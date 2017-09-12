@@ -228,8 +228,8 @@ export function* CMSCreate(crypto, data) {
       if (!certificate.signature.algorithmParams) {
         certificate.signature.algorithmParams = new asn1js.Null();
       }
-      if (!certificate.signatureAlgorithm.algorithmParams) { 
-      certificate.signatureAlgorithm.algorithmParams = new asn1js.Null();
+      if (!certificate.signatureAlgorithm.algorithmParams) {
+        certificate.signatureAlgorithm.algorithmParams = new asn1js.Null();
       }
 
       // Convert certificate to DER

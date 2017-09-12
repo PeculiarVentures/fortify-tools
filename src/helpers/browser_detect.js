@@ -14,7 +14,7 @@ export default function browserInfo() {
   const userAgent = window.navigator.userAgent;
 
   switch (true) {
-    case (/edge\/([\d\.]+)/i.test(userAgent)):
+    case (/edge\/([\d\.]+)/i.test(userAgent)): // eslint-disable-line
       return Browser.Edge;
     case (/msie/i.test(userAgent)):
       return Browser.IE;

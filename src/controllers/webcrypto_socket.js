@@ -65,6 +65,7 @@ export const WSController = {
             });
           return ws.login();
         }
+        return true;
       })
       .then(() => {
         Store.dispatch(DialogActions.close());

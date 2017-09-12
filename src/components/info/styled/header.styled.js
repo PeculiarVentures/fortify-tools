@@ -181,7 +181,7 @@ export const HeaderBtn = styled.div`
       opacity: 0.6;
     }
   }
-  ${props => {
+  ${(props) => {
     if (props.disabled) {
       return `
         pointer-events: none;

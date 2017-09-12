@@ -95,6 +95,19 @@ const subjectNames = {
   '1.3.6.1.2.1.1.5': 'Host Name',
 };
 
+function fixName(name) {
+  // TODO: must be removed if PKIjs fixed
+  if (name.typesAndValues) {
+    const schema = (new asn1js.Sequence({
+      value: Array.from(name.typesAndValues, element => new asn1js.Set({
+        value: [element.toSchema()],
+      })),
+    }));
+    const der = schema.toBER();
+    name.fromSchema(asn1js.fromBER(der).result);
+  }
+}
+
 /**
  * Certificate decode/encode helper
  * @type {{
@@ -217,7 +230,7 @@ const CertHelper = {
         name: json.subjectPublicKeyInfo.kty,
       },
       value: this.addSpaceAfterSecondCharset(
-        Convert.ToHex(x509.subjectPublicKeyInfo.subjectPublicKey.valueBeforeDecode)
+        Convert.ToHex(x509.subjectPublicKeyInfo.subjectPublicKey.valueBeforeDecode),
       ),
     };
 
@@ -488,18 +501,5 @@ const CertHelper = {
     return subjectObj;
   },
 };
-
-function fixName(name) {
-  // TODO: must be removed if PKIjs fixed
-  if (name.typesAndValues) {
-    const schema = (new asn1js.Sequence({
-      value: Array.from(name.typesAndValues,  element => new asn1js.Set({
-        value: [element.toSchema()]
-      }))
-    }));
-    const der = schema.toBER()
-    name.fromSchema(asn1js.fromBER(der).result);
-  }
-}
 
 export default CertHelper;

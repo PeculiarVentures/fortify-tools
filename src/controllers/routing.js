@@ -1,21 +1,6 @@
-// import { browserHistory } from 'react-router';
-// import { getAppPath } from '../helpers';
-//
-// const RoutingController = {
-//   push: (path) => {
-//     browserHistory.push(`${getAppPath()}${path}`);
-//   },
-//   goBack: () => {
-//     browserHistory.goBack();
-//   },
-// };
-//
-// export default RoutingController;
-
 import { State } from 'quantizer';
 import { browserHistory } from 'react-router';
 import { getAppPath, parseSearch } from '../helpers';
-// import { ACTIONS_CONST } from '../constants';
 
 class RoutingController extends State.Map {
 

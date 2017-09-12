@@ -98,6 +98,26 @@ function* getProviderCertificates() {
 }
 
 /**
+ * Select provider
+ * @param {{
+ *  id: string
+ * }}
+ */
+function* providerSelect({ id }) {
+  const state = yield select();
+  const providers = state.find('providers');
+  const provider = providers.where({ id }).get();
+  if (!provider.loaded) {
+    yield [getProviderCertificates()];
+    yield put(ItemActions.select());
+    yield put(ProviderActions.update({ loaded: true }));
+  }
+  if (!provider.logged) {
+    yield put(WSActions.login(provider.id));
+  }
+}
+
+/**
  * On 'listening' webcrypto-socket action
  * @returns {boolean}
  */
@@ -157,6 +177,7 @@ function* webcryptoOnListening() {
 
   yield providerSelect({ id: selected });
   yield put(AppActions.loaded(true));
+  return true;
 }
 
 /**
@@ -174,26 +195,6 @@ function* providerLogin({ id }) {
     yield put(ProviderActions.update({ logged }));
   } else {
     yield put(ProviderActions.update({ logged: true }));
-  }
-}
-
-/**
- * Select provider
- * @param {{
- *  id: string
- * }}
- */
-function* providerSelect({ id }) {
-  const state = yield select();
-  const providers = state.find('providers');
-  const provider = providers.where({ id }).get();
-  if (!provider.loaded) {
-    yield [getProviderCertificates()];
-    yield put(ItemActions.select());
-    yield put(ProviderActions.update({ loaded: true }));
-  }
-  if (!provider.logged) {
-    yield put(WSActions.login(provider.id));
   }
 }
 
@@ -398,7 +399,7 @@ function* addedProvider({ data }) {
   }));
 }
 
-function* removedProvider({ data }) {
+function* removedProvider() {
   EventChannel.emit(ACTIONS_CONST.SNACKBAR_SHOW, 'card_removed', 3000);
   yield webcryptoOnListening();
 }
