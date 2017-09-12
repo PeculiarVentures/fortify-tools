@@ -1,0 +1,14 @@
+.vscode
+node_modules
+package-lock.json
+out
+dist
+
+.webcrypto
+.keystorage
+.certstorage
+.DS_Store
+*.log
+
+.idea
+scripts/compiled_env.json
