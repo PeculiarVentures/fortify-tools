@@ -15,4 +15,4 @@
 ### Deploy to gh-pages
 
  * `npm run deploy`
- Visit **[gh-pages](https://peculiarventures.github.io/fortify-web/)**
+ * Visit **[gh-pages](https://peculiarventures.github.io/fortify-web/)**
