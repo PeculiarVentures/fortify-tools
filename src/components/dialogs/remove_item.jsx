@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Dialog } from '../basic';
 import { QShortcuts } from '../../controllers';
-import enLang from '../../langs/en.json';
 
 export default class RemoveItemDialog extends Component {
 
@@ -15,6 +14,10 @@ export default class RemoveItemDialog extends Component {
   static defaultProps = {
     certificateName: '',
     certificateType: '',
+  };
+
+  static contextTypes = {
+    lang: PropTypes.object,
   };
 
   constructor() {
@@ -37,16 +40,17 @@ export default class RemoveItemDialog extends Component {
 
   getTypeText() {
     const { certificateType } = this.props;
+    const { lang } = this.context;
 
     switch (certificateType) {
       case 'certificate':
-        return enLang['Dialog.RemoveCertificate.Type.Certificate'];
+        return lang['Dialog.RemoveCertificate.Type.Certificate'];
 
       case 'request':
-        return enLang['Dialog.RemoveCertificate.Type.Request'];
+        return lang['Dialog.RemoveCertificate.Type.Request'];
 
       case 'key':
-        return enLang['Dialog.RemoveCertificate.Type.Key'];
+        return lang['Dialog.RemoveCertificate.Type.Key'];
 
       default:
         return null;
@@ -55,12 +59,13 @@ export default class RemoveItemDialog extends Component {
 
   render() {
     const { onAccept, onCancel, certificateName } = this.props;
+    const { lang } = this.context;
 
     return (
       <Dialog
-        title={`${enLang['Dialog.RemoveCertificate.Title']} ${this.getTypeText()} "${certificateName}"?`}
-        acceptText={enLang['Dialog.RemoveCertificate.Btn.Accept']}
-        cancelText={enLang['Dialog.RemoveCertificate.Btn.Cancel']}
+        title={`${lang['Dialog.RemoveCertificate.Title']} ${this.getTypeText()} "${certificateName}"?`}
+        acceptText={lang['Dialog.RemoveCertificate.Btn.Accept']}
+        cancelText={lang['Dialog.RemoveCertificate.Btn.Cancel']}
         onAccept={onAccept}
         onCancel={onCancel}
       />

@@ -1,6 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import styled from 'styled-components';
-import enLang from '../../../langs/en.json';
 import { Button } from '../button';
 
 const SnackbarStyled = styled.div`
@@ -93,11 +92,15 @@ export default class Snackbar extends Component {
     offset: '16px',
     origin: 'bottom',
     type: 'info', // info, error
-    buttonText: enLang['Snackbar.Btn.Cancel'],
+    buttonText: '',
     animationTime: 300,
     animation: true,
     onMouseOver: null,
     onMouseLeave: null,
+  };
+
+  static contextTypes = {
+    lang: PropTypes.object,
   };
 
   constructor() {
@@ -192,7 +195,8 @@ export default class Snackbar extends Component {
   }
 
   renderSnackbarContent() {
-    const { children, text, buttonText } = this.props;
+    const { lang } = this.context;
+    const { children, text, buttonText = lang['Snackbar.Btn.Cancel'] } = this.props;
 
     if (children) {
       return (

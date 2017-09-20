@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import styled from 'styled-components';
 import { TextField, SelectField, SelectItem, SelectNative } from '../../basic';
 import { Title, GroupContainer, GroupPart } from './styles';
-import enLang from '../../../langs/en.json';
 
 const TextFieldContainer = styled.div`
   display: inline-block;
@@ -43,6 +42,7 @@ export default class SubjectInfo extends Component {
 
   static contextTypes = {
     deviceType: PropTypes.string,
+    lang: PropTypes.object,
   };
 
   constructor() {
@@ -93,20 +93,20 @@ export default class SubjectInfo extends Component {
 
   render() {
     const { countries, onValidate, onCreate } = this.props;
-    const { deviceType } = this.context;
+    const { deviceType, lang } = this.context;
 
     return (
       <GroupContainer>
         <Title>
-          { enLang['CertificateCreate.Subject.Title'] }
+          { lang['CertificateCreate.Subject.Title'] }
         </Title>
         <GroupPart>
           <TextFieldContainer>
             <TextField
-              labelText={enLang['CertificateCreate.Subject.Field.CommonName']}
+              labelText={lang['CertificateCreate.Subject.Field.CommonName']}
               ref={node => (this.fieldNodes.commonName = node)}
               validation={['text']}
-              errorText={enLang['CertificateCreate.Subject.Field.CommonName.Error']}
+              errorText={lang['CertificateCreate.Subject.Field.CommonName.Error']}
               onChange={onValidate}
               onBlur={onValidate}
               onEnter={onCreate}
@@ -114,14 +114,14 @@ export default class SubjectInfo extends Component {
           </TextFieldContainer>
           <TextFieldContainer>
             <TextField
-              labelText={enLang['CertificateCreate.Subject.Field.Organization']}
+              labelText={lang['CertificateCreate.Subject.Field.Organization']}
               ref={node => (this.fieldNodes.organization = node)}
               onEnter={onCreate}
             />
           </TextFieldContainer>
           <TextFieldContainer>
             <TextField
-              labelText={enLang['CertificateCreate.Subject.Field.OrganizationUnit']}
+              labelText={lang['CertificateCreate.Subject.Field.OrganizationUnit']}
               ref={node => (this.fieldNodes.organizationUnit = node)}
               onEnter={onCreate}
             />
@@ -130,14 +130,14 @@ export default class SubjectInfo extends Component {
             {
               deviceType === 'phone'
                 ? <SelectNative
-                  labelText={enLang['CertificateCreate.Subject.Field.Country']}
-                  placeholder={enLang['Select.Label.Country']}
+                  labelText={lang['CertificateCreate.Subject.Field.Country']}
+                  placeholder={lang['Select.Label.Country']}
                   ref={node => (this.fieldNodes.country = node)}
                   options={countries}
                 />
                 : <SelectField
-                  labelText={enLang['CertificateCreate.Subject.Field.Country']}
-                  placeholder={enLang['Select.Label.Country']}
+                  labelText={lang['CertificateCreate.Subject.Field.Country']}
+                  placeholder={lang['Select.Label.Country']}
                   ref={node => (this.fieldNodes.country = node)}
                 >
                   {
@@ -154,14 +154,14 @@ export default class SubjectInfo extends Component {
           </TextFieldContainer>
           <TextFieldContainer>
             <TextField
-              labelText={enLang['CertificateCreate.Subject.Field.Region']}
+              labelText={lang['CertificateCreate.Subject.Field.Region']}
               ref={node => (this.fieldNodes.state = node)}
               onEnter={onCreate}
             />
           </TextFieldContainer>
           <TextFieldContainer>
             <TextField
-              labelText={enLang['CertificateCreate.Subject.Field.City']}
+              labelText={lang['CertificateCreate.Subject.Field.City']}
               ref={node => (this.fieldNodes.locality = node)}
               onEnter={onCreate}
             />

@@ -3,12 +3,12 @@ import { SegueHandler, Snackbar } from '../basic';
 import { EventChannel } from '../../controllers';
 import { ModalActions } from '../../actions/ui';
 import { ACTIONS_CONST } from '../../constants';
-import enLang from '../../langs/en.json';
 
 export default class Snackbars extends React.Component {
 
   static contextTypes = {
     windowSize: PropTypes.object,
+    lang: PropTypes.object,
     dispatch: PropTypes.func,
   };
 
@@ -113,6 +113,8 @@ export default class Snackbars extends React.Component {
 
   render() {
     const { type, duration } = this.state;
+    const { lang } = this.context;
+
     return (
       <SegueHandler
         query={type}
@@ -129,24 +131,24 @@ export default class Snackbars extends React.Component {
         <Snackbar
           type="error"
           name="offline"
-          buttonText={enLang['Snackbar.Offline.Btn.Get']}
+          buttonText={lang['Snackbar.Offline.Btn.Get']}
           onButtonClick={() => console.log('click Get help button')}
-          text={enLang['Snackbar.Offline.Text']}
+          text={lang['Snackbar.Offline.Text']}
         />
         <Snackbar
           name="copied"
-          buttonText={enLang['Snackbar.Copy.Btn.Close']}
+          buttonText={lang['Snackbar.Copy.Btn.Close']}
           onButtonClick={() => EventChannel.emit(ACTIONS_CONST.SNACKBAR_HIDE)}
-          text={enLang['Snackbar.Copy.Text']}
+          text={lang['Snackbar.Copy.Text']}
         />
         <Snackbar
           name="card_removed"
-          text={enLang['Snackbar.CardRemoved.Text']}
+          text={lang['Snackbar.CardRemoved.Text']}
           buttonText=""
         />
         <Snackbar
           name="card_inserted"
-          text={enLang['Snackbar.CardInserted.Text']}
+          text={lang['Snackbar.CardInserted.Text']}
           buttonText=""
         />
       </SegueHandler>

@@ -3,7 +3,6 @@ import { Convert } from 'pvtsutils';
 import { WSActions, ProviderActions } from '../../actions/state';
 import { CertHelper, regExps } from '../../helpers';
 import { Button, SelectField, SelectNative, SelectItem, TextField } from '../basic';
-import enLang from '../../langs/en.json';
 import * as BodyStyled from '../create_certificate/styled/body.styled';
 import {
   TextareaContainer,
@@ -28,6 +27,7 @@ export default class Body extends Component {
   static contextTypes = {
     deviceType: PropTypes.string,
     dispatch: PropTypes.func,
+    lang: PropTypes.object,
   };
 
   constructor() {
@@ -130,7 +130,7 @@ export default class Body extends Component {
   render() {
     const { providers } = this.props;
     const { valid } = this.state;
-    const { deviceType } = this.context;
+    const { deviceType, lang } = this.context;
     const selectedProvider = providers.filter(obj => obj.selected);
     const currentProvider = selectedProvider.length
       ? selectedProvider[0]
@@ -144,8 +144,8 @@ export default class Body extends Component {
             {
               deviceType === 'phone'
                 ? <SelectNative
-                  labelText={enLang['ImportCertificate.Field.Provider']}
-                  placeholder={enLang['Select.Label.Provider']}
+                  labelText={lang['ImportCertificate.Field.Provider']}
+                  placeholder={lang['Select.Label.Provider']}
                   options={providersFiltered.map(item => ({
                     value: item.id,
                     name: item.name,
@@ -154,8 +154,8 @@ export default class Body extends Component {
                   onChange={this.onSelectChange}
                 />
                 : <SelectField
-                  labelText={enLang['ImportCertificate.Field.Provider']}
-                  placeholder={enLang['Select.Label.Provider']}
+                  labelText={lang['ImportCertificate.Field.Provider']}
+                  placeholder={lang['Select.Label.Provider']}
                   defaultSelected={{
                     name: currentProvider ? currentProvider.name : '',
                     value: currentProvider ? currentProvider.id : '',
@@ -177,7 +177,7 @@ export default class Body extends Component {
           </TextFieldContainer>
           <TextareaContainer>
             <TextField
-              labelText={enLang['ImportCertificate.Field.Certificate']}
+              labelText={lang['ImportCertificate.Field.Certificate']}
               multiline
               ref={node => (this.fieldNodes.textarea = node)}
               validation={['hex', 'base64']}
@@ -188,7 +188,7 @@ export default class Body extends Component {
           <BtnsContainer>
             <InputFileContainer>
               <LabelStyled htmlFor="file_input">
-                { enLang['ImportCertificate.Btn.File'] }
+                { lang['ImportCertificate.Btn.File'] }
               </LabelStyled>
               <input
                 type="file"
@@ -204,7 +204,7 @@ export default class Body extends Component {
               onClick={this.onClickImportHandler}
               disabled={!valid}
             >
-              { enLang['ImportCertificate.Btn.Import'] }
+              { lang['ImportCertificate.Btn.Import'] }
             </Button>
           </BtnsContainer>
         </BodyStyled.Container>

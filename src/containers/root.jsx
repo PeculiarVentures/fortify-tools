@@ -5,6 +5,7 @@ import Info from '../components/info/index';
 import Sidebar from '../components/sidebar/index';
 import Overlay from './overlay';
 import Snackbars from '../components/snackbars';
+import langEn from '../langs/en.json';
 
 const ContentStyled = styled.div`
   height: 100%;
@@ -46,6 +47,7 @@ class RootContainer extends Component {
     dispatch: PropTypes.func,
     windowSize: PropTypes.object,
     handleRootAction: PropTypes.func,
+    lang: PropTypes.object,
   };
 
   static getWindowSize() {
@@ -84,6 +86,7 @@ class RootContainer extends Component {
       dispatch: this.props.dispatch,
       windowSize: this.state.windowSize,
       handleRootAction: this.handleRootAction.bind(this),
+      lang: langEn,
     };
   }
 

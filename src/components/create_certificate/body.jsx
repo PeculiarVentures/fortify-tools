@@ -4,7 +4,6 @@ import SubjectInfo from './parts/subject_info';
 import KeyInfo from './parts/key_info';
 import Provider from './parts/provider';
 import Options from './parts/options';
-import enLang from '../../langs/en.json';
 import countriesData from '../../constants/countries.json';
 import parametersData from '../../constants/parameters.json';
 import * as BodyStyled from './styled/body.styled';
@@ -37,6 +36,10 @@ export default class Body extends Component {
     onCreate: null,
     providers: [],
     readOnly: false,
+  };
+
+  static contextTypes = {
+    lang: PropTypes.object,
   };
 
   constructor() {
@@ -89,6 +92,7 @@ export default class Body extends Component {
   render() {
     const { countries, parameters, loaded, status, providers, readOnly } = this.props;
     const { createDisabled } = this.state;
+    const { lang } = this.context;
     const btnCreateDisabled = !loaded || status !== 'online' || readOnly || createDisabled;
 
     return (
@@ -114,14 +118,14 @@ export default class Body extends Component {
             <Button
               onClick={this.onCancelHandler}
             >
-              { enLang['CertificateCreate.Btn.Cancel'] }
+              { lang['CertificateCreate.Btn.Cancel'] }
             </Button>
             <BodyStyled.Btn
               primary
               onClick={this.onCreateHandler}
               disabled={btnCreateDisabled}
             >
-              { enLang['CertificateCreate.Btn.Create'] }
+              { lang['CertificateCreate.Btn.Create'] }
             </BodyStyled.Btn>
           </BodyStyled.BtnsContainer>
         </BodyStyled.Container>

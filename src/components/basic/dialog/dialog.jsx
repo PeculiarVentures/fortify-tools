@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react';
-import enLang from '../../../langs/en.json';
 import * as DialogStyled from './styled/dialog.styled';
 
-const Dialog = (props) => {
+const Dialog = (props, context) => {
+  const { lang } = context;
   const {
     title,
     acceptText,
-    cancelText,
+    cancelText = lang['Dialog.Btn.Cancel'],
     acceptFirst,
     disableAccept,
     disableCancel,
@@ -119,7 +119,11 @@ Dialog.propTypes = {
 };
 
 Dialog.defaultProps = {
-  cancelText: enLang['Dialog.Btn.Cancel'],
+  cancelText: '',
+};
+
+Dialog.contextTypes = {
+  lang: PropTypes.object,
 };
 
 export default Dialog;

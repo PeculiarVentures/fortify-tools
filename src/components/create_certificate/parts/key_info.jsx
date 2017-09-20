@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import styled from 'styled-components';
 import { SelectField, SelectItem, Checkbox, SelectNative } from '../../basic';
 import { Title, GroupContainer, GroupPart } from './styles';
-import enLang from '../../../langs/en.json';
 
 const CheckboxContainer = styled.div`
   display: inline-block;
@@ -55,6 +54,7 @@ export default class KeyInfo extends Component {
 
   static contextTypes = {
     deviceType: PropTypes.string,
+    lang: PropTypes.object,
   };
 
   constructor(props) {
@@ -170,25 +170,25 @@ export default class KeyInfo extends Component {
   render() {
     const { keyInfoData } = this;
     const { algorithmValue } = this.state;
-    const { deviceType } = this.context;
+    const { deviceType, lang } = this.context;
     const currentAlgorithmData = keyInfoData[algorithmValue.index];
     const isECType = algorithmValue.name.slice(0, 2) === 'EC';
     const selectSizeLabel = isECType
-      ? enLang['CertificateCreate.KeyInfo.Field.NamedCurve']
-      : enLang['CertificateCreate.KeyInfo.Field.ModulusBits'];
+      ? lang['CertificateCreate.KeyInfo.Field.NamedCurve']
+      : lang['CertificateCreate.KeyInfo.Field.ModulusBits'];
 
     return (
       <GroupContainer>
         <Title>
-          { enLang['CertificateCreate.KeyInfo.Title'] }
+          { lang['CertificateCreate.KeyInfo.Title'] }
         </Title>
         <GroupPart>
           <TextFieldContainer>
             {
               deviceType === 'phone'
               ? <SelectNative
-                labelText={enLang['CertificateCreate.KeyInfo.Field.Algorithm']}
-                placeholder={enLang['Select.Label.Algorithm']}
+                labelText={lang['CertificateCreate.KeyInfo.Field.Algorithm']}
+                placeholder={lang['Select.Label.Algorithm']}
                 ref={node => (this.fieldNodes.algorithm = node)}
                 options={keyInfoData.map((key) => {
                   key.value = key.name;
@@ -198,9 +198,9 @@ export default class KeyInfo extends Component {
                 value={algorithmValue.value}
               />
               : <SelectField
-                labelText={enLang['CertificateCreate.KeyInfo.Field.Algorithm']}
+                labelText={lang['CertificateCreate.KeyInfo.Field.Algorithm']}
                 ref={node => (this.fieldNodes.algorithm = node)}
-                placeholder={enLang['Select.Label.Algorithm']}
+                placeholder={lang['Select.Label.Algorithm']}
                 onChange={this.handleChangeAlgorithm}
                 value={algorithmValue}
               >
@@ -221,7 +221,7 @@ export default class KeyInfo extends Component {
               deviceType === 'phone'
               ? <SelectNative
                 labelText={selectSizeLabel}
-                placeholder={enLang['Select.Label.Size']}
+                placeholder={lang['Select.Label.Size']}
                 ref={node => (this.fieldNodes.size = node)}
                 options={currentAlgorithmData.modulusLength.map(module => ({
                   value: module,
@@ -231,7 +231,7 @@ export default class KeyInfo extends Component {
               : <SelectField
                 labelText={selectSizeLabel}
                 ref={node => (this.fieldNodes.size = node)}
-                placeholder={enLang['Select.Label.Size']}
+                placeholder={lang['Select.Label.Size']}
                 defaultSelected={{
                   name: currentAlgorithmData.modulusLength[0],
                   value: currentAlgorithmData.modulusLength[0],
@@ -253,7 +253,7 @@ export default class KeyInfo extends Component {
         </GroupPart>
         <GroupPart>
           <TitleCheckboxes>
-            { enLang['CertificateCreate.KeyInfo.Usage.Title'] }
+            { lang['CertificateCreate.KeyInfo.Usage.Title'] }
           </TitleCheckboxes>
           {
             currentAlgorithmData.usages.map((usage, index) => (

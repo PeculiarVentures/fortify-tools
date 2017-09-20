@@ -1,8 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Root, Row, Title, RowCertInfo, ColCert, RowCert } from './styled/info';
-import enLang from '../../langs/en.json';
 
-const KeyInfo = (props) => {
+const KeyInfo = (props, context) => {
   const {
     algorithm,
     usages,
@@ -10,6 +9,7 @@ const KeyInfo = (props) => {
     modulusLength,
     namedCurve,
   } = props;
+  const { lang } = context;
 
   const renderRowContainer = (title, value, index, monospace) => {
     if (value && title !== 'name') {
@@ -34,14 +34,14 @@ const KeyInfo = (props) => {
 
       <Row>
         <Title>
-          { enLang['Info.Body.PublicKeyInfo'] }
+          { lang['Info.Body.PublicKeyInfo'] }
         </Title>
         <RowCert>
-          { renderRowContainer(enLang['Info.Body.Algorithm'], algorithm) }
-          { renderRowContainer(enLang['Info.Body.ModulusBits'], modulusLength) }
-          { renderRowContainer(enLang['Info.Body.PublicExponent'], publicExponent) }
-          { renderRowContainer(enLang['Info.Body.NamedCurve'], namedCurve) }
-          { renderRowContainer(enLang['Info.Body.Usages'], usages.join(', ')) }
+          { renderRowContainer(lang['Info.Body.Algorithm'], algorithm) }
+          { renderRowContainer(lang['Info.Body.ModulusBits'], modulusLength) }
+          { renderRowContainer(lang['Info.Body.PublicExponent'], publicExponent) }
+          { renderRowContainer(lang['Info.Body.NamedCurve'], namedCurve) }
+          { renderRowContainer(lang['Info.Body.Usages'], usages.join(', ')) }
         </RowCert>
       </Row>
 
@@ -63,6 +63,10 @@ KeyInfo.defaultProps = {
   publicExponent: '',
   modulusLength: '',
   namedCurve: '',
+};
+
+KeyInfo.contextTypes = {
+  lang: PropTypes.object,
 };
 
 export default KeyInfo;

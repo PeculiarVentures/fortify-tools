@@ -1,13 +1,17 @@
-import React, { Component } from 'react';
+import React, { PropTypes, Component } from 'react';
 import { Dialog } from '../basic';
-import enLang from '../../langs/en.json';
 
 export default class ServerOfflineDialog extends Component {
+  static contextTypes = {
+    lang: PropTypes.object,
+  };
 
   render() {
+    const { lang } = this.context;
+
     return (
       <Dialog
-        title={enLang['Dialog.ServerOffline.Title']}
+        title={lang['Dialog.ServerOffline.Title']}
         acceptText=""
         cancelText=""
       />

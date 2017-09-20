@@ -1,20 +1,23 @@
 import React, { PropTypes, Component } from 'react';
 import { Dialog } from '../basic';
-import enLang from '../../langs/en.json';
 
 export default class TimeoutPinDialog extends Component {
-
   static propTypes = {
     onAccept: PropTypes.func.isRequired,
   };
 
+  static contextTypes = {
+    lang: PropTypes.object,
+  };
+
   render() {
     const { onAccept } = this.props;
+    const { lang } = this.context;
 
     return (
       <Dialog
-        title={enLang['Dialog.TimeoutPin.Title']}
-        acceptText={enLang['Dialog.TimeoutPin.Btn.Accept']}
+        title={lang['Dialog.TimeoutPin.Title']}
+        acceptText={lang['Dialog.TimeoutPin.Btn.Accept']}
         cancelText=""
         onAccept={onAccept}
       />

@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import styled from 'styled-components';
 import { Dialog } from '../basic';
-import enLang from '../../langs/en.json';
 
 const NumberStyled = styled.div`
   display: inline-block;
@@ -40,8 +39,13 @@ export default class FortifyAuthorizationDialog extends Component {
     message: '',
   };
 
+  static contextTypes = {
+    lang: PropTypes.object,
+  };
+
   render() {
     const { message } = this.props;
+    const { lang } = this.context;
 
     return (
       <Dialog
@@ -50,7 +54,7 @@ export default class FortifyAuthorizationDialog extends Component {
         cancelText={''}
       >
         <DescrStyled>
-          { enLang['Dialog.FortifyAuthorization.Description'] }
+          { lang['Dialog.FortifyAuthorization.Description'] }
         </DescrStyled>
         <NumbersContainerStyled>
           {

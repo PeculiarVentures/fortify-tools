@@ -1,5 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import enLang from '../../langs/en.json';
 import {
   StyledShellTitle,
   TitleShell,
@@ -64,6 +63,7 @@ export default class Header extends Component {
 
   static contextTypes = {
     windowSize: PropTypes.object,
+    lang: PropTypes.object,
   };
 
   constructor() {
@@ -160,6 +160,7 @@ export default class Header extends Component {
   renderDropdown() {
     const { isKey } = this.props;
     const { dropdown } = this.state;
+    const { lang } = this.context;
 
     if (dropdown) {
       return (
@@ -171,7 +172,7 @@ export default class Header extends Component {
               : <DropdownItemContainer>
                 <DropdownItemStyled onClick={this.handleDownload} secondary>
                   <DownloadIconStyled />
-                  { enLang['Info.Header.Btn.Download'] }
+                  { lang['Info.Header.Btn.Download'] }
                 </DropdownItemStyled>
               </DropdownItemContainer>
             }
@@ -181,14 +182,14 @@ export default class Header extends Component {
                 : <DropdownItemContainer>
                   <DropdownItemStyled onClick={this.bindedHandleCopy} secondary>
                     <CopyIconStyled />
-                    { enLang['Info.Header.Btn.Copy'] }
+                    { lang['Info.Header.Btn.Copy'] }
                   </DropdownItemStyled>
                 </DropdownItemContainer>
             }
             <DropdownItemContainer>
               <DropdownItemStyled onClick={this.bindedHandleRemove} secondary>
                 <RemoveIconStyled />
-                { enLang['Info.Header.Btn.Remove'] }
+                { lang['Info.Header.Btn.Remove'] }
               </DropdownItemStyled>
             </DropdownItemContainer>
           </DropdownItemsWrapper>
@@ -226,6 +227,7 @@ export default class Header extends Component {
 
   renderButtons() {
     const { loaded, isKey, readOnly } = this.props;
+    const { lang } = this.context;
 
     return (
       <ButtonsContainer>
@@ -235,7 +237,7 @@ export default class Header extends Component {
             : <HeaderBtn
               onClick={() => this.handleDownload('pem')}
               disabled={!loaded}
-              title={enLang['Info.Header.Btn.Download']}
+              title={lang['Info.Header.Btn.Download']}
             >
               <DownloadIconStyled />
             <BtnDropdown data-class="dropdown">
@@ -258,7 +260,7 @@ export default class Header extends Component {
             : <HeaderBtn
               onClick={this.bindedHandleCopy}
               disabled={!loaded}
-              title={enLang['Info.Header.Btn.Copy']}
+              title={lang['Info.Header.Btn.Copy']}
             >
               <CopyIconStyled />
             </HeaderBtn>
@@ -266,7 +268,7 @@ export default class Header extends Component {
         <HeaderBtn
           onClick={this.bindedHandleRemove}
           disabled={!loaded || readOnly}
-          title={enLang['Info.Header.Btn.Remove']}
+          title={lang['Info.Header.Btn.Remove']}
         >
           <RemoveIconStyled />
         </HeaderBtn>

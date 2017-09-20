@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import { SelectField, SelectItem, SelectNative } from '../basic';
 import { ModalActions } from '../../actions/ui';
 import { ProviderActions, AppActions } from '../../actions/state';
-import enLang from '../../langs/en.json';
 import { ReloadIcon, Logo } from '../svg';
 import * as S from './styled/header.styled';
 
@@ -25,6 +24,7 @@ export default class SidebarHeader extends Component {
   static contextTypes = {
     dispatch: PropTypes.func,
     deviceType: PropTypes.string,
+    lang: PropTypes.object,
   };
 
   onClickCreateHandler = () => {
@@ -55,7 +55,7 @@ export default class SidebarHeader extends Component {
 
   render() {
     const { loaded, providers, readOnly } = this.props;
-    const { deviceType } = this.context;
+    const { deviceType, lang } = this.context;
     const selectedProvider = providers.filter(obj => obj.selected);
     const currentProvider = selectedProvider.length
       ? selectedProvider[0]
@@ -73,14 +73,14 @@ export default class SidebarHeader extends Component {
             onClick={this.onClickCreateHandler}
           >
             <S.CreateIc />
-            { enLang['Sidebar.Header.Btn.Create'] }
+            { lang['Sidebar.Header.Btn.Create'] }
           </S.Btn>
           <S.Btn
             disabled={!loaded || readOnly}
             onClick={this.onClickImportHandler}
           >
             <S.ImportIc />
-            { enLang['Sidebar.Header.Btn.Import'] }
+            { lang['Sidebar.Header.Btn.Import'] }
           </S.Btn>
         </S.BtnsContainer>
         <S.Container disabled={!providers.length}>
@@ -88,8 +88,8 @@ export default class SidebarHeader extends Component {
             {
               deviceType === 'phone'
               ? <SelectNative
-                labelText={enLang['CertificateCreate.Provider.Field.Name']}
-                placeholder={enLang['Select.Label.Provider']}
+                labelText={lang['CertificateCreate.Provider.Field.Name']}
+                placeholder={lang['Select.Label.Provider']}
                 options={providers.map(item => ({
                   value: item.id,
                   name: item.name,
@@ -98,8 +98,8 @@ export default class SidebarHeader extends Component {
                 onChange={this.onSelectHandler}
               />
               : <SelectField
-                labelText={enLang['CertificateCreate.Provider.Field.Name']}
-                placeholder={enLang['Select.Label.Provider']}
+                labelText={lang['CertificateCreate.Provider.Field.Name']}
+                placeholder={lang['Select.Label.Provider']}
                 value={{
                   name: currentProvider ? currentProvider.name : '',
                   value: currentProvider ? currentProvider.id : '',

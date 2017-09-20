@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import styled from 'styled-components';
 import { Dialog } from '../basic';
 import { QShortcuts } from '../../controllers';
-import enLang from '../../langs/en.json';
 
 const DescrStyled = styled.div`
   font-size: 14px;
@@ -27,6 +26,10 @@ export default class RemoveItemErrorDialog extends Component {
     message: '',
   };
 
+  static contextTypes = {
+    lang: PropTypes.object,
+  };
+
   constructor() {
     super();
     this.unbind = () => {};
@@ -47,16 +50,17 @@ export default class RemoveItemErrorDialog extends Component {
 
   getTypeText() {
     const { certificateType } = this.props;
+    const { lang } = this.context;
 
     switch (certificateType) {
       case 'certificate':
-        return enLang['Dialog.RemoveCertificate.Type.Certificate'];
+        return lang['Dialog.RemoveCertificate.Type.Certificate'];
 
       case 'request':
-        return enLang['Dialog.RemoveCertificate.Type.Request'];
+        return lang['Dialog.RemoveCertificate.Type.Request'];
 
       case 'key':
-        return enLang['Dialog.RemoveCertificate.Type.Key'];
+        return lang['Dialog.RemoveCertificate.Type.Key'];
 
       default:
         return null;
@@ -65,12 +69,13 @@ export default class RemoveItemErrorDialog extends Component {
 
   render() {
     const { onAccept, onCancel, certificateName, message } = this.props;
+    const { lang } = this.context;
 
     return (
       <Dialog
-        title={`${enLang['Dialog.RemoveCertificateError.Title']} ${this.getTypeText()} "${certificateName}"`}
-        acceptText={enLang['Dialog.RemoveCertificateError.Btn.Accept']}
-        cancelText={enLang['Dialog.RemoveCertificateError.Btn.Cancel']}
+        title={`${lang['Dialog.RemoveCertificateError.Title']} ${this.getTypeText()} "${certificateName}"`}
+        acceptText={lang['Dialog.RemoveCertificateError.Btn.Accept']}
+        cancelText={lang['Dialog.RemoveCertificateError.Btn.Cancel']}
         onAccept={onAccept}
         onCancel={onCancel}
       >

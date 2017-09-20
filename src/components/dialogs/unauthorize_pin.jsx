@@ -1,20 +1,23 @@
 import React, { PropTypes, Component } from 'react';
 import { Dialog } from '../basic';
-import enLang from '../../langs/en.json';
 
 export default class UnauthorizePinDialog extends Component {
-
   static propTypes = {
     onAccept: PropTypes.func.isRequired,
   };
 
+  static contextTypes = {
+    lang: PropTypes.object,
+  };
+
   render() {
     const { onAccept } = this.props;
+    const { lang } = this.context;
 
     return (
       <Dialog
-        title={enLang['Dialog.UnauthorizePin.Title']}
-        acceptText={enLang['Dialog.UnauthorizePin.Btn.Accept']}
+        title={lang['Dialog.UnauthorizePin.Title']}
+        acceptText={lang['Dialog.UnauthorizePin.Btn.Accept']}
         cancelText=""
         onAccept={onAccept}
       />

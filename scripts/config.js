@@ -13,3 +13,4 @@ export const INDEX_HTML_PATH = env('INDEX_HTML_PATH');
 
 export const URL = env('URL');
 export const SERVER_URL = env('SERVER_URL', '127.0.0.1:31337');
+export const SUPPORTED_LANGS = ['en', 'ru'];

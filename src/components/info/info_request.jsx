@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react';
 import { Root, Row, Title, RowCertInfo, ColCert, RowCert } from './styled/info';
-import enLang from '../../langs/en.json';
 
-const RequestInfo = (props) => {
+const RequestInfo = (props, context) => {
   const {
     subject,
     publicKey,
     signature,
   } = props;
+  const { lang } = context;
 
   const renderRowContainer = (title, value, monospace) => {
     if (value && title !== 'name') {
@@ -30,43 +30,43 @@ const RequestInfo = (props) => {
 
       <Row>
         <Title>
-          { enLang['Info.Body.SubjectInfo'] }
+          { lang['Info.Body.SubjectInfo'] }
         </Title>
         <RowCert>
-          { renderRowContainer(enLang['Info.Body.CommonName'], subject['Common Name']) }
-          { renderRowContainer(enLang['Info.Body.Organization'], subject.Organization) }
-          { renderRowContainer(enLang['Info.Body.OrganizationUnit'], subject['Organization Unit']) }
-          { renderRowContainer(enLang['Info.Body.Country'], subject.Country) }
-          { renderRowContainer(enLang['Info.Body.Region'], subject.Region) }
-          { renderRowContainer(enLang['Info.Body.City'], subject.City) }
+          { renderRowContainer(lang['Info.Body.CommonName'], subject['Common Name']) }
+          { renderRowContainer(lang['Info.Body.Organization'], subject.Organization) }
+          { renderRowContainer(lang['Info.Body.OrganizationUnit'], subject['Organization Unit']) }
+          { renderRowContainer(lang['Info.Body.Country'], subject.Country) }
+          { renderRowContainer(lang['Info.Body.Region'], subject.Region) }
+          { renderRowContainer(lang['Info.Body.City'], subject.City) }
         </RowCert>
       </Row>
 
       <Row>
         <Title>
-          { enLang['Info.Body.PublicKeyInfo'] }
+          { lang['Info.Body.PublicKeyInfo'] }
         </Title>
         <RowCert>
-          { renderRowContainer(enLang['Info.Body.Algorithm'], publicKey.algorithm) }
-          { renderRowContainer(enLang['Info.Body.ModulusBits'], publicKey.modulusBits) }
-          { renderRowContainer(enLang['Info.Body.PublicExponent'], publicKey.publicExponent) }
-          { renderRowContainer(enLang['Info.Body.NamedCurve'], publicKey.namedCurve) }
+          { renderRowContainer(lang['Info.Body.Algorithm'], publicKey.algorithm) }
+          { renderRowContainer(lang['Info.Body.ModulusBits'], publicKey.modulusBits) }
+          { renderRowContainer(lang['Info.Body.PublicExponent'], publicKey.publicExponent) }
+          { renderRowContainer(lang['Info.Body.NamedCurve'], publicKey.namedCurve) }
         </RowCert>
         <RowCert>
-          { renderRowContainer(enLang['Info.Body.Value'], publicKey.value, true) }
+          { renderRowContainer(lang['Info.Body.Value'], publicKey.value, true) }
         </RowCert>
       </Row>
 
       <Row>
         <Title>
-          { enLang['Info.Body.Signature'] }
+          { lang['Info.Body.Signature'] }
         </Title>
         <RowCert>
-          { renderRowContainer(enLang['Info.Body.Algorithm'], signature.algorithm) }
-          { renderRowContainer(enLang['Info.Body.Hash'], signature.hash) }
+          { renderRowContainer(lang['Info.Body.Algorithm'], signature.algorithm) }
+          { renderRowContainer(lang['Info.Body.Hash'], signature.hash) }
         </RowCert>
         <RowCert>
-          { renderRowContainer(enLang['Info.Body.Value'], signature.value, true) }
+          { renderRowContainer(lang['Info.Body.Value'], signature.value, true) }
         </RowCert>
       </Row>
 
@@ -120,6 +120,10 @@ RequestInfo.defaultProps = {
     hash: '',
     value: '',
   },
+};
+
+RequestInfo.contextTypes = {
+  lang: PropTypes.object,
 };
 
 export default RequestInfo;

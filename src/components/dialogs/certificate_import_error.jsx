@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import styled from 'styled-components';
 import { Dialog } from '../basic';
-import enLang from '../../langs/en.json';
 
 const DescrStyled = styled.div`
   font-size: 14px;
@@ -11,19 +10,23 @@ const DescrStyled = styled.div`
 `;
 
 export default class CertificateImportErrorDialog extends Component {
-
   static propTypes = {
     onAccept: PropTypes.func.isRequired,
     message: PropTypes.string,
   };
 
+  static contextTypes = {
+    lang: PropTypes.object,
+  };
+
   render() {
     const { onAccept, message } = this.props;
+    const { lang } = this.context;
 
     return (
       <Dialog
-        title={enLang['Dialog.CertificateImportError.Title']}
-        acceptText={enLang['Dialog.CertificateImportError.Btn.Accept']}
+        title={lang['Dialog.CertificateImportError.Title']}
+        acceptText={lang['Dialog.CertificateImportError.Btn.Accept']}
         cancelText=""
         onAccept={onAccept}
       >

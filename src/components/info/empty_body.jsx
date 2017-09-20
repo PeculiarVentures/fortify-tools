@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 import { EmptyCertIcon } from '../svg';
-import enLang from '../../langs/en.json';
 
 const IconStyled = styled(EmptyCertIcon)`
   width: 74px;
@@ -40,12 +39,12 @@ const EmptyBodyStyled = styled.div`
   ${props => props.theme.mixins.ghostVerticalAlign}
 `;
 
-const EmptyBody = ({ blackBg }) => (
+const EmptyBody = ({ blackBg }, { lang }) => (
   <EmptyBodyStyled>
     <ContainerStyled>
       <IconStyled blackBg={blackBg} />
       <TextStyled blackBg={blackBg}>
-        { enLang['Sidebar.Body.Empty'] }
+        { lang['Sidebar.Body.Empty'] }
       </TextStyled>
     </ContainerStyled>
   </EmptyBodyStyled>
@@ -57,6 +56,10 @@ EmptyBody.propTypes = {
 
 EmptyBody.defaultProps = {
   blackBg: false,
+};
+
+EmptyBody.contextTypes = {
+  lang: PropTypes.object,
 };
 
 export default EmptyBody;

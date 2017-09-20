@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { SelectField, SelectItem, SelectNative } from '../../basic';
 import { ProviderActions } from '../../../actions/state';
 import { Title, GroupContainer, GroupPart } from './styles';
-import enLang from '../../../langs/en.json';
 
 const TextFieldContainer = styled.div`
   display: inline-block;
@@ -41,6 +40,7 @@ export default class Provider extends Component {
   static contextTypes = {
     deviceType: PropTypes.string,
     dispatch: PropTypes.func,
+    lang: PropTypes.object,
   };
 
   onSelectHandler = (data) => {
@@ -54,7 +54,7 @@ export default class Provider extends Component {
 
   render() {
     const { providers } = this.props;
-    const { deviceType, dispatch } = this.context;
+    const { deviceType, dispatch, lang } = this.context;
 
     const selectedProvider = providers.filter(obj => obj.selected);
     const notReadOnlyProviders = providers.filter(obj => !obj.readOnly);
@@ -70,15 +70,15 @@ export default class Provider extends Component {
     return (
       <GroupContainer>
         <Title>
-          { enLang['CertificateCreate.Provider.Title'] }
+          { lang['CertificateCreate.Provider.Title'] }
         </Title>
         <GroupPart>
           <TextFieldContainer>
             {
               deviceType === 'phone'
                 ? <SelectNative
-                  labelText={enLang['CertificateCreate.Provider.Field.Name']}
-                  placeholder={enLang['Select.Label.Provider']}
+                  labelText={lang['CertificateCreate.Provider.Field.Name']}
+                  placeholder={lang['Select.Label.Provider']}
                   options={notReadOnlyProviders.map(item => ({
                     value: item.id,
                     name: item.name,
@@ -87,8 +87,8 @@ export default class Provider extends Component {
                   onChange={this.onSelectHandler}
                 />
                 : <SelectField
-                  labelText={enLang['CertificateCreate.Provider.Field.Name']}
-                  placeholder={enLang['Select.Label.Provider']}
+                  labelText={lang['CertificateCreate.Provider.Field.Name']}
+                  placeholder={lang['Select.Label.Provider']}
                   value={{
                     name: currentProvider ? currentProvider.name : '',
                     value: currentProvider ? currentProvider.id : '',

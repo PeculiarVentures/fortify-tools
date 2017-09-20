@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Overlay from './overlay';
 import CertificateCreate from '../components/create_certificate';
+import langEn from '../langs/en.json';
 
 const ContentStyled = styled.div`
   height: 100%;
@@ -30,11 +31,13 @@ class CreateContainer extends Component {
 
   static childContextTypes = {
     dispatch: PropTypes.func,
+    lang: PropTypes.object,
   };
 
   getChildContext() {
     return {
       dispatch: this.props.dispatch,
+      lang: langEn,
     };
   }
 

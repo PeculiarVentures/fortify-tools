@@ -1,8 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Root, Row, Title, RowCertInfo, RowCert, ColCert } from './styled/info';
-import enLang from '../../langs/en.json';
 
-const CertificateInfo = (props) => {
+const CertificateInfo = (props, context) => {
   const {
     general,
     subject,
@@ -11,6 +10,7 @@ const CertificateInfo = (props) => {
     signature,
     extensions,
   } = props;
+  const { lang } = context;
 
   const renderRowContainer = (title, value, index, monospace) => {
     if (value && title !== 'name') {
@@ -35,22 +35,22 @@ const CertificateInfo = (props) => {
 
       <Row>
         <Title>
-          { enLang['Info.Body.General'] }
+          { lang['Info.Body.General'] }
         </Title>
         <RowCert>
-          { renderRowContainer(enLang['Info.Body.SerialNumber'], general.serialNumber, '', true) }
-          { renderRowContainer(enLang['Info.Body.Version'], general.version) }
-          { renderRowContainer(enLang['Info.Body.Issued'], general.notBefore) }
-          { renderRowContainer(enLang['Info.Body.Expired'], general.notAfter) }
+          { renderRowContainer(lang['Info.Body.SerialNumber'], general.serialNumber, '', true) }
+          { renderRowContainer(lang['Info.Body.Version'], general.version) }
+          { renderRowContainer(lang['Info.Body.Issued'], general.notBefore) }
+          { renderRowContainer(lang['Info.Body.Expired'], general.notAfter) }
           <RowCert>
-            { renderRowContainer(enLang['Info.Body.Thumbprint'], general.thumbprint, '', true) }
+            { renderRowContainer(lang['Info.Body.Thumbprint'], general.thumbprint, '', true) }
           </RowCert>
         </RowCert>
       </Row>
 
       <Row>
         <Title>
-          { enLang['Info.Body.SubjectName'] }
+          { lang['Info.Body.SubjectName'] }
         </Title>
         <RowCert>
           {
@@ -61,7 +61,7 @@ const CertificateInfo = (props) => {
 
       <Row>
         <Title>
-          { enLang['Info.Body.IssuerName'] }
+          { lang['Info.Body.IssuerName'] }
         </Title>
         <RowCert>
           {
@@ -72,35 +72,35 @@ const CertificateInfo = (props) => {
 
       <Row>
         <Title>
-          { enLang['Info.Body.PublicKeyInfo'] }
+          { lang['Info.Body.PublicKeyInfo'] }
         </Title>
         <RowCert>
-          { renderRowContainer(enLang['Info.Body.Algorithm'], publicKey.algorithm) }
-          { renderRowContainer(enLang['Info.Body.ModulusBits'], publicKey.modulusBits) }
-          { renderRowContainer(enLang['Info.Body.PublicExponent'], publicKey.publicExponent) }
-          { renderRowContainer(enLang['Info.Body.NamedCurve'], publicKey.namedCurve) }
+          { renderRowContainer(lang['Info.Body.Algorithm'], publicKey.algorithm) }
+          { renderRowContainer(lang['Info.Body.ModulusBits'], publicKey.modulusBits) }
+          { renderRowContainer(lang['Info.Body.PublicExponent'], publicKey.publicExponent) }
+          { renderRowContainer(lang['Info.Body.NamedCurve'], publicKey.namedCurve) }
         </RowCert>
         <RowCert>
-          { renderRowContainer(enLang['Info.Body.Value'], publicKey.value, '', true) }
+          { renderRowContainer(lang['Info.Body.Value'], publicKey.value, '', true) }
         </RowCert>
       </Row>
 
       <Row>
         <Title>
-          { enLang['Info.Body.Signature'] }
+          { lang['Info.Body.Signature'] }
         </Title>
         <RowCert>
-          { renderRowContainer(enLang['Info.Body.Algorithm'], signature.algorithm) }
-          { renderRowContainer(enLang['Info.Body.Hash'], signature.hash) }
+          { renderRowContainer(lang['Info.Body.Algorithm'], signature.algorithm) }
+          { renderRowContainer(lang['Info.Body.Hash'], signature.hash) }
         </RowCert>
         <RowCert>
-          { renderRowContainer(enLang['Info.Body.Value'], signature.value, '', true) }
+          { renderRowContainer(lang['Info.Body.Value'], signature.value, '', true) }
         </RowCert>
       </Row>
 
       <Row>
         <Title>
-          { enLang['Info.Body.Extensions'] }
+          { lang['Info.Body.Extensions'] }
         </Title>
         {
           extensions.length
@@ -108,13 +108,13 @@ const CertificateInfo = (props) => {
             <RowCert
               key={index}
             >
-              { renderRowContainer(enLang['Info.Body.Name'], ext.name) }
-              { renderRowContainer(enLang['Info.Body.Value'], ext.value, '', true) }
-              { renderRowContainer(enLang['Info.Body.Critical'], ext.critical ? 'yes' : 'no') }
+              { renderRowContainer(lang['Info.Body.Name'], ext.name) }
+              { renderRowContainer(lang['Info.Body.Value'], ext.value, '', true) }
+              { renderRowContainer(lang['Info.Body.Critical'], ext.critical ? 'yes' : 'no') }
             </RowCert>
           ))
           : <RowCert>
-            { renderRowContainer(enLang['Info.Body.None'], ' ') }
+            { renderRowContainer(lang['Info.Body.None'], ' ') }
           </RowCert>
         }
       </Row>
@@ -176,6 +176,10 @@ CertificateInfo.defaultProps = {
     value: '',
   },
   extensions: [],
+};
+
+CertificateInfo.contextInfo = {
+  lang: PropTypes.object,
 };
 
 export default CertificateInfo;

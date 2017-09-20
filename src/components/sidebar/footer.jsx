@@ -1,6 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import styled from 'styled-components';
-import enLang from '../../langs/en.json';
 
 const SidebarFooterStyled = styled.div`
   padding: 28px 10px;
@@ -56,18 +55,23 @@ export default class SidebarFooter extends Component {
     status: 'seaching',
   };
 
+  static contextTypes = {
+    lang: PropTypes.object,
+  };
+
   getStatusText() {
     const { status } = this.props;
+    const { lang } = this.context;
 
     switch (status) {
       case 'seaching':
-        return enLang['Sidebar.Footer.Status.Seaching'];
+        return lang['Sidebar.Footer.Status.Seaching'];
 
       case 'online':
-        return enLang['Sidebar.Footer.Status.Online'];
+        return lang['Sidebar.Footer.Status.Online'];
 
       case 'offline':
-        return enLang['Sidebar.Footer.Status.Offline'];
+        return lang['Sidebar.Footer.Status.Offline'];
 
       default:
         return null;

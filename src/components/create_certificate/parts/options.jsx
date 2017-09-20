@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
+import React, { PropTypes, Component } from 'react';
 import styled from 'styled-components';
 import { Checkbox } from '../../basic';
 import { Title, GroupContainer, GroupPart } from './styles';
-import enLang from '../../../langs/en.json';
 
 const CheckboxContainer = styled.div`
   display: inline-block;
@@ -22,6 +21,10 @@ const CheckboxContainer = styled.div`
 `;
 
 export default class Options extends Component {
+
+  static contextTypes = {
+    lang: PropTypes.object,
+  };
 
   constructor() {
     super();
@@ -48,15 +51,17 @@ export default class Options extends Component {
   };
 
   render() {
+    const { lang } = this.context;
+
     return (
       <GroupContainer>
         <Title>
-          { enLang['CertificateCreate.Options.Title'] }
+          { lang['CertificateCreate.Options.Title'] }
         </Title>
         <GroupPart>
           <CheckboxContainer>
             <Checkbox
-              labelText={enLang['CertificateCreate.Options.SelfSigned']}
+              labelText={lang['CertificateCreate.Options.SelfSigned']}
               ref={node => (this.checkboxNodes.selfSigned = node)}
               defaultChecked={false}
             />

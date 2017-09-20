@@ -1,13 +1,17 @@
-import React, { Component } from 'react';
+import React, { PropTypes, Component } from 'react';
 import { Dialog } from '../basic';
-import enLang from '../../langs/en.json';
 
 export default class EmptyProviders extends Component {
+  static contextTypes = {
+    lang: PropTypes.object,
+  };
 
   render() {
+    const { lang } = this.context;
+
     return (
       <Dialog
-        title={enLang['Dialog.EmptyProviders.Title']}
+        title={lang['Dialog.EmptyProviders.Title']}
         acceptText=""
         cancelText=""
       />

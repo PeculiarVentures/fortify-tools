@@ -1,13 +1,16 @@
 import React, { PropTypes, Component } from 'react';
 import { Dialog } from '../basic';
 import { QShortcuts } from '../../controllers';
-import enLang from '../../langs/en.json';
 
 export default class IncorrectPinDialog extends Component {
 
   static propTypes = {
     onAccept: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
+  };
+
+  static contextTypes = {
+    lang: PropTypes.object,
   };
 
   constructor() {
@@ -30,12 +33,13 @@ export default class IncorrectPinDialog extends Component {
 
   render() {
     const { onAccept, onCancel } = this.props;
+    const { lang } = this.context;
 
     return (
       <Dialog
-        title={enLang['Dialog.IncorrectPin.Title']}
-        acceptText={enLang['Dialog.IncorrectPin.Btn.Accept']}
-        cancelText={enLang['Dialog.IncorrectPin.Btn.Cancel']}
+        title={lang['Dialog.IncorrectPin.Title']}
+        acceptText={lang['Dialog.IncorrectPin.Btn.Accept']}
+        cancelText={lang['Dialog.IncorrectPin.Btn.Cancel']}
         onAccept={onAccept}
         onCancel={onCancel}
       />
