@@ -65,7 +65,7 @@ export default class SelectField extends Component {
     placeholder: '',
     children: [],
     onChange: null,
-    validation: '',
+    validation: [],
     errorText: '',
     disabled: false,
   };

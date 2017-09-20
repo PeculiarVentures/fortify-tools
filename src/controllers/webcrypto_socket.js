@@ -20,7 +20,7 @@ export const WSController = {
       .on('error', (error) => {
         clearTimeout(this.interval);
         Store.dispatch(ErrorActions.error(error));
-        console.log('WebcryptoSocket connected error: ', error.message);
+        console.log('WebcryptoSocket connected error: ', error);
       })
       .on('listening', () => {
         clearTimeout(this.interval);

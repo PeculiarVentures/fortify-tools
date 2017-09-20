@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import Info from '../components/info/index';
 import Sidebar from '../components/sidebar/index';
 import Overlay from './overlay';
-import { CertificateActions } from '../actions/state';
 import Snackbars from '../components/snackbars';
 
 const ContentStyled = styled.div`
@@ -23,25 +22,24 @@ const InfoStyled = styled.div`
 `;
 
 class RootContainer extends Component {
-
   static propTypes = {
-    params: PropTypes.oneOfType([
-      PropTypes.object,
-    ]),
     dispatch: PropTypes.func,
     loaded: PropTypes.bool,
     status: PropTypes.string,
     providers: PropTypes.oneOfType([
       PropTypes.array,
     ]),
+    dialog: PropTypes.string,
+    modal: PropTypes.string,
   };
 
   static defaultProps = {
-    params: {},
     dispatch: () => {},
     loaded: false,
     status: 'seaching',
     providers: [],
+    dialog: '',
+    modal: '',
   };
 
   static childContextTypes = {
@@ -98,7 +96,7 @@ class RootContainer extends Component {
     const selectedProviderProps = providers.filter(p => p.selected)[0];
     const selectedPrevProviderProps = prevProps.providers.filter(p => p.selected)[0];
 
-    if (selectedPrevProviderProps) {
+    if (selectedPrevProviderProps && {}.hasOwnProperty.call(selectedPrevProviderProps, 'items')) {
       if (selectedPrevProviderProps.items.length === 1 && !selectedProviderProps.items.length) {
         this.handleRootAction({ type: 'SIDEBAR:OPEN' });
       }

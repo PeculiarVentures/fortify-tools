@@ -7,7 +7,10 @@ import { WSController } from '../controllers/webcrypto_socket';
 import { EventChannel } from '../controllers';
 
 function* errorHandler({ data, action }) {
-  const { message, stack } = data;
+  if (!data) {
+    return console.error(data);
+  }
+  const { message = '', stack } = data;
   let errorMessage = '';
 
   // if (/Client.prototype.getServerInfo/.test(stack)) {
