@@ -1,5 +1,4 @@
-import { takeEvery } from 'redux-saga';
-import { put } from 'redux-saga/effects';
+import { put, all, takeEvery } from 'redux-saga/effects';
 import { ACTIONS_CONST } from '../constants';
 import { DialogActions } from '../actions/ui';
 import { WSActions } from '../actions/state';
@@ -81,7 +80,7 @@ function* errorHandler({ data, action }) {
 }
 
 export default function* () {
-  yield [
-    takeEvery(ACTIONS_CONST.ERROR, errorHandler),
-  ];
+  yield all([
+    yield takeEvery(ACTIONS_CONST.ERROR, errorHandler),
+  ]);
 }

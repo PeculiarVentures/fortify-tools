@@ -96,7 +96,10 @@ class RootContainer extends Component {
     const selectedProviderProps = providers.filter(p => p.selected)[0];
     const selectedPrevProviderProps = prevProps.providers.filter(p => p.selected)[0];
 
-    if (selectedPrevProviderProps && {}.hasOwnProperty.call(selectedPrevProviderProps, 'items')) {
+    if (
+      typeof selectedPrevProviderProps === 'object' &&
+      {}.hasOwnProperty.call(selectedPrevProviderProps, 'items')
+    ) {
       if (selectedPrevProviderProps.items.length === 1 && !selectedProviderProps.items.length) {
         this.handleRootAction({ type: 'SIDEBAR:OPEN' });
       }

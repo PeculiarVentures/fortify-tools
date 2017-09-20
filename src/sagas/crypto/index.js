@@ -1,5 +1,4 @@
-import { takeEvery } from 'redux-saga';
-import { select, put } from 'redux-saga/effects';
+import { select, put, takeEvery, all } from 'redux-saga/effects';
 import UUID from 'uuid';
 import { ACTIONS_CONST } from '../../constants';
 import {
@@ -128,6 +127,7 @@ function* webcryptoOnListening() {
     status: 'online',
   }));
 
+  var t0 = performance.now();
   const providers = yield Provider.providerGetList();
   let index = 0;
   let selected = false;
@@ -177,6 +177,8 @@ function* webcryptoOnListening() {
 
   yield providerSelect({ id: selected });
   yield put(AppActions.loaded(true));
+  var t1 = performance.now();
+  console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
   return true;
 }
 
@@ -405,17 +407,17 @@ function* removedProvider() {
 }
 
 export default function* () {
-  yield [
-    takeEvery(ACTIONS_CONST.WS_ON_LISTENING, webcryptoOnListening),
-    takeEvery(ACTIONS_CONST.PROVIDER_SELECT, providerSelect),
-    takeEvery(ACTIONS_CONST.PROVIDER_RELOAD, providerReload),
-    takeEvery(ACTIONS_CONST.WS_LOGIN, providerLogin),
-    takeEvery(ACTIONS_CONST.WS_DOWNLOAD_ITEM, downloadItem),
-    takeEvery(ACTIONS_CONST.WS_REMOVE_ITEM, removeItem),
-    takeEvery(ACTIONS_CONST.WS_IMPORT_ITEM, importItem),
-    takeEvery(ACTIONS_CONST.WS_CREATE_REQUEST, createRequest),
-    takeEvery(ACTIONS_CONST.WS_CREATE_SELF_SIGNED_CERTIFICATE, createSelfSignedCertificate),
-    takeEvery(ACTIONS_CONST.WS_ADDED_PROVIDER, addedProvider),
-    takeEvery(ACTIONS_CONST.WS_REMOVED_PROVIDER, removedProvider),
-  ];
+  yield all([
+    yield takeEvery(ACTIONS_CONST.WS_ON_LISTENING, webcryptoOnListening),
+    yield takeEvery(ACTIONS_CONST.PROVIDER_SELECT, providerSelect),
+    yield takeEvery(ACTIONS_CONST.PROVIDER_RELOAD, providerReload),
+    yield takeEvery(ACTIONS_CONST.WS_LOGIN, providerLogin),
+    yield takeEvery(ACTIONS_CONST.WS_DOWNLOAD_ITEM, downloadItem),
+    yield takeEvery(ACTIONS_CONST.WS_REMOVE_ITEM, removeItem),
+    yield takeEvery(ACTIONS_CONST.WS_IMPORT_ITEM, importItem),
+    yield takeEvery(ACTIONS_CONST.WS_CREATE_REQUEST, createRequest),
+    yield takeEvery(ACTIONS_CONST.WS_CREATE_SELF_SIGNED_CERTIFICATE, createSelfSignedCertificate),
+    yield takeEvery(ACTIONS_CONST.WS_ADDED_PROVIDER, addedProvider),
+    yield takeEvery(ACTIONS_CONST.WS_REMOVED_PROVIDER, removedProvider),
+  ]);
 }
