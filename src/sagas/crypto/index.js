@@ -68,6 +68,10 @@ function* getProviderCertificates() {
     const certificatesArr = yield getCertificatesArr;
 
     for (const item of certificatesArr) {
+      if (!item) {
+        // NOTE: certificateGet returns cert or false, we have to skip wrong data
+        continue;
+      }
       const pem = yield Certificate.certificateExport(provider, item, 'pem');
       let certData = '';
 
