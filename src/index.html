@@ -205,6 +205,23 @@
 			loc.appendChild(script2);
 		}, 200);
 	</script>
+	<script>
+		// get user locale code
+    fetch('https://api.hancock.ink/v0/users/info', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((res) => {
+      if (res.status === 200) {
+        return res.json();
+      }
+    }).then((res) => {
+      window.__lang = res.locale.split('-')[0];
+    }).catch(() => {
+      window.__lang = 'en';
+    });
+	</script>
 </body>
 
 </html>

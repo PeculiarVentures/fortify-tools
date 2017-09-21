@@ -5,7 +5,6 @@ import Info from '../components/info/index';
 import Sidebar from '../components/sidebar/index';
 import Overlay from './overlay';
 import Snackbars from '../components/snackbars';
-import langEn from '../langs/en.json';
 
 const ContentStyled = styled.div`
   height: 100%;
@@ -24,7 +23,6 @@ const InfoStyled = styled.div`
 
 class RootContainer extends Component {
   static propTypes = {
-    dispatch: PropTypes.func,
     loaded: PropTypes.bool,
     status: PropTypes.string,
     providers: PropTypes.oneOfType([
@@ -35,7 +33,6 @@ class RootContainer extends Component {
   };
 
   static defaultProps = {
-    dispatch: () => {},
     loaded: false,
     status: 'seaching',
     providers: [],
@@ -44,49 +41,20 @@ class RootContainer extends Component {
   };
 
   static childContextTypes = {
-    dispatch: PropTypes.func,
-    windowSize: PropTypes.object,
     handleRootAction: PropTypes.func,
-    lang: PropTypes.object,
   };
-
-  static getWindowSize() {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    let device = 'desktop';
-
-    if (width <= 1024 && width > 736) {
-      device = 'tablet';
-    } else if (width <= 736) {
-      device = 'mobile';
-    }
-
-    return {
-      width,
-      height,
-      device,
-    };
-  }
 
   constructor() {
     super();
 
     this.state = {
-      windowSize: RootContainer.getWindowSize(),
       sidebarOpen: false,
     };
-
-    this.bindedOnResize = ::this.onResize;
-
-    window.addEventListener('resize', this.bindedOnResize);
   }
 
   getChildContext() {
     return {
-      dispatch: this.props.dispatch,
-      windowSize: this.state.windowSize,
       handleRootAction: this.handleRootAction.bind(this),
-      lang: langEn,
     };
   }
 
@@ -111,12 +79,6 @@ class RootContainer extends Component {
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.bindedOnResize);
-  }
-
-  onResize() {
-    this.setState({
-      windowSize: RootContainer.getWindowSize(),
-    });
   }
 
   handleRootAction(payload) {

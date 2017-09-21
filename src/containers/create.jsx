@@ -3,43 +3,31 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Overlay from './overlay';
 import CertificateCreate from '../components/create_certificate';
-import langEn from '../langs/en.json';
 
 const ContentStyled = styled.div`
   height: 100%;
 `;
 
 class CreateContainer extends Component {
-
   static propTypes = {
-    dispatch: PropTypes.func,
     loaded: PropTypes.bool,
     status: PropTypes.string,
     providers: PropTypes.oneOfType([
       PropTypes.array,
     ]),
     readOnly: PropTypes.bool,
+    dialog: PropTypes.string,
+    modal: PropTypes.string,
   };
 
   static defaultProps = {
-    dispatch: null,
     loaded: false,
     status: 'seaching',
     providers: [],
     readOnly: false,
+    dialog: '',
+    modal: '',
   };
-
-  static childContextTypes = {
-    dispatch: PropTypes.func,
-    lang: PropTypes.object,
-  };
-
-  getChildContext() {
-    return {
-      dispatch: this.props.dispatch,
-      lang: langEn,
-    };
-  }
 
   render() {
     const { loaded, status, providers, dialog, modal } = this.props;

@@ -1,6 +1,7 @@
 /* eslint no-unused-vars: 0 */
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 import { objectOmitPluck } from './helpers';
 import Routing from './routing';
 import Store from './store';
@@ -11,4 +12,9 @@ if (process.env && process.env.NODE_ENV === 'development') {
 }
 WSController.connect();
 
-ReactDOM.render(<Routing />, document.getElementById('root'));
+ReactDOM.render(
+  <Provider store={Store}>
+    <Routing />
+  </Provider>,
+  document.getElementById('root'),
+);
