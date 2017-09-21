@@ -69,7 +69,9 @@ class RootContainer extends Component {
 
     if (
       typeof selectedPrevProviderProps === 'object' &&
-      {}.hasOwnProperty.call(selectedPrevProviderProps, 'items')
+      {}.hasOwnProperty.call(selectedPrevProviderProps, 'items') &&
+      typeof selectedProviderProps === 'object' &&
+      {}.hasOwnProperty.call(selectedProviderProps, 'items')
     ) {
       if (selectedPrevProviderProps.items.length === 1 && !selectedProviderProps.items.length) {
         this.handleRootAction({ type: 'SIDEBAR:OPEN' });
