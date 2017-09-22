@@ -256,7 +256,7 @@ export default class KeyInfo extends Component {
             { lang['CertificateCreate.KeyInfo.Usage.Title'] }
           </TitleCheckboxes>
           {
-            currentAlgorithmData.usages.map((usage, index) => (
+            currentAlgorithmData.usages[window.__lang].map((usage, index) => (
               <CheckboxContainer key={index}>
                 <Checkbox
                   labelText={usage}
