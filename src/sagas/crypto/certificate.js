@@ -4,7 +4,7 @@ import Attribute from 'pkijs/build/Attribute';
 import Extensions from 'pkijs/build/Extensions';
 import Extension from 'pkijs/build/Extension';
 import Certificate from 'pkijs/build/Certificate';
-import { setEngine } from 'pkijs/build/common';
+import { setEngine, CryptoEngine } from 'pkijs';
 import * as asn1js from 'asn1js';
 import { ErrorActions } from '../../actions/state';
 import { CertHelper } from '../../helpers';
@@ -122,7 +122,7 @@ export function* certificateCreate(crypto, data) {
         privateKey,
       } = yield crypto.subtle.generateKey(algorithm, extractable, usages);
 
-      setEngine('Crypto', crypto, crypto.subtle);
+      
       pkcs10.version = 0;
       pkcs10 = CertHelper.decoratePkcs10Subject(pkcs10, data);
       pkcs10.attributes = [];
@@ -185,7 +185,7 @@ export function* CMSCreate(crypto, data) {
 
     try {
       // Set engine
-      yield setEngine('MsCAPI PKCS#11', crypto, crypto.subtle);
+      setEngine('Crypto', crypto, new CryptoEngine({ name: 'Crypto', crypto, subtle: crypto.subtle }));
 
       // Generate key
       const {
@@ -223,7 +223,7 @@ export function* CMSCreate(crypto, data) {
 
 
       yield certificate.subjectPublicKeyInfo.importKey(publicKey);
-      yield certificate.sign(privateKey, 'SHA-1');
+      yield certificate.sign(privateKey, 'SHA-256');
       // Add null param for algorithms
       if (!certificate.signature.algorithmParams) {
         certificate.signature.algorithmParams = new asn1js.Null();
