@@ -1,5 +1,6 @@
 import { select, put, takeEvery, all } from 'redux-saga/effects';
 import UUID from 'uuid';
+import * as asn1js from 'asn1js';
 import { ACTIONS_CONST } from '../../constants';
 import {
   ProviderActions,
@@ -77,6 +78,8 @@ function* getProviderCertificates() {
 
       if (item.type === 'x509') {
         const raw = yield Certificate.certificateExport(provider, item, 'raw');
+        // const asn1 = asn1js.fromBER(raw);
+        // console.log(asn1);
         const thumbprint = yield Certificate.certificateThumbprint(provider, raw);
         const certificateDetails = CertHelper.certRawToJson(raw);
 
