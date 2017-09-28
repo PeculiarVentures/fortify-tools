@@ -1,6 +1,6 @@
 import { select, put, takeEvery, all } from 'redux-saga/effects';
 import UUID from 'uuid';
-import * as asn1js from 'asn1js';
+// import * as asn1js from 'asn1js';
 import { ACTIONS_CONST } from '../../constants';
 import {
   ProviderActions,
@@ -18,34 +18,34 @@ import { RoutingController, EventChannel } from '../../controllers';
 /**
  * Get provider keys
  */
-function* getProviderKeys() {
-  const state = yield select();
-  const providers = state.find('providers');
-  const currentProvider = providers.where({ selected: true }).get();
-
-  const { provider } = yield Provider.providerGet(currentProvider.id);
-  const keyIDs = yield Key.keyGetIDs(provider);
-
-  if (keyIDs.length) {
-    const getKeysArr = [];
-    let index = 0;
-
-    for (const keyID of keyIDs) {
-      getKeysArr.push(Key.keyGet(provider, keyID));
-    }
-
-    const keysArr = yield getKeysArr;
-
-    for (const item of keysArr) {
-      const keyData = CertHelper.keyDataHandler({
-        ...item,
-        id: keyIDs[index],
-      });
-      index += 1;
-      yield put(ItemActions.add(keyData, currentProvider.id));
-    }
-  }
-}
+// function* getProviderKeys() {
+//   const state = yield select();
+//   const providers = state.find('providers');
+//   const currentProvider = providers.where({ selected: true }).get();
+//
+//   const { provider } = yield Provider.providerGet(currentProvider.id);
+//   const keyIDs = yield Key.keyGetIDs(provider);
+//
+//   if (keyIDs.length) {
+//     const getKeysArr = [];
+//     let index = 0;
+//
+//     for (const keyID of keyIDs) {
+//       getKeysArr.push(Key.keyGet(provider, keyID));
+//     }
+//
+//     const keysArr = yield getKeysArr;
+//
+//     for (const item of keysArr) {
+//       const keyData = CertHelper.keyDataHandler({
+//         ...item,
+//         id: keyIDs[index],
+//       });
+//       index += 1;
+//       yield put(ItemActions.add(keyData, currentProvider.id));
+//     }
+//   }
+// }
 
 /**
  * Get provider certificates
@@ -71,7 +71,7 @@ function* getProviderCertificates() {
     for (const item of certificatesArr) {
       if (!item) {
         // NOTE: certificateGet returns cert or false, we have to skip wrong data
-        continue;
+        continue; // eslint-disable-line
       }
       const pem = yield Certificate.certificateExport(provider, item, 'pem');
       let certData = '';
@@ -406,6 +406,10 @@ function* addedProvider({ data }) {
     index: state.get('providers').length,
     logged: provider.isLogged,
   }));
+
+  if (state.get('dialog') === 'empty_providers') {
+    yield put(DialogActions.close());
+  }
 }
 
 function* removedProvider() {
