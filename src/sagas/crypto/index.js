@@ -1,6 +1,7 @@
 import { select, put, takeEvery, all } from 'redux-saga/effects';
 import UUID from 'uuid';
 // import * as asn1js from 'asn1js';
+import { Convert } from 'pvtsutils';
 import { ACTIONS_CONST } from '../../constants';
 import {
   ProviderActions,
@@ -73,13 +74,15 @@ function* getProviderCertificates() {
         // NOTE: certificateGet returns cert or false, we have to skip wrong data
         continue; // eslint-disable-line
       }
-      const pem = yield Certificate.certificateExport(provider, item, 'pem');
+      const raw = yield Certificate.certificateExport(provider, item, 'raw');
+      const base64 = Convert.ToBase64(raw);
       let certData = '';
 
       if (item.type === 'x509') {
-        const raw = yield Certificate.certificateExport(provider, item, 'raw');
-        // const asn1 = asn1js.fromBER(raw);
-        // console.log(asn1);
+        const pem = `-----BEGIN CERTIFICATE-----
+        ${base64}
+        -----END CERTIFICATE-----`;
+
         const thumbprint = yield Certificate.certificateThumbprint(provider, raw);
         const certificateDetails = CertHelper.certRawToJson(raw);
 
@@ -90,6 +93,10 @@ function* getProviderCertificates() {
           thumbprint,
         });
       } else {
+        const pem = `-----BEGIN CERTIFICATE REQUEST-----
+        ${base64}
+        -----END CERTIFICATE REQUEST-----`;
+
         certData = CertHelper.requestDataHandler({
           ...item,
           id: certIDs[index],
