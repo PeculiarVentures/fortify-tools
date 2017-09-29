@@ -118,6 +118,9 @@ export function* certificateCreate(crypto, data) {
     let pkcs10 = new CertificationRequest();
 
     try {
+      // Set engine
+      setEngine('Crypto', crypto, new CryptoEngine({ name: 'Crypto', crypto, subtle: crypto.subtle }));
+      
       const {
         publicKey,
         privateKey,
