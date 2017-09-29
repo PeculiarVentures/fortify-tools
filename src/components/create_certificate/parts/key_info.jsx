@@ -260,7 +260,7 @@ export default class KeyInfo extends Component {
               <CheckboxContainer key={index}>
                 <Checkbox
                   labelText={usage}
-                  ref={node => (this.checkboxNodes[usage] = node)}
+                  ref={node => (this.checkboxNodes[currentAlgorithmData.usages.en[index]] = node)}
                   checked
                   disabled
                 />

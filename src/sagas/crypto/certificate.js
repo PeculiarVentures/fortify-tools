@@ -109,11 +109,10 @@ export function* certificateCreate(crypto, data) {
   //   },
   // };
   if (crypto) {
-    const { extractable } = data.keyInfo;
+    const { extractable, usages } = data.keyInfo;
     const algorithm = (() => Object.assign({
       publicExponent: new Uint8Array([1, 0, 1]),
     }, data.keyInfo.algorithm))();
-    const usages = ['sign', 'verify'];
     const algorithmHash = algorithm.hash;
     let pkcs10 = new CertificationRequest();
 
@@ -123,7 +122,6 @@ export function* certificateCreate(crypto, data) {
         privateKey,
       } = yield crypto.subtle.generateKey(algorithm, extractable, usages);
 
-      
       pkcs10.version = 0;
       pkcs10 = CertHelper.decoratePkcs10Subject(pkcs10, data);
       pkcs10.attributes = [];
