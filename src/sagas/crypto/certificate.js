@@ -109,10 +109,11 @@ export function* certificateCreate(crypto, data) {
   //   },
   // };
   if (crypto) {
-    const { extractable, usages } = data.keyInfo;
+    const { extractable } = data.keyInfo;
     const algorithm = (() => Object.assign({
       publicExponent: new Uint8Array([1, 0, 1]),
     }, data.keyInfo.algorithm))();
+    const usages = ['sign', 'verify'];
     const algorithmHash = algorithm.hash;
     let pkcs10 = new CertificationRequest();
 
