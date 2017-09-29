@@ -141,7 +141,6 @@ function* webcryptoOnListening() {
     status: 'online',
   }));
 
-  // var t0 = performance.now();
   const providers = yield Provider.providerGetList();
   let index = 0;
   let selected = false;
@@ -166,7 +165,7 @@ function* webcryptoOnListening() {
 
     providersArray.push({
       id: prv.id,
-      name: prv.name,
+      name: prv.name || prv.reader || 'Token with empty name',
       readOnly: prv.readOnly,
       index,
       logged: provider.isLogged,
@@ -191,8 +190,7 @@ function* webcryptoOnListening() {
 
   yield providerSelect({ id: selected });
   yield put(AppActions.loaded(true));
-  // var t1 = performance.now();
-  // console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
+
   return true;
 }
 
