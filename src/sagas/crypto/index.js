@@ -8,6 +8,7 @@ import {
   WSActions,
   ItemActions,
   AppActions,
+  ErrorActions,
 } from '../../actions/state';
 import { DialogActions, ModalActions } from '../../actions/ui';
 import { CertHelper, downloadCertFromURI } from '../../helpers';
@@ -57,56 +58,74 @@ function* getProviderCertificates() {
   const currentProvider = providers.where({ selected: true }).get();
 
   const { provider } = yield Provider.providerGet(currentProvider.id);
+  const keyIDs = yield Key.keyGetIDs(provider);
   const certIDs = yield Certificate.certificateGetIDs(provider);
 
-  if (certIDs.length) {
-    const getCertificatesArr = [];
-    let index = 0;
+  const certificatesArr = [];
+  let index = 0;
 
-    for (const certID of certIDs) {
-      getCertificatesArr.push(Certificate.certificateGet(provider, certID));
-    }
 
-    const certificatesArr = yield getCertificatesArr;
-
-    for (const item of certificatesArr) {
-      if (!item) {
-        // NOTE: certificateGet returns cert or false, we have to skip wrong data
-        continue; // eslint-disable-line
+  for (const certID of certIDs) {
+    // Get certificates with private key only
+    for (const keyID of keyIDs) {
+      const keyParts = keyID.split('-');
+      if (keyParts[0] === 'private' && keyParts[2] === certID.split('-')[2]) {
+        const cert = yield Certificate.certificateGet(provider, certID);
+        if (cert) {
+          certificatesArr.push(cert);
+        }
+        break;
       }
-      const raw = yield Certificate.certificateExport(provider, item, 'raw');
-      const base64 = Convert.ToBase64(raw);
-      let certData = '';
+    }
+  }
 
-      if (item.type === 'x509') {
-        const pem = `-----BEGIN CERTIFICATE-----
+  // sort certificates
+  certificatesArr.sort((a, b) => {
+    if (a.subjectName > b.subjectName) {
+      return 1;
+    } else if (a.subjectName < b.subjectName) {
+      return -1;
+    }
+    return 0;
+  });
+
+  for (const item of certificatesArr) {
+    if (!item) {
+      // NOTE: certificateGet returns cert or false, we have to skip wrong data
+      continue; // eslint-disable-line
+    }
+    const raw = yield Certificate.certificateExport(provider, item, 'raw');
+    const base64 = Convert.ToBase64(raw);
+    let certData = '';
+
+    if (item.type === 'x509') {
+      const pem = `-----BEGIN CERTIFICATE-----
         ${base64}
         -----END CERTIFICATE-----`;
 
-        const thumbprint = yield Certificate.certificateThumbprint(provider, raw);
-        const certificateDetails = CertHelper.certRawToJson(raw);
+      const thumbprint = yield Certificate.certificateThumbprint(provider, raw);
+      const certificateDetails = CertHelper.certRawToJson(raw);
 
-        certData = CertHelper.certDataHandler({
-          ...certificateDetails,
-          id: certIDs[index],
-          pem,
-          thumbprint,
-        });
-      } else {
-        const pem = `-----BEGIN CERTIFICATE REQUEST-----
+      certData = CertHelper.certDataHandler({
+        ...certificateDetails,
+        id: certIDs[index],
+        pem,
+        thumbprint,
+      });
+    } else {
+      const pem = `-----BEGIN CERTIFICATE REQUEST-----
         ${base64}
         -----END CERTIFICATE REQUEST-----`;
 
-        certData = CertHelper.requestDataHandler({
-          ...item,
-          id: certIDs[index],
-          pem,
-        });
-      }
-
-      index += 1;
-      yield put(ItemActions.add(certData, currentProvider.id));
+      certData = CertHelper.requestDataHandler({
+        ...item,
+        id: certIDs[index],
+        pem,
+      });
     }
+
+    index += 1;
+    yield put(ItemActions.add(certData, currentProvider.id));
   }
 }
 
@@ -117,16 +136,20 @@ function* getProviderCertificates() {
  * }}
  */
 function* providerSelect({ id }) {
-  const state = yield select();
-  const providers = state.find('providers');
-  const provider = providers.where({ id }).get();
-  if (!provider.loaded) {
-    yield [getProviderCertificates()];
-    yield put(ItemActions.select());
-    yield put(ProviderActions.update({ loaded: true }));
-  }
-  if (!provider.logged) {
-    yield put(WSActions.login(provider.id));
+  try {
+    const state = yield select();
+    const providers = state.find('providers');
+    const provider = providers.where({ id }).get();
+    if (!provider.loaded) {
+      yield [getProviderCertificates()];
+      yield put(ItemActions.select());
+      yield put(ProviderActions.update({ loaded: true }));
+    }
+    if (!provider.logged) {
+      yield put(WSActions.login(provider.id));
+    }
+  } catch (error) {
+    yield put(ErrorActions.error(error));
   }
 }
 
@@ -135,63 +158,68 @@ function* providerSelect({ id }) {
  * @returns {boolean}
  */
 function* webcryptoOnListening() {
-  yield put(AppActions.setState({
-    loaded: false,
-    providers: [],
-    status: 'online',
-  }));
+  try {
+    yield put(AppActions.setState({
+      loaded: false,
+      providers: [],
+      status: 'online',
+    }));
 
-  const providers = yield Provider.providerGetList();
-  let index = 0;
-  let selected = false;
-  const providersArray = [];
+    const providers = yield Provider.providerGetList();
+    let index = 0;
+    let selected = false;
+    const providersArray = [];
 
-  const initState = RoutingController.parseInitState(
-    window.location.pathname,
-    window.location.search,
-  );
+    const initState = RoutingController.parseInitState(
+      window.location.pathname,
+      window.location.search,
+    );
 
-  if (!providers.length) {
-    yield put(DialogActions.open('empty_providers'));
-    return false;
-  }
-
-  for (const prv of providers) {
-    const provider = yield Provider.providerGet(prv.id);
-
-    if (initState.params.provider === prv.id) {
-      selected = prv.id;
+    if (!providers.length) {
+      yield put(DialogActions.open('empty_providers'));
+      return false;
     }
 
-    providersArray.push({
-      id: prv.id,
-      name: prv.name || prv.reader || 'Token with empty name',
-      readOnly: prv.readOnly,
-      index,
-      logged: provider.isLogged,
-      selected: initState.params.provider === prv.id,
-    });
+    for (const prv of providers) {
+      const provider = yield Provider.providerGet(prv.id);
 
-    index += 1;
+      if (initState.params.provider === prv.id) {
+        selected = prv.id;
+      }
+
+      providersArray.push({
+        id: prv.id,
+        name: prv.name || prv.reader || 'Token with empty name',
+        readOnly: prv.readOnly,
+        index,
+        logged: provider.isLogged,
+        selected: initState.params.provider === prv.id,
+      });
+
+      index += 1;
+    }
+
+    if (!selected) {
+      selected = providersArray[0].id;
+      providersArray[0].selected = true;
+    }
+
+    yield put(AppActions.setState({
+      providers: providersArray,
+    }));
+
+    if (RoutingController.initialState.create) {
+      yield put(AppActions.create(true));
+    }
+
+    yield providerSelect({ id: selected });
+    yield put(AppActions.loaded(true));
+
+    return true;
+  } catch (error) {
+    yield put(ErrorActions.error(error));
+    return false;
   }
-
-  if (!selected) {
-    selected = providersArray[0].id;
-    providersArray[0].selected = true;
-  }
-
-  yield put(AppActions.setState({
-    providers: providersArray,
-  }));
-
-  if (RoutingController.initialState.create) {
-    yield put(AppActions.create(true));
-  }
-
-  yield providerSelect({ id: selected });
-  yield put(AppActions.loaded(true));
-
-  return true;
 }
 
 /**
@@ -201,14 +229,18 @@ function* webcryptoOnListening() {
  * }}
  */
 function* providerLogin({ id }) {
-  const crypto = yield Provider.cryptoGet(id);
-  const isLogged = yield Provider.providerIsLogged(crypto);
+  try {
+    const crypto = yield Provider.cryptoGet(id);
+    const isLogged = yield Provider.providerIsLogged(crypto);
 
-  if (!isLogged) {
-    const logged = yield Provider.providerLogin(crypto);
-    yield put(ProviderActions.update({ logged }));
-  } else {
-    yield put(ProviderActions.update({ logged: true }));
+    if (!isLogged) {
+      const logged = yield Provider.providerLogin(crypto);
+      yield put(ProviderActions.update({ logged }));
+    } else {
+      yield put(ProviderActions.update({ logged: true }));
+    }
+  } catch (error) {
+    yield put(ErrorActions.error(error, 'unauthorize_pin'));
   }
 }
 
@@ -219,13 +251,17 @@ function* providerLogin({ id }) {
  * }}
  */
 function* providerReload({ id }) {
-  yield put(AppActions.loaded(false));
-  yield put(ProviderActions.update({ loaded: false, items: [] }));
+  try {
+    yield put(AppActions.loaded(false));
+    yield put(ProviderActions.update({ loaded: false, items: [] }));
 
-  const crypto = yield Provider.cryptoReset(id);
-  if (typeof crypto === 'undefined') {
-    yield providerSelect({ id });
-    yield put(AppActions.loaded(true));
+    const crypto = yield Provider.cryptoReset(id);
+    if (typeof crypto === 'undefined') {
+      yield providerSelect({ id });
+      yield put(AppActions.loaded(true));
+    }
+  } catch (error) {
+    yield put(ErrorActions.error(error));
   }
 }
 
@@ -236,20 +272,24 @@ function* providerReload({ id }) {
  * }}
  */
 function* downloadItem({ format }) {
-  const state = yield select();
-  const selectedProvider = state.find('providers').where({ selected: true });
-  const crypto = yield Provider.cryptoGet(selectedProvider.get().id);
+  try {
+    const state = yield select();
+    const selectedProvider = state.find('providers').where({ selected: true });
+    const crypto = yield Provider.cryptoGet(selectedProvider.get().id);
 
-  if (crypto) {
-    const selectedItem = selectedProvider.find('items').where({ selected: true }).get();
-    const item = yield Certificate.certificateGet(crypto, selectedItem._id);
-    const exported = yield Certificate.certificateExport(crypto, item, format);
+    if (crypto) {
+      const selectedItem = selectedProvider.find('items').where({ selected: true }).get();
+      const item = yield Certificate.certificateGet(crypto, selectedItem._id);
+      const exported = yield Certificate.certificateExport(crypto, item, format);
 
-    if (exported && typeof exported === 'string') {
-      downloadCertFromURI(selectedItem.name, exported, selectedItem.type);
-    } else if (exported) {
-      downloadCertFromURI(selectedItem.name, [exported], selectedItem.type, true);
+      if (exported && typeof exported === 'string') {
+        downloadCertFromURI(selectedItem.name, exported, selectedItem.type);
+      } else if (exported) {
+        downloadCertFromURI(selectedItem.name, [exported], selectedItem.type, true);
+      }
     }
+  } catch (error) {
+    yield put(ErrorActions.error(error));
   }
 }
 
@@ -257,169 +297,188 @@ function* downloadItem({ format }) {
  * Remove provider certificate/request/key
  */
 function* removeItem() {
-  const state = yield select();
-  const selectedProvider = state.find('providers').where({ selected: true });
-  const crypto = yield Provider.cryptoGet(selectedProvider.get().id);
+  try {
+    const state = yield select();
+    const selectedProvider = state.find('providers').where({ selected: true });
+    const crypto = yield Provider.cryptoGet(selectedProvider.get().id);
 
-  if (crypto) {
     const selectedItem = selectedProvider.find('items').where({ selected: true }).get();
-    let remove = '';
 
     if (selectedItem.type === 'key') {
-      remove = yield Key.keyRemove(crypto, selectedItem._id);
+      yield Key.keyRemove(crypto, selectedItem._id);
     } else {
-      remove = yield Certificate.certificateRemove(crypto, selectedItem._id);
+      yield Certificate.certificateRemove(crypto, selectedItem._id);
     }
-    if (remove) {
-      yield put(ItemActions.remove(selectedItem.id));
-      yield put(DialogActions.close());
-    }
+    yield put(ItemActions.remove(selectedItem.id));
+    yield put(DialogActions.close());
+  } catch (error) {
+    yield put(ErrorActions.error(error, 'remove_item_error'));
   }
 }
 
 function* importItem({ data }) {
-  yield put(DialogActions.open('load'));
+  try {
+    yield put(DialogActions.open('load'));
 
-  const state = yield select();
-  const selectedProvider = state.find('providers').where({ selected: true });
-  const crypto = yield Provider.cryptoGet(selectedProvider.get().id);
+    const state = yield select();
+    const selectedProvider = state.find('providers').where({ selected: true });
+    const crypto = yield Provider.cryptoGet(selectedProvider.get().id);
 
-  if (crypto) {
-    const imported = yield Certificate.certificateImport(crypto, data);
+    if (crypto) {
+      const imported = yield Certificate.certificateImport(crypto, data);
 
-    if (imported) {
-      const item = yield Certificate.certificateGet(crypto, imported);
-      const pem = yield Certificate.certificateExport(crypto, item, 'pem');
-      const addedId = UUID();
-      let certData = '';
+      if (imported) {
+        const item = yield Certificate.certificateGet(crypto, imported);
+        const pem = yield Certificate.certificateExport(crypto, item, 'pem');
+        const addedId = UUID();
+        let certData = '';
 
-      if (item.type === 'x509') {
-        const raw = yield Certificate.certificateExport(crypto, item, 'raw');
-        const thumbprint = yield Certificate.certificateThumbprint(crypto, raw);
-        const certificateDetails = CertHelper.certRawToJson(raw);
+        if (item.type === 'x509') {
+          const raw = yield Certificate.certificateExport(crypto, item, 'raw');
+          const thumbprint = yield Certificate.certificateThumbprint(crypto, raw);
+          const certificateDetails = CertHelper.certRawToJson(raw);
 
-        certData = CertHelper.certDataHandler({
-          ...certificateDetails,
-          id: imported,
-          pem,
-          thumbprint,
-          addedId,
-        });
-      } else {
-        certData = CertHelper.requestDataHandler({
-          ...item,
-          id: imported,
-          pem,
-          addedId,
-        });
+          certData = CertHelper.certDataHandler({
+            ...certificateDetails,
+            id: imported,
+            pem,
+            thumbprint,
+            addedId,
+          });
+        } else {
+          certData = CertHelper.requestDataHandler({
+            ...item,
+            id: imported,
+            pem,
+            addedId,
+          });
+        }
+
+        yield put(ItemActions.add(certData, selectedProvider.get().id));
+        yield put(ModalActions.close());
+        yield put(DialogActions.close());
+        yield put(ItemActions.select(addedId));
       }
-
-      yield put(ItemActions.add(certData, selectedProvider.get().id));
-      yield put(ModalActions.close());
-      yield put(DialogActions.close());
-      yield put(ItemActions.select(addedId));
     }
+  } catch (error) {
+    yield put(ErrorActions.error(error));
   }
 }
 
 function* createRequest({ data }) {
-  yield put(DialogActions.open('load'));
+  try {
+    yield put(DialogActions.open('load'));
 
-  const state = yield select();
-  const selectedProvider = state.find('providers').where({ selected: true });
-  const crypto = yield Provider.cryptoGet(selectedProvider.get().id);
+    const state = yield select();
+    const selectedProvider = state.find('providers').where({ selected: true });
+    const crypto = yield Provider.cryptoGet(selectedProvider.get().id);
 
-  if (crypto) {
-    const created = yield Certificate.certificateCreate(crypto, data);
+    if (crypto) {
+      const created = yield Certificate.certificateCreate(crypto, data);
 
-    if (created) {
-      const item = yield Certificate.certificateGet(crypto, created);
-      const pem = yield Certificate.certificateExport(crypto, item, 'pem');
-      const addedId = UUID();
+      if (created) {
+        const item = yield Certificate.certificateGet(crypto, created);
+        const pem = yield Certificate.certificateExport(crypto, item, 'pem');
+        const addedId = UUID();
 
-      const certData = CertHelper.requestDataHandler({
-        ...item,
-        id: created,
-        pem,
-        addedId,
-      });
-
-      yield put(ItemActions.add(certData, selectedProvider.get().id));
-      yield put(AppActions.create(false));
-      yield put(DialogActions.close());
-      yield put(ItemActions.select(addedId));
-    }
-  }
-}
-
-function* createSelfSignedCertificate({ data }) {
-  yield put(DialogActions.open('load'));
-
-  const state = yield select();
-  const selectedProvider = state.find('providers').where({ selected: true });
-  const crypto = yield Provider.cryptoGet(selectedProvider.get().id);
-
-  if (crypto) {
-    const created = yield Certificate.CMSCreate(crypto, data);
-
-    if (created) {
-      const item = yield Certificate.certificateGet(crypto, created);
-      const pem = yield Certificate.certificateExport(crypto, item, 'pem');
-      const addedId = UUID();
-      let certData = '';
-
-      if (item.type === 'x509') {
-        const raw = yield Certificate.certificateExport(crypto, item, 'raw');
-        const thumbprint = yield Certificate.certificateThumbprint(crypto, raw);
-        const certificateDetails = CertHelper.certRawToJson(raw);
-
-        certData = CertHelper.certDataHandler({
-          ...certificateDetails,
-          id: created,
-          pem,
-          thumbprint,
-          addedId,
-        });
-      } else {
-        certData = CertHelper.requestDataHandler({
+        const certData = CertHelper.requestDataHandler({
           ...item,
           id: created,
           pem,
           addedId,
         });
-      }
 
-      yield put(ItemActions.add(certData, selectedProvider.get().id));
-      yield put(AppActions.create(false));
-      yield put(DialogActions.close());
-      yield put(ItemActions.select(addedId));
+        yield put(ItemActions.add(certData, selectedProvider.get().id));
+        yield put(AppActions.create(false));
+        yield put(DialogActions.close());
+        yield put(ItemActions.select(addedId));
+      }
     }
+  } catch (error) {
+    yield put(ErrorActions.error(error, 'request_create'));
+  }
+}
+
+function* createSelfSignedCertificate({ data }) {
+  try {
+    yield put(DialogActions.open('load'));
+
+    const state = yield select();
+    const selectedProvider = state.find('providers').where({ selected: true });
+    const crypto = yield Provider.cryptoGet(selectedProvider.get().id);
+
+    if (crypto) {
+      const created = yield Certificate.CMSCreate(crypto, data);
+
+      if (created) {
+        const item = yield Certificate.certificateGet(crypto, created);
+        const pem = yield Certificate.certificateExport(crypto, item, 'pem');
+        const addedId = UUID();
+        let certData = '';
+
+        if (item.type === 'x509') {
+          const raw = yield Certificate.certificateExport(crypto, item, 'raw');
+          const thumbprint = yield Certificate.certificateThumbprint(crypto, raw);
+          const certificateDetails = CertHelper.certRawToJson(raw);
+
+          certData = CertHelper.certDataHandler({
+            ...certificateDetails,
+            id: created,
+            pem,
+            thumbprint,
+            addedId,
+          });
+        } else {
+          certData = CertHelper.requestDataHandler({
+            ...item,
+            id: created,
+            pem,
+            addedId,
+          });
+        }
+
+        yield put(ItemActions.add(certData, selectedProvider.get().id));
+        yield put(AppActions.create(false));
+        yield put(DialogActions.close());
+        yield put(ItemActions.select(addedId));
+      }
+    }
+  } catch (error) {
+    yield put(ErrorActions.error(error, 'request_create'));
   }
 }
 
 function* addedProvider({ data }) {
-  EventChannel.emit(ACTIONS_CONST.SNACKBAR_SHOW, 'card_inserted', 3000);
+  try {
+    EventChannel.emit(ACTIONS_CONST.SNACKBAR_SHOW, 'card_inserted', 3000);
 
-  const state = yield select();
-  const prv = data[0];
-  const provider = yield Provider.providerGet(prv.id);
+    const state = yield select();
+    const prv = data[0];
+    const provider = yield Provider.providerGet(prv.id);
 
-  yield put(ProviderActions.add({
-    id: prv.id,
-    name: prv.name,
-    readOnly: prv.readOnly,
-    index: state.get('providers').length,
-    logged: provider.isLogged,
-  }));
+    yield put(ProviderActions.add({
+      id: prv.id,
+      name: prv.name,
+      readOnly: prv.readOnly,
+      index: state.get('providers').length,
+      logged: provider.isLogged,
+    }));
 
-  if (state.get('dialog') === 'empty_providers') {
-    yield put(DialogActions.close());
+    if (state.get('dialog') === 'empty_providers') {
+      yield put(DialogActions.close());
+    }
+  } catch (error) {
+    yield put(ErrorActions.error(error));
   }
 }
 
 function* removedProvider() {
-  EventChannel.emit(ACTIONS_CONST.SNACKBAR_SHOW, 'card_removed', 3000);
-  yield webcryptoOnListening();
+  try {
+    EventChannel.emit(ACTIONS_CONST.SNACKBAR_SHOW, 'card_removed', 3000);
+    yield webcryptoOnListening();
+  } catch (error) {
+    yield put(ErrorActions.error(error));
+  }
 }
 
 export default function* () {

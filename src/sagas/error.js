@@ -73,7 +73,9 @@ function* errorHandler({ data, action }) {
     }
 
     default:
-      console.error(data);
+      yield put(DialogActions.open('error'));
+      EventChannel.emit('DIALOG:SET_MESSAGE', message);
+      break;
   }
 
   return true;

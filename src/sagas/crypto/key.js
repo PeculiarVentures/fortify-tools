@@ -7,15 +7,7 @@ import { ErrorActions } from '../../actions/state';
  * @returns {Promise|Array}
  */
 export function* keyGetIDs(crypto) {
-  if (crypto) {
-    try {
-      return yield crypto.keyStorage.keys();
-    } catch (error) {
-      yield put(ErrorActions.error(error));
-      return [];
-    }
-  }
-  return [];
+  return yield crypto.keyStorage.keys();
 }
 
 /**
@@ -25,15 +17,7 @@ export function* keyGetIDs(crypto) {
  * @returns {Promise|[]}
  */
 export function* keySet(crypto, key) {
-  if (crypto) {
-    try {
-      return yield crypto.keyStorage.setItem(key);
-    } catch (error) {
-      yield put(ErrorActions.error(error));
-      return [];
-    }
-  }
-  return [];
+  return yield crypto.keyStorage.setItem(key);
 }
 
 /**
@@ -43,15 +27,12 @@ export function* keySet(crypto, key) {
  * @returns {Promise|Boolean}
  */
 export function* keyGet(crypto, id) {
-  if (crypto) {
-    try {
-      return yield crypto.keyStorage.getItem(id);
-    } catch (error) {
-      yield put(ErrorActions.error(error));
-      return false;
-    }
+  try {
+    return yield crypto.keyStorage.getItem(id);
+  } catch (error) {
+    console.error(error);
+    return false;
   }
-  return false;
 }
 
 /**
@@ -61,14 +42,5 @@ export function* keyGet(crypto, id) {
  * @returns {boolean}
  */
 export function* keyRemove(crypto, id) {
-  if (crypto) {
-    try {
-      yield crypto.keyStorage.removeItem(id);
-      return true;
-    } catch (error) {
-      yield put(ErrorActions.error(error));
-      return false;
-    }
-  }
-  return false;
+  yield crypto.keyStorage.removeItem(id);
 }

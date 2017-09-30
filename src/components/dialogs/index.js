@@ -1,3 +1,4 @@
+export ErrorDialog from './error';
 export RemoveItemDialog from './remove_item';
 export IncorrectPinDialog from './incorrect_pin';
 export UnauthorizePinDialog from './unauthorize_pin';
