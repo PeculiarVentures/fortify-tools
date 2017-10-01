@@ -264,6 +264,12 @@ const CertHelper = {
           case '2.5.29.37': // Extended Key Usage
             extension.value = item.parsedValue.keyPurposes.map(oid => OIDS[oid] || oid);
             break;
+          case '2.5.29.31': // CRL Distribution Points
+            extension.value = item.parsedValue;
+            break;
+          case '2.5.29.17': // Subject Alternative Name
+            extension.value = item.parsedValue.altNames.map(name => name.value);
+            break;
           default:
             extension.value = this.addSpaceAfterSecondCharset(item.extnValue.valueBlock.valueHex);
         }
