@@ -275,14 +275,14 @@ const CertHelper = {
   },
 
   prepareCertToImport: function prepareCertToImport(value) {
-    let certBuf = '';
+    let certBuf;
 
-    if (regExps.base64.test(value)) { // check pem
-      value = value.replace(/(-----(BEGIN|END) CERTIFICATE( REQUEST|)-----|\r|\n)/g, '');
-      certBuf = Convert.FromBinary(window.atob(value));
-    } else { // else der
-      value = Convert.FromHex(value.replace(/(\r|\n|\s)/g, ''));
-      certBuf = value;
+    if (regExps.base64.test(value)) { // pem
+      certBuf = Convert.FromBinary(window.atob(value.replace(/(-----(BEGIN|END) CERTIFICATE-----|\r|\n)/g, '')));
+    } else if (/[a-f\d]/ig.test(value)) { // hex
+      certBuf = Convert.FromHex(value.replace(/(\r|\n|\s)/g, ''));
+    } else { // der
+      certBuf = Convert.FromBinary(value);
     }
 
     const asn1 = asn1js.fromBER(certBuf);
@@ -292,15 +292,9 @@ const CertHelper = {
 
       try {
         cert = new Certificate({ schema: asn1.result });
-        type = 'certificate';
-      } catch (_error) {
-        try {
-          cert = new CertificationRequest({ schema: asn1.result });
-          type = 'request';
-        } catch (error) {
-          console.error(error);
-          return false;
-        }
+        type = 'x509';
+      } catch (error) {
+        throw new Error('ASN1 schema is not match to X509 certificate schema');
       }
 
       const json = cert.toJSON();
@@ -326,8 +320,7 @@ const CertHelper = {
         },
       };
     }
-    console.error('asn1 fromBER error');
-    return false;
+    throw new Error('Cannot parse ASN1 data');
   },
 
   decoratePkcs10Subject: function decoratePkcs10Subject(pkcs10, data) {

@@ -64,7 +64,6 @@ function* getProviderCertificates() {
   const certificatesArr = [];
   let index = 0;
 
-
   for (const certID of certIDs) {
     // Get certificates with private key only
     for (const keyID of keyIDs) {
@@ -140,13 +139,13 @@ function* providerSelect({ id }) {
     const state = yield select();
     const providers = state.find('providers');
     const provider = providers.where({ id }).get();
+    if (!provider.logged) {
+      yield put(WSActions.login(provider.id));
+    }
     if (!provider.loaded) {
       yield [getProviderCertificates()];
       yield put(ItemActions.select());
       yield put(ProviderActions.update({ loaded: true }));
-    }
-    if (!provider.logged) {
-      yield put(WSActions.login(provider.id));
     }
   } catch (error) {
     yield put(ErrorActions.error(error));
@@ -318,50 +317,55 @@ function* removeItem() {
 
 function* importItem({ data }) {
   try {
+    const preparedCert = CertHelper.prepareCertToImport(data);
+
     yield put(DialogActions.open('load'));
 
     const state = yield select();
     const selectedProvider = state.find('providers').where({ selected: true });
     const crypto = yield Provider.cryptoGet(selectedProvider.get().id);
 
-    if (crypto) {
-      const imported = yield Certificate.certificateImport(crypto, data);
+    const cert = yield Certificate.certificateImport(crypto, preparedCert);
+    const hasPrivateKey = yield Certificate.certificateHasPrivateKey(crypto, cert);
+    if (!hasPrivateKey) {
+      throw new Error("Cannot import certificate item, cause it doesn't have private key in storage");
+    }
+    const certID = yield Certificate.certificateSet(crypto, cert);
 
-      if (imported) {
-        const item = yield Certificate.certificateGet(crypto, imported);
-        const pem = yield Certificate.certificateExport(crypto, item, 'pem');
-        const addedId = UUID();
-        let certData = '';
+    if (certID) {
+      const item = yield Certificate.certificateGet(crypto, certID);
+      const pem = yield Certificate.certificateExport(crypto, item, 'pem');
+      const addedId = UUID();
+      let certData = '';
 
-        if (item.type === 'x509') {
-          const raw = yield Certificate.certificateExport(crypto, item, 'raw');
-          const thumbprint = yield Certificate.certificateThumbprint(crypto, raw);
-          const certificateDetails = CertHelper.certRawToJson(raw);
+      if (item.type === 'x509') {
+        const raw = yield Certificate.certificateExport(crypto, item, 'raw');
+        const thumbprint = yield Certificate.certificateThumbprint(crypto, raw);
+        const certificateDetails = CertHelper.certRawToJson(raw);
 
-          certData = CertHelper.certDataHandler({
-            ...certificateDetails,
-            id: imported,
-            pem,
-            thumbprint,
-            addedId,
-          });
-        } else {
-          certData = CertHelper.requestDataHandler({
-            ...item,
-            id: imported,
-            pem,
-            addedId,
-          });
-        }
-
-        yield put(ItemActions.add(certData, selectedProvider.get().id));
-        yield put(ModalActions.close());
-        yield put(DialogActions.close());
-        yield put(ItemActions.select(addedId));
+        certData = CertHelper.certDataHandler({
+          ...certificateDetails,
+          id: certID,
+          pem,
+          thumbprint,
+          addedId,
+        });
+      } else {
+        certData = CertHelper.requestDataHandler({
+          ...item,
+          id: certID,
+          pem,
+          addedId,
+        });
       }
+
+      yield put(ItemActions.add(certData, selectedProvider.get().id));
+      yield put(ModalActions.close());
+      yield put(DialogActions.close());
+      yield put(ItemActions.select(addedId));
     }
   } catch (error) {
-    yield put(ErrorActions.error(error));
+    yield put(ErrorActions.error(error, 'import_item'));
   }
 }
 
@@ -450,7 +454,7 @@ function* createSelfSignedCertificate({ data }) {
 
 function* addedProvider({ data }) {
   try {
-    EventChannel.emit(ACTIONS_CONST.SNACKBAR_SHOW, 'card_inserted', 3000);
+    EventChannel.emit(ACTIONS_CONST.SNACKBAR_SHOW, 'card_inserted', 3e3);
 
     const state = yield select();
     const prv = data[0];

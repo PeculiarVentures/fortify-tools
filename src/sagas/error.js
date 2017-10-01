@@ -11,6 +11,7 @@ function* errorHandler({ data, action }) {
   }
   const { message = '', stack } = data;
   let errorMessage = '';
+  console.error(data);
 
   // if (/Client.prototype.getServerInfo/.test(stack)) {
   //   errorMessage = 'NOT_SUPPORTED_LOCALHOST';

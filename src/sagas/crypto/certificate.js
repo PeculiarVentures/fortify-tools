@@ -35,26 +35,44 @@ export function* certificateExport(crypto, cert, format = 'pem') {
   return yield crypto.certStorage.exportCert(format, cert);
 }
 
+function* certificateGatPrivateKeyID(crypto, cert) {
+  const publicKeyID = yield Key.publicKeyThumbprint(crypto, cert.publicKey, 'SHA-1');
+  const keyIDs = yield Key.keyGetIDs(crypto);
+  for (const keyID of keyIDs) {
+    const idPart = keyID.split('-')[2];
+    if (publicKeyID === idPart) {
+      return keyID;
+    }
+  }
+  return null;
+}
+
+export function* certificateHasPrivateKey(crypto, cert) {
+  const keyID = yield certificateGatPrivateKeyID(crypto, cert);
+  return !!keyID;
+}
+
+export function* certificateGetPrivateKey(crypto, cert) {
+  const keyID = yield certificateGatPrivateKeyID(crypto, cert);
+  return yield Key.keyGet(crypto, keyID);
+}
+
 export function* certificateImport(crypto, data) {
   const { raw, usages, type } = data;
   const algorithm = () => Object.assign({}, data.algorithm);
-  let importCert = '';
+  let cert;
 
-  if (type === 'request') { // check certificate request data
-    try {
-      importCert = yield crypto.certStorage.importCert('request', raw, algorithm(), usages);
-    } catch (error) {
-      yield put(ErrorActions.error(error, 'import_item'));
-    }
-  } else { // else certificate
-    try {
-      importCert = yield crypto.certStorage.importCert('x509', raw, algorithm(), usages);
-    } catch (error) {
-      yield put(ErrorActions.error(error, 'import_item'));
-    }
+  switch (type) { // check certificate request data
+    case 'request':
+      cert = yield crypto.certStorage.importCert('request', raw, algorithm(), usages);
+      break;
+    case 'x509':
+      cert = yield crypto.certStorage.importCert('x509', raw, algorithm(), usages);
+      break;
+    default:
+      throw new Error(`Unsupported type '${type}' of certificate storage item`);
   }
-
-  return yield certificateSet(crypto, importCert);
+  return cert;
 }
 
 export function* certificateCreate(crypto, data) {

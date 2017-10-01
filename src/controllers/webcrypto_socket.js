@@ -51,7 +51,7 @@ export const WSController = {
   checkConnect: function checkConnect() {
     this.interval = setTimeout(() => {
       this.connect();
-    }, 4000);
+    }, 4e3);
   },
 
   isLogged: function isLogged() {

@@ -1,5 +1,31 @@
 import { put } from 'redux-saga/effects';
+import { Convert } from 'pvtsutils';
 import { ErrorActions } from '../../actions/state';
+
+/**
+ * Returns index of key from key storage
+ * @param {Crypto}      crypto
+ * @param {CryptoKey}   key
+ * @returns {string | null}
+ */
+export function* keyIndexOf(crypto, key) {
+  return yield crypto.keyStorage.indexOf(key);
+}
+
+/**
+ * Returns thumbprint of public key
+ * @param {Crypto} crypto
+ * @param {CryptoKey} publicKey
+ */
+export function* publicKeyThumbprint(crypto, publicKey, hash = 'SHA-256') {
+  if (publicKey.type !== 'public') {
+    throw new Error(`Wrong type of key '${publicKey.type}'. Must be 'public'`);
+  }
+  const spki = yield crypto.subtle.exportKey('spki', publicKey);
+  // NOTE: Use native digest instead of service provider
+  const thumbprint = yield window.crypto.subtle.digest(hash, spki);
+  return Convert.ToHex(thumbprint);
+}
 
 /**
  * Get provider key IDs
