@@ -257,21 +257,38 @@ const CertHelper = {
         };
 
         // parse extensions
-        switch (item.extnID) {
-          case '2.5.29.15': // key usage
-            extension.value = CertHelper.Extensions.keyUsage(item);
-            break;
-          case '2.5.29.37': // Extended Key Usage
-            extension.value = item.parsedValue.keyPurposes.map(oid => OIDS[oid] || oid);
-            break;
-          case '2.5.29.31': // CRL Distribution Points
-            extension.value = item.parsedValue;
-            break;
-          case '2.5.29.17': // Subject Alternative Name
-            extension.value = item.parsedValue.altNames.map(name => name.value);
-            break;
-          default:
-            extension.value = this.addSpaceAfterSecondCharset(item.extnValue.valueBlock.valueHex);
+        try {
+          switch (item.extnID) {
+            case '2.5.29.15': // key usage
+              extension.value = CertHelper.Extensions.keyUsage(item);
+              break;
+            case '2.5.29.37': // Extended Key Usage
+              extension.value = item.parsedValue.keyPurposes.map(oid => OIDS[oid] || oid);
+              break;
+            case '2.5.29.31': // CRL Distribution Points
+              extension.value = item.parsedValue;
+              break;
+            case '2.5.29.17': // Subject Alternative Name
+              extension.value = item.parsedValue.altNames.map(name => name.value);
+              break;
+            case '2.5.29.35': // Authority Key Identifier
+              extension.value = {};
+              if (item.parsedValue.keyIdentifier) {
+                extension.value.keyIdentifier = item.parsedValue.keyIdentifier.valueBlock.valueHex.toUpperCase();
+              }
+              if (item.parsedValue.authorityCertSerialNumber) {
+                extension.value.authorityCertSerialNumber = item.parsedValue.authorityCertSerialNumber.valueBlock.valueHex.toUpperCase();
+              }
+              if (item.parsedValue.authorityCertIssuer) {
+                extension.value.authorityCertIssuer = this.name2str(item.parsedValue.authorityCertIssuer[0].value);
+              }
+              break;
+            default:
+              extension.value = this.addSpaceAfterSecondCharset(item.extnValue.valueBlock.valueHex);
+          }
+        } catch (error) {
+          console.error(error);
+          extension.value = this.addSpaceAfterSecondCharset(item.extnValue.valueBlock.valueHex);
         }
 
         extensions.push(extension);

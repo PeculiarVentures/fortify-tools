@@ -107,21 +107,34 @@ const CertificateInfo = (props, context) => {
           extensions.length
             ? extensions.map((ext, index) => {
               let value;
-              switch (ext.oid) {
-                case '2.5.29.15': // key usage
-                case '2.5.29.37': // Extended Key Usage
-                case '2.5.29.17': // Subject Alternative Name
-                  value = ext.value.join(', ');
-                  break;
-                case '2.5.29.31': // CRL Distribution Points
-                  value = (
-                    ext.value.distributionPoints.map(dp => (
-                      <div>{dp.distributionPoint[0].value}</div>
-                    ))
-                  );
-                  break;
-                default:
-                  value = ext.value;
+              if (typeof ext.value === "string") {
+                value = ext.value;
+              } else {
+                switch (ext.oid) {
+                  case '2.5.29.15': // key usage
+                  case '2.5.29.37': // Extended Key Usage
+                  case '2.5.29.17': // Subject Alternative Name
+                    value = ext.value.join(', ');
+                    break;
+                  case '2.5.29.31': // CRL Distribution Points
+                    value = (
+                      ext.value.distributionPoints.map(dp => (
+                        <div>{dp.distributionPoint[0].value}</div>
+                      ))
+                    );
+                    break;
+                  case '2.5.29.35': // Authority Key Identifier
+                    value = (
+                      <div>
+                        {ext.value.keyIdentifier ? <div>Key identifier: {ext.value.keyIdentifier}</div> : null}
+                        {ext.value.authorityCertSerialNumber ? <div>Authority serial number: {ext.value.authorityCertSerialNumber}</div> : null}
+                        {ext.value.authorityCertIssuer ? <div>Authority issuer name: {ext.value.authorityCertIssuer}</div> : null}
+                      </div>
+                    );
+                    break;
+                  default:
+                    value = ext.value;
+                }
               }
               return (
                 <RowCert
