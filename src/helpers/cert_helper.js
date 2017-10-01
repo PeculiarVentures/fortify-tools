@@ -283,6 +283,15 @@ const CertHelper = {
                 extension.value.authorityCertIssuer = this.name2str(item.parsedValue.authorityCertIssuer[0].value);
               }
               break;
+            case '1.3.6.1.5.5.7.1.1': // Authority Info Access
+              console.log(item);
+              extension.value = item.parsedValue.accessDescriptions.map((desc) => {
+                return {
+                  location: desc.accessLocation.value,
+                  method: OIDS[desc.accessMethod] || desc.accessMethod,
+                };
+              });
+              break;
             default:
               extension.value = this.addSpaceAfterSecondCharset(item.extnValue.valueBlock.valueHex);
           }

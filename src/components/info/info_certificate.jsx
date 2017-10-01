@@ -132,6 +132,17 @@ const CertificateInfo = (props, context) => {
                       </div>
                     );
                     break;
+                  case '1.3.6.1.5.5.7.1.1': // Authority Info Access
+                    value = (
+                      ext.value.map(access => (
+                        <div>
+                          <div>Location: {access.location}</div>
+                          <div>Method: {access.method}</div>
+                          <br/>
+                        </div>
+                      ))
+                    );
+                    break;
                   default:
                     value = ext.value;
                 }
