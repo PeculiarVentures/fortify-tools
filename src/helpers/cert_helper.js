@@ -250,11 +250,25 @@ const CertHelper = {
 
     if (json.extensions) {
       for (const item of json.extensions) {
-        extensions.push({
+        const extension = {
           name: OIDS[item.extnID] || item.extnID,
+          oid: item.extnID,
           critical: item.critical || false,
-          value: this.addSpaceAfterSecondCharset(item.extnValue.valueBlock.valueHex),
-        });
+        };
+
+        // parse extensions
+        switch (item.extnID) {
+          case '2.5.29.15': // key usage
+            extension.value = CertHelper.Extensions.keyUsage(item);
+            break;
+          case '2.5.29.37': // Extended Key Usage
+            extension.value = item.parsedValue.keyPurposes.map(oid => OIDS[oid] || oid);
+            break;
+          default:
+            extension.value = this.addSpaceAfterSecondCharset(item.extnValue.valueBlock.valueHex);
+        }
+
+        extensions.push(extension);
       }
     }
 
@@ -492,6 +506,53 @@ const CertHelper = {
     });
 
     return subjectObj;
+  },
+
+  Extensions: {
+    keyUsage: function keyUsage(extension) {
+      const usages = [];
+      // parse key usage BitString
+      const valueHex = new Uint8Array(Convert.FromHex(extension.parsedValue.valueBlock.valueHex));
+      const unusedBits = extension.parsedValue.valueBlock.unusedBits;
+      let keyUsageByte1 = valueHex[0];
+      let keyUsageByte2 = valueHex.byteLength > 1 ? valueHex[1] : 0;
+      if (valueHex.byteLength === 1) {
+        keyUsageByte1 >>= unusedBits;
+        keyUsageByte1 <<= unusedBits;
+      }
+      if (valueHex.byteLength === 2) {
+        keyUsageByte2 >>= unusedBits;
+        keyUsageByte2 <<= unusedBits;
+      }
+      if (keyUsageByte1 & 0x80) {
+        usages.push('digitalSignature');
+      }
+      if (keyUsageByte1 & 0x40) {
+        usages.push('nonRepudiation');
+      }
+      if (keyUsageByte1 & 0x20) {
+        usages.push('keyEncipherment');
+      }
+      if (keyUsageByte1 & 0x10) {
+        usages.push('dataEncipherment');
+      }
+      if (keyUsageByte1 & 0x08) {
+        usages.push('keyAgreement');
+      }
+      if (keyUsageByte1 & 0x04) {
+        usages.push('keyCertSign');
+      }
+      if (keyUsageByte1 & 0x02) {
+        usages.push('cRLSign');
+      }
+      if (keyUsageByte1 & 0x01) {
+        usages.push('encipherOnly');
+      }
+      if (keyUsageByte2 & 0x80) {
+        usages.push('decipherOnly');
+      }
+      return usages;
+    },
   },
 };
 

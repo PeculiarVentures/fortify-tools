@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Root, Row, Title, RowCertInfo, RowCert, ColCert } from './styled/info';
+import { CertHelper } from '../../helpers';
 
 const CertificateInfo = (props, context) => {
   const {
@@ -19,10 +20,10 @@ const CertificateInfo = (props, context) => {
           key={index}
         >
           <ColCert>
-            { title }{title === 'None' ? '' : ':'}
+            {title}{title === 'None' ? '' : ':'}
           </ColCert>
           <ColCert monospace={monospace}>
-            { value }
+            {value}
           </ColCert>
         </RowCertInfo>
       );
@@ -35,22 +36,22 @@ const CertificateInfo = (props, context) => {
 
       <Row>
         <Title>
-          { lang['Info.Body.General'] }
+          {lang['Info.Body.General']}
         </Title>
         <RowCert>
-          { renderRowContainer(lang['Info.Body.SerialNumber'], general.serialNumber, '', true) }
-          { renderRowContainer(lang['Info.Body.Version'], general.version) }
-          { renderRowContainer(lang['Info.Body.Issued'], general.notBefore) }
-          { renderRowContainer(lang['Info.Body.Expired'], general.notAfter) }
+          {renderRowContainer(lang['Info.Body.SerialNumber'], general.serialNumber, '', true)}
+          {renderRowContainer(lang['Info.Body.Version'], general.version)}
+          {renderRowContainer(lang['Info.Body.Issued'], general.notBefore)}
+          {renderRowContainer(lang['Info.Body.Expired'], general.notAfter)}
           <RowCert>
-            { renderRowContainer(lang['Info.Body.Thumbprint'], general.thumbprint, '', true) }
+            {renderRowContainer(lang['Info.Body.Thumbprint'], general.thumbprint, '', true)}
           </RowCert>
         </RowCert>
       </Row>
 
       <Row>
         <Title>
-          { lang['Info.Body.SubjectName'] }
+          {lang['Info.Body.SubjectName']}
         </Title>
         <RowCert>
           {
@@ -61,7 +62,7 @@ const CertificateInfo = (props, context) => {
 
       <Row>
         <Title>
-          { lang['Info.Body.IssuerName'] }
+          {lang['Info.Body.IssuerName']}
         </Title>
         <RowCert>
           {
@@ -72,53 +73,65 @@ const CertificateInfo = (props, context) => {
 
       <Row>
         <Title>
-          { lang['Info.Body.PublicKeyInfo'] }
+          {lang['Info.Body.PublicKeyInfo']}
         </Title>
         <RowCert>
-          { renderRowContainer(lang['Info.Body.Algorithm'], publicKey.algorithm) }
-          { renderRowContainer(lang['Info.Body.ModulusBits'], publicKey.modulusBits) }
-          { renderRowContainer(lang['Info.Body.PublicExponent'], publicKey.publicExponent) }
-          { renderRowContainer(lang['Info.Body.NamedCurve'], publicKey.namedCurve) }
+          {renderRowContainer(lang['Info.Body.Algorithm'], publicKey.algorithm)}
+          {renderRowContainer(lang['Info.Body.ModulusBits'], publicKey.modulusBits)}
+          {renderRowContainer(lang['Info.Body.PublicExponent'], publicKey.publicExponent)}
+          {renderRowContainer(lang['Info.Body.NamedCurve'], publicKey.namedCurve)}
         </RowCert>
         <RowCert>
-          { renderRowContainer(lang['Info.Body.Value'], publicKey.value, '', true) }
+          {renderRowContainer(lang['Info.Body.Value'], publicKey.value, '', true)}
         </RowCert>
       </Row>
 
       <Row>
         <Title>
-          { lang['Info.Body.Signature'] }
+          {lang['Info.Body.Signature']}
         </Title>
         <RowCert>
-          { renderRowContainer(lang['Info.Body.Algorithm'], signature.algorithm) }
-          { renderRowContainer(lang['Info.Body.Hash'], signature.hash) }
+          {renderRowContainer(lang['Info.Body.Algorithm'], signature.algorithm)}
+          {renderRowContainer(lang['Info.Body.Hash'], signature.hash)}
         </RowCert>
         <RowCert>
-          { renderRowContainer(lang['Info.Body.Value'], signature.value, '', true) }
+          {renderRowContainer(lang['Info.Body.Value'], signature.value, '', true)}
         </RowCert>
       </Row>
 
       <Row>
         <Title>
-          { lang['Info.Body.Extensions'] }
+          {lang['Info.Body.Extensions']}
         </Title>
         {
           extensions.length
-          ? extensions.map((ext, index) => (
-            <RowCert
-              key={index}
-            >
-              { renderRowContainer(lang['Info.Body.Name'], ext.name) }
-              { renderRowContainer(lang['Info.Body.Value'], ext.value, '', true) }
-              { renderRowContainer(lang['Info.Body.Critical'], ext.critical ? 'yes' : 'no') }
+            ? extensions.map((ext, index) => {
+              let value;
+              switch (ext.oid) {
+                case '2.5.29.15': // key usage
+                case '2.5.29.37': // Extended Key Usage
+                  value = ext.value.join(', ');
+                  break;
+                default:
+                  value = ext.value;
+              }
+              return (
+                <RowCert
+                  key={index}
+                >
+                  {renderRowContainer(lang['Info.Body.Name'], ext.name)
+                  }
+                  {renderRowContainer(lang['Info.Body.Critical'], ext.critical ? 'yes' : 'no')}
+                  {renderRowContainer(lang['Info.Body.Value'], value, '', true)}
+                </RowCert>
+              );
+            })
+            : <RowCert>
+              {renderRowContainer(lang['Info.Body.None'], ' ')}
             </RowCert>
-          ))
-          : <RowCert>
-            { renderRowContainer(lang['Info.Body.None'], ' ') }
-          </RowCert>
         }
       </Row>
-    </Root>
+    </Root >
   );
 };
 
