@@ -590,6 +590,7 @@ const CertHelper = {
       }
       return usages;
     },
+
     netscapeCertType: function netscapeCertType(extension) {
       const usages = [];
       // parse key usage BitString

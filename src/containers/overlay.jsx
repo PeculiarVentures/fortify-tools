@@ -256,6 +256,19 @@ export default class Overlay extends Component {
             name="error"
             message={message}
           />
+          <Dialog.EmptyPinDialog
+            name="empty_pin"
+            onAccept={() => (
+              this.handleAction({
+                type: 'TRY_AGAIN_LOGIN',
+              })
+            )}
+            onCancel={() => (
+              this.handleAction({
+                type: ACTIONS_CONST.DIALOG_CLOSE,
+              })
+            )}
+          />
         </SegueHandler>
       );
     }

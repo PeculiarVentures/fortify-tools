@@ -30,7 +30,7 @@ export function* providerLogin(crypto) {
     yield crypto.login();
     return true;
   } catch (error) {
-    console.error(error);
+    yield put(ErrorActions.error(error));
     return false;
   }
 }

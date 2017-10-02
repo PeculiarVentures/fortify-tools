@@ -12,7 +12,6 @@ function* errorHandler({ data, action }) {
   const { message = '', stack } = data;
   let errorMessage = '';
   console.error(data);
-  console.log('ERROR SAGA', message);
 
   if (message === 'NetworkError when attempting to fetch resource.') {
     errorMessage = 'NOT_SUPPORTED_LOCALHOST';
@@ -28,6 +27,8 @@ function* errorHandler({ data, action }) {
     errorMessage = 'UNAPPROVED_PIN';
   } else if (/C_DestroyObject/.test(message)) {
     errorMessage = 'REMOVE_ITEM';
+  } else if (message === 'Incorrect PIN value. It cannot be empty.') {
+    errorMessage = 'EMPTY_PIN';
   }
 
   switch (errorMessage) {
@@ -50,6 +51,11 @@ function* errorHandler({ data, action }) {
 
     case 'INCORRECT_PIN': {
       yield put(DialogActions.open('incorrect_pin'));
+      break;
+    }
+
+    case 'EMPTY_PIN': {
+      yield put(DialogActions.open('empty_pin'));
       break;
     }
 

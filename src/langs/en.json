@@ -24,6 +24,7 @@
   "Dialog.RemoveCertificateError.Title": "An error occurred while deleting your",
   "Dialog.RemoveCertificateError.Btn.Accept": "Try again",
   "Dialog.RemoveCertificateError.Btn.Cancel": "Cancel",
+  "Dialog.EmptyPin.Title": "Incorrect PIN value. It cannot be empty.",
 
   "Sidebar.Footer.Status.Online": "Server is online",
   "Sidebar.Footer.Status.Offline": "Server is offline",
