@@ -112,9 +112,12 @@ const CertificateInfo = (props, context) => {
             } else if (Array.isArray(value) && typeof value[0] === 'string') {
               valueBlock = renderRowContainer(lang['Info.Body.Value'], value.join(', '), '', true);
             } else {
-              valueBlock = value.map(val => (
+              valueBlock = value.map((val, ind) => (
                 Object.keys(val).map((keyVal, keyIndex) => {
-                  const valueText = lang[`Info.Body.${keyVal}`] || keyVal;
+                  let valueText = lang[`Info.Body.${keyVal}`] || keyVal;
+                  if (keyVal === 'Purpose') {
+                    valueText = `${valueText} #${ind + 1}`;
+                  }
                   return renderRowContainer(valueText, val[keyVal], `${keyVal}${keyIndex}`, true);
                 })
               ));
