@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import { Root, Row, Title, RowCertInfo, RowCert, ColCert } from './styled/info';
-// import { CertHelper } from '../../helpers';
 
 const CertificateInfo = (props, context) => {
   const {
@@ -103,76 +102,37 @@ const CertificateInfo = (props, context) => {
         <Title>
           {lang['Info.Body.Extensions']}
         </Title>
-        {
-          extensions.length
-            ? extensions.map((ext, index) => {
-              let value;
-              if (typeof ext.value === 'string') {
-                value = ext.value;
-              } else {
-                switch (ext.oid) {
-                  case '2.5.29.15': // key usage
-                  case '2.5.29.37': // Extended Key Usage
-                  case '2.5.29.17': // Subject Alternative Name
-                  case '2.16.840.1.113730.1.1': // Netscape Certificate Type
-                    value = ext.value.join(', ');
-                    break;
-                  case '2.5.29.31': // CRL Distribution Points
-                    value = (
-                      ext.value.distributionPoints.map(dp => (
-                        <div>{dp.distributionPoint[0].value}</div>
-                      ))
-                    );
-                    break;
-                  case '2.5.29.35': // Authority Key Identifier
-                    value = (
-                      <div>
-                        {ext.value.keyIdentifier
-                          ? <div>Key identifier: {ext.value.keyIdentifier}</div>
-                          : null
-                        }
-                        {ext.value.authorityCertSerialNumber
-                          ? <div>
-                            Authority serial number: {ext.value.authorityCertSerialNumber}
-                          </div>
-                          : null
-                        }
-                        {ext.value.authorityCertIssuer
-                          ? <div>Authority issuer name: {ext.value.authorityCertIssuer}</div>
-                          : null
-                        }
-                      </div>
-                    );
-                    break;
-                  case '1.3.6.1.5.5.7.1.1': // Authority Info Access
-                    value = (
-                      ext.value.map(access => (
-                        <div>
-                          <div>Location: {access.location}</div>
-                          <div>Method: {access.method}</div>
-                          <br />
-                        </div>
-                      ))
-                    );
-                    break;
-                  default:
-                    value = ext.value;
-                }
-              }
-              return (
-                <RowCert
-                  key={index}
-                >
-                  {renderRowContainer(lang['Info.Body.Name'], ext.name)}
-                  {renderRowContainer(lang['Info.Body.Critical'], ext.critical ? 'yes' : 'no')}
-                  {renderRowContainer(lang['Info.Body.Value'], value, '', true)}
-                </RowCert>
-              );
-            })
-            : <RowCert>
-              {renderRowContainer(lang['Info.Body.None'], ' ')}
-            </RowCert>
-        }
+        {extensions.length ? (
+          extensions.map((ext, index) => {
+            const { name, critical, value } = ext;
+            let valueBlock;
+
+            if (typeof value === 'string') {
+              valueBlock = renderRowContainer(lang['Info.Body.Value'], value, '', true);
+            } else if (Array.isArray(value) && typeof value[0] === 'string') {
+              valueBlock = renderRowContainer(lang['Info.Body.Value'], value.join(', '), '', true);
+            } else {
+              valueBlock = value.map(val => (
+                Object.keys(val).map((keyVal, keyIndex) => {
+                  const valueText = lang[`Info.Body.${keyVal}`] || keyVal;
+                  return renderRowContainer(valueText, val[keyVal], `${keyVal}${keyIndex}`, true);
+                })
+              ));
+            }
+
+            return (
+              <RowCert key={index}>
+                {renderRowContainer(lang['Info.Body.Name'], name)}
+                {renderRowContainer(lang['Info.Body.Critical'], critical ? 'yes' : 'no')}
+                {valueBlock}
+              </RowCert>
+            );
+          })
+        ) : (
+          <RowCert>
+            {renderRowContainer(lang['Info.Body.None'], ' ')}
+          </RowCert>
+        )}
       </Row>
     </Root >
   );

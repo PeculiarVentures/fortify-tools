@@ -1,6 +1,6 @@
 import * as asn1js from 'asn1js';
 import Certificate from 'pkijs/build/Certificate';
-import CertificationRequest from 'pkijs/build/CertificationRequest';
+// import CertificationRequest from 'pkijs/build/CertificationRequest';
 import AttributeTypeAndValue from 'pkijs/build/AttributeTypeAndValue';
 import moment from 'moment';
 import UUID from 'uuid';
@@ -250,8 +250,9 @@ const CertHelper = {
 
     if (json.extensions) {
       for (const item of json.extensions) {
+        const oid = OIDS[item.extnID];
         const extension = {
-          name: OIDS[item.extnID] || item.extnID,
+          name: oid ? `${oid} (${item.extnID})` : item.extnID,
           oid: item.extnID,
           critical: item.critical || false,
         };
@@ -263,36 +264,58 @@ const CertHelper = {
               extension.value = CertHelper.Extensions.keyUsage(item);
               break;
             case '2.5.29.37': // Extended Key Usage
-              extension.value = item.parsedValue.keyPurposes.map(oid => OIDS[oid] || oid);
+              extension.value = item.parsedValue.keyPurposes.map((o) => {
+                const _oid = OIDS[o];
+                return {
+                  Purpose: _oid ? `${_oid} (${o})` : o,
+                };
+              });
               break;
             case '2.5.29.31': // CRL Distribution Points
-              extension.value = item.parsedValue;
+              extension.value = item.parsedValue.distributionPoints.map(dp => ({
+                URl: dp.distributionPoint[0].value,
+              }));
               break;
             case '2.5.29.17': // Subject Alternative Name
               extension.value = item.parsedValue.altNames.map(name => name.value);
               break;
             case '2.5.29.14': // Subject Key Identifier
-              extension.value = this.addSpaceAfterSecondCharset(item.parsedValue.valueBlock.valueHex);
+              extension.value = this.addSpaceAfterSecondCharset(
+                item.parsedValue.valueBlock.valueHex,
+              );
               break;
             case '2.5.29.35': // Authority Key Identifier
-              extension.value = {};
+              extension.value = [{}];
               if (item.parsedValue.keyIdentifier) {
-                extension.value.keyIdentifier = item.parsedValue.keyIdentifier.valueBlock.valueHex.toUpperCase();
+                extension.value[0].KeyID = this.addSpaceAfterSecondCharset(
+                  item
+                    .parsedValue
+                    .keyIdentifier
+                    .valueBlock
+                    .valueHex
+                    .toUpperCase(),
+                );
               }
               if (item.parsedValue.authorityCertSerialNumber) {
-                extension.value.authorityCertSerialNumber = item.parsedValue.authorityCertSerialNumber.valueBlock.valueHex.toUpperCase();
+                extension.value[0].AuthorityCertSerialNumber = this.addSpaceAfterSecondCharset(
+                  item
+                    .parsedValue
+                    .authorityCertSerialNumber
+                    .valueBlock
+                    .valueHex.toUpperCase(),
+                );
               }
               if (item.parsedValue.authorityCertIssuer) {
-                extension.value.authorityCertIssuer = this.name2str(item.parsedValue.authorityCertIssuer[0].value);
+                extension.value[0].AuthorityCertIssuer = this.name2str(
+                  item.parsedValue.authorityCertIssuer[0].value,
+                );
               }
               break;
             case '1.3.6.1.5.5.7.1.1': // Authority Info Access
-              extension.value = item.parsedValue.accessDescriptions.map((desc) => {
-                return {
-                  location: desc.accessLocation.value,
-                  method: OIDS[desc.accessMethod] || desc.accessMethod,
-                };
-              });
+              extension.value = item.parsedValue.accessDescriptions.map(desc => ({
+                Method: desc.accessLocation.value,
+                URl: OIDS[desc.accessMethod] || desc.accessMethod,
+              }));
               break;
             case '2.16.840.1.113730.1.1': // Netscape Certificate Type
               extension.value = CertHelper.Extensions.netscapeCertType(item);
@@ -430,7 +453,6 @@ const CertHelper = {
   },
 
   certDataHandler: function certDataHandler(data) {
-    // console.log('sdsds', data);
     const lang = navigator.language;
     const {
       issuerName,
