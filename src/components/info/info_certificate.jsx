@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import { Root, Row, Title, RowCertInfo, RowCert, ColCert } from './styled/info';
 
+const regexpURl = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+
 const CertificateInfo = (props, context) => {
   const {
     general,
@@ -22,7 +24,11 @@ const CertificateInfo = (props, context) => {
             {title}{title === 'None' ? '' : ':'}
           </ColCert>
           <ColCert monospace={monospace}>
-            {value}
+            {regexpURl.test(value) ? (
+              <a href={value} target="_blank" rel="noopener noreferrer">
+                {value}
+              </a>
+            ) : value}
           </ColCert>
         </RowCertInfo>
       );
@@ -115,10 +121,10 @@ const CertificateInfo = (props, context) => {
               valueBlock = value.map((val, ind) => (
                 Object.keys(val).map((keyVal, keyIndex) => {
                   let valueText = lang[`Info.Body.${keyVal}`] || keyVal;
-                  if (keyVal === 'Purpose') {
+                  if (keyVal === 'Purpose' || keyVal === 'Method') {
                     valueText = `${valueText} #${ind + 1}`;
                   }
-                  return renderRowContainer(valueText, val[keyVal], `${keyVal}${keyIndex}`, true);
+                  return renderRowContainer(valueText, val[keyVal], `${ind}${keyIndex}`, true);
                 })
               ));
             }

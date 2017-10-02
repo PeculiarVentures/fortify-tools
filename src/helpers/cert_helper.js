@@ -313,12 +313,14 @@ const CertHelper = {
               break;
             case '1.3.6.1.5.5.7.1.1': // Authority Info Access
               extension.value = item.parsedValue.accessDescriptions.map(desc => ({
-                Method: desc.accessLocation.value,
-                URl: OIDS[desc.accessMethod] || desc.accessMethod,
+                URl: desc.accessLocation.value,
+                Method: OIDS[desc.accessMethod] || desc.accessMethod,
               }));
               break;
             case '2.16.840.1.113730.1.1': // Netscape Certificate Type
-              extension.value = CertHelper.Extensions.netscapeCertType(item);
+              extension.value = [{
+                Type: CertHelper.Extensions.netscapeCertType(item),
+              }];
               break;
             default:
               extension.value = this.addSpaceAfterSecondCharset(item.extnValue.valueBlock.valueHex);

@@ -75,6 +75,13 @@ export const ColCert = styled.div`
   &:nth-child(2) {
     width: 75%;
   }
+  a {
+    color: ${props => props.theme.palette.secondaryButtonColor};
+    transition: opacity 300ms;
+    &:hover {
+      opacity: .6;
+    }
+  }
   @media ${props => props.theme.media.mobile} {
     width: 100% !important;
     &:nth-child(2) {
