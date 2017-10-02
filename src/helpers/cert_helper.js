@@ -271,6 +271,9 @@ const CertHelper = {
             case '2.5.29.17': // Subject Alternative Name
               extension.value = item.parsedValue.altNames.map(name => name.value);
               break;
+            case '2.5.29.14': // Subject Key Identifier
+              extension.value = this.addSpaceAfterSecondCharset(item.parsedValue.valueBlock.valueHex);
+              break;
             case '2.5.29.35': // Authority Key Identifier
               extension.value = {};
               if (item.parsedValue.keyIdentifier) {
@@ -284,13 +287,15 @@ const CertHelper = {
               }
               break;
             case '1.3.6.1.5.5.7.1.1': // Authority Info Access
-              console.log(item);
               extension.value = item.parsedValue.accessDescriptions.map((desc) => {
                 return {
                   location: desc.accessLocation.value,
                   method: OIDS[desc.accessMethod] || desc.accessMethod,
                 };
               });
+              break;
+            case '2.16.840.1.113730.1.1': // Netscape Certificate Type
+              extension.value = CertHelper.Extensions.netscapeCertType(item);
               break;
             default:
               extension.value = this.addSpaceAfterSecondCharset(item.extnValue.valueBlock.valueHex);
@@ -582,6 +587,51 @@ const CertHelper = {
       }
       if (keyUsageByte2 & 0x80) {
         usages.push('Decipher Only');
+      }
+      return usages;
+    },
+    netscapeCertType: function netscapeCertType(extension) {
+      const usages = [];
+      // parse key usage BitString
+      const valueHex = Convert.FromHex(extension.extnValue.valueBlock.valueHex);
+      const bitString = asn1js.fromBER(valueHex).result;
+      const unusedBits = bitString.valueBlock.unusedBits;
+      let byte = new Uint8Array(bitString.valueBlock.valueHex)[0];
+      byte >>= unusedBits;
+      byte <<= unusedBits;
+      /**
+       * bit-0 SSL client - this cert is certified for SSL client authentication use
+       * bit-1 SSL server - this cert is certified for SSL server authentication use
+       * bit-2 S/MIME - this cert is certified for use by clients (New in PR3)
+       * bit-3 Object Signing - this cert is certified for signing objects such as Java applets and plugins(New in PR3)
+       * bit-4 Reserved - this bit is reserved for future use
+       * bit-5 SSL CA - this cert is certified for issuing certs for SSL use
+       * bit-6 S/MIME CA - this cert is certified for issuing certs for S/MIME use (New in PR3)
+       * bit-7 Object Signing CA - this cert is certified for issuing certs for Object Signing (New in PR3)
+       */
+      if (byte & 0x80) {
+        usages.push('SSL client');
+      }
+      if (byte & 0x40) {
+        usages.push('SSL server');
+      }
+      if (byte & 0x20) {
+        usages.push('S/MIME');
+      }
+      if (byte & 0x10) {
+        usages.push('Object Signing');
+      }
+      if (byte & 0x08) {
+        usages.push('Reserved');
+      }
+      if (byte & 0x04) {
+        usages.push('SSL CA');
+      }
+      if (byte & 0x02) {
+        usages.push('S/MIME CA');
+      }
+      if (byte & 0x01) {
+        usages.push('Object Signing CA');
       }
       return usages;
     },
