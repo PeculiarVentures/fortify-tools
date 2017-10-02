@@ -557,31 +557,31 @@ const CertHelper = {
         keyUsageByte2 <<= unusedBits;
       }
       if (keyUsageByte1 & 0x80) {
-        usages.push('digitalSignature');
+        usages.push('Digital Signature');
       }
       if (keyUsageByte1 & 0x40) {
-        usages.push('nonRepudiation');
+        usages.push('Non Repudiation');
       }
       if (keyUsageByte1 & 0x20) {
-        usages.push('keyEncipherment');
+        usages.push('Key Encipherment');
       }
       if (keyUsageByte1 & 0x10) {
-        usages.push('dataEncipherment');
+        usages.push('Data Encipherment');
       }
       if (keyUsageByte1 & 0x08) {
-        usages.push('keyAgreement');
+        usages.push('Key Agreement');
       }
       if (keyUsageByte1 & 0x04) {
-        usages.push('keyCertSign');
+        usages.push('Key Cert Sign');
       }
       if (keyUsageByte1 & 0x02) {
-        usages.push('cRLSign');
+        usages.push('cRL Sign');
       }
       if (keyUsageByte1 & 0x01) {
-        usages.push('encipherOnly');
+        usages.push('Encipher Only');
       }
       if (keyUsageByte2 & 0x80) {
-        usages.push('decipherOnly');
+        usages.push('Decipher Only');
       }
       return usages;
     },

@@ -12,10 +12,8 @@ function* errorHandler({ data, action }) {
   const { message = '', stack } = data;
   let errorMessage = '';
   console.error(data);
+  console.log('ERROR SAGA', message);
 
-  // if (/Client.prototype.getServerInfo/.test(stack)) {
-  //   errorMessage = 'NOT_SUPPORTED_LOCALHOST';
-  // } else
   if (message === 'NetworkError when attempting to fetch resource.') {
     errorMessage = 'NOT_SUPPORTED_LOCALHOST';
   } else if (action === 'request_create') {

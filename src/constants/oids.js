@@ -945,6 +945,7 @@ export default {
   '1.2.840.113635.100.4.6.2': 'Apple Crypto Tier1 QoS',
   '1.2.840.113635.100.4.6.3': 'Apple Crypto Tier2 QoS',
   '1.2.840.113635.100.4.6.4': 'Apple Crypto Tier3 QoS',
+  '1.2.840.113635.100.4.7': 'Apple ID Sharing Certificate',
   '1.2.840.113635.100.5': 'Apple Certificate Policies',
   '1.2.840.113635.100.5.1': 'Apple Certificate Policy ID',
   '1.2.840.113635.100.5.2': 'Apple Dot Mac Certificate Policy ID',

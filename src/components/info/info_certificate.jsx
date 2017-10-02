@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Root, Row, Title, RowCertInfo, RowCert, ColCert } from './styled/info';
-import { CertHelper } from '../../helpers';
+// import { CertHelper } from '../../helpers';
 
 const CertificateInfo = (props, context) => {
   const {
@@ -107,7 +107,7 @@ const CertificateInfo = (props, context) => {
           extensions.length
             ? extensions.map((ext, index) => {
               let value;
-              if (typeof ext.value === "string") {
+              if (typeof ext.value === 'string') {
                 value = ext.value;
               } else {
                 switch (ext.oid) {
@@ -126,9 +126,20 @@ const CertificateInfo = (props, context) => {
                   case '2.5.29.35': // Authority Key Identifier
                     value = (
                       <div>
-                        {ext.value.keyIdentifier ? <div>Key identifier: {ext.value.keyIdentifier}</div> : null}
-                        {ext.value.authorityCertSerialNumber ? <div>Authority serial number: {ext.value.authorityCertSerialNumber}</div> : null}
-                        {ext.value.authorityCertIssuer ? <div>Authority issuer name: {ext.value.authorityCertIssuer}</div> : null}
+                        {ext.value.keyIdentifier
+                          ? <div>Key identifier: {ext.value.keyIdentifier}</div>
+                          : null
+                        }
+                        {ext.value.authorityCertSerialNumber
+                          ? <div>
+                            Authority serial number: {ext.value.authorityCertSerialNumber}
+                          </div>
+                          : null
+                        }
+                        {ext.value.authorityCertIssuer
+                          ? <div>Authority issuer name: {ext.value.authorityCertIssuer}</div>
+                          : null
+                        }
                       </div>
                     );
                     break;
@@ -138,7 +149,7 @@ const CertificateInfo = (props, context) => {
                         <div>
                           <div>Location: {access.location}</div>
                           <div>Method: {access.method}</div>
-                          <br/>
+                          <br />
                         </div>
                       ))
                     );
@@ -151,8 +162,7 @@ const CertificateInfo = (props, context) => {
                 <RowCert
                   key={index}
                 >
-                  {renderRowContainer(lang['Info.Body.Name'], ext.name)
-                  }
+                  {renderRowContainer(lang['Info.Body.Name'], ext.name)}
                   {renderRowContainer(lang['Info.Body.Critical'], ext.critical ? 'yes' : 'no')}
                   {renderRowContainer(lang['Info.Body.Value'], value, '', true)}
                 </RowCert>

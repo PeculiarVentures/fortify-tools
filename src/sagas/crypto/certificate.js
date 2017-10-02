@@ -106,9 +106,9 @@ export function* certificateCreate(crypto, data) {
   setEngine('Crypto', crypto, new CryptoEngine({ name: 'Crypto', crypto, subtle: crypto.subtle }));
 
   const {
-        publicKey,
+    publicKey,
     privateKey,
-      } = yield crypto.subtle.generateKey(algorithm, extractable, usages);
+  } = yield crypto.subtle.generateKey(algorithm, extractable, usages);
 
   pkcs10.version = 0;
   pkcs10 = CertHelper.decoratePkcs10Subject(pkcs10, data);
