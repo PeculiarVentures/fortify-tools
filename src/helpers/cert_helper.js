@@ -271,6 +271,9 @@ const CertHelper = {
             case '2.5.29.17': // Subject Alternative Name
               extension.value = item.parsedValue.altNames.map(name => name.value);
               break;
+            case '2.5.29.14': // Subject Key Identifier
+              extension.value = this.addSpaceAfterSecondCharset(item.parsedValue.valueBlock.valueHex);
+              break;
             case '2.5.29.35': // Authority Key Identifier
               extension.value = {};
               if (item.parsedValue.keyIdentifier) {
