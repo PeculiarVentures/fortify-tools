@@ -114,6 +114,7 @@ const CertificateInfo = (props, context) => {
                   case '2.5.29.15': // key usage
                   case '2.5.29.37': // Extended Key Usage
                   case '2.5.29.17': // Subject Alternative Name
+                  case '2.16.840.1.113730.1.1': // Netscape Certificate Type
                     value = ext.value.join(', ');
                     break;
                   case '2.5.29.31': // CRL Distribution Points
