@@ -32,15 +32,17 @@ export function* certificateGet(crypto, id) {
 }
 
 export function* certificateExport(crypto, cert, format = 'pem') {
+  console.log("here");
   return yield crypto.certStorage.exportCert(format, cert);
 }
 
 function* certificateGatPrivateKeyID(crypto, cert) {
-  const publicKeyID = yield Key.publicKeyThumbprint(crypto, cert.publicKey, 'SHA-1');
+  const publicKeyIDsha1 = yield Key.publicKeyThumbprint(crypto, cert.publicKey, 'SHA-1');
+  const publicKeyIDsha256 = yield Key.publicKeyThumbprint(crypto, cert.publicKey, 'SHA-256');
   const keyIDs = yield Key.keyGetIDs(crypto);
   for (const keyID of keyIDs) {
     const idPart = keyID.split('-')[2];
-    if (publicKeyID === idPart) {
+    if (publicKeyIDsha1 === idPart || publicKeyIDsha256 === idPart) {
       return keyID;
     }
   }

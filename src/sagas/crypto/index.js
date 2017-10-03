@@ -254,11 +254,10 @@ function* providerReload({ id }) {
     yield put(AppActions.loaded(false));
     yield put(ProviderActions.update({ loaded: false, items: [] }));
 
-    const crypto = yield Provider.cryptoReset(id);
-    if (typeof crypto === 'undefined') {
-      yield providerSelect({ id });
-      yield put(AppActions.loaded(true));
-    }
+    const crypto = yield Provider.cryptoGet(id);
+    yield Provider.cryptoReset(crypto);
+    yield providerSelect({ id });
+    yield put(AppActions.loaded(true));
   } catch (error) {
     yield put(ErrorActions.error(error));
   }
@@ -331,6 +330,21 @@ function* importItem({ data }) {
       throw new Error("Cannot import certificate item, cause it doesn't have private key in storage");
     }
     const certID = yield Certificate.certificateSet(crypto, cert);
+
+    // Look for the existing requests and remove them
+    try {
+      const certIdParts = certID.split('-');
+      const certIDs = yield Certificate.certificateGetIDs(crypto);
+      for (const id of certIDs) {
+        const idParts = id.split('-');
+        if (idParts[0] === 'request' && idParts[2] === certIdParts[2]) {
+          yield Certificate.certificateRemove(crypto, id);
+        }
+      }
+    } catch (error) {
+      console.error('Cannot remove request for imported certificate');
+      console.error(error);
+    }
 
     if (certID) {
       const item = yield Certificate.certificateGet(crypto, certID);

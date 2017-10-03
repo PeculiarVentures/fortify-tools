@@ -46,11 +46,11 @@ export function* cryptoGet(id) {
 
 /**
  * Reset provider crypto
- * @param {string} id
+ * @param {Crypto} crypto
  * @returns {Promise}
  */
-export function* cryptoReset(id) {
-  const crypto = yield ws.getCrypto(id);
+export function* cryptoReset(crypto) {
+  yield crypto.reset();
 }
 
 /**
