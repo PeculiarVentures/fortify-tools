@@ -60,7 +60,7 @@ const CertificateInfo = (props, context) => {
         </Title>
         <RowCert>
           {
-            Object.keys(subject).map((iss, index) => renderRowContainer(iss, subject[iss], index))
+            Object.keys(subject).map((iss, index) => renderRowContainer(lang[`Info.Body.${iss.replace(' ', '')}`] || iss, subject[iss], index))
           }
         </RowCert>
       </Row>
@@ -71,7 +71,7 @@ const CertificateInfo = (props, context) => {
         </Title>
         <RowCert>
           {
-            Object.keys(issuer).map((iss, index) => renderRowContainer(iss, issuer[iss], index))
+            Object.keys(issuer).map((iss, index) => renderRowContainer(lang[`Info.Body.${iss.replace(' ', '')}`] || iss, issuer[iss], index))
           }
         </RowCert>
       </Row>
