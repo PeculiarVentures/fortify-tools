@@ -339,6 +339,7 @@ function* importItem({ data }) {
         const idParts = id.split('-');
         if (idParts[0] === 'request' && idParts[2] === certIdParts[2]) {
           yield Certificate.certificateRemove(crypto, id);
+          yield put(ItemActions.remove(id));
         }
       }
     } catch (error) {
