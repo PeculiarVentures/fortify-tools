@@ -261,7 +261,8 @@ const CertHelper = {
         try {
           switch (item.extnID) {
             case '2.5.29.15': // key usage
-              extension.value = CertHelper.Extensions.keyUsage(item);
+              extension.value = [{}];
+              extension.value[0].Usages = CertHelper.Extensions.keyUsage(item);
               break;
             case '2.5.29.37': // Extended Key Usage
               extension.value = item.parsedValue.keyPurposes.map((o) => {
@@ -280,7 +281,8 @@ const CertHelper = {
               extension.value = item.parsedValue.altNames.map(name => name.value);
               break;
             case '2.5.29.14': // Subject Key Identifier
-              extension.value = this.addSpaceAfterSecondCharset(
+              extension.value = [{}];
+              extension.value[0].KeyID = this.addSpaceAfterSecondCharset(
                 item.parsedValue.valueBlock.valueHex,
               );
               break;
@@ -312,10 +314,13 @@ const CertHelper = {
               }
               break;
             case '1.3.6.1.5.5.7.1.1': // Authority Info Access
-              extension.value = item.parsedValue.accessDescriptions.map(desc => ({
-                URl: desc.accessLocation.value,
-                Method: OIDS[desc.accessMethod] || desc.accessMethod,
-              }));
+              extension.value = item.parsedValue.accessDescriptions.map((desc) => {
+                const _oid = OIDS[desc.accessMethod];
+                return {
+                  URl: desc.accessLocation.value,
+                  Method: _oid ? `${_oid} (${desc.accessMethod})` : desc.accessMethod,
+                };
+              });
               break;
             case '2.16.840.1.113730.1.1': // Netscape Certificate Type
               extension.value = [{
