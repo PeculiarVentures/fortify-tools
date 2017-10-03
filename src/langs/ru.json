@@ -100,6 +100,8 @@
   "Info.Body.Expired": "Действителен по",
   "Info.Body.None": "Пусто",
   "Info.Body.Thumbprint": "Печать (SHA2)",
+  "Info.Body.Critical.Yes": "ДА",
+  "Info.Body.Critical.No": "НЕТ",
 
   "Snackbar.Offline.Btn.Get": "Получить помощь",
   "Snackbar.Offline.Text": "Сервер отключен или не установлен",

@@ -262,7 +262,7 @@ const CertHelper = {
           switch (item.extnID) {
             case '2.5.29.15': // key usage
               extension.value = [{}];
-              extension.value[0].Usages = CertHelper.Extensions.keyUsage(item);
+              extension.value[0].Usages = CertHelper.Extensions.keyUsage(item).join(', ');
               break;
             case '2.5.29.37': // Extended Key Usage
               extension.value = item.parsedValue.keyPurposes.map((o) => {
@@ -324,7 +324,7 @@ const CertHelper = {
               break;
             case '2.16.840.1.113730.1.1': // Netscape Certificate Type
               extension.value = [{
-                Type: CertHelper.Extensions.netscapeCertType(item),
+                Type: CertHelper.Extensions.netscapeCertType(item).join(', '),
               }];
               break;
             default:

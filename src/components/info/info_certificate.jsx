@@ -132,7 +132,7 @@ const CertificateInfo = (props, context) => {
             return (
               <RowCert key={index}>
                 {renderRowContainer(lang['Info.Body.Name'], name)}
-                {renderRowContainer(lang['Info.Body.Critical'], critical ? 'yes' : 'no')}
+                {renderRowContainer(lang['Info.Body.Critical'], critical ? lang['Info.Body.Critical.Yes'] : lang['Info.Body.Critical.No'])}
                 {valueBlock}
               </RowCert>
             );
