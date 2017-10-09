@@ -71,7 +71,10 @@ function* getProviderCertificates() {
       if (keyParts[0] === 'private' && keyParts[2] === certID.split('-')[2]) {
         const cert = yield Certificate.certificateGet(provider, certID);
         if (cert) {
-          certificatesArr.push(cert);
+          certificatesArr.push({
+            id: certID,
+            data: cert,
+          });
         }
         break;
       }
@@ -80,20 +83,16 @@ function* getProviderCertificates() {
 
   // sort certificates
   certificatesArr.sort((a, b) => {
-    if (a.subjectName > b.subjectName) {
+    if (a.data.subjectName > b.data.subjectName) {
       return 1;
-    } else if (a.subjectName < b.subjectName) {
+    } else if (a.data.subjectName < b.data.subjectName) {
       return -1;
     }
     return 0;
   });
 
   for (const item of certificatesArr) {
-    if (!item) {
-      // NOTE: certificateGet returns cert or false, we have to skip wrong data
-      continue; // eslint-disable-line
-    }
-    const raw = yield Certificate.certificateExport(provider, item, 'raw');
+    const raw = yield Certificate.certificateExport(provider, item.data, 'raw');
     const base64 = Convert.ToBase64(raw);
 
     // Add \n after each 64 bytes
@@ -114,7 +113,7 @@ function* getProviderCertificates() {
 
     let certData = '';
 
-    if (item.type === 'x509') {
+    if (item.data.type === 'x509') {
       const pem = `-----BEGIN CERTIFICATE-----\n${b64Formated}\n-----END CERTIFICATE-----`;
 
       const thumbprint = yield Certificate.certificateThumbprint(provider, raw);
@@ -122,7 +121,7 @@ function* getProviderCertificates() {
 
       certData = CertHelper.certDataHandler({
         ...certificateDetails,
-        id: certIDs[index],
+        id: item.id,
         pem,
         thumbprint,
       });
@@ -130,8 +129,8 @@ function* getProviderCertificates() {
       const pem = `-----BEGIN CERTIFICATE REQUEST-----\n${b64Formated}\n-----END CERTIFICATE REQUEST-----`;
 
       certData = CertHelper.requestDataHandler({
-        ...item,
-        id: certIDs[index],
+        ...item.data,
+        id: item.id,
         pem,
       });
     }
@@ -314,6 +313,7 @@ function* removeItem() {
     const crypto = yield Provider.cryptoGet(selectedProvider.get().id);
 
     const selectedItem = selectedProvider.find('items').where({ selected: true }).get();
+    console.log(selectedItem);
 
     if (selectedItem.type === 'key') {
       yield Key.keyRemove(crypto, selectedItem._id);
