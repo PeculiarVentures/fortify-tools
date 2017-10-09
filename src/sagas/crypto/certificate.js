@@ -32,7 +32,6 @@ export function* certificateGet(crypto, id) {
 }
 
 export function* certificateExport(crypto, cert, format = 'pem') {
-  console.log("here");
   return yield crypto.certStorage.exportCert(format, cert);
 }
 
