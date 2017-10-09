@@ -95,12 +95,27 @@ function* getProviderCertificates() {
     }
     const raw = yield Certificate.certificateExport(provider, item, 'raw');
     const base64 = Convert.ToBase64(raw);
+
+    // Add \n after each 64 bytes
+    let b64Formated = '';
+    const b64Rows = [];
+    let b64Row = '';
+    for (let i = 0; i < base64.length; i++) {
+      if (i && !(i % 64)) {
+        b64Rows.push(b64Row);
+        b64Row = '';
+      }
+      b64Row += base64.charAt(i);
+    }
+    if (b64Row && b64Row.length % 64) {
+      b64Rows.push(b64Row);
+    }
+    b64Formated = b64Rows.join('\n');
+
     let certData = '';
 
     if (item.type === 'x509') {
-      const pem = `-----BEGIN CERTIFICATE-----
-        ${base64}
-        -----END CERTIFICATE-----`;
+      const pem = `-----BEGIN CERTIFICATE-----\n${b64Formated}\n-----END CERTIFICATE-----`;
 
       const thumbprint = yield Certificate.certificateThumbprint(provider, raw);
       const certificateDetails = CertHelper.certRawToJson(raw);
@@ -112,9 +127,7 @@ function* getProviderCertificates() {
         thumbprint,
       });
     } else {
-      const pem = `-----BEGIN CERTIFICATE REQUEST-----
-        ${base64}
-        -----END CERTIFICATE REQUEST-----`;
+      const pem = `-----BEGIN CERTIFICATE REQUEST-----\n${b64Formated}\n-----END CERTIFICATE REQUEST-----`;
 
       certData = CertHelper.requestDataHandler({
         ...item,
