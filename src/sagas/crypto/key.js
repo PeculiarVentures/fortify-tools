@@ -21,7 +21,7 @@ export function* publicKeyThumbprint(crypto, publicKey, hash = 'SHA-256') {
   if (publicKey.type !== 'public') {
     throw new Error(`Wrong type of key '${publicKey.type}'. Must be 'public'`);
   }
-  const spki = yield crypto.subtle.exportKey('spki', publicKey);
+  const spki = yield crypto.subtle.exportKey('raw', publicKey);
   // NOTE: Use native digest instead of service provider
   const thumbprint = yield window.crypto.subtle.digest(hash, spki);
   return Convert.ToHex(thumbprint);
