@@ -1,3 +1,4 @@
+export ErrorDialog from './error';
 export RemoveItemDialog from './remove_item';
 export IncorrectPinDialog from './incorrect_pin';
 export UnauthorizePinDialog from './unauthorize_pin';
@@ -9,3 +10,4 @@ export FortifyAuthorizationDialog from './fortify_authorization';
 export ServerOfflineDialog from './server_offline';
 export EmptyProviders from './empty_providers';
 export RemoveItemErrorDialog from './remove_item_error';
+export EmptyPinDialog from './empty_pin';

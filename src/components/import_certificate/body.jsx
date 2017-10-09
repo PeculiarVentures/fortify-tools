@@ -53,10 +53,7 @@ export default class Body extends Component {
     const { dispatch } = this.context;
     const { textarea } = this.fieldNodes;
     const value = textarea.getValue();
-    const preparedCert = CertHelper.prepareCertToImport(value);
-    if (preparedCert) {
-      dispatch(WSActions.importItem(preparedCert));
-    }
+    dispatch(WSActions.importItem(value));
   };
 
   onFileChangeHandler = (e) => {
@@ -104,7 +101,7 @@ export default class Body extends Component {
 
   fileReaderHandler(file) {
     const reader = new FileReader();
-    const supportedFileExtension = ['csr', 'cer', 'req'];
+    const supportedFileExtension = ['csr', 'cer', 'req', 'crt', 'pem'];
 
     if (!file) {
       return false;
@@ -188,7 +185,7 @@ export default class Body extends Component {
           <BtnsContainer>
             <InputFileContainer>
               <LabelStyled htmlFor="file_input">
-                { lang['ImportCertificate.Btn.File'] }
+                {lang['ImportCertificate.Btn.File']}
               </LabelStyled>
               <input
                 type="file"
@@ -204,7 +201,7 @@ export default class Body extends Component {
               onClick={this.onClickImportHandler}
               disabled={!valid}
             >
-              { lang['ImportCertificate.Btn.Import'] }
+              {lang['ImportCertificate.Btn.Import']}
             </Button>
           </BtnsContainer>
         </BodyStyled.Container>

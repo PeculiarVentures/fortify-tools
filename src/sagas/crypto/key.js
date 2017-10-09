@@ -1,5 +1,31 @@
 import { put } from 'redux-saga/effects';
+import { Convert } from 'pvtsutils';
 import { ErrorActions } from '../../actions/state';
+
+/**
+ * Returns index of key from key storage
+ * @param {Crypto}      crypto
+ * @param {CryptoKey}   key
+ * @returns {string | null}
+ */
+export function* keyIndexOf(crypto, key) {
+  return yield crypto.keyStorage.indexOf(key);
+}
+
+/**
+ * Returns thumbprint of public key
+ * @param {Crypto} crypto
+ * @param {CryptoKey} publicKey
+ */
+export function* publicKeyThumbprint(crypto, publicKey, hash = 'SHA-256') {
+  if (publicKey.type !== 'public') {
+    throw new Error(`Wrong type of key '${publicKey.type}'. Must be 'public'`);
+  }
+  const spki = yield crypto.subtle.exportKey('raw', publicKey);
+  // NOTE: Use native digest instead of service provider
+  const thumbprint = yield window.crypto.subtle.digest(hash, spki);
+  return Convert.ToHex(thumbprint);
+}
 
 /**
  * Get provider key IDs
@@ -7,15 +33,7 @@ import { ErrorActions } from '../../actions/state';
  * @returns {Promise|Array}
  */
 export function* keyGetIDs(crypto) {
-  if (crypto) {
-    try {
-      return yield crypto.keyStorage.keys();
-    } catch (error) {
-      yield put(ErrorActions.error(error));
-      return [];
-    }
-  }
-  return [];
+  return yield crypto.keyStorage.keys();
 }
 
 /**
@@ -25,15 +43,7 @@ export function* keyGetIDs(crypto) {
  * @returns {Promise|[]}
  */
 export function* keySet(crypto, key) {
-  if (crypto) {
-    try {
-      return yield crypto.keyStorage.setItem(key);
-    } catch (error) {
-      yield put(ErrorActions.error(error));
-      return [];
-    }
-  }
-  return [];
+  return yield crypto.keyStorage.setItem(key);
 }
 
 /**
@@ -43,15 +53,12 @@ export function* keySet(crypto, key) {
  * @returns {Promise|Boolean}
  */
 export function* keyGet(crypto, id) {
-  if (crypto) {
-    try {
-      return yield crypto.keyStorage.getItem(id);
-    } catch (error) {
-      yield put(ErrorActions.error(error));
-      return false;
-    }
+  try {
+    return yield crypto.keyStorage.getItem(id);
+  } catch (error) {
+    console.error(error);
+    return false;
   }
-  return false;
 }
 
 /**
@@ -61,14 +68,5 @@ export function* keyGet(crypto, id) {
  * @returns {boolean}
  */
 export function* keyRemove(crypto, id) {
-  if (crypto) {
-    try {
-      yield crypto.keyStorage.removeItem(id);
-      return true;
-    } catch (error) {
-      yield put(ErrorActions.error(error));
-      return false;
-    }
-  }
-  return false;
+  yield crypto.keyStorage.removeItem(id);
 }

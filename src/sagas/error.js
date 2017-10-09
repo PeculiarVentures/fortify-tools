@@ -11,10 +11,8 @@ function* errorHandler({ data, action }) {
   }
   const { message = '', stack } = data;
   let errorMessage = '';
+  console.error(data);
 
-  // if (/Client.prototype.getServerInfo/.test(stack)) {
-  //   errorMessage = 'NOT_SUPPORTED_LOCALHOST';
-  // } else
   if (message === 'NetworkError when attempting to fetch resource.') {
     errorMessage = 'NOT_SUPPORTED_LOCALHOST';
   } else if (action === 'request_create') {
@@ -29,6 +27,8 @@ function* errorHandler({ data, action }) {
     errorMessage = 'UNAPPROVED_PIN';
   } else if (/C_DestroyObject/.test(message)) {
     errorMessage = 'REMOVE_ITEM';
+  } else if (message === 'Incorrect PIN value. It cannot be empty.') {
+    errorMessage = 'EMPTY_PIN';
   }
 
   switch (errorMessage) {
@@ -54,6 +54,11 @@ function* errorHandler({ data, action }) {
       break;
     }
 
+    case 'EMPTY_PIN': {
+      yield put(DialogActions.open('empty_pin'));
+      break;
+    }
+
     case 'OFFLINE': {
       yield put(DialogActions.open('server_offline'));
       WSController.checkConnect();
@@ -73,7 +78,9 @@ function* errorHandler({ data, action }) {
     }
 
     default:
-      console.error(data);
+      yield put(DialogActions.open('error'));
+      EventChannel.emit('DIALOG:SET_MESSAGE', message);
+      break;
   }
 
   return true;

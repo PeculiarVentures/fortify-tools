@@ -252,6 +252,23 @@ export default class Overlay extends Component {
           <Dialog.EmptyProviders
             name="empty_providers"
           />
+          <Dialog.ErrorDialog
+            name="error"
+            message={message}
+          />
+          <Dialog.EmptyPinDialog
+            name="empty_pin"
+            onAccept={() => (
+              this.handleAction({
+                type: 'TRY_AGAIN_LOGIN',
+              })
+            )}
+            onCancel={() => (
+              this.handleAction({
+                type: ACTIONS_CONST.DIALOG_CLOSE,
+              })
+            )}
+          />
         </SegueHandler>
       );
     }
@@ -265,8 +282,8 @@ export default class Overlay extends Component {
         <OverlayStyled
           innerRef={rootNode => (this.refRootNode = rootNode)}
         >
-          { this.renderModal() }
-          { this.renderDialog() }
+          {this.renderModal()}
+          {this.renderDialog()}
         </OverlayStyled>
       );
     }

@@ -1,6 +1,6 @@
 import * as asn1js from 'asn1js';
 import Certificate from 'pkijs/build/Certificate';
-import CertificationRequest from 'pkijs/build/CertificationRequest';
+// import CertificationRequest from 'pkijs/build/CertificationRequest';
 import AttributeTypeAndValue from 'pkijs/build/AttributeTypeAndValue';
 import moment from 'moment';
 import UUID from 'uuid';
@@ -250,11 +250,92 @@ const CertHelper = {
 
     if (json.extensions) {
       for (const item of json.extensions) {
-        extensions.push({
-          name: OIDS[item.extnID] || item.extnID,
+        const oid = OIDS[item.extnID];
+        const extension = {
+          name: oid ? `${oid} (${item.extnID})` : item.extnID,
+          oid: item.extnID,
           critical: item.critical || false,
-          value: this.addSpaceAfterSecondCharset(item.extnValue.valueBlock.valueHex),
-        });
+        };
+
+        // parse extensions
+        try {
+          switch (item.extnID) {
+            case '2.5.29.15': // key usage
+              extension.value = [{}];
+              extension.value[0].Usages = CertHelper.Extensions.keyUsage(item).join(', ');
+              break;
+            case '2.5.29.37': // Extended Key Usage
+              extension.value = item.parsedValue.keyPurposes.map((o) => {
+                const _oid = OIDS[o];
+                return {
+                  Purpose: _oid ? `${_oid} (${o})` : o,
+                };
+              });
+              break;
+            case '2.5.29.31': // CRL Distribution Points
+              extension.value = item.parsedValue.distributionPoints.map(dp => ({
+                URl: dp.distributionPoint[0].value,
+              }));
+              break;
+            case '2.5.29.17': // Subject Alternative Name
+              extension.value = item.parsedValue.altNames.map(name => name.value);
+              break;
+            case '2.5.29.14': // Subject Key Identifier
+              extension.value = [{}];
+              extension.value[0].KeyID = this.addSpaceAfterSecondCharset(
+                item.parsedValue.valueBlock.valueHex,
+              );
+              break;
+            case '2.5.29.35': // Authority Key Identifier
+              extension.value = [{}];
+              if (item.parsedValue.keyIdentifier) {
+                extension.value[0].KeyID = this.addSpaceAfterSecondCharset(
+                  item
+                    .parsedValue
+                    .keyIdentifier
+                    .valueBlock
+                    .valueHex
+                    .toUpperCase(),
+                );
+              }
+              if (item.parsedValue.authorityCertSerialNumber) {
+                extension.value[0].AuthorityCertSerialNumber = this.addSpaceAfterSecondCharset(
+                  item
+                    .parsedValue
+                    .authorityCertSerialNumber
+                    .valueBlock
+                    .valueHex.toUpperCase(),
+                );
+              }
+              if (item.parsedValue.authorityCertIssuer) {
+                extension.value[0].AuthorityCertIssuer = this.name2str(
+                  item.parsedValue.authorityCertIssuer[0].value,
+                );
+              }
+              break;
+            case '1.3.6.1.5.5.7.1.1': // Authority Info Access
+              extension.value = item.parsedValue.accessDescriptions.map((desc) => {
+                const _oid = OIDS[desc.accessMethod];
+                return {
+                  URl: desc.accessLocation.value,
+                  Method: _oid ? `${_oid} (${desc.accessMethod})` : desc.accessMethod,
+                };
+              });
+              break;
+            case '2.16.840.1.113730.1.1': // Netscape Certificate Type
+              extension.value = [{
+                Type: CertHelper.Extensions.netscapeCertType(item).join(', '),
+              }];
+              break;
+            default:
+              extension.value = this.addSpaceAfterSecondCharset(item.extnValue.valueBlock.valueHex);
+          }
+        } catch (error) {
+          console.error(error);
+          extension.value = this.addSpaceAfterSecondCharset(item.extnValue.valueBlock.valueHex);
+        }
+
+        extensions.push(extension);
       }
     }
 
@@ -275,14 +356,14 @@ const CertHelper = {
   },
 
   prepareCertToImport: function prepareCertToImport(value) {
-    let certBuf = '';
+    let certBuf;
 
-    if (regExps.base64.test(value)) { // check pem
-      value = value.replace(/(-----(BEGIN|END) CERTIFICATE( REQUEST|)-----|\r|\n)/g, '');
-      certBuf = Convert.FromBinary(window.atob(value));
-    } else { // else der
-      value = Convert.FromHex(value.replace(/(\r|\n|\s)/g, ''));
-      certBuf = value;
+    if (regExps.base64.test(value)) { // pem
+      certBuf = Convert.FromBinary(window.atob(value.replace(/(-----(BEGIN|END) CERTIFICATE-----|\r|\n)/g, '')));
+    } else if (/[a-f\d]/ig.test(value)) { // hex
+      certBuf = Convert.FromHex(value.replace(/(\r|\n|\s)/g, ''));
+    } else { // der
+      certBuf = Convert.FromBinary(value);
     }
 
     const asn1 = asn1js.fromBER(certBuf);
@@ -292,15 +373,9 @@ const CertHelper = {
 
       try {
         cert = new Certificate({ schema: asn1.result });
-        type = 'certificate';
-      } catch (_error) {
-        try {
-          cert = new CertificationRequest({ schema: asn1.result });
-          type = 'request';
-        } catch (error) {
-          console.error(error);
-          return false;
-        }
+        type = 'x509';
+      } catch (error) {
+        throw new Error('ASN1 schema is not match to X509 certificate schema');
       }
 
       const json = cert.toJSON();
@@ -326,8 +401,7 @@ const CertHelper = {
         },
       };
     }
-    console.error('asn1 fromBER error');
-    return false;
+    throw new Error('Cannot parse ASN1 data');
   },
 
   decoratePkcs10Subject: function decoratePkcs10Subject(pkcs10, data) {
@@ -386,7 +460,6 @@ const CertHelper = {
   },
 
   certDataHandler: function certDataHandler(data) {
-    // console.log('sdsds', data);
     const lang = navigator.language;
     const {
       issuerName,
@@ -499,6 +572,99 @@ const CertHelper = {
     });
 
     return subjectObj;
+  },
+
+  Extensions: {
+    keyUsage: function keyUsage(extension) {
+      const usages = [];
+      // parse key usage BitString
+      const valueHex = new Uint8Array(Convert.FromHex(extension.parsedValue.valueBlock.valueHex));
+      const unusedBits = extension.parsedValue.valueBlock.unusedBits;
+      let keyUsageByte1 = valueHex[0];
+      let keyUsageByte2 = valueHex.byteLength > 1 ? valueHex[1] : 0;
+      if (valueHex.byteLength === 1) {
+        keyUsageByte1 >>= unusedBits;
+        keyUsageByte1 <<= unusedBits;
+      }
+      if (valueHex.byteLength === 2) {
+        keyUsageByte2 >>= unusedBits;
+        keyUsageByte2 <<= unusedBits;
+      }
+      if (keyUsageByte1 & 0x80) {
+        usages.push('Digital Signature');
+      }
+      if (keyUsageByte1 & 0x40) {
+        usages.push('Non Repudiation');
+      }
+      if (keyUsageByte1 & 0x20) {
+        usages.push('Key Encipherment');
+      }
+      if (keyUsageByte1 & 0x10) {
+        usages.push('Data Encipherment');
+      }
+      if (keyUsageByte1 & 0x08) {
+        usages.push('Key Agreement');
+      }
+      if (keyUsageByte1 & 0x04) {
+        usages.push('Key Cert Sign');
+      }
+      if (keyUsageByte1 & 0x02) {
+        usages.push('cRL Sign');
+      }
+      if (keyUsageByte1 & 0x01) {
+        usages.push('Encipher Only');
+      }
+      if (keyUsageByte2 & 0x80) {
+        usages.push('Decipher Only');
+      }
+      return usages;
+    },
+
+    netscapeCertType: function netscapeCertType(extension) {
+      const usages = [];
+      // parse key usage BitString
+      const valueHex = Convert.FromHex(extension.extnValue.valueBlock.valueHex);
+      const bitString = asn1js.fromBER(valueHex).result;
+      const unusedBits = bitString.valueBlock.unusedBits;
+      let byte = new Uint8Array(bitString.valueBlock.valueHex)[0];
+      byte >>= unusedBits;
+      byte <<= unusedBits;
+      /**
+       * bit-0 SSL client - this cert is certified for SSL client authentication use
+       * bit-1 SSL server - this cert is certified for SSL server authentication use
+       * bit-2 S/MIME - this cert is certified for use by clients (New in PR3)
+       * bit-3 Object Signing - this cert is certified for signing objects such as Java applets and plugins(New in PR3)
+       * bit-4 Reserved - this bit is reserved for future use
+       * bit-5 SSL CA - this cert is certified for issuing certs for SSL use
+       * bit-6 S/MIME CA - this cert is certified for issuing certs for S/MIME use (New in PR3)
+       * bit-7 Object Signing CA - this cert is certified for issuing certs for Object Signing (New in PR3)
+       */
+      if (byte & 0x80) {
+        usages.push('SSL client');
+      }
+      if (byte & 0x40) {
+        usages.push('SSL server');
+      }
+      if (byte & 0x20) {
+        usages.push('S/MIME');
+      }
+      if (byte & 0x10) {
+        usages.push('Object Signing');
+      }
+      if (byte & 0x08) {
+        usages.push('Reserved');
+      }
+      if (byte & 0x04) {
+        usages.push('SSL CA');
+      }
+      if (byte & 0x02) {
+        usages.push('S/MIME CA');
+      }
+      if (byte & 0x01) {
+        usages.push('Object Signing CA');
+      }
+      return usages;
+    },
   },
 };
 

@@ -12,80 +12,68 @@ import * as Key from './key';
 
 export function* certificateGetIDs(crypto) {
   if (crypto) {
-    try {
-      return yield crypto.certStorage.keys();
-    } catch (error) {
-      yield put(ErrorActions.error(error));
-      return [];
-    }
+    return yield crypto.certStorage.keys();
   }
   return [];
 }
 
 export function* certificateSet(crypto, cert) {
-  if (crypto) {
-    try {
-      return yield crypto.certStorage.setItem(cert);
-    } catch (error) {
-      yield put(ErrorActions.error(error));
-      return false;
-    }
-  }
-  return false;
+  return yield crypto.certStorage.setItem(cert);
 }
 
 export function* certificateGet(crypto, id) {
-  if (crypto) {
-    try {
-      return yield crypto.certStorage.getItem(id);
-    } catch (error) {
-      yield put(ErrorActions.error(error));
-      return false;
-    }
+  try {
+    return yield crypto.certStorage.getItem(id);
+  } catch (error) {
+    console.error(`Cannot get certificate '${id}' from provider. ${error.message}`);
+    // yield put(ErrorActions.error(error));
+    return false;
   }
-  return false;
 }
 
 export function* certificateExport(crypto, cert, format = 'pem') {
-  if (crypto) {
-    try {
-      return yield crypto.certStorage.exportCert(format, cert);
-    } catch (error) {
-      yield put(ErrorActions.error(error));
-      return false;
+  return yield crypto.certStorage.exportCert(format, cert);
+}
+
+function* certificateGatPrivateKeyID(crypto, cert) {
+  const publicKeyIDsha1 = yield Key.publicKeyThumbprint(crypto, cert.publicKey, 'SHA-1');
+  const publicKeyIDsha256 = yield Key.publicKeyThumbprint(crypto, cert.publicKey, 'SHA-256');
+  const keyIDs = yield Key.keyGetIDs(crypto);
+  for (const keyID of keyIDs) {
+    const idPart = keyID.split('-')[2];
+    if (publicKeyIDsha1 === idPart || publicKeyIDsha256 === idPart) {
+      return keyID;
     }
   }
-  return false;
+  return null;
+}
+
+export function* certificateHasPrivateKey(crypto, cert) {
+  const keyID = yield certificateGatPrivateKeyID(crypto, cert);
+  return !!keyID;
+}
+
+export function* certificateGetPrivateKey(crypto, cert) {
+  const keyID = yield certificateGatPrivateKeyID(crypto, cert);
+  return yield Key.keyGet(crypto, keyID);
 }
 
 export function* certificateImport(crypto, data) {
-  if (crypto) {
-    try {
-      const { raw, usages, type } = data;
-      const algorithm = () => Object.assign({}, data.algorithm);
-      let importCert = '';
+  const { raw, usages, type } = data;
+  const algorithm = () => Object.assign({}, data.algorithm);
+  let cert;
 
-      if (type === 'request') { // check certificate request data
-        try {
-          importCert = yield crypto.certStorage.importCert('request', raw, algorithm(), usages);
-        } catch (error) {
-          yield put(ErrorActions.error(error, 'import_item'));
-        }
-      } else { // else certificate
-        try {
-          importCert = yield crypto.certStorage.importCert('x509', raw, algorithm(), usages);
-        } catch (error) {
-          yield put(ErrorActions.error(error, 'import_item'));
-        }
-      }
-
-      return yield certificateSet(crypto, importCert);
-    } catch (error) {
-      yield put(ErrorActions.error(error, 'import_item'));
-      return false;
-    }
+  switch (type) { // check certificate request data
+    case 'request':
+      cert = yield crypto.certStorage.importCert('request', raw, algorithm(), usages);
+      break;
+    case 'x509':
+      cert = yield crypto.certStorage.importCert('x509', raw, algorithm(), usages);
+      break;
+    default:
+      throw new Error(`Unsupported type '${type}' of certificate storage item`);
   }
-  return false;
+  return cert;
 }
 
 export function* certificateCreate(crypto, data) {
@@ -108,174 +96,143 @@ export function* certificateCreate(crypto, data) {
   //     usages: ['sign', 'verify'],
   //   },
   // };
-  if (crypto) {
-    const { extractable, usages } = data.keyInfo;
-    const algorithm = (() => Object.assign({
-      publicExponent: new Uint8Array([1, 0, 1]),
-    }, data.keyInfo.algorithm))();
-    const algorithmHash = algorithm.hash;
-    let pkcs10 = new CertificationRequest();
+  const { extractable, usages } = data.keyInfo;
+  const algorithm = (() => Object.assign({
+    publicExponent: new Uint8Array([1, 0, 1]),
+  }, data.keyInfo.algorithm))();
+  const algorithmHash = algorithm.hash;
+  let pkcs10 = new CertificationRequest();
 
-    try {
-      // Set engine
-      setEngine('Crypto', crypto, new CryptoEngine({ name: 'Crypto', crypto, subtle: crypto.subtle }));
-      
-      const {
-        publicKey,
-        privateKey,
-      } = yield crypto.subtle.generateKey(algorithm, extractable, usages);
+  // Set engine
+  setEngine('Crypto', crypto, new CryptoEngine({ name: 'Crypto', crypto, subtle: crypto.subtle }));
 
-      pkcs10.version = 0;
-      pkcs10 = CertHelper.decoratePkcs10Subject(pkcs10, data);
-      pkcs10.attributes = [];
+  const {
+    publicKey,
+    privateKey,
+  } = yield crypto.subtle.generateKey(algorithm, extractable, usages);
 
-      yield pkcs10.subjectPublicKeyInfo.importKey(publicKey);
+  pkcs10.version = 0;
+  pkcs10 = CertHelper.decoratePkcs10Subject(pkcs10, data);
+  pkcs10.attributes = [];
 
-      const hash = yield crypto.subtle.digest(
-        { name: algorithmHash },
-        pkcs10.subjectPublicKeyInfo.subjectPublicKey.valueBlock.valueHex,
-      );
-      const attribute = new Attribute({
-        type: '1.2.840.113549.1.9.14',
-        values: [(new Extensions({
-          extensions: [
-            new Extension({
-              extnID: '2.5.29.14',
-              critical: false,
-              extnValue: (new asn1js.OctetString({ valueHex: hash })).toBER(false),
-            }),
-          ],
-        })).toSchema()],
-      });
+  yield pkcs10.subjectPublicKeyInfo.importKey(publicKey);
 
-      pkcs10.attributes.push(attribute);
-      // sign
-      yield pkcs10.sign(privateKey, privateKey.algorithm.hash ? privateKey.algorithm.hash.name : 'SHA-1');
+  const hash = yield crypto.subtle.digest(
+    { name: algorithmHash },
+    pkcs10.subjectPublicKeyInfo.subjectPublicKey.valueBlock.valueHex,
+  );
+  const attribute = new Attribute({
+    type: '1.2.840.113549.1.9.14',
+    values: [(new Extensions({
+      extensions: [
+        new Extension({
+          extnID: '2.5.29.14',
+          critical: false,
+          extnValue: (new asn1js.OctetString({ valueHex: hash })).toBER(false),
+        }),
+      ],
+    })).toSchema()],
+  });
 
-      // Fix parameters for algorithms
-      if (!pkcs10.signatureAlgorithm.algorithmParams) {
-        pkcs10.signatureAlgorithm.algorithmParams = new asn1js.Null();
-      }
+  pkcs10.attributes.push(attribute);
+  // sign
+  yield pkcs10.sign(privateKey, privateKey.algorithm.hash ? privateKey.algorithm.hash.name : 'SHA-1');
 
-
-      const csrBuffer = pkcs10.toSchema().toBER(false);
-
-      let importCert = '';
-      try {
-        importCert = yield crypto.certStorage.importCert('request', csrBuffer, algorithm, usages);
-      } catch (error) {
-        yield put(ErrorActions.error(error, 'request_create'));
-      }
-
-      const certId = yield certificateSet(crypto, importCert);
-      yield Key.keySet(crypto, privateKey);
-      yield Key.keySet(crypto, publicKey);
-      return certId;
-    } catch (error) {
-      yield put(ErrorActions.error(error, 'request_create'));
-    }
+  // Fix parameters for algorithms
+  if (!pkcs10.signatureAlgorithm.algorithmParams) {
+    pkcs10.signatureAlgorithm.algorithmParams = new asn1js.Null();
   }
-  return false;
+
+
+  const csrBuffer = pkcs10.toSchema().toBER(false);
+
+  let importCert = '';
+  try {
+    importCert = yield crypto.certStorage.importCert('request', csrBuffer, algorithm, usages);
+  } catch (error) {
+    yield put(ErrorActions.error(error, 'request_create'));
+  }
+
+  const certId = yield certificateSet(crypto, importCert);
+  yield Key.keySet(crypto, privateKey);
+  yield Key.keySet(crypto, publicKey);
+  return certId;
 }
 
 export function* CMSCreate(crypto, data) {
-  if (crypto) {
-    const algorithm = (() => Object.assign({
-      publicExponent: new Uint8Array([1, 0, 1]),
-    }, data.keyInfo.algorithm))();
-    const usages = ['sign', 'verify'];
+  const algorithm = (() => Object.assign({
+    publicExponent: new Uint8Array([1, 0, 1]),
+  }, data.keyInfo.algorithm))();
+  const usages = ['sign', 'verify'];
 
-    try {
-      // Set engine
-      setEngine('Crypto', crypto, new CryptoEngine({ name: 'Crypto', crypto, subtle: crypto.subtle }));
+  // Set engine
+  setEngine('Crypto', crypto, new CryptoEngine({ name: 'Crypto', crypto, subtle: crypto.subtle }));
 
-      // Generate key
-      const {
+  // Generate key
+  const {
         publicKey,
-        privateKey,
+    privateKey,
       } = yield crypto.subtle.generateKey(algorithm, false, usages);
 
-      // Generate new certificate
-      let certificate = new Certificate();
-      certificate.version = 2;
-      certificate.serialNumber = new asn1js.Integer({ value: 1 });
+  // Generate new certificate
+  let certificate = new Certificate();
+  certificate.version = 2;
+  certificate.serialNumber = new asn1js.Integer({ value: 1 });
 
-      certificate = CertHelper.decorateCertificateSubject(certificate, data);
+  certificate = CertHelper.decorateCertificateSubject(certificate, data);
 
-      certificate.notBefore.value = new Date();
-      certificate.notAfter.value = new Date();
-      certificate.notAfter.value.setFullYear(certificate.notAfter.value.getFullYear() + 1);
+  certificate.notBefore.value = new Date();
+  certificate.notAfter.value = new Date();
+  certificate.notAfter.value.setFullYear(certificate.notAfter.value.getFullYear() + 1);
 
-      certificate.extensions = [];
+  certificate.extensions = [];
 
-      // "KeyUsage" extension
-      const bitArray = new ArrayBuffer(1);
-      const bitView = new Uint8Array(bitArray);
-      bitView[0] |= 0x80; // digitalSignature
-      const keyUsage = new asn1js.BitString({ valueHex: bitArray });
+  // "KeyUsage" extension
+  const bitArray = new ArrayBuffer(1);
+  const bitView = new Uint8Array(bitArray);
+  bitView[0] |= 0x80; // digitalSignature
+  const keyUsage = new asn1js.BitString({ valueHex: bitArray });
 
-      certificate.extensions.push(
-        new Extension({
-          extnID: '2.5.29.15',
-          critical: false,
-          extnValue: keyUsage.toBER(false),
-          parsedValue: keyUsage, // Parsed value for well-known extensions
-        }),
-      );
+  certificate.extensions.push(
+    new Extension({
+      extnID: '2.5.29.15',
+      critical: false,
+      extnValue: keyUsage.toBER(false),
+      parsedValue: keyUsage, // Parsed value for well-known extensions
+    }),
+  );
 
 
-      yield certificate.subjectPublicKeyInfo.importKey(publicKey);
-      yield certificate.sign(privateKey, 'SHA-256');
-      // Add null param for algorithms
-      if (!certificate.signature.algorithmParams) {
-        certificate.signature.algorithmParams = new asn1js.Null();
-      }
-      if (!certificate.signatureAlgorithm.algorithmParams) {
-        certificate.signatureAlgorithm.algorithmParams = new asn1js.Null();
-      }
-
-      // Convert certificate to DER
-      const derCert = certificate.toSchema(true).toBER(false);
-
-      let importCert = '';
-      try {
-        importCert = yield crypto.certStorage.importCert('x509', derCert, algorithm, usages);
-      } catch (error) {
-        yield put(ErrorActions.error(error, 'request_create'));
-      }
-
-      const certId = yield certificateSet(crypto, importCert);
-      yield Key.keySet(crypto, privateKey);
-      yield Key.keySet(crypto, publicKey);
-      return certId;
-    } catch (error) {
-      yield put(ErrorActions.error(error, 'request_create'));
-    }
+  yield certificate.subjectPublicKeyInfo.importKey(publicKey);
+  yield certificate.sign(privateKey, 'SHA-256');
+  // Add null param for algorithms
+  if (!certificate.signature.algorithmParams) {
+    certificate.signature.algorithmParams = new asn1js.Null();
   }
-  return false;
+  if (!certificate.signatureAlgorithm.algorithmParams) {
+    certificate.signatureAlgorithm.algorithmParams = new asn1js.Null();
+  }
+
+  // Convert certificate to DER
+  const derCert = certificate.toSchema(true).toBER(false);
+
+  let importCert = '';
+  try {
+    importCert = yield crypto.certStorage.importCert('x509', derCert, algorithm, usages);
+  } catch (error) {
+    yield put(ErrorActions.error(error, 'request_create'));
+  }
+
+  const certId = yield certificateSet(crypto, importCert);
+  yield Key.keySet(crypto, privateKey);
+  yield Key.keySet(crypto, publicKey);
+  return certId;
 }
 
 export function* certificateRemove(crypto, id) {
-  if (crypto) {
-    try {
-      yield crypto.certStorage.removeItem(id);
-      return true;
-    } catch (error) {
-      yield put(ErrorActions.error(error));
-      return false;
-    }
-  }
-  return false;
+  yield crypto.certStorage.removeItem(id);
 }
 
 export function* certificateThumbprint(crypto, raw) {
-  if (crypto) {
-    try {
-      return yield crypto.subtle.digest('SHA-256', raw);
-    } catch (error) {
-      yield put(ErrorActions.error(error));
-      return false;
-    }
-  }
-  return false;
+  return yield crypto.subtle.digest('SHA-256', raw);
 }
