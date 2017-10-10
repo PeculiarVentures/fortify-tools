@@ -155,7 +155,7 @@ function* providerSelect({ id }) {
       yield put(WSActions.login(provider.id));
       console.warn('yield put(WSActions.login(provider.id));');
     }
-    if (!provider.loaded) {
+    if (!provider.loaded && provider.logged) {
       yield [getProviderCertificates()];
       yield put(ItemActions.select());
       yield put(ProviderActions.update({ loaded: true }));
@@ -249,9 +249,17 @@ function* providerLogin({ id }) {
     if (!isLogged) {
       const logged = yield Provider.providerLogin(crypto);
       yield put(ProviderActions.update({ logged }));
+
+      if (logged) {
+        yield [getProviderCertificates()];
+        yield put(ItemActions.select());
+        yield put(ProviderActions.update({ loaded: true }));
+      }
       console.warn('put ProviderActions.update({ logged })');
     } else {
-      yield put(ProviderActions.update({ logged: true }));
+      yield [getProviderCertificates()];
+      yield put(ItemActions.select());
+      yield put(ProviderActions.update({ logged: true, loaded: true }));
     }
   } catch (error) {
     yield put(ErrorActions.error(error, 'unauthorize_pin'));
