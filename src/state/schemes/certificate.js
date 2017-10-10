@@ -5,7 +5,7 @@ export default new Schema('Certificate', {
   _id: Type.ObjectID,
   name: Type.String,
   selected: Type.Boolean,
-  type: Type.string,
+  type: Type.String,
   pem: Type.String,
   general: {
     serialNumber: Type.String,
