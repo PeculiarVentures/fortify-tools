@@ -153,6 +153,7 @@ function* providerSelect({ id }) {
     const provider = providers.where({ id }).get();
     if (!provider.logged) {
       yield put(WSActions.login(provider.id));
+      console.warn('yield put(WSActions.login(provider.id));');
     }
     if (!provider.loaded) {
       yield [getProviderCertificates()];
@@ -240,6 +241,7 @@ function* webcryptoOnListening() {
  * }}
  */
 function* providerLogin({ id }) {
+  console.warn('providerLogin');
   try {
     const crypto = yield Provider.cryptoGet(id);
     const isLogged = yield Provider.providerIsLogged(crypto);
@@ -247,6 +249,7 @@ function* providerLogin({ id }) {
     if (!isLogged) {
       const logged = yield Provider.providerLogin(crypto);
       yield put(ProviderActions.update({ logged }));
+      console.warn('put ProviderActions.update({ logged })');
     } else {
       yield put(ProviderActions.update({ logged: true }));
     }
