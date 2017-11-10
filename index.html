@@ -4,8 +4,12 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no, minimal-ui" maximum-scale="1.0"
-	 user-scalable="false" />
+	<meta
+		name="viewport"
+		content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no, minimal-ui"
+		maximum-scale="1.0"
+    user-scalable="false"
+	/>
 	<link rel="manifest" href="./manifest.json" />
 	<title>Fortify App</title>
 	<link rel="icon" type="image/png" sizes="32x32" href="./favicons/favicon-32x32.png">
@@ -178,34 +182,19 @@
 			</svg>
 		</div>
 	</div>
-	<script src="https://peculiarventures.github.io/pv-webcrypto-tests/src/promise.js"></script>
-	<script src="https://peculiarventures.github.io/pv-webcrypto-tests/src/es5-shim.min.js"></script>
-	<script src="https://peculiarventures.github.io/pv-webcrypto-tests/src/webcrypto-liner.min.js"></script>
-	<script src="https://peculiarventures.github.io/pv-webcrypto-tests/src/asmcrypto.js"></script>
-	<script src="https://peculiarventures.github.io/pv-webcrypto-tests/src/elliptic.js"></script>
-	<script src="https://cdn.rawgit.com/dcodeIO/protobuf.js/6.8.0/dist/protobuf.js"></script>
-	<script src="https://cdn.rawgit.com/jakearchibald/idb/97e4e878/lib/idb.js"></script>
-	<script src="https://min.gitcdn.link/repo/undoZen/fetch/master/fetch.js"></script>
-	<script>
-		// Build for gh-pages
-		const loc = document.querySelectorAll('body')[0];
-		const script = document.createElement('script');
-		const script2 = document.createElement('script');
-		const href = window.location.href;
-
-		if (href.indexOf('github.io') !== -1) {
-			script.src = './webcrypto-socket.js';
-			script2.src = './main.js';
-		} else {
-			script.src = '/webcrypto-socket.js';
-			script2.src = '/main.js';
-		}
-		loc.appendChild(script);
-		setTimeout(function () {
-			loc.appendChild(script2);
-		}, 200);
-	</script>
-	<script>
+	<script nomodule src="https://peculiarventures.github.io/pv-webcrypto-tests/src/promise.js" defer></script>
+	<script nomodule src="https://peculiarventures.github.io/pv-webcrypto-tests/src/es5-shim.min.js" defer></script>
+	<script src="https://peculiarventures.github.io/pv-webcrypto-tests/src/webcrypto-liner.min.js" defer></script>
+	<script src="https://peculiarventures.github.io/pv-webcrypto-tests/src/asmcrypto.js" defer></script>
+	<script src="https://peculiarventures.github.io/pv-webcrypto-tests/src/elliptic.js" defer></script>
+	<script src="https://cdn.rawgit.com/dcodeIO/protobuf.js/6.8.0/dist/protobuf.min.js" defer></script>
+	<script src="https://cdn.rawgit.com/jakearchibald/idb/97e4e878/lib/idb.js" defer></script>
+	<script nomodule src="https://min.gitcdn.link/repo/undoZen/fetch/master/fetch.min.js" defer></script>
+	<script src="/webcrypto-socket.js" defer></script>
+	<script src="./webcrypto-socket.js" defer></script>
+	<script src="/main.js" defer></script>
+	<script src="./main.js" defer></script>
+	<script defer>
 		// get user locale code
     fetch('https://api.hancock.ink/v0/users/info', {
       method: 'GET',
