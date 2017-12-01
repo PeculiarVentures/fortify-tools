@@ -56,6 +56,7 @@ export const ButtonStyled = styled.button`
     max-height: 14px;
     max-width: 16px;
     margin-right: 7px;
+    opacity: ${props => (props.disabled ? 0.6 : 1)};
   }
   &:disabled {
     opacity: 1;

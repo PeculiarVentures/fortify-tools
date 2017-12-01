@@ -54,7 +54,7 @@ export function getTheme(palette = defaultPalette) {
         background: 'transparent',
       },
       disabled: {
-        color: palette.secondaryTextColor1,
+        color: colorManipulator.fade(palette.secondaryTextColor1, 0.6),
         borderColor: '#F7F8F9',
         background: '#F7F8F9',
       },
