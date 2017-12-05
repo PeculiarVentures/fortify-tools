@@ -496,19 +496,21 @@ function* addedProvider({ data }) {
     EventChannel.emit(ACTIONS_CONST.SNACKBAR_SHOW, 'card_inserted', 3e3);
 
     const state = yield select();
-    const prv = data[0];
-    const provider = yield Provider.providerGet(prv.id);
 
-    yield put(ProviderActions.add({
-      id: prv.id,
-      name: prv.name,
-      readOnly: prv.readOnly,
-      index: state.get('providers').length,
-      logged: provider.isLogged,
-    }));
+    for (const prv of data) {
+      const provider = yield Provider.providerGet(prv.id);
 
-    if (state.get('dialog') === 'empty_providers') {
-      yield put(DialogActions.close());
+      yield put(ProviderActions.add({
+        id: prv.id,
+        name: prv.name,
+        readOnly: prv.readOnly,
+        index: state.get('providers').length,
+        logged: provider.isLogged,
+      }));
+
+      if (state.get('dialog') === 'empty_providers') {
+        yield put(DialogActions.close());
+      }
     }
   } catch (error) {
     yield put(ErrorActions.error(error));
