@@ -1,7 +1,7 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('protobufjs')) :
 	typeof define === 'function' && define.amd ? define(['exports', 'protobufjs'], factory) :
-	(factory((global.WebcryptoSocket = global.WebcryptoSocket || {}),global.protobuf));
+	(factory((global.WebcryptoSocket = {}),global.protobuf));
 }(this, (function (exports,protobufjs) { 'use strict';
 
 /*! *****************************************************************************
@@ -48,7 +48,7 @@ function __decorate(decorators, target, key, desc) {
 function __awaiter(thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
@@ -1178,8 +1178,7 @@ var Curve = (function () {
                             publicKey: key.publicKey.key
                         };
                         return [4, key.publicKey.thumbprint()];
-                    case 1: return [2, (_a.thumbprint = _b.sent(),
-                            _a)];
+                    case 1: return [2, (_a.thumbprint = _b.sent(), _a)];
                 }
             });
         });
@@ -1194,8 +1193,7 @@ var Curve = (function () {
                             privateKey: keys.privateKey
                         };
                         return [4, ECPublicKey.create(keys.publicKey)];
-                    case 1: return [2, (_a.publicKey = _b.sent(),
-                            _a)];
+                    case 1: return [2, (_a.publicKey = _b.sent(), _a)];
                 }
             });
         });
@@ -1257,7 +1255,7 @@ var Secret = (function () {
                     case 3:
                         PRKBytes = _c.sent();
                         infoBuffer = new ArrayBuffer(32 + info.byteLength + 1);
-                        infoArray = new Uint8Array(infoBuffer);
+                        
                         return [4, this.importHMAC(PRKBytes)];
                     case 4:
                         PRK = _c.sent();
@@ -1494,13 +1492,9 @@ var Identity = (function () {
                         };
                         return [4, Curve.ecKeyPairToJson(this.exchangeKey)];
                     case 9:
-                        _h.exchangeKey = _j.sent(),
-                            _h.id = this.id,
-                            _h.preKeys = preKeys,
-                            _h.signedPreKeys = signedPreKeys;
+                        _h.exchangeKey = _j.sent(), _h.id = this.id, _h.preKeys = preKeys, _h.signedPreKeys = signedPreKeys;
                         return [4, Curve.ecKeyPairToJson(this.signingKey)];
-                    case 10: return [2, (_h.signingKey = _j.sent(),
-                            _h)];
+                    case 10: return [2, (_h.signingKey = _j.sent(), _h)];
                 }
             });
         });
@@ -1600,15 +1594,12 @@ var RemoteIdentity = (function () {
                         };
                         return [4, this.exchangeKey.key];
                     case 1:
-                        _a.exchangeKey = _b.sent(),
-                            _a.id = this.id,
-                            _a.signature = this.signature;
+                        _a.exchangeKey = _b.sent(), _a.id = this.id, _a.signature = this.signature;
                         return [4, this.signingKey.key];
                     case 2:
                         _a.signingKey = _b.sent();
                         return [4, this.signingKey.thumbprint()];
-                    case 3: return [2, (_a.thumbprint = _b.sent(),
-                            _a)];
+                    case 3: return [2, (_a.thumbprint = _b.sent(), _a)];
                 }
             });
         });
@@ -2116,8 +2107,7 @@ var SymmetricRatchet = (function () {
                         };
                         return [4, Secret.importHMAC(nextRootKeyBytes)];
                     case 3:
-                        res = (_a.rootKey = _b.sent(),
-                            _a);
+                        res = (_a.rootKey = _b.sent(), _a);
                         return [2, res];
                 }
             });
@@ -2588,11 +2578,9 @@ var AsymmetricRatchet = (function (_super) {
                         _a.ratchetKey = _b.sent();
                         return [4, this.remoteIdentity.signingKey.thumbprint()];
                     case 2:
-                        _a.remoteIdentity = _b.sent(),
-                            _a.rootKey = this.rootKey;
+                        _a.remoteIdentity = _b.sent(), _a.rootKey = this.rootKey;
                         return [4, this.steps.toJSON()];
-                    case 3: return [2, (_a.steps = _b.sent(),
-                            _a)];
+                    case 3: return [2, (_a.steps = _b.sent(), _a)];
                 }
             });
         });
@@ -2776,6 +2764,65 @@ var Event = (function () {
     return Event;
 }());
 
+var WebCryptoLocalErrorEnum;
+(function (WebCryptoLocalErrorEnum) {
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["UNKNOWN"] = 0] = "UNKNOWN";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["METHOD_NOT_IMPLEMENTED"] = 1] = "METHOD_NOT_IMPLEMENTED";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["CASE_ERROR"] = 2] = "CASE_ERROR";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["RATCHET_COMMON"] = 100] = "RATCHET_COMMON";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["RATCHET_KEY_NOT_APPROVED"] = 101] = "RATCHET_KEY_NOT_APPROVED";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["ACTION_COMMON"] = 200] = "ACTION_COMMON";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["ACTION_NOT_IMPLEMENTED"] = 201] = "ACTION_NOT_IMPLEMENTED";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["ACTION_NOT_SUPPORTED"] = 202] = "ACTION_NOT_SUPPORTED";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["CARD_CONFIG_COMMON"] = 300] = "CARD_CONFIG_COMMON";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["MEMORY_STORAGE_COMMON"] = 350] = "MEMORY_STORAGE_COMMON";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["MEMORY_STORAGE_OUT_OF_INDEX"] = 351] = "MEMORY_STORAGE_OUT_OF_INDEX";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["PROVIDER_COMMON"] = 400] = "PROVIDER_COMMON";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["PROVIDER_INIT"] = 401] = "PROVIDER_INIT";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["PROVIDER_CRYPTO_NOT_FOUND"] = 402] = "PROVIDER_CRYPTO_NOT_FOUND";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["PROVIDER_CRYPTO_WRONG"] = 403] = "PROVIDER_CRYPTO_WRONG";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["PROVIDER_NOT_FOUND"] = 404] = "PROVIDER_NOT_FOUND";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["PROVIDER_WRONG_LIBRARY"] = 405] = "PROVIDER_WRONG_LIBRARY";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["TOKEN_COMMON"] = 500] = "TOKEN_COMMON";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["TOKEN_REMOVE_TOKEN_READING"] = 501] = "TOKEN_REMOVE_TOKEN_READING";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["TOKEN_REMOVE_NO_SLOTS_FOUND"] = 502] = "TOKEN_REMOVE_NO_SLOTS_FOUND";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["SERVER_COMMON"] = 600] = "SERVER_COMMON";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["SERVER_WRONG_MESSAGE"] = 601] = "SERVER_WRONG_MESSAGE";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["SERVER_NOT_LOGGED_IN"] = 602] = "SERVER_NOT_LOGGED_IN";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["PCSC_COMMON"] = 700] = "PCSC_COMMON";
+    WebCryptoLocalErrorEnum[WebCryptoLocalErrorEnum["PCSC_CANNOT_START"] = 701] = "PCSC_CANNOT_START";
+})(WebCryptoLocalErrorEnum || (WebCryptoLocalErrorEnum = {}));
+var WebCryptoLocalError = (function (_super) {
+    __extends(WebCryptoLocalError, _super);
+    function WebCryptoLocalError(param, message) {
+        if (message === void 0) { message = ""; }
+        var _this = _super.call(this) || this;
+        _this.code = 0;
+        _this.type = "wcl";
+        var CODE = WebCryptoLocalError.CODE;
+        if (typeof param === "number") {
+            _this.message = message || CODE[param] || CODE[0];
+            _this.code = param;
+        }
+        else {
+            _this.code = 0;
+            _this.message = message;
+        }
+        var error = new Error(_this.message);
+        error.name = _this.constructor.name;
+        _this.stack = error.stack;
+        return _this;
+    }
+    WebCryptoLocalError.isError = function (obj) {
+        if (obj instanceof Error && obj.hasOwnProperty("code") && obj.hasOwnProperty("type")) {
+            return true;
+        }
+        return false;
+    };
+    WebCryptoLocalError.CODE = WebCryptoLocalErrorEnum;
+    return WebCryptoLocalError;
+}(Error));
+
 var DateConverter$1 = (function () {
     function DateConverter() {
     }
@@ -2917,7 +2964,7 @@ var AlgorithmProto = (function (_super) {
                             break;
                         }
                         default:
-                            throw new Error("Unsupported parser '" + thisStatic.items[key].parser.name + "'");
+                            throw new WebCryptoLocalError(WebCryptoLocalError.CODE.CASE_ERROR, "Unsupported parser '" + thisStatic.items[key].parser.name + "'");
                     }
                 }
                 else {
@@ -3023,6 +3070,36 @@ var CryptoKeyPairProto = (function (_super) {
     return CryptoKeyPairProto;
     var CryptoKeyPairProto_1;
 }(BaseProto));
+var ErrorProto = (function (_super) {
+    __extends(ErrorProto, _super);
+    function ErrorProto(message, code, type) {
+        if (code === void 0) { code = 0; }
+        if (type === void 0) { type = "error"; }
+        var _this = _super.call(this) || this;
+        if (message) {
+            _this.message = message;
+            _this.code = code;
+            _this.type = type;
+        }
+        return _this;
+    }
+    ErrorProto_1 = ErrorProto;
+    ErrorProto.INDEX = BaseProto.INDEX;
+    __decorate([
+        ProtobufProperty({ id: ErrorProto_1.INDEX++, type: "uint32", defaultValue: 0 })
+    ], ErrorProto.prototype, "code", void 0);
+    __decorate([
+        ProtobufProperty({ id: ErrorProto_1.INDEX++, type: "string", defaultValue: "error" })
+    ], ErrorProto.prototype, "type", void 0);
+    __decorate([
+        ProtobufProperty({ id: ErrorProto_1.INDEX++, type: "string", defaultValue: "" })
+    ], ErrorProto.prototype, "message", void 0);
+    ErrorProto = ErrorProto_1 = __decorate([
+        ProtobufElement({ name: "Error" })
+    ], ErrorProto);
+    return ErrorProto;
+    var ErrorProto_1;
+}(BaseProto));
 var ResultProto = (function (_super) {
     __extends(ResultProto, _super);
     function ResultProto(proto) {
@@ -3039,7 +3116,7 @@ var ResultProto = (function (_super) {
         ProtobufProperty({ id: ResultProto_1.INDEX++, type: "bool", defaultValue: false })
     ], ResultProto.prototype, "status", void 0);
     __decorate([
-        ProtobufProperty({ id: ResultProto_1.INDEX++, type: "string", defaultValue: "" })
+        ProtobufProperty({ id: ResultProto_1.INDEX++, type: "bytes", parser: ErrorProto })
     ], ResultProto.prototype, "error", void 0);
     __decorate([
         ProtobufProperty({ id: ResultProto_1.INDEX++, type: "bytes", converter: ArrayBufferConverter })
@@ -3231,9 +3308,7 @@ var BrowserStorage = (function () {
                         _a = {};
                         return [4, getEngine().crypto.subtle.exportKey("raw", key.key)];
                     case 1:
-                        key = (_a.key = (_b.sent()),
-                            _a.iv = key.iv,
-                            _a);
+                        key = (_a.key = (_b.sent()), _a.iv = key.iv, _a);
                         _b.label = 2;
                     case 2:
                         tx = this.db.transaction(BrowserStorage.IDENTITY_STORAGE, "readwrite");
@@ -3305,9 +3380,7 @@ var BrowserStorage = (function () {
                         _a = {};
                         return [4, getEngine().crypto.subtle.generateKey({ name: AES_CBC.name, length: 256 }, isEdge(), ["wrapKey", "unwrapKey", "encrypt", "decrypt"])];
                     case 1:
-                        wkey = (_a.key = _f.sent(),
-                            _a.iv = getEngine().crypto.getRandomValues(new Uint8Array(AES_CBC.iv)).buffer,
-                            _a);
+                        wkey = (_a.key = _f.sent(), _a.iv = getEngine().crypto.getRandomValues(new Uint8Array(AES_CBC.iv)).buffer, _a);
                         return [4, this.saveWrapKey(wkey)];
                     case 2:
                         _f.sent();
@@ -3549,7 +3622,9 @@ var Client = (function (_super) {
                             case 2:
                                 identity = _b.sent();
                                 if (!!identity) return [3, 5];
-                                console.info("Generates new identity");
+                                if (window.PV_WEBCRYPTO_SOCKET_LOG) {
+                                    console.info("Generates new identity");
+                                }
                                 return [4, Identity.create(1)];
                             case 3:
                                 identity = _b.sent();
@@ -3711,13 +3786,15 @@ var Client = (function (_super) {
     };
     Client.prototype.onMessage = function (message) {
         return __awaiter(this, void 0, void 0, function () {
-            var proto, promise, messageProto, _a, _b;
+            var proto, promise, messageProto, _a, _b, errorProto, error;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0: return [4, ActionProto.importProto(message)];
                     case 1:
                         proto = _c.sent();
-                        console.info("Action:", proto.action);
+                        if (window.PV_WEBCRYPTO_SOCKET_LOG) {
+                            console.info("Action:", proto.action);
+                        }
                         promise = this.stack[proto.actionId];
                         if (!promise) return [3, 4];
                         delete this.stack[proto.actionId];
@@ -3726,10 +3803,12 @@ var Client = (function (_super) {
                     case 2: return [4, _b.apply(_a, [_c.sent()])];
                     case 3:
                         messageProto = _c.sent();
-                        if (messageProto.error) {
-                            console.error("Error action:", messageProto.action);
-                            console.error(messageProto.error);
-                            promise.reject(new Error(messageProto.error));
+                        if (messageProto.error && messageProto.error.message) {
+                            errorProto = messageProto.error;
+                            error = new Error(messageProto.error.message);
+                            error.code = errorProto.code;
+                            error.type = errorProto.type;
+                            promise.reject(error);
                         }
                         else {
                             promise.resolve(messageProto.data);
@@ -3863,7 +3942,7 @@ var ProviderTokenEventProto = (function (_super) {
         ProtobufProperty({ id: ProviderTokenEventProto_1.INDEX++, repeated: true, parser: ProviderCryptoProto })
     ], ProviderTokenEventProto.prototype, "removed", void 0);
     __decorate([
-        ProtobufProperty({ id: ProviderTokenEventProto_1.INDEX++, type: "string" })
+        ProtobufProperty({ id: ProviderTokenEventProto_1.INDEX++, type: "bytes", parser: ErrorProto })
     ], ProviderTokenEventProto.prototype, "error", void 0);
     ProviderTokenEventProto = ProviderTokenEventProto_1 = __decorate([
         ProtobufElement({ name: "ProviderTokenEvent" })
@@ -3871,6 +3950,161 @@ var ProviderTokenEventProto = (function (_super) {
     return ProviderTokenEventProto;
     var ProviderTokenEventProto_1;
 }(ActionProto));
+
+var CardReaderActionProto = (function (_super) {
+    __extends(CardReaderActionProto, _super);
+    function CardReaderActionProto() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    CardReaderActionProto.INDEX = ActionProto.INDEX;
+    CardReaderActionProto.ACTION = "cardReader";
+    CardReaderActionProto = __decorate([
+        ProtobufElement({})
+    ], CardReaderActionProto);
+    return CardReaderActionProto;
+}(ActionProto));
+var CardReaderGetReadersActionProto = (function (_super) {
+    __extends(CardReaderGetReadersActionProto, _super);
+    function CardReaderGetReadersActionProto() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    CardReaderGetReadersActionProto.INDEX = ActionProto.INDEX;
+    CardReaderGetReadersActionProto.ACTION = "cardReader/readers";
+    CardReaderGetReadersActionProto = __decorate([
+        ProtobufElement({})
+    ], CardReaderGetReadersActionProto);
+    return CardReaderGetReadersActionProto;
+}(ActionProto));
+var CardReaderEventProto = (function (_super) {
+    __extends(CardReaderEventProto, _super);
+    function CardReaderEventProto() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    CardReaderEventProto_1 = CardReaderEventProto;
+    CardReaderEventProto.fromObject = function (e) {
+        var res = new this();
+        res.fromObject(e);
+        return res;
+    };
+    CardReaderEventProto.prototype.fromObject = function (e) {
+        this.reader = e.reader.name;
+        this.atr = e.atr.toString("hex");
+    };
+    CardReaderEventProto.INDEX = CardReaderActionProto.INDEX;
+    __decorate([
+        ProtobufProperty({ id: CardReaderEventProto_1.INDEX++, required: true, type: "string", defaultValue: "" })
+    ], CardReaderEventProto.prototype, "reader", void 0);
+    __decorate([
+        ProtobufProperty({ id: CardReaderEventProto_1.INDEX++, required: true, converter: HexStringConverter })
+    ], CardReaderEventProto.prototype, "atr", void 0);
+    CardReaderEventProto = CardReaderEventProto_1 = __decorate([
+        ProtobufElement({})
+    ], CardReaderEventProto);
+    return CardReaderEventProto;
+    var CardReaderEventProto_1;
+}(CardReaderActionProto));
+var CardReaderInsertEventProto = (function (_super) {
+    __extends(CardReaderInsertEventProto, _super);
+    function CardReaderInsertEventProto() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    CardReaderInsertEventProto.INDEX = CardReaderEventProto.INDEX;
+    CardReaderInsertEventProto.ACTION = CardReaderEventProto.ACTION + "/insert";
+    CardReaderInsertEventProto = __decorate([
+        ProtobufElement({})
+    ], CardReaderInsertEventProto);
+    return CardReaderInsertEventProto;
+}(CardReaderEventProto));
+var CardReaderRemoveEventProto = (function (_super) {
+    __extends(CardReaderRemoveEventProto, _super);
+    function CardReaderRemoveEventProto() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    CardReaderRemoveEventProto.INDEX = CardReaderEventProto.INDEX;
+    CardReaderRemoveEventProto.ACTION = CardReaderEventProto.ACTION + "/remove";
+    CardReaderRemoveEventProto = __decorate([
+        ProtobufElement({})
+    ], CardReaderRemoveEventProto);
+    return CardReaderRemoveEventProto;
+}(CardReaderEventProto));
+
+var CardReader = (function (_super) {
+    __extends(CardReader, _super);
+    function CardReader(client) {
+        var _this = _super.call(this) || this;
+        _this.client = client;
+        _this.onEvent = _this.onEvent.bind(_this);
+        _this.client
+            .on("listening", function () {
+            _this.client.on("event", _this.onEvent);
+        })
+            .on("close", function () {
+            _this.client.removeListener("event", _this.onEvent);
+        });
+        return _this;
+    }
+    CardReader.prototype.readers = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var data;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, this.client.send(new CardReaderGetReadersActionProto())];
+                    case 1:
+                        data = _a.sent();
+                        return [2, JSON.parse(Convert.ToString(data))];
+                }
+            });
+        });
+    };
+    CardReader.prototype.on = function (event, cb) {
+        return _super.prototype.on.call(this, event, cb);
+    };
+    CardReader.prototype.emit = function (event) {
+        var args = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            args[_i - 1] = arguments[_i];
+        }
+        return _super.prototype.emit.apply(this, [event].concat(args));
+    };
+    CardReader.prototype.onEvent = function (actionProto) {
+        var _this = this;
+        (function () { return __awaiter(_this, void 0, void 0, function () {
+            var _a, _b, _c;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
+                    case 0:
+                        _a = actionProto.action;
+                        switch (_a) {
+                            case CardReaderInsertEventProto.ACTION: return [3, 1];
+                            case CardReaderRemoveEventProto.ACTION: return [3, 3];
+                        }
+                        return [3, 5];
+                    case 1:
+                        _b = this.onInsert;
+                        return [4, CardReaderInsertEventProto.importProto(actionProto)];
+                    case 2:
+                        _b.apply(this, [_d.sent()]);
+                        return [3, 5];
+                    case 3:
+                        _c = this.onRemove;
+                        return [4, CardReaderRemoveEventProto.importProto(actionProto)];
+                    case 4:
+                        _c.apply(this, [_d.sent()]);
+                        return [3, 5];
+                    case 5: return [2];
+                }
+            });
+        }); })()
+            .catch(function (err) { return _this.emit("error", err); });
+    };
+    CardReader.prototype.onInsert = function (actionProto) {
+        this.emit("insert", actionProto);
+    };
+    CardReader.prototype.onRemove = function (actionProto) {
+        this.emit("remove", actionProto);
+    };
+    return CardReader;
+}(EventEmitter));
 
 var CryptoActionProto = (function (_super) {
     __extends(CryptoActionProto, _super);
@@ -6616,7 +6850,6 @@ var SocketSubtleCrypto = (function (_super) {
                         action.algorithm = algProto;
                         action.extractable = extractable;
                         action.usage = keyUsages;
-                        console.log(action);
                         return [4, this.service.client.send(action)];
                     case 2:
                         result = _a.sent();
@@ -6842,11 +7075,11 @@ var SocketCrypto = (function () {
         this.keyStorage = new SocketKeyStorage(this);
         this.certStorage = new SocketCertificateStorage(this);
     }
-    SocketCrypto.prototype.getRandomValues = function (data) {
+    SocketCrypto.prototype.getRandomValues = function (array) {
         if (!self.crypto) {
             throw new Error("Cannot get native crypto object. Function getRandomValues is not implemented.");
         }
-        return self.crypto.getRandomValues(data);
+        return self.crypto.getRandomValues(array);
     };
     SocketCrypto.prototype.login = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -6902,6 +7135,7 @@ var SocketProvider = (function (_super) {
     function SocketProvider() {
         var _this = _super.call(this) || this;
         _this.client = new Client();
+        _this.cardReader = new CardReader(_this.client);
         return _this;
     }
     Object.defineProperty(SocketProvider.prototype, "state", {
@@ -6913,13 +7147,11 @@ var SocketProvider = (function (_super) {
     });
     SocketProvider.prototype.connect = function (address) {
         var _this = this;
-        this.client.removeAllListeners();
         this.client.connect(address)
             .on("error", function (e) {
             _this.emit("error", e.error);
         })
             .on("event", function (proto) {
-            console.log("Client:Event", proto.action);
             (function () { return __awaiter(_this, void 0, void 0, function () {
                 var _a, tokenProto, _b, _c, authProto, _d, _e;
                 return __generator(this, function (_f) {
@@ -6953,11 +7185,15 @@ var SocketProvider = (function (_super) {
             }); })();
         })
             .on("listening", function (e) {
-            console.info("Client:Listening", e.address);
+            if (window.PV_WEBCRYPTO_SOCKET_LOG) {
+                console.info("Client:Listening", e.address);
+            }
             _this.emit("listening", address);
         })
             .on("close", function (e) {
-            console.info("Client:Closed: " + e.description + " (code: " + e.reasonCode + ")");
+            if (window.PV_WEBCRYPTO_SOCKET_LOG) {
+                console.info("Client:Closed: " + e.description + " (code: " + e.reasonCode + ")");
+            }
             _this.emit("close", e.remoteAddress);
         });
         return this;
