@@ -25,6 +25,8 @@
   "Dialog.RemoveCertificateError.Btn.Accept": "Еще раз",
   "Dialog.RemoveCertificateError.Btn.Cancel": "Отмена",
   "Dialog.EmptyPin.Title": "Неверное значение PIN. Он не может быть пустым.",
+  "Dialog.Error.Title": "Ошибка",
+  "Dialog.Error.Btn.Accept": "Ок",
 
   "Sidebar.Footer.Status.Online": "Сервер онлайн",
   "Sidebar.Footer.Status.Offline": "Сервер офлайн",

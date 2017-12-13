@@ -143,7 +143,6 @@ export function* certificateCreate(crypto, data) {
     pkcs10.signatureAlgorithm.algorithmParams = new asn1js.Null();
   }
 
-
   const csrBuffer = pkcs10.toSchema().toBER(false);
 
   let importCert = '';
@@ -170,9 +169,9 @@ export function* CMSCreate(crypto, data) {
 
   // Generate key
   const {
-        publicKey,
+    publicKey,
     privateKey,
-      } = yield crypto.subtle.generateKey(algorithm, false, usages);
+  } = yield crypto.subtle.generateKey(algorithm, false, usages);
 
   // Generate new certificate
   let certificate = new Certificate();
@@ -201,7 +200,6 @@ export function* CMSCreate(crypto, data) {
       parsedValue: keyUsage, // Parsed value for well-known extensions
     }),
   );
-
 
   yield certificate.subjectPublicKeyInfo.importKey(publicKey);
   yield certificate.sign(privateKey, 'SHA-256');

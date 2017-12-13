@@ -255,6 +255,11 @@ export default class Overlay extends Component {
           <Dialog.ErrorDialog
             name="error"
             message={message}
+            onAccept={() => (
+              this.handleAction({
+                type: ACTIONS_CONST.DIALOG_CLOSE,
+              })
+            )}
           />
           <Dialog.EmptyPinDialog
             name="empty_pin"

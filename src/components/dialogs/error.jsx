@@ -10,19 +10,25 @@ const DescrStyled = styled.div`
 `;
 
 export default class ErrorDialog extends Component {
+  static propTypes = {
+    message: PropTypes.string,
+    onAccept: PropTypes.func,
+  };
+
   static contextTypes = {
     lang: PropTypes.object,
   };
 
   render() {
-    const { message } = this.props;
+    const { message, onAccept } = this.props;
     const { lang } = this.context;
 
     return (
       <Dialog
-        title="Error"
-        acceptText=""
+        title={lang['Dialog.Error.Title']}
+        acceptText={lang['Dialog.Error.Btn.Accept']}
         cancelText=""
+        onAccept={onAccept}
       >
         <DescrStyled>
           {message}
