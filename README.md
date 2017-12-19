@@ -16,7 +16,7 @@ Fortify enables web applications to use smart cards, local certificate stores an
 ### Deploy to gh-pages
 
  * `npm run deploy`
- * Visit **[gh-pages](https://peculiarventures.github.io/fortify-web/)**
+ * Visit **[website](https://tools.fortifyapp.com/)**
  
  
  ## Thanks
