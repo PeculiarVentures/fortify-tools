@@ -1,4 +1,4 @@
-# Fortify Toll
+# Fortify Tool
 Fortify enables web applications to use smart cards, local certificate stores and do certificate enrollment. This repository contains a sample application based on Fortify that is also useful as tool to enable users view the contents of certificate stores, and create certificate requests/self signed certificates. 
 
 ### Quick Development Start
