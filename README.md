@@ -16,3 +16,7 @@
 
  * `npm run deploy`
  * Visit **[gh-pages](https://peculiarventures.github.io/fortify-web/)**
+ 
+ 
+ ## Thanks
+Thanks to the [CA Security Council](https://casecurity.org/) for their support of this project and the many individuals from [Twitter](https://twitter.com/rmhrisk) who provided feedback and testing.
