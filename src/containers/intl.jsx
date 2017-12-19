@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 const supportedLangs = [
   'en',
   'ru',
+  'es',
+  'fr',
 ];
 
 export default class Intl extends Component {
