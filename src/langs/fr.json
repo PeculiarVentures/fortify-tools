@@ -104,6 +104,8 @@
   "Info.Body.Thumbprint": "Empreinte (SHA2)",
   "Info.Body.Critical.Yes": "OUI",
   "Info.Body.Critical.No": "NON",
+  "Info.Body.GivenName": "Prénom",
+  "Info.Body.Surname": "Nom de famille",
 
   "Snackbar.Offline.Btn.Get": "Obtenir de l'aide",
   "Snackbar.Offline.Text": "Serveur déconnecté ou non installé",

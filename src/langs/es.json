@@ -105,6 +105,8 @@
   "Info.Body.Thumbprint": "Huella (SHA2)",
   "Info.Body.Critical.Yes": "SÍ",
   "Info.Body.Critical.No": "NO",
+  "Info.Body.GivenName": "Nombre de pila",
+  "Info.Body.Surname": "Apellido",
 
   "Snackbar.Offline.Btn.Get": "Obtener ayuda",
   "Snackbar.Offline.Text": "Servidor desconectado o no instalado",
