@@ -104,6 +104,8 @@
   "Info.Body.Thumbprint": "Печать (SHA2)",
   "Info.Body.Critical.Yes": "ДА",
   "Info.Body.Critical.No": "НЕТ",
+  "Info.Body.GivenName": "Собственное имя",
+  "Info.Body.Surname": "Фамилия",
 
   "Snackbar.Offline.Btn.Get": "Получить помощь",
   "Snackbar.Offline.Text": "Сервер отключен или не установлен",

@@ -104,6 +104,8 @@
   "Info.Body.Thumbprint": "Thumbprint (SHA2)",
   "Info.Body.Critical.Yes": "YES",
   "Info.Body.Critical.No": "NO",
+  "Info.Body.GivenName": "Given Name",
+  "Info.Body.Surname": "Surname",
 
   "Snackbar.Offline.Btn.Get": "Get help",
   "Snackbar.Offline.Text": "Server offline or not installed",
