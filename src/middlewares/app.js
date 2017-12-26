@@ -1,5 +1,5 @@
 import UUID from 'uuid';
-import { ItemActions, ProviderActions } from '../actions/state';
+import { ItemActions } from '../actions/state';
 import { ACTIONS_CONST } from '../constants';
 
 export default store => next => (payload) => {
@@ -18,18 +18,6 @@ export default store => next => (payload) => {
       const _id = id || state.find('providers').where({ selected: true }).get().id;
 
       next(ItemActions.add(data, _id));
-      break;
-    }
-
-    case ACTIONS_CONST.PROVIDER_SELECT: {
-      const provider = providers.where({ id });
-      let _id = id;
-
-      if (!provider) {
-        _id = providers.get()[0].id;
-      }
-
-      next(ProviderActions.select(_id));
       break;
     }
 
