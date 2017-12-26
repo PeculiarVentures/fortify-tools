@@ -1,12 +1,12 @@
 import { ACTIONS_CONST } from '../../constants';
 
 export default function (state, payload) {
-  const { type, result, id } = payload;
+  const { type, result, id, data } = payload;
   const providers = state.find('providers');
   switch (type) {
 
     case ACTIONS_CONST.PROVIDER_ADD: {
-      providers.add(result);
+      providers.add(data);
       return state;
     }
 

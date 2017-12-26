@@ -4,18 +4,25 @@ import { ACTIONS_CONST } from '../constants';
 export default store => next => (payload) => {
   const state = store.getState();
   const providers = state.find('providers');
-  const { type, id } = payload;
+  const { type, id, data, list } = payload;
 
   switch (type) {
     case ACTIONS_CONST.PROVIDER_SELECT: {
       const provider = providers.where({ id });
-      let _id = id;
+      const providerId = !provider ? providers.get()[0].id : id;
 
-      if (!provider) {
-        _id = providers.get()[0].id;
-      }
+      next(ProviderActions.select(providerId));
+      break;
+    }
 
-      next(ProviderActions.select(_id));
+    case ACTIONS_CONST.PROVIDER_ADD: {
+      next(ProviderActions.add(data));
+      providers.sortBy('name');
+      break;
+    }
+
+    case ACTIONS_CONST.PROVIDER_SET_LIST: {
+      providers.set(list).sortBy('name');
       break;
     }
 

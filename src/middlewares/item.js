@@ -14,7 +14,7 @@ export default store => next => (payload) => {
         id: itemId,
         selected: false,
       });
-      const _id = id || state.find('providers').where({ selected: true }).get().id;
+      const _id = id || providers.where({ selected: true }).get('id');
 
       next(ItemActions.add(data, _id));
       break;

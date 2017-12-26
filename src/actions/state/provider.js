@@ -1,8 +1,13 @@
 import { ACTIONS_CONST } from '../../constants';
 
-export const add = result => ({
+export const add = data => ({
   type: ACTIONS_CONST.PROVIDER_ADD,
-  result,
+  data,
+});
+
+export const setList = list => ({
+  type: ACTIONS_CONST.PROVIDER_SET_LIST,
+  list,
 });
 
 export const update = (result, id) => ({

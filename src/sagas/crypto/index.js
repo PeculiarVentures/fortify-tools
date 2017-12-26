@@ -170,9 +170,9 @@ function* webcryptoOnListening() {
   try {
     yield put(AppActions.setState({
       loaded: false,
-      providers: [],
       status: 'online',
     }));
+    yield put(ProviderActions.setList([]));
 
     const providers = yield Provider.providerGetList();
     let index = 0;
@@ -213,9 +213,7 @@ function* webcryptoOnListening() {
       providersArray[0].selected = true;
     }
 
-    yield put(AppActions.setState({
-      providers: providersArray,
-    }));
+    yield put(ProviderActions.setList(providersArray));
 
     if (RoutingController.initialState.create) {
       yield put(AppActions.create(true));
