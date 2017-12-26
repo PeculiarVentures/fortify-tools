@@ -1,6 +1,5 @@
 import { select, put, takeEvery, all } from 'redux-saga/effects';
 import UUID from 'uuid';
-// import * as asn1js from 'asn1js';
 import { Convert } from 'pvtsutils';
 import { ACTIONS_CONST } from '../../constants';
 import {
@@ -62,7 +61,6 @@ function* getProviderCertificates() {
   const certIDs = yield Certificate.certificateGetIDs(provider);
 
   const certificatesArr = [];
-  let index = 0;
 
   for (const certID of certIDs) {
     // Get certificates with private key only
@@ -135,7 +133,6 @@ function* getProviderCertificates() {
       });
     }
 
-    index += 1;
     yield put(ItemActions.add(certData, currentProvider.id));
   }
 }
@@ -156,7 +153,7 @@ function* providerSelect({ id }) {
       console.warn('yield put(WSActions.login(provider.id));');
     }
     if (!provider.loaded && provider.logged) {
-      yield [getProviderCertificates()];
+      yield getProviderCertificates();
       yield put(ItemActions.select());
       yield put(ProviderActions.update({ loaded: true }));
     }
@@ -251,13 +248,13 @@ function* providerLogin({ id }) {
       yield put(ProviderActions.update({ logged }));
 
       if (logged) {
-        yield [getProviderCertificates()];
+        yield getProviderCertificates();
         yield put(ItemActions.select());
         yield put(ProviderActions.update({ loaded: true }));
       }
       console.warn('put ProviderActions.update({ logged })');
     } else {
-      yield [getProviderCertificates()];
+      yield getProviderCertificates();
       yield put(ItemActions.select());
       yield put(ProviderActions.update({ logged: true, loaded: true }));
     }
