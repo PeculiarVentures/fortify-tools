@@ -8,7 +8,6 @@ export default store => next => (payload) => {
   const { type, result, id } = payload;
 
   switch (type) {
-
     case ACTIONS_CONST.ITEM_ADD: {
       const itemId = result.id || UUID();
       const data = Object.assign({}, result, {

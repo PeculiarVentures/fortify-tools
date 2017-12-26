@@ -1,2 +1,2 @@
-export AppMiddleware from './app';
+export ItemMiddleware from './item';
 export ProviderMiddleware from './provider';
