@@ -4,6 +4,7 @@ import ItemListModel from '../models/item_list';
 export default new Schema('Provider', {
   id: Type.ObjectID,
   name: Type.String,
+  _name: Type.String,
   index: Type.Number,
   selected: Type.Boolean,
   readOnly: Type.Boolean,

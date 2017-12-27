@@ -199,6 +199,7 @@ function* webcryptoOnListening() {
       providersArray.push({
         id: prv.id,
         name: prv.name || prv.reader || 'Token with empty name',
+        _name: prv.name || prv.reader || 'Token with empty name',
         readOnly: prv.readOnly,
         index,
         logged: provider.isLogged,
@@ -498,6 +499,7 @@ function* addedProvider({ data }) {
       yield put(ProviderActions.add({
         id: prv.id,
         name: prv.name,
+        _name: prv.name,
         readOnly: prv.readOnly,
         index: state.get('providers').length,
         logged: provider.isLogged,
