@@ -11,7 +11,7 @@ export default function (state, payload) {
     }
 
     case ACTIONS_CONST.PROVIDER_SET_LIST: {
-      providers.set(list);
+      providers.setList(list);
       return state;
     }
 

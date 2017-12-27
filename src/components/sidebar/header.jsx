@@ -85,9 +85,8 @@ export default class SidebarHeader extends Component {
         </S.BtnsContainer>
         <S.Container disabled={!providers.length}>
           <S.SelectContainer>
-            {
-              deviceType === 'phone'
-              ? <SelectNative
+            {deviceType === 'phone' ? (
+              <SelectNative
                 labelText={lang['CertificateCreate.Provider.Field.Name']}
                 placeholder={lang['Select.Label.Provider']}
                 options={providers.map(item => ({
@@ -97,7 +96,8 @@ export default class SidebarHeader extends Component {
                 value={currentProvider ? currentProvider.id : ''}
                 onChange={this.onSelectHandler}
               />
-              : <SelectField
+            ) : (
+              <SelectField
                 labelText={lang['CertificateCreate.Provider.Field.Name']}
                 placeholder={lang['Select.Label.Provider']}
                 value={{
@@ -118,7 +118,7 @@ export default class SidebarHeader extends Component {
                   ))
                 }
               </SelectField>
-            }
+            )}
           </S.SelectContainer>
           <S.ReloadBtn
             title="Reload"
