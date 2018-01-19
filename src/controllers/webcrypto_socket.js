@@ -5,6 +5,9 @@ import { WSActions, ErrorActions } from '../actions/state';
 import { DialogActions } from '../actions/ui';
 import { EventChannel } from '../controllers';
 
+// for debug WebcryptoSocket logs
+window.PV_WEBCRYPTO_SOCKET_LOG = true;
+
 export const ws = new WebcryptoSocket.SocketProvider();
 if (process.env && process.env.NODE_ENV === 'development') {
   window.ws = ws;
