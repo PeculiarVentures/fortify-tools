@@ -1,5 +1,5 @@
 import { put } from 'redux-saga/effects';
-import { ws } from '../../controllers/webcrypto_socket';
+import { ws } from '../../controllers/webcrypto';
 import { ErrorActions } from '../../actions/state';
 
 /**

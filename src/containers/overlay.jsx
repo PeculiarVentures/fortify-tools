@@ -7,7 +7,6 @@ import { ACTIONS_CONST } from '../constants';
 import { WSActions } from '../actions/state';
 import { DialogActions } from '../actions/ui';
 import ImportCertificate from '../components/import_certificate';
-import { WSController } from '../controllers/webcrypto_socket';
 import { EventChannel } from '../controllers';
 
 const OverlayStyled = styled.div`
@@ -28,11 +27,13 @@ export default class Overlay extends Component {
     provider: PropTypes.oneOfType([
       PropTypes.object,
     ]),
+    pin: PropTypes.string,
   };
 
   static defaultProps = {
     dialog: '',
     modal: '',
+    pin: '',
   };
 
   static contextTypes = {
@@ -140,13 +141,12 @@ export default class Overlay extends Component {
       }
 
       case 'TRY_AGAIN_LOGIN': {
-        dispatch(WSActions.login(provider.id));
+        dispatch(WSActions.providerLogin(provider.id));
         return dispatch(DialogActions.close());
       }
 
       case 'TRY_AGAIN_PIN': {
-        WSController.isLogged();
-        return dispatch(DialogActions.close());
+        return dispatch(WSActions.login());
       }
 
       default:
@@ -155,7 +155,7 @@ export default class Overlay extends Component {
   };
 
   renderDialog() {
-    const { dialog, provider } = this.props;
+    const { dialog, provider, pin } = this.props;
     const { message } = this.state;
 
     if (dialog) {
@@ -247,7 +247,7 @@ export default class Overlay extends Component {
           />
           <Dialog.FortifyAuthorizationDialog
             name="fortify_authorization"
-            message={message}
+            pin={pin}
           />
           <Dialog.EmptyProviders
             name="empty_providers"

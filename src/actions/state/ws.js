@@ -42,8 +42,12 @@ export const getProviders = () => ({
   type: ACTIONS_CONST.WS_GET_PROVIDERS,
 });
 
-export const login = id => ({
+export const login = () => ({
   type: ACTIONS_CONST.WS_LOGIN,
+});
+
+export const providerLogin = id => ({
+  type: ACTIONS_CONST.WS_PROVIDER_LOGIN,
   id,
 });
 
@@ -59,4 +63,17 @@ export const addedProvider = data => ({
 export const removedProvider = data => ({
   type: ACTIONS_CONST.WS_REMOVED_PROVIDER,
   data,
+});
+
+export const handleAction = action => ({
+  type: ACTIONS_CONST.WS_HANDLE_ACTION,
+  action,
+});
+
+export const connectionReady = () => ({
+  type: ACTIONS_CONST.WS_CONNECTION_READY,
+});
+
+export const connectionClose = () => ({
+  type: ACTIONS_CONST.WS_CONNECTION_CLOSE,
 });

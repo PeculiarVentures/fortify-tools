@@ -6,4 +6,5 @@ export const DEFAULT = {
   status: 'seaching',
   providers: [],
   create: false,
+  pin: '',
 };

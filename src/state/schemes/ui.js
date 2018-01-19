@@ -13,4 +13,5 @@ export default new Schema('UI', {
     validate: is.list,
   }),
   create: Type.Boolean,
+  pin: Type.String,
 });

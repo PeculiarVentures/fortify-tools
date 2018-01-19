@@ -32,11 +32,11 @@ const DescrStyled = styled.div`
 export default class FortifyAuthorizationDialog extends Component {
 
   static propTypes = {
-    message: PropTypes.string,
+    pin: PropTypes.string,
   };
 
   static defaultProps = {
-    message: '',
+    pin: '',
   };
 
   static contextTypes = {
@@ -44,7 +44,7 @@ export default class FortifyAuthorizationDialog extends Component {
   };
 
   render() {
-    const { message } = this.props;
+    const { pin } = this.props;
     const { lang } = this.context;
 
     return (
@@ -58,7 +58,7 @@ export default class FortifyAuthorizationDialog extends Component {
         </DescrStyled>
         <NumbersContainerStyled>
           {
-            message.split('').map((number, index) => (
+            pin.split('').map((number, index) => (
               <NumberStyled
                 key={index}
               >

@@ -18,6 +18,7 @@ class CreateContainer extends Component {
     readOnly: PropTypes.bool,
     dialog: PropTypes.string,
     modal: PropTypes.string,
+    pin: PropTypes.string,
   };
 
   static defaultProps = {
@@ -27,10 +28,11 @@ class CreateContainer extends Component {
     readOnly: false,
     dialog: '',
     modal: '',
+    pin: '',
   };
 
   render() {
-    const { loaded, status, providers, dialog, modal } = this.props;
+    const { loaded, status, providers, dialog, modal, pin } = this.props;
     const selectedProviderProps = providers.filter(p => p.selected)[0];
 
     return (
@@ -46,6 +48,7 @@ class CreateContainer extends Component {
           dialog={dialog}
           providers={providers}
           modal={modal}
+          pin={pin}
         />
       </ContentStyled>
     );

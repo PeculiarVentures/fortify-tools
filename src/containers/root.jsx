@@ -30,6 +30,7 @@ class RootContainer extends Component {
     ]),
     dialog: PropTypes.string,
     modal: PropTypes.string,
+    pin: PropTypes.string,
   };
 
   static defaultProps = {
@@ -38,6 +39,7 @@ class RootContainer extends Component {
     providers: [],
     dialog: '',
     modal: '',
+    pin: '',
   };
 
   static childContextTypes = {
@@ -107,7 +109,7 @@ class RootContainer extends Component {
   }
 
   render() {
-    const { loaded, status, providers, dialog, modal } = this.props;
+    const { loaded, status, providers, dialog, modal, pin } = this.props;
     const { sidebarOpen } = this.state;
     const selectedProviderProps = providers.filter(p => p.selected)[0];
 
@@ -132,6 +134,7 @@ class RootContainer extends Component {
           dialog={dialog}
           providers={providers}
           modal={modal}
+          pin={pin}
         />
       </ContentStyled>
     );

@@ -2,7 +2,7 @@ import { put, all, takeEvery } from 'redux-saga/effects';
 import { ACTIONS_CONST } from '../constants';
 import { DialogActions } from '../actions/ui';
 import { WSActions } from '../actions/state';
-import { WSController } from '../controllers/webcrypto_socket';
+import { WSController } from '../controllers/webcrypto';
 import { EventChannel } from '../controllers';
 
 // CODES FOR ERRORS
@@ -80,8 +80,6 @@ function* errorHandler(payload) {
 
     case 90001: {
       yield put(DialogActions.open('server_offline'));
-      WSController.checkConnect();
-      yield put(WSActions.status('offline'));
       break;
     }
 
