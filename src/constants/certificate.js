@@ -11,6 +11,8 @@ export const DEFAULT = {
     notBefore: '',
     notAfter: '',
     thumbprint: '',
+    issuerDN: '',
+    subjectDN: '',
   },
   subject: {},
   issuer: {},

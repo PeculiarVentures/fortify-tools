@@ -1,6 +1,5 @@
 import * as asn1js from 'asn1js';
 import Certificate from 'pkijs/build/Certificate';
-// import CertificationRequest from 'pkijs/build/CertificationRequest';
 import AttributeTypeAndValue from 'pkijs/build/AttributeTypeAndValue';
 import moment from 'moment';
 import UUID from 'uuid';
@@ -498,6 +497,8 @@ const CertHelper = {
         notBefore: notBefore ? moment(notBefore).locale(lang).format('LLLL') : '',
         notAfter: notAfter ? moment(notAfter).locale(lang).format('LLLL') : '',
         thumbprint: this.addSpaceAfterSecondCharset(Convert.ToHex(thumbprint)),
+        issuerDN: issuerName,
+        subjectDN: subjectName,
       },
       issuer: decodedIssuer,
       subject: decodedSubject,

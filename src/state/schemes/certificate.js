@@ -13,6 +13,8 @@ export default new Schema('Certificate', {
     notBefore: Type.String,
     notAfter: Type.String,
     thumbprint: Type.String,
+    issuerDN: Type.String,
+    subjectDN: Type.String,
   },
   subject: Type.Map,
   issuer: Type.Map,
