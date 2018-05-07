@@ -6,8 +6,6 @@ const regexpURl = /^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$
 const CertificateInfo = (props, context) => {
   const {
     general,
-    subject,
-    issuer,
     publicKey,
     signature,
     extensions,
@@ -41,38 +39,24 @@ const CertificateInfo = (props, context) => {
 
       <Row>
         <Title>
-          {lang['Info.Body.General']}
+          {lang['Info.Body.BasicInformation']}
         </Title>
         <RowCert>
+          {renderRowContainer('Subject DN', general.subjectDN)}
+          {renderRowContainer('Issuer DN', general.issuerDN)}
           {renderRowContainer(lang['Info.Body.SerialNumber'], general.serialNumber, '', true)}
           {renderRowContainer(lang['Info.Body.Version'], general.version)}
           {renderRowContainer(lang['Info.Body.Issued'], general.notBefore)}
           {renderRowContainer(lang['Info.Body.Expired'], general.notAfter)}
-          <RowCert>
-            {renderRowContainer(lang['Info.Body.Thumbprint'], general.thumbprint, '', true)}
-          </RowCert>
         </RowCert>
       </Row>
 
       <Row>
         <Title>
-          {lang['Info.Body.SubjectName']}
+          {lang['Info.Body.Fingerprint']}
         </Title>
         <RowCert>
-          {
-            Object.keys(subject).map((iss, index) => renderRowContainer(lang[`Info.Body.${iss.replace(' ', '')}`] || iss, subject[iss], index))
-          }
-        </RowCert>
-      </Row>
-
-      <Row>
-        <Title>
-          {lang['Info.Body.IssuerName']}
-        </Title>
-        <RowCert>
-          {
-            Object.keys(issuer).map((iss, index) => renderRowContainer(lang[`Info.Body.${iss.replace(' ', '')}`] || iss, issuer[iss], index))
-          }
+          {renderRowContainer(lang['Info.Body.SHA2'], general.thumbprint, '', true)}
         </RowCert>
       </Row>
 
@@ -155,12 +139,6 @@ CertificateInfo.propTypes = {
     notAfter: PropTypes.string,
     thumbprint: PropTypes.string,
   }),
-  subject: PropTypes.oneOfType([
-    PropTypes.object,
-  ]),
-  issuer: PropTypes.oneOfType([
-    PropTypes.object,
-  ]),
   publicKey: PropTypes.shape({
     modulusBits: PropTypes.any,
     namedCurve: PropTypes.any,
@@ -186,8 +164,6 @@ CertificateInfo.defaultProps = {
     notAfter: '',
     thumbprint: '',
   },
-  subject: {},
-  issuer: {},
   publicKey: {
     modulusBits: '',
     namedCurve: '',
