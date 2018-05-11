@@ -67,7 +67,7 @@
     "gh-pages": "^1.0.0",
     "idb": "^2.0.4",
     "moment": "^2.19.0",
-    "pkijs": "^2.1.5",
+    "pkijs": "2.1.5",
     "preact": "^8.2.4",
     "preact-compat": "^3.17.0",
     "pvtsutils": "^1.0.2",

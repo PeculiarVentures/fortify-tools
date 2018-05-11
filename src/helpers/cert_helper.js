@@ -71,6 +71,226 @@ const OID = {
   },
 };
 
+function getAlgorithmByOID(oid) {
+  switch (oid) {
+    case '1.2.840.113549.1.1.1':
+    case '1.2.840.113549.1.1.5':
+      return {
+        name: 'RSASSA-PKCS1-v1_5',
+        hash: {
+          name: 'SHA-1',
+        },
+      };
+    case '1.2.840.113549.1.1.11':
+      return {
+        name: 'RSASSA-PKCS1-v1_5',
+        hash: {
+          name: 'SHA-256',
+        },
+      };
+    case '1.2.840.113549.1.1.12':
+      return {
+        name: 'RSASSA-PKCS1-v1_5',
+        hash: {
+          name: 'SHA-384',
+        },
+      };
+    case '1.2.840.113549.1.1.13':
+      return {
+        name: 'RSASSA-PKCS1-v1_5',
+        hash: {
+          name: 'SHA-512',
+        },
+      };
+    case '1.2.840.113549.1.1.10':
+      return {
+        name: 'RSA-PSS',
+      };
+    case '1.2.840.113549.1.1.7':
+      return {
+        name: 'RSA-OAEP',
+      };
+    case '1.2.840.10045.2.1':
+    case '1.2.840.10045.4.1':
+      return {
+        name: 'ECDSA',
+        hash: {
+          name: 'SHA-1',
+        },
+      };
+    case '1.2.840.10045.4.3.2':
+      return {
+        name: 'ECDSA',
+        hash: {
+          name: 'SHA-256',
+        },
+      };
+    case '1.2.840.10045.4.3.3':
+      return {
+        name: 'ECDSA',
+        hash: {
+          name: 'SHA-384',
+        },
+      };
+    case '1.2.840.10045.4.3.4':
+      return {
+        name: 'ECDSA',
+        hash: {
+          name: 'SHA-512',
+        },
+      };
+    case '1.3.133.16.840.63.0.2':
+      return {
+        name: 'ECDH',
+        kdf: 'SHA-1',
+      };
+    case '1.3.132.1.11.1':
+      return {
+        name: 'ECDH',
+        kdf: 'SHA-256',
+      };
+    case '1.3.132.1.11.2':
+      return {
+        name: 'ECDH',
+        kdf: 'SHA-384',
+      };
+    case '1.3.132.1.11.3':
+      return {
+        name: 'ECDH',
+        kdf: 'SHA-512',
+      };
+    case '2.16.840.1.101.3.4.1.2':
+      return {
+        name: 'AES-CBC',
+        length: 128,
+      };
+    case '2.16.840.1.101.3.4.1.22':
+      return {
+        name: 'AES-CBC',
+        length: 192,
+      };
+    case '2.16.840.1.101.3.4.1.42':
+      return {
+        name: 'AES-CBC',
+        length: 256,
+      };
+    case '2.16.840.1.101.3.4.1.6':
+      return {
+        name: 'AES-GCM',
+        length: 128,
+      };
+    case '2.16.840.1.101.3.4.1.26':
+      return {
+        name: 'AES-GCM',
+        length: 192,
+      };
+    case '2.16.840.1.101.3.4.1.46':
+      return {
+        name: 'AES-GCM',
+        length: 256,
+      };
+    case '2.16.840.1.101.3.4.1.4':
+      return {
+        name: 'AES-CFB',
+        length: 128,
+      };
+    case '2.16.840.1.101.3.4.1.24':
+      return {
+        name: 'AES-CFB',
+        length: 192,
+      };
+    case '2.16.840.1.101.3.4.1.44':
+      return {
+        name: 'AES-CFB',
+        length: 256,
+      };
+    case '2.16.840.1.101.3.4.1.5':
+      return {
+        name: 'AES-KW',
+        length: 128,
+      };
+    case '2.16.840.1.101.3.4.1.25':
+      return {
+        name: 'AES-KW',
+        length: 192,
+      };
+    case '2.16.840.1.101.3.4.1.45':
+      return {
+        name: 'AES-KW',
+        length: 256,
+      };
+    case '1.2.840.113549.2.7':
+      return {
+        name: 'HMAC',
+        hash: {
+          name: 'SHA-1',
+        },
+      };
+    case '1.2.840.113549.2.9':
+      return {
+        name: 'HMAC',
+        hash: {
+          name: 'SHA-256',
+        },
+      };
+    case '1.2.840.113549.2.10':
+      return {
+        name: 'HMAC',
+        hash: {
+          name: 'SHA-384',
+        },
+      };
+    case '1.2.840.113549.2.11':
+      return {
+        name: 'HMAC',
+        hash: {
+          name: 'SHA-512',
+        },
+      };
+    case '1.2.840.113549.1.9.16.3.5':
+      return {
+        name: 'DH',
+      };
+    case '1.3.14.3.2.26':
+      return {
+        name: 'SHA-1',
+      };
+    case '2.16.840.1.101.3.4.2.1':
+      return {
+        name: 'SHA-256',
+      };
+    case '2.16.840.1.101.3.4.2.2':
+      return {
+        name: 'SHA-384',
+      };
+    case '2.16.840.1.101.3.4.2.3':
+      return {
+        name: 'SHA-512',
+      };
+    case '1.2.840.113549.1.5.12':
+      return {
+        name: 'PBKDF2',
+      };
+    // region Special case - OIDs for ECC curves
+    case '1.2.840.10045.3.1.7':
+      return {
+        name: 'P-256',
+      };
+    case '1.3.132.0.34':
+      return {
+        name: 'P-384',
+      };
+    case '1.3.132.0.35':
+      return {
+        name: 'P-521',
+      };
+    // endregion
+    default:
+  }
+
+  return {};
+}
+
 const subjectTypesAndValues = {
   commonName: '2.5.4.3',
   hostName: '1.3.6.1.2.1.1.5',
@@ -198,6 +418,15 @@ const CertHelper = {
   },
 
   /**
+   * Add space symbol after all second charset and convert ArrayBuffer to string
+   * @param {array} arrayBuffer
+   * @returns {string}
+   */
+  toHexAndFormat: function toHexAndFormat(arrayBuffer) {
+    return this.addSpaceAfterSecondCharset(Convert.ToHex(arrayBuffer)).toUpperCase();
+  },
+
+  /**
    * Decode certificate raw format
    * @param {string} raw
    * @returns {{
@@ -221,12 +450,11 @@ const CertHelper = {
   certRawToJson: function certRawToJson(raw) {
     const asn1 = asn1js.fromBER(raw);
     const x509 = new Certificate({ schema: asn1.result });
-    const json = x509.toJSON();
 
     // Public Key
     const publicKey = {
       algorithm: {
-        name: json.subjectPublicKeyInfo.kty,
+        name: x509.subjectPublicKeyInfo.algorithm.algorithmId === '1.2.840.10045.2.1' ? 'EC' : 'RSA',
       },
       value: this.addSpaceAfterSecondCharset(
         Convert.ToHex(x509.subjectPublicKeyInfo.subjectPublicKey.valueBeforeDecode),
@@ -241,14 +469,16 @@ const CertHelper = {
         ? 65537
         : 3;
     } else if (publicKey.algorithm.name === 'EC') {
-      publicKey.algorithm.namedCurve = json.subjectPublicKeyInfo.crv;
+      publicKey.algorithm.namedCurve = getAlgorithmByOID(
+        x509.subjectPublicKeyInfo.parsedKey.namedCurve,
+      ).name;
     }
 
     // Extensions
     const extensions = [];
 
-    if (json.extensions) {
-      for (const item of json.extensions) {
+    if (x509.extensions) {
+      for (const item of x509.extensions) {
         const oid = OIDS[item.extnID];
         const extension = {
           name: oid ? `${oid} (${item.extnID})` : item.extnID,
@@ -281,35 +511,30 @@ const CertHelper = {
               break;
             case '2.5.29.14': // Subject Key Identifier
               extension.value = [{}];
-              extension.value[0].KeyID = this.addSpaceAfterSecondCharset(
-                item.parsedValue.valueBlock.valueHex,
-              );
+              extension.value[0].KeyID =
+                this.toHexAndFormat(item.parsedValue.valueBlock.valueHex);
               break;
             case '2.5.29.35': // Authority Key Identifier
               extension.value = [{}];
               if (item.parsedValue.keyIdentifier) {
-                extension.value[0].KeyID = this.addSpaceAfterSecondCharset(
-                  item
-                    .parsedValue
-                    .keyIdentifier
-                    .valueBlock
-                    .valueHex
-                    .toUpperCase(),
+                extension.value[0].KeyID = this.toHexAndFormat(item
+                  .parsedValue
+                  .keyIdentifier
+                  .valueBlock
+                  .valueHex,
                 );
               }
               if (item.parsedValue.authorityCertSerialNumber) {
-                extension.value[0].AuthorityCertSerialNumber = this.addSpaceAfterSecondCharset(
-                  item
-                    .parsedValue
-                    .authorityCertSerialNumber
-                    .valueBlock
-                    .valueHex.toUpperCase(),
+                extension.value[0].AuthorityCertSerialNumber = this.toHexAndFormat(item
+                  .parsedValue
+                  .authorityCertSerialNumber
+                  .valueBlock
+                  .valueHex,
                 );
               }
               if (item.parsedValue.authorityCertIssuer) {
-                extension.value[0].AuthorityCertIssuer = this.name2str(
-                  item.parsedValue.authorityCertIssuer[0].value,
-                );
+                extension.value[0].AuthorityCertIssuer =
+                  this.name2str(item.parsedValue.authorityCertIssuer[0].value);
               }
               break;
             case '1.3.6.1.5.5.7.1.1': // Authority Info Access
@@ -327,11 +552,11 @@ const CertHelper = {
               }];
               break;
             default:
-              extension.value = this.addSpaceAfterSecondCharset(item.extnValue.valueBlock.valueHex);
+              extension.value = this.toHexAndFormat(item.extnValue.valueBlock.valueHex);
           }
         } catch (error) {
           console.error(error);
-          extension.value = this.addSpaceAfterSecondCharset(item.extnValue.valueBlock.valueHex);
+          extension.value = this.toHexAndFormat(item.extnValue.valueBlock.valueHex);
         }
 
         extensions.push(extension);
@@ -340,7 +565,7 @@ const CertHelper = {
 
     return {
       version: x509.version,
-      serialNumber: this.addSpaceAfterSecondCharset(json.serialNumber.valueBlock.valueHex),
+      serialNumber: this.toHexAndFormat(x509.serialNumber.valueBlock._valueHex),
       notBefore: x509.notBefore.value,
       notAfter: x509.notAfter.value,
       issuerName: this.name2str(x509.issuer),
@@ -348,8 +573,8 @@ const CertHelper = {
       publicKey,
       extensions,
       signature: {
-        algorithm: this.prepareAlgorithm(json.signature),
-        value: this.addSpaceAfterSecondCharset(json.signatureValue.valueBlock.valueHex),
+        algorithm: this.prepareAlgorithm(x509.signature),
+        value: this.toHexAndFormat(x509.signatureValue.valueBlock.valueHex),
       },
     };
   },

@@ -49,7 +49,7 @@ function* errorHandler(payload) {
   const { message = '', stack } = data;
   let code = data.code;
 
-  console.error('ERROR MESSAGE:', message);
+  console.error('ERROR MESSAGE:', data);
   console.log('CODE:', data.code);
 
   if (message === 'NetworkError when attempting to fetch resource.') {
