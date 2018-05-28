@@ -147,11 +147,16 @@ function* providerSelect({ id }) {
   try {
     const state = yield select();
     const providers = state.find('providers');
-    const provider = providers.where({ id }).get();
+    let provider = providers.where({ id }).get();
+
+    if (Array.isArray(provider)) {
+      provider = provider[0];
+    }
+
     if (!provider.logged) {
       yield put(WSActions.login(provider.id));
-      console.warn('yield put(WSActions.login(provider.id));');
     }
+
     if (!provider.loaded && provider.logged) {
       yield getProviderCertificates();
       yield put(ItemActions.select());
@@ -237,7 +242,6 @@ function* webcryptoOnListening() {
  * }}
  */
 function* providerLogin({ id }) {
-  console.warn('providerLogin');
   try {
     const crypto = yield Provider.cryptoGet(id);
     const isLogged = yield Provider.providerIsLogged(crypto);
@@ -251,7 +255,6 @@ function* providerLogin({ id }) {
         yield put(ItemActions.select());
         yield put(ProviderActions.update({ loaded: true }));
       }
-      console.warn('put ProviderActions.update({ logged })');
     } else {
       yield getProviderCertificates();
       yield put(ItemActions.select());
