@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Root, Row, Title, RowCertInfo, RowCert, ColCert } from './styled/info';
 
-const regexpURl = /^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+const regexpURl = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
 
 const CertificateInfo = (props, context) => {
   const {

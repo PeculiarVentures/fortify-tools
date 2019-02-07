@@ -15,6 +15,7 @@ import * as Key from './key';
 import * as Provider from './provider';
 import * as Certificate from './certificate';
 import { RoutingController, EventChannel } from '../../controllers';
+import { ALLOW_CERTIFICATES_WITHOUT_PRIVATE_KEY } from '../../../scripts/config';
 
 /**
  * Get provider keys
@@ -63,18 +64,31 @@ function* getProviderCertificates() {
   const certificatesArr = [];
 
   for (const certID of certIDs) {
-    // Get certificates with private key only
-    for (const keyID of keyIDs) {
-      const keyParts = keyID.split('-');
-      if (keyParts[0] === 'private' && keyParts[2] === certID.split('-')[2]) {
-        const cert = yield Certificate.certificateGet(provider, certID);
-        if (cert) {
-          certificatesArr.push({
-            id: certID,
-            data: cert,
-          });
+    if (ALLOW_CERTIFICATES_WITHOUT_PRIVATE_KEY) {
+      const cert = yield Certificate.certificateGet(provider, certID);
+
+      if (cert) {
+        certificatesArr.push({
+          id: certID,
+          data: cert,
+        });
+      }
+    } else {
+      // Get certificates with private key only
+      for (const keyID of keyIDs) {
+        const keyParts = keyID.split('-');
+
+        if (keyParts[0] === 'private' && keyParts[2] === certID.split('-')[2]) {
+          const cert = yield Certificate.certificateGet(provider, certID);
+
+          if (cert) {
+            certificatesArr.push({
+              id: certID,
+              data: cert,
+            });
+          }
+          break;
         }
-        break;
       }
     }
   }
@@ -349,7 +363,7 @@ function* importItem({ data }) {
 
     const cert = yield Certificate.certificateImport(crypto, preparedCert);
     const hasPrivateKey = yield Certificate.certificateHasPrivateKey(crypto, cert);
-    if (!hasPrivateKey) {
+    if (!hasPrivateKey && !ALLOW_CERTIFICATES_WITHOUT_PRIVATE_KEY) {
       throw new Error("Cannot import certificate item, cause it doesn't have private key in storage");
     }
     const certID = yield Certificate.certificateSet(crypto, cert);
