@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import uuid from 'uuid';
 import styled from 'styled-components';
 import { CheckmarkIcon } from '../../svg';

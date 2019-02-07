@@ -1,5 +1,5 @@
-export CertificateSchema from './certificate';
-export RequestSchema from './request';
-export UISchema from './ui';
-export KeySchema from './key';
-export ProviderSchema from './provider';
+export { default as CertificateSchema } from './certificate';
+export { default as RequestSchema } from './request';
+export { default as UISchema } from './ui';
+export { default as KeySchema } from './key';
+export { default as ProviderSchema } from './provider';

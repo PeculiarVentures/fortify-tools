@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Convert } from 'pvtsutils';
 import { WSActions, ProviderActions } from '../../actions/state';
 import { CertHelper, regExps } from '../../helpers';

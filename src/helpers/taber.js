@@ -32,8 +32,8 @@ export default class Taber {
   }
 
   initListeners() {
-    this.props.rootNode.addEventListener('keydown', ::this.onKeyDown);
-    this.props.rootNode.addEventListener('keyup', ::this.onKeyUp);
+    this.props.rootNode.addEventListener('keydown', this.onKeyDown.bind(this));
+    this.props.rootNode.addEventListener('keyup', this.onKeyUp.bind(this));
   }
 
   init() {

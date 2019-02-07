@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Header from './header';
 import Body from './body';
 import { ModalActions } from '../../actions/ui';

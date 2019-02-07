@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { SegueHandler, Snackbar } from '../basic';
 import { EventChannel } from '../../controllers';
 import { ModalActions } from '../../actions/ui';
@@ -26,11 +27,11 @@ export default class Snackbars extends React.Component {
 
     this.delay = null;
 
-    this.bindedShow = ::this.show;
-    this.bindedHide = ::this.hide;
-    this.bindedSetHideTimeout = ::this.setHideTimeout;
-    this.bindedSetMessage = ::this.setMesssage;
-    this.bindedResetDelay = ::this.resetDelay;
+    this.bindedShow = this.show.bind(this);
+    this.bindedHide = this.hide.bind(this);
+    this.bindedSetHideTimeout = this.setHideTimeout.bind(this);
+    this.bindedSetMessage = this.setMesssage.bind(this);
+    this.bindedResetDelay = this.resetDelay.bind(this);
 
     EventChannel.on(ACTIONS_CONST.SNACKBAR_SET_MESSAGE, this.bindedSetMessage);
     EventChannel.on(ACTIONS_CONST.SNACKBAR_SHOW, this.bindedShow);
@@ -50,7 +51,7 @@ export default class Snackbars extends React.Component {
 
   setHideTimeout(timeout) {
     clearTimeout(this.hideTimeout);
-    this.hideTimeout = setTimeout(::this.hide, timeout);
+    this.hideTimeout = setTimeout(this.hide.bind(this), timeout);
   }
 
   handleAction(payload) {

@@ -1,11 +1,23 @@
-export * as INITIAL_STATE from './initial_state';
-export * as ACTIONS_CONST from './actions';
+import * as INITIAL_STATE from './initial_state';
+import * as ACTIONS_CONST from './actions';
 
-export * as CERTIFICATE from './certificate';
-export * as REQUEST from './request';
-export * as KEY from './key';
-export * as PROVIDER from './provider';
+import * as CERTIFICATE from './certificate';
+import * as REQUEST from './request';
+import * as KEY from './key';
+import * as PROVIDER from './provider';
 
-export OIDS from './oids';
-export PARAMETERS from './parameters.json';
-export COUNTRIES from './countries.json';
+import OIDS from './oids';
+import PARAMETERS from './parameters.json';
+import COUNTRIES from './countries.json';
+
+export {
+  INITIAL_STATE,
+  ACTIONS_CONST,
+  CERTIFICATE,
+  REQUEST,
+  KEY,
+  PROVIDER,
+  OIDS,
+  PARAMETERS,
+  COUNTRIES,
+};

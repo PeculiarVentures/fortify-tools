@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Button } from '../button';
 
@@ -106,9 +107,9 @@ export default class Snackbar extends Component {
   constructor() {
     super();
 
-    this.bindedOnButtonClick = ::this.onButtonClick;
-    this.bindedOnMouseEnter = ::this.onMouseEnter;
-    this.bindedOnMouseLeave = ::this.onMouseLeave;
+    this.bindedOnButtonClick = this.onButtonClick.bind(this);
+    this.bindedOnMouseEnter = this.onMouseEnter.bind(this);
+    this.bindedOnMouseLeave = this.onMouseLeave.bind(this);
   }
 
   componentDidMount() {

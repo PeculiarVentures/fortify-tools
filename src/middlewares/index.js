@@ -1,3 +1,3 @@
-export ItemMiddleware from './item';
-export ProviderMiddleware from './provider';
-export DebugMiddleware from './debug';
+export { default as ItemMiddleware } from './item';
+export { default as ProviderMiddleware } from './provider';
+export { default as DebugMiddleware } from './debug';

@@ -1,11 +1,12 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import isMobile from 'ismobilejs';
 import { connect } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
-import { Router, Route, browserHistory } from 'react-router';
+import { Router, Route, Switch } from 'react-router';
 import { getTheme } from './components/theme';
 import { RootContainer, CreateContainer, Intl } from './containers';
-import { getAppPath } from './helpers';
+import { getAppPath, history } from './helpers';
 
 class Routing extends Component {
 
@@ -60,7 +61,7 @@ class Routing extends Component {
       windowSize: Routing.getWindowSize(),
     };
 
-    this.bindedOnResize = ::this.onResize;
+    this.bindedOnResize = this.onResize.bind(this);
     window.addEventListener('resize', this.bindedOnResize);
   }
 
@@ -92,12 +93,14 @@ class Routing extends Component {
     return (
       <ThemeProvider theme={getTheme()}>
         <Intl>
-          <Router history={browserHistory}>
-            <Route path={getAppPath()} component={RootContainer} />
-            <Route path={`${getAppPath()}certificate/:id`} component={RootContainer} />
-            <Route path={`${getAppPath()}request/:id`} component={RootContainer} />
-            <Route path={`${getAppPath()}key/:id`} component={RootContainer} />
-            <Route path={`${getAppPath()}create`} component={CreateContainer} />
+          <Router history={history}>
+            <Switch>
+              <Route exact path={getAppPath()} component={RootContainer} />
+              <Route path={`${getAppPath()}certificate/:id`} component={RootContainer} />
+              <Route path={`${getAppPath()}request/:id`} component={RootContainer} />
+              <Route path={`${getAppPath()}key/:id`} component={RootContainer} />
+              <Route path={`${getAppPath()}create`} component={CreateContainer} />
+            </Switch>
           </Router>
         </Intl>
       </ThemeProvider>
