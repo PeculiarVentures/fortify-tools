@@ -15,7 +15,8 @@ import * as Key from './key';
 import * as Provider from './provider';
 import * as Certificate from './certificate';
 import { RoutingController, EventChannel } from '../../controllers';
-import { ALLOW_CERTIFICATES_WITHOUT_PRIVATE_KEY } from '../../../scripts/config';
+
+window.ALLOW_CERTIFICATES_WITHOUT_PRIVATE_KEY = false;
 
 /**
  * Get provider keys
