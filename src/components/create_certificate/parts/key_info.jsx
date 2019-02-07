@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { SelectField, SelectItem, Checkbox, SelectNative } from '../../basic';
 import { Title, GroupContainer, GroupPart } from './styles';

@@ -6,8 +6,8 @@ class Network {
     this.onLine = window.navigator.onLine;
     ee(this);
 
-    window.addEventListener('online', ::this.onOnline);
-    window.addEventListener('offline', ::this.onOffline);
+    window.addEventListener('online', this.onOnline.bind(this));
+    window.addEventListener('offline', this.onOffline.bind(this));
   }
 
   onOnline() {

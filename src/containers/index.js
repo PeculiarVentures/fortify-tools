@@ -1,3 +1,3 @@
-export RootContainer from './root';
-export CreateContainer from './create';
-export Intl from './intl';
+export { default as RootContainer } from './root';
+export { default as CreateContainer } from './create';
+export { default as Intl } from './intl';

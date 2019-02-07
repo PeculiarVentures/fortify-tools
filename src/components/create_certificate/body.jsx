@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from '../basic';
 import SubjectInfo from './parts/subject_info';
 import KeyInfo from './parts/key_info';

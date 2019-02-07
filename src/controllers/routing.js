@@ -1,11 +1,10 @@
 import { State } from 'quantizer';
-import { browserHistory } from 'react-router';
-import { getAppPath, parseSearch } from '../helpers';
+import { getAppPath, parseSearch, history } from '../helpers';
 
 class RoutingController extends State.Map {
 
   static go(path) {
-    browserHistory.push(`${getAppPath()}${path}`);
+    history.push(`${getAppPath()}${path}`);
   }
 
   constructor() {

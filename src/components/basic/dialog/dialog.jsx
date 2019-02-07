@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import * as DialogStyled from './styled/dialog.styled';
 
 const Dialog = (props, context) => {

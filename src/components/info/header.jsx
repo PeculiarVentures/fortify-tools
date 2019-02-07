@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   StyledShellTitle,
   TitleShell,
@@ -73,17 +74,17 @@ export default class Header extends Component {
       dropdown: false,
     };
 
-    this.bindedToggleDropdown = ::this.toggleDropdown;
-    this.bindedHandleMenu = ::this.handleMenu;
-    this.bindedHandleCopy = ::this.handleCopy;
-    this.bindedHandleRemove = ::this.handleRemove;
+    this.bindedToggleDropdown = this.toggleDropdown.bind(this);
+    this.bindedHandleMenu = this.handleMenu.bind(this);
+    this.bindedHandleCopy = this.handleCopy.bind(this);
+    this.bindedHandleRemove = this.handleRemove.bind(this);
   }
 
-  componentDidUpdate(prevProps, prevState, prevContext) {
+  componentWillUpdate(nextProps, nextState, nextContext) {
     const { windowSize } = this.context;
     const { device } = windowSize;
 
-    if (prevContext.windowSize.device !== device) {
+    if (nextContext.windowSize.device !== device) {
       if (device !== 'mobile') {
         this.toggleDropdown(false);
       }

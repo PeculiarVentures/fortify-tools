@@ -11,7 +11,9 @@
     user-scalable="false"
 	/>
 	<link rel="manifest" href="./manifest.json" />
-	<title>Fortify App</title>
+	<title>
+		<%= htmlWebpackPlugin.options.title %>
+	</title>
 	<link rel="icon" type="image/png" sizes="32x32" href="./favicons/favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="./favicons/favicon-16x16.png">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
@@ -191,7 +193,6 @@
 	<script src="https://cdn.rawgit.com/jakearchibald/idb/97e4e878/lib/idb.js" defer></script>
 	<script nomodule src="https://min.gitcdn.link/repo/undoZen/fetch/master/fetch.min.js" defer></script>
 	<script src="/webcrypto-socket.js" defer></script>
-	<script src="/main.js" defer></script>
 	<script defer>
 		// get user locale code
     fetch('https://api.hancock.ink/v0/users/info', {

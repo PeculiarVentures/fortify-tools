@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import * as HeaderStyled from '../create_certificate/styled/header.styled';
 
 const Header = (props, context) => {

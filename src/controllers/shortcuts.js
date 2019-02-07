@@ -89,9 +89,9 @@ class Shortcuts {
 
     this.pressed = new State.List();
 
-    window.addEventListener('keydown', ::this.handleKeyDown);
-    window.addEventListener('keyup', ::this.handleKeyUp);
-    window.addEventListener('blur', ::this.handleBlur);
+    window.addEventListener('keydown', this.handleKeyDown.bind(this));
+    window.addEventListener('keyup', this.handleKeyUp.bind(this));
+    window.addEventListener('blur', this.handleBlur.bind(this));
   }
 
   static keysHas(array, key) {

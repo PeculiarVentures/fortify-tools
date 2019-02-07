@@ -1,1 +1,1 @@
-export CircularLoader from './circular';
+export { default as CircularLoader } from './circular';

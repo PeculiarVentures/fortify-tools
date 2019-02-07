@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { SelectField, SelectItem, SelectNative } from '../../basic';
 import { ProviderActions } from '../../../actions/state';

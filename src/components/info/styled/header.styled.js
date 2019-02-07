@@ -81,7 +81,7 @@ export const CopyIconStyled = styled(CopyIcon)`
 `;
 
 export const RemoveIconStyled = styled(RemoveIcon)`
-  width: 16px;]
+  width: 16px;
   fill: ${props => props.theme.info.header.iconColorRed};
 `;
 

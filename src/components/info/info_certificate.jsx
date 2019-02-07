@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Root, Row, Title, RowCertInfo, RowCert, ColCert } from './styled/info';
 
 const regexpURl = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
@@ -36,7 +37,6 @@ const CertificateInfo = (props, context) => {
 
   return (
     <Root>
-
       <Row>
         <Title>
           {lang['Info.Body.BasicInformation']}
@@ -179,7 +179,7 @@ CertificateInfo.defaultProps = {
   extensions: [],
 };
 
-CertificateInfo.contextInfo = {
+CertificateInfo.contextTypes = {
   lang: PropTypes.object,
 };
 

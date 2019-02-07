@@ -1,5 +1,4 @@
 /* eslint no-undef: 0 */
-import { SERVER_URL } from '../../scripts/config';
 import Store from '../store';
 import { WSActions, ErrorActions } from '../actions/state';
 import { DialogActions } from '../actions/ui';
@@ -16,7 +15,7 @@ export const WSController = {
     clearTimeout(this.interval);
     ws.removeAllListeners();
 
-    ws.connect(SERVER_URL)
+    ws.connect(process.env.SERVER_URL)
       .on('error', (error) => {
         clearTimeout(this.interval);
         Store.dispatch(ErrorActions.error(error));

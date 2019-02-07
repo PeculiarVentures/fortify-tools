@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Root, Row, Title, RowCertInfo, ColCert, RowCert } from './styled/info';
 
 const KeyInfo = (props, context) => {

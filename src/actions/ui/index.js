@@ -1,2 +1,7 @@
-export * as ModalActions from './modal';
-export * as DialogActions from './dialog';
+import * as ModalActions from './modal';
+import * as DialogActions from './dialog';
+
+export {
+  ModalActions,
+  DialogActions,
+};

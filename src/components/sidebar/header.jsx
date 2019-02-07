@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { SelectField, SelectItem, SelectNative } from '../basic';
 import { ModalActions } from '../../actions/ui';
 import { ProviderActions, AppActions } from '../../actions/state';
