@@ -225,6 +225,27 @@ module.exports = {
         minifyURLs: true,
       },
     }),
+    new HtmlWebpackPlugin({
+      // Now you can use env variables in html.
+      // For example `<%= htmlWebpackPlugin.options.PORT %>`.
+      ...env.raw,
+      title: env.raw.TITLE,
+      template: path.resolve(__dirname, `../../${env.raw.ENTRY_FOLDER}/${env.raw.ENTRY_HTML_FILE}`),
+      publicPath,
+      filename: '404.html',
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true,
+      },
+    }),
     // Enhances html-webpack-plugin functionality with different deployment
     // options for your scripts including
     // https://www.npmjs.com/package/script-ext-html-webpack-plugin
