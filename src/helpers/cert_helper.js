@@ -507,7 +507,13 @@ const CertHelper = {
               }));
               break;
             case '2.5.29.17': // Subject Alternative Name
-              extension.value = item.parsedValue.altNames.map(name => name.value);
+              extension.value = item.parsedValue.altNames.map((name) => {
+                if (typeof name.value === 'string') {
+                  return name.value;
+                }
+
+                return '';
+              });
               break;
             case '2.5.29.14': // Subject Key Identifier
               extension.value = [{}];
