@@ -461,16 +461,16 @@ const CertHelper = {
       ),
     };
 
-    const { modulus, publicExponent } = x509.subjectPublicKeyInfo.parsedKey;
     // Add params for Public key
     if (publicKey.algorithm.name === 'RSA') {
+      const { modulus, publicExponent } = x509.subjectPublicKeyInfo.parsedKey;
       publicKey.algorithm.modulusBits = modulus.valueBlock.valueHex.byteLength << 3;
       publicKey.algorithm.publicExponent = publicExponent.valueBlock.valueHex.byteLength === 3
         ? 65537
         : 3;
     } else if (publicKey.algorithm.name === 'EC') {
       publicKey.algorithm.namedCurve = getAlgorithmByOID(
-        x509.subjectPublicKeyInfo.parsedKey.namedCurve,
+        x509.subjectPublicKeyInfo.toJSON().algorithm.algorithmParams.valueBlock.value,
       ).name;
     }
 
