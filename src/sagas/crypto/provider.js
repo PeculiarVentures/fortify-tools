@@ -1,5 +1,5 @@
 import { put } from 'redux-saga/effects';
-import { ws } from '../../controllers/webcrypto_socket';
+import WSController from '../../controllers/webcrypto_socket';
 import { ErrorActions } from '../../actions/state';
 
 /**
@@ -7,7 +7,7 @@ import { ErrorActions } from '../../actions/state';
  * @returns {Array}
  */
 export function* providerGetList() {
-  const info = yield ws.info();
+  const info = yield WSController.ws.info();
   return info.providers;
 }
 
@@ -41,7 +41,7 @@ export function* providerLogin(crypto) {
  * @returns {Promise}
  */
 export function* cryptoGet(id) {
-  return yield ws.getCrypto(id);
+  return yield WSController.ws.getCrypto(id);
 }
 
 /**

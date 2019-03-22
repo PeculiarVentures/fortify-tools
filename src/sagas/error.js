@@ -2,7 +2,7 @@ import { put, all, takeEvery } from 'redux-saga/effects';
 import { ACTIONS_CONST } from '../constants';
 import { DialogActions } from '../actions/ui';
 import { WSActions } from '../actions/state';
-import { WSController } from '../controllers/webcrypto_socket';
+import WSController from '../controllers/webcrypto_socket';
 import { EventChannel } from '../controllers';
 
 // CODES FOR ERRORS

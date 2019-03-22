@@ -8,7 +8,7 @@ import { ACTIONS_CONST } from '../constants';
 import { WSActions } from '../actions/state';
 import { DialogActions } from '../actions/ui';
 import ImportCertificate from '../components/import_certificate';
-import { WSController } from '../controllers/webcrypto_socket';
+import WSController from '../controllers/webcrypto_socket';
 import { EventChannel } from '../controllers';
 
 const OverlayStyled = styled.div`

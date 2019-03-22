@@ -37,6 +37,9 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
   },
+  externals: {
+    ws: 'WebSocket',
+  },
   optimization: {
     runtimeChunk: 'single',
     splitChunks: {
@@ -107,9 +110,6 @@ module.exports = {
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, `../../${env.raw.ENTRY_FOLDER}/assets`),
-      },
-      {
-        from: './node_modules/webcrypto-local/dist/webcrypto-socket.js',
       },
     ]),
     // Makes some environment variables available to the JS code, for example:
