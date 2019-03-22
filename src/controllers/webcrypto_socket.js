@@ -1,4 +1,5 @@
 /* eslint no-undef: 0 */
+import 'webcrypto-liner';
 import * as wsClient from '@webcrypto-local/client/build/index.js';
 
 import Store from '../store';
