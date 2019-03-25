@@ -1,6 +1,6 @@
-/* eslint no-undef: 0 */
+// /* eslint no-undef: 0 */
 import 'webcrypto-liner';
-import * as wsClient from '@webcrypto-local/client/build/index.js';
+import '@webcrypto-local/client';
 
 import Store from '../store';
 import { WSActions, ErrorActions } from '../actions/state';
@@ -11,9 +11,9 @@ class WS {
   interval = null;
 
   async init() {
-    const storage = await wsClient.BrowserStorage.create();
+    const storage = await WebcryptoSocket.BrowserStorage.create();
 
-    this.ws = new wsClient.SocketProvider({
+    this.ws = new WebcryptoSocket.SocketProvider({
       storage,
     });
   }

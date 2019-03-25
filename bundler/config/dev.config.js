@@ -95,6 +95,10 @@ module.exports = {
         ],
       },
       {
+        test: /webcrypto-socket\.js$/,
+        use: ['script-loader'],
+      },
+      {
         test: /\.yaml$/,
         use: ['json-loader', 'yaml-loader'],
       },
