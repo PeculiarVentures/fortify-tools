@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "clean": "rimraf dist",
-    "build": "npm run clean && ENV_CONFIG=env/.env  node bundler/scripts/build",
-    "start": "npm run clean && ENV_CONFIG=env/.env  node bundler/scripts/start",
-    "server": "ENV_CONFIG=env/.env node bundler/scripts/server",
+    "build": "npm run clean && node bundler/scripts/build",
+    "start": "npm run clean && node bundler/scripts/start",
+    "server": "node bundler/scripts/server",
     "lint": "eslint src bundler",
     "deploy": "gh-pages -d dist"
   },

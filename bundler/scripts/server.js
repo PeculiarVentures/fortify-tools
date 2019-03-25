@@ -1,4 +1,7 @@
 /* eslint "import/no-extraneous-dependencies": 1 */
+
+require("./config");
+
 const express = require('express');
 const path = require('path');
 const getClientEnvironment = require('../utils/env');
