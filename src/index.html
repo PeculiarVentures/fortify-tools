@@ -184,10 +184,15 @@
 			</svg>
 		</div>
 	</div>
-	<script src="https://peculiarventures.github.io/pv-webcrypto-tests/src/asmcrypto.js" defer></script>
-	<script src="https://peculiarventures.github.io/pv-webcrypto-tests/src/elliptic.js" defer></script>
-	<script src="https://cdn.rawgit.com/dcodeIO/protobuf.js/6.8.0/dist/protobuf.js" defer></script>
-	<script defer>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.7.0/polyfill.min.js" defer></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/asmCrypto/2.3.2/asmcrypto.all.es5.min.js" defer></script>
+	<script src="https://cdn.rawgit.com/indutny/elliptic/master/dist/elliptic.min.js" defer></script>
+	<script src="https://unpkg.com/webcrypto-liner@1.1.4/build/webcrypto-liner.shim.min.js" defer></script>
+	<script src="https://cdn.rawgit.com/dcodeIO/protobuf.js/6.8.0/dist/protobuf.min.js" defer></script>
+	<script src="https://unpkg.com/@webcrypto-local/client@1.0.14/build/webcrypto-socket.min.js" defer></script>
+
+	<script>
 		// get user locale code
     fetch('https://api.hancock.ink/v0/users/info', {
       method: 'GET',

@@ -1,6 +1,4 @@
-// /* eslint no-undef: 0 */
-import 'webcrypto-liner';
-import '@webcrypto-local/client';
+/* eslint no-undef: 0 */
 
 import Store from '../store';
 import { WSActions, ErrorActions } from '../actions/state';
