@@ -23,6 +23,13 @@ class WS {
       await this.init();
     }
 
+    /**
+     * Remove all listeners from previous connection.
+     */
+    if (this.ws.client) {
+      this.ws.client.removeAllListeners();
+    }
+
     this.ws.removeAllListeners();
 
     this.ws.connect(process.env.SERVER_URL)
