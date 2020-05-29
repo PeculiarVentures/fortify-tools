@@ -15,14 +15,15 @@ const RequestInfo = (props, context) => {
       return (
         <RowCertInfo>
           <ColCert>
-            { title }:
+            {title}:
           </ColCert>
           <ColCert monospace={monospace}>
-            { value }
+            {value}
           </ColCert>
         </RowCertInfo>
       );
     }
+
     return null;
   };
 

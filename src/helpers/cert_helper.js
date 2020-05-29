@@ -342,16 +342,29 @@ function fixName(name) {
  * }}
  */
 const CertHelper = {
-  name2str: function name2str(name, splitter) {
-    splitter = splitter || ',';
-    const res = [];
-    name.typesAndValues.forEach((typeValue) => {
-      const type = typeValue.type;
-      const oidValue = OID[type.toString()];
-      const oidName = oidValue && oidValue.short ? oidValue.short : type.toString();
-      res.push(`${oidName}=${typeValue.value.valueBlock.value}`);
+  name2str: function name2str(attributeTypeAndValue, splitter = ', ') {
+    if (!attributeTypeAndValue) {
+      return '';
+    }
+
+    if (Array.isArray(attributeTypeAndValue.typesAndValues)) {
+      attributeTypeAndValue = attributeTypeAndValue.typesAndValues;
+    }
+
+    const result = [];
+
+    attributeTypeAndValue.forEach((attr) => {
+      let name = attr.type.toString();
+      const type = OID[name];
+
+      if (type) {
+        name = type.short || type.long;
+      }
+
+      result.push([name, attr.value.valueBlock.value.toString()].join('='));
     });
-    return res.join(`${splitter} `);
+
+    return result.join(splitter);
   },
 
   formatDer: function formatDer(string) {
@@ -460,6 +473,7 @@ const CertHelper = {
     // Add params for Public key
     if (publicKey.algorithm.name === 'RSA') {
       const { modulus, publicExponent } = x509.subjectPublicKeyInfo.parsedKey;
+
       publicKey.algorithm.modulusBits = modulus.valueBlock.valueHex.byteLength << 3;
       publicKey.algorithm.publicExponent = publicExponent.valueBlock.valueHex.byteLength === 3
         ? 65537

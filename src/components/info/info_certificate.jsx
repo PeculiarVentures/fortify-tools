@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Root, Row, Title, RowCertInfo, RowCert, ColCert } from './styled/info';
 
-const regexpURl = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
-
 const CertificateInfo = (props, context) => {
   const {
     general,
@@ -23,7 +21,7 @@ const CertificateInfo = (props, context) => {
             {title}{title === 'None' ? '' : ':'}
           </ColCert>
           <ColCert monospace={monospace}>
-            {regexpURl.test(value) ? (
+            {value.toString().indexOf('http') === 0 ? (
               <a href={value} target="_blank" rel="noopener noreferrer">
                 {value}
               </a>
@@ -32,6 +30,7 @@ const CertificateInfo = (props, context) => {
         </RowCertInfo>
       );
     }
+
     return null;
   };
 
