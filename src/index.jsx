@@ -2,7 +2,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { objectOmitPluck } from './helpers';
 import Routing from './routing';
 import Store from './store';
 import WSController from './controllers/webcrypto_socket';

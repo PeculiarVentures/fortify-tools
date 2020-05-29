@@ -56,6 +56,7 @@ const IconStyled = styled.div`
   display: inline-block;
   vertical-align: middle;
   width: 20px;
+  height: 30px;
   transition: fill 300ms;
 `;
 

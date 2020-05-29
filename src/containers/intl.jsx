@@ -22,14 +22,19 @@ export default class Intl extends Component {
   };
 
   static getLangFile(lang) {
-    if (supportedLangs.indexOf(lang) !== -1) {
-      return require(`../langs/${lang}.json`);
-    }
-    return require('../langs/en.json');
+    return require(`../langs/${lang}.json`);
   }
 
   constructor() {
     super();
+
+    let language = window.navigator.language.slice(0, 2).toLowerCase();
+
+    if (!supportedLangs.includes(language)) {
+      language = 'en';
+    }
+
+    window.__lang = language;
 
     this.state = {
       lang: Intl.getLangFile(window.__lang),

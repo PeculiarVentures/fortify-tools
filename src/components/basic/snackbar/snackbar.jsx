@@ -167,7 +167,7 @@ export default class Snackbar extends Component {
     });
 
     setTimeout(() => {
-      rootNodeClone.remove();
+      document.body.removeChild(rootNodeClone);
     }, animationTime);
   }
 

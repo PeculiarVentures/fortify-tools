@@ -1,9 +1,5 @@
-import * as asn1js from 'asn1js';
-import Certificate from 'pkijs/build/Certificate';
-import AttributeTypeAndValue from 'pkijs/build/AttributeTypeAndValue';
 import moment from 'moment';
 import UUID from 'uuid';
-import { Convert } from 'pvtsutils';
 import { OIDS } from '../constants';
 import { regExps } from '../helpers';
 
@@ -423,7 +419,7 @@ const CertHelper = {
    * @returns {string}
    */
   toHexAndFormat: function toHexAndFormat(arrayBuffer) {
-    return this.addSpaceAfterSecondCharset(Convert.ToHex(arrayBuffer)).toUpperCase();
+    return this.addSpaceAfterSecondCharset(pvtsutils.Convert.ToHex(arrayBuffer)).toUpperCase();
   },
 
   /**
@@ -449,7 +445,7 @@ const CertHelper = {
    */
   certRawToJson: function certRawToJson(raw) {
     const asn1 = asn1js.fromBER(raw);
-    const x509 = new Certificate({ schema: asn1.result });
+    const x509 = new pkijs.Certificate({ schema: asn1.result });
 
     // Public Key
     const publicKey = {
@@ -457,7 +453,7 @@ const CertHelper = {
         name: x509.subjectPublicKeyInfo.algorithm.algorithmId === '1.2.840.10045.2.1' ? 'EC' : 'RSA',
       },
       value: this.addSpaceAfterSecondCharset(
-        Convert.ToHex(x509.subjectPublicKeyInfo.subjectPublicKey.valueBeforeDecode),
+        pvtsutils.Convert.ToHex(x509.subjectPublicKeyInfo.subjectPublicKey.valueBeforeDecode),
       ),
     };
 
@@ -589,11 +585,11 @@ const CertHelper = {
     let certBuf;
 
     if (regExps.base64.test(value)) { // pem
-      certBuf = Convert.FromBinary(window.atob(value.replace(/(-----(BEGIN|END) CERTIFICATE-----|\r|\n)/g, '')));
+      certBuf = pvtsutils.Convert.FromBinary(window.atob(value.replace(/(-----(BEGIN|END) CERTIFICATE-----|\r|\n)/g, '')));
     } else if (/[a-f\d]/ig.test(value)) { // hex
-      certBuf = Convert.FromHex(value.replace(/(\r|\n|\s)/g, ''));
+      certBuf = pvtsutils.Convert.FromHex(value.replace(/(\r|\n|\s)/g, ''));
     } else { // der
-      certBuf = Convert.FromBinary(value);
+      certBuf = pvtsutils.Convert.FromBinary(value);
     }
 
     const asn1 = asn1js.fromBER(certBuf);
@@ -602,7 +598,7 @@ const CertHelper = {
       let type = '';
 
       try {
-        cert = new Certificate({ schema: asn1.result });
+        cert = new pkijs.Certificate({ schema: asn1.result });
         type = 'x509';
       } catch (error) {
         throw new Error('ASN1 schema is not match to X509 certificate schema');
@@ -637,7 +633,7 @@ const CertHelper = {
   decoratePkcs10Subject: function decoratePkcs10Subject(pkcs10, data) {
     Object.keys(data).map((key) => {
       if ({}.hasOwnProperty.call(subjectTypesAndValues, key) && data[key]) {
-        pkcs10.subject.typesAndValues.push(new AttributeTypeAndValue({
+        pkcs10.subject.typesAndValues.push(new pkijs.AttributeTypeAndValue({
           type: subjectTypesAndValues[key],
           value: new asn1js.PrintableString({ value: data[key] }),
         }));
@@ -651,11 +647,11 @@ const CertHelper = {
   decorateCertificateSubject: function decorateCertificateSubject(certificate, data) {
     Object.keys(data).map((key) => {
       if ({}.hasOwnProperty.call(subjectTypesAndValues, key) && data[key]) {
-        certificate.issuer.typesAndValues.push(new AttributeTypeAndValue({
+        certificate.issuer.typesAndValues.push(new pkijs.AttributeTypeAndValue({
           type: subjectTypesAndValues[key],
           value: new asn1js.PrintableString({ value: data[key] }),
         }));
-        certificate.subject.typesAndValues.push(new AttributeTypeAndValue({
+        certificate.subject.typesAndValues.push(new pkijs.AttributeTypeAndValue({
           type: subjectTypesAndValues[key],
           value: new asn1js.PrintableString({ value: data[key] }),
         }));
@@ -727,7 +723,7 @@ const CertHelper = {
         version,
         notBefore: notBefore ? moment(notBefore).locale(lang).format('LLLL') : '',
         notAfter: notAfter ? moment(notAfter).locale(lang).format('LLLL') : '',
-        thumbprint: this.addSpaceAfterSecondCharset(Convert.ToHex(thumbprint)),
+        thumbprint: this.addSpaceAfterSecondCharset(pvtsutils.Convert.ToHex(thumbprint)),
         issuerDN: issuerName,
         subjectDN: subjectName,
       },
@@ -778,12 +774,12 @@ const CertHelper = {
         namedCurve: algorithm.namedCurve,
         publicExponent,
         algorithm: this.getKeyType(algorithm.name),
-        value: this.addSpaceAfterSecondCharset(Convert.ToHex(raw)),
+        value: this.addSpaceAfterSecondCharset(pvtsutils.Convert.ToHex(raw)),
       },
       signature: {
         algorithm: algorithm.name,
         hash: algorithm.hash.name,
-        value: this.addSpaceAfterSecondCharset(Convert.ToHex(algorithm.raw)),
+        value: this.addSpaceAfterSecondCharset(pvtsutils.Convert.ToHex(algorithm.raw)),
       },
     };
   },
@@ -810,7 +806,7 @@ const CertHelper = {
     keyUsage: function keyUsage(extension) {
       const usages = [];
       // parse key usage BitString
-      const valueHex = new Uint8Array(Convert.FromHex(extension.parsedValue.valueBlock.valueHex));
+      const valueHex = new Uint8Array(pvtsutils.Convert.FromHex(extension.parsedValue.valueBlock.valueHex));
       const unusedBits = extension.parsedValue.valueBlock.unusedBits;
       let keyUsageByte1 = valueHex[0];
       let keyUsageByte2 = valueHex.byteLength > 1 ? valueHex[1] : 0;
@@ -855,7 +851,7 @@ const CertHelper = {
     netscapeCertType: function netscapeCertType(extension) {
       const usages = [];
       // parse key usage BitString
-      const valueHex = Convert.FromHex(extension.extnValue.valueBlock.valueHex);
+      const valueHex = pvtsutils.Convert.FromHex(extension.extnValue.valueBlock.valueHex);
       const bitString = asn1js.fromBER(valueHex).result;
       const unusedBits = bitString.valueBlock.unusedBits;
       let byte = new Uint8Array(bitString.valueBlock.valueHex)[0];

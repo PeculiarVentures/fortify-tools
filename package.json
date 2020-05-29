@@ -1,6 +1,6 @@
 {
   "name": "fortify-web",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,9 +9,9 @@
     "start": "npm run clean && node bundler/scripts/start",
     "server": "node bundler/scripts/server",
     "lint": "eslint src bundler",
-    "deploy": "gh-pages -d dist"
+    "deploy:gh-pages": "gh-pages -d dist"
   },
-  "author": "",
+  "author": "PeculiarVentures Team",
   "license": "ISC",
   "repository": {
     "type": "git",
@@ -52,20 +52,16 @@
     "webpack": "^4.29.3",
     "webpack-bundle-analyzer": "^3.6.0",
     "webpack-dev-middleware": "^3.5.2",
-    "webpack-dev-server": "^3.1.14",
+    "webpack-dev-server": "^3.11.0",
     "webpack-hot-middleware": "^2.18.2",
     "workbox-webpack-plugin": "^3.6.3"
   },
   "dependencies": {
-    "asn1js": "^2.0.21",
     "event-emitter": "^0.3.5",
     "history": "^4.7.2",
-    "idb": "^3.0.2",
     "ismobilejs": "^0.5.1",
     "moment": "^2.19.0",
-    "pkijs": "2.1.74",
     "prop-types": "^15.6.2",
-    "pvtsutils": "^1.0.3",
     "quantizer": "^2.2.3",
     "react": "16.8.1",
     "react-dom": "^16.8.1",

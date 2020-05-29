@@ -1,6 +1,5 @@
 import { select, put, takeEvery, all } from 'redux-saga/effects';
 import UUID from 'uuid';
-import { Convert } from 'pvtsutils';
 import { ACTIONS_CONST } from '../../constants';
 import {
   ProviderActions,
@@ -10,7 +9,7 @@ import {
   ErrorActions,
 } from '../../actions/state';
 import { DialogActions, ModalActions } from '../../actions/ui';
-import { CertHelper, downloadCertFromURI } from '../../helpers';
+import { CertHelper, downloadFromBuffer } from '../../helpers';
 import * as Key from './key';
 import * as Provider from './provider';
 import * as Certificate from './certificate';
@@ -106,7 +105,7 @@ function* getProviderCertificates() {
 
   for (const item of certificatesArr) {
     const raw = yield Certificate.certificateExport(provider, item.data, 'raw');
-    const base64 = Convert.ToBase64(raw);
+    const base64 = pvtsutils.Convert.ToBase64(raw);
 
     // Add \n after each 64 bytes
     let b64Formated = '';
@@ -315,12 +314,27 @@ function* downloadItem({ format }) {
     if (crypto) {
       const selectedItem = selectedProvider.find('items').where({ selected: true }).get();
       const item = yield Certificate.certificateGet(crypto, selectedItem._id);
-      const exported = yield Certificate.certificateExport(crypto, item, format);
+      let exported = yield Certificate.certificateExport(crypto, item, format);
 
-      if (exported && typeof exported === 'string') {
-        downloadCertFromURI(selectedItem.name, exported, selectedItem.type);
-      } else if (exported) {
-        downloadCertFromURI(selectedItem.name, [exported], selectedItem.type, true);
+      if (exported) {
+        let mimetype = 'application/pkcs10';
+        let extension = 'req';
+
+        if (typeof exported === 'string') {
+          exported = pvtsutils.Convert.FromString(exported);
+        }
+
+        if (selectedItem.type === 'certificate') {
+          mimetype = 'application/pkix-cert';
+          extension = 'cer';
+        }
+
+        downloadFromBuffer(
+          exported,
+          mimetype,
+          selectedItem.name,
+          extension,
+        );
       }
     }
   } catch (error) {

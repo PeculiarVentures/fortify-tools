@@ -4,7 +4,13 @@ import { Button } from '../../basic';
 
 export const Logo = styled.div`
   margin-left: 31px;
-  width: 92px;
+  height: 30px;
+
+  img {
+    display: block;
+    height: 100%;
+  }
+
   @media ${props => props.theme.media.mobile} {
     margin-left: 14px;
   }
@@ -80,10 +86,12 @@ export const ReloadBtn = styled.div`
       : 'pointer'
   )};
   text-align: center;
+
   svg {
     display: inline-block;
     vertical-align: middle;
     width: 16px;
+    height: 24px;
     fill: rgba(112, 125, 134, 0.5);
     transition: fill ${props => props.theme.basicTransition}ms;
   }

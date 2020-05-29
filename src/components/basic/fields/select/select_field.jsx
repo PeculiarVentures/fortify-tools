@@ -9,6 +9,7 @@ import { isEqual } from '../../../../helpers';
 const ArrowIconStyled = styled(ArrowSelectDownIcon)`
   fill: rgba(112, 125, 134, 0.5);
   width: 8px;
+  height: 5px;
   position: absolute;
   right: 10px;
   bottom: 12px;
