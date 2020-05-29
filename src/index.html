@@ -14,9 +14,11 @@
 	<title>
 		<%= htmlWebpackPlugin.options.title %>
 	</title>
+
 	<link rel="icon" type="image/png" sizes="32x32" href="./favicons/favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="./favicons/favicon-16x16.png">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
+
 	<style>
 		* {
 			margin: 0;
@@ -191,24 +193,6 @@
 	<script src="https://unpkg.com/webcrypto-liner@1.1.4/build/webcrypto-liner.shim.min.js" defer></script>
 	<script src="https://cdn.rawgit.com/dcodeIO/protobuf.js/6.8.0/dist/protobuf.min.js" defer></script>
 	<script src="https://unpkg.com/@webcrypto-local/client@1.0.14/build/webcrypto-socket.min.js" defer></script>
-
-	<script>
-		// get user locale code
-    fetch('https://api.hancock.ink/v0/users/info', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then((res) => {
-      if (res.status === 200) {
-        return res.json();
-      }
-    }).then((res) => {
-      window.__lang = res.locale.split('-')[0];
-    }).catch(() => {
-      window.__lang = 'en';
-    });
-	</script>
 </body>
 
 </html>
