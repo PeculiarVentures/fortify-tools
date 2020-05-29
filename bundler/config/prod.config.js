@@ -213,7 +213,6 @@ module.exports = {
       // Now you can use env variables in html.
       // For example `<%= htmlWebpackPlugin.options.PORT %>`.
       ...env.raw,
-      title: env.raw.TITLE,
       template: path.resolve(__dirname, `../../${env.raw.ENTRY_FOLDER}/${env.raw.ENTRY_HTML_FILE}`),
       publicPath,
       minify: {
@@ -233,7 +232,6 @@ module.exports = {
       // Now you can use env variables in html.
       // For example `<%= htmlWebpackPlugin.options.PORT %>`.
       ...env.raw,
-      title: env.raw.TITLE,
       template: path.resolve(__dirname, `../../${env.raw.ENTRY_FOLDER}/${env.raw.ENTRY_HTML_FILE}`),
       publicPath,
       filename: '404.html',

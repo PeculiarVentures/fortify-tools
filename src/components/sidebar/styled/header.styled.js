@@ -4,7 +4,13 @@ import { Button } from '../../basic';
 
 export const Logo = styled.div`
   margin-left: 31px;
-  width: 92px;
+  height: 30px;
+
+  img {
+    display: block;
+    height: 100%;
+  }
+
   @media ${props => props.theme.media.mobile} {
     margin-left: 14px;
   }

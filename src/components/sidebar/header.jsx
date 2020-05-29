@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { SelectField, SelectItem, SelectNative } from '../basic';
 import { ModalActions } from '../../actions/ui';
 import { ProviderActions, AppActions } from '../../actions/state';
-import { ReloadIcon, Logo } from '../svg';
+import { ReloadIcon } from '../svg';
 import * as S from './styled/header.styled';
 
 export default class SidebarHeader extends Component {
@@ -66,7 +66,10 @@ export default class SidebarHeader extends Component {
     return (
       <S.SidebarHeader>
         <S.Logo>
-          <Logo />
+          <img
+            src="/images/logo.svg"
+            alt="Fortify logo"
+          />
         </S.Logo>
         <S.BtnsContainer>
           <S.Btn

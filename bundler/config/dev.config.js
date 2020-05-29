@@ -134,7 +134,6 @@ module.exports = {
       ...env.raw,
       // Disable service-worker for development mode
       USE_SERVICE_WORKER: '',
-      title: env.raw.TITLE,
       template: path.resolve(__dirname, `../../${env.raw.ENTRY_FOLDER}/${env.raw.ENTRY_HTML_FILE}`),
       publicPath,
     }),
