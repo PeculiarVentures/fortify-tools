@@ -194,12 +194,22 @@
 		</div>
 	</div>
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.7.0/polyfill.min.js" defer></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/asmCrypto/2.3.2/asmcrypto.all.es5.min.js" defer></script>
-	<script src="https://cdn.rawgit.com/indutny/elliptic/master/dist/elliptic.min.js" defer></script>
-	<script src="https://unpkg.com/webcrypto-liner@1.1.4/build/webcrypto-liner.shim.min.js" defer></script>
-	<script src="https://cdn.rawgit.com/dcodeIO/protobuf.js/6.8.0/dist/protobuf.min.js" defer></script>
-	<script src="https://unpkg.com/@webcrypto-local/client@1.0.14/build/webcrypto-socket.min.js" defer></script>
+	<!-- Babel Polyfill -->
+	<script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.8.7/polyfill.min.js"></script>
+	
+	<!-- Fetch Polyfill -->
+	<script defer="" nomodule="" src="https://unpkg.com/whatwg-fetch@3.0.0/dist/fetch.umd.js"></script>
+
+	<!-- Crypto Polyfill -->
+	<script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/asmCrypto/2.3.2/asmcrypto.all.es5.min.js"></script>
+	<script defer="" src="https://cdn.rawgit.com/indutny/elliptic/master/dist/elliptic.min.js"></script>
+	<script defer="" type="module" src="https://unpkg.com/webcrypto-liner@1.2.1/build/webcrypto-liner.shim.mjs"></script>
+	<script defer="" nomodule="" src="https://unpkg.com/webcrypto-liner@1.2.1/build/webcrypto-liner.shim.js"></script>
+	
+	<!-- WebCrypto Socket -->
+	<script defer="" src="https://cdn.rawgit.com/dcodeIO/protobuf.js/6.8.0/dist/protobuf.js"></script>
+	<script defer="" type="module" src="https://unpkg.com/@webcrypto-local/client@1.1.0/build/webcrypto-socket.mjs"></script>
+	<script defer="" nomodule="" src="https://unpkg.com/@webcrypto-local/client@1.1.0/build/webcrypto-socket.js"></script>
 </body>
 
 </html>
