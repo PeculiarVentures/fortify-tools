@@ -1,7 +1,3 @@
-import { put } from 'redux-saga/effects';
-import { Convert } from 'pvtsutils';
-import { ErrorActions } from '../../actions/state';
-
 /**
  * Returns index of key from key storage
  * @param {Crypto}      crypto
@@ -21,10 +17,11 @@ export function* publicKeyThumbprint(crypto, publicKey, hash = 'SHA-256') {
   if (publicKey.type !== 'public') {
     throw new Error(`Wrong type of key '${publicKey.type}'. Must be 'public'`);
   }
+
   const spki = yield crypto.subtle.exportKey('raw', publicKey);
   // NOTE: Use native digest instead of service provider
   const thumbprint = yield window.crypto.subtle.digest(hash, spki);
-  return Convert.ToHex(thumbprint);
+  return pvtsutils.Convert.ToHex(thumbprint);
 }
 
 /**

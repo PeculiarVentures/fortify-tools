@@ -62,10 +62,6 @@ export const ColCert = styled.div`
   vertical-align: top;
   line-height: 15px;
   color: #59656E;
-  -webkit-user-select: auto;
-  -moz-user-select: auto;
-  -ms-user-select: auto;
-  user-select: auto;
   &:first-child {
     color: rgba(112, 125, 124, .62);
     width: 25%;

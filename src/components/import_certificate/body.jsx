@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Convert } from 'pvtsutils';
 import { WSActions, ProviderActions } from '../../actions/state';
 import { CertHelper, regExps } from '../../helpers';
 import { Button, SelectField, SelectNative, SelectItem, TextField } from '../basic';
@@ -87,7 +86,7 @@ export default class Body extends Component {
       } else if (regExps.base64.test(str)) {
         value = str;
       } else {
-        value = CertHelper.formatDer(Convert.ToHex(Convert.FromBinary(str)));
+        value = CertHelper.formatDer(pvtsutils.Convert.ToHex(pvtsutils.Convert.FromBinary(str)));
       }
 
       textarea.fieldNode.value = value;
@@ -109,19 +108,27 @@ export default class Body extends Component {
     }
 
     const fileExtension = file.name.split('.')[file.name.split('.').length - 1];
+
     if (supportedFileExtension.indexOf(fileExtension) === -1) {
       alert('Not supported file format!');
       return false;
     }
 
-    reader.readAsBinaryString(file);
-    reader.onloadend = () => {
-      if (reader.error) {
-        alert(`Your browser couldn't read the specified file (error code ${reader.error.code}).`);
-      } else {
-        this.decodeBinaryString(reader.result);
-      }
-    };
+    reader.onerror = () => alert('File cannot be opened');
+
+    if (reader.readAsBinaryString) {
+      reader.onload = e => this.decodeBinaryString(e.target.result);
+      reader.readAsBinaryString(file);
+    } else {
+      reader.onload = (e) => {
+        const bytes = new Uint8Array(e.target.result);
+        const binary = bytes.reduce((acc, byte) => acc + String.fromCharCode(byte), "");
+
+        this.decodeBinaryString(binary);
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
     return false;
   }
 

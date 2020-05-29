@@ -1,12 +1,4 @@
 import { put } from 'redux-saga/effects';
-import CertificationRequest from 'pkijs/build/CertificationRequest';
-import Attribute from 'pkijs/build/Attribute';
-import Extensions from 'pkijs/build/Extensions';
-import Extension from 'pkijs/build/Extension';
-import Certificate from 'pkijs/build/Certificate';
-import CryptoEngine from 'pkijs/build/CryptoEngine';
-import { setEngine } from 'pkijs/build/common';
-import * as asn1js from 'asn1js';
 import { ErrorActions } from '../../actions/state';
 import { CertHelper } from '../../helpers';
 import * as Key from './key';
@@ -102,15 +94,14 @@ export function* certificateCreate(crypto, data) {
     publicExponent: new Uint8Array([1, 0, 1]),
   }, data.keyInfo.algorithm))();
   const algorithmHash = algorithm.hash;
-  let pkcs10 = new CertificationRequest();
-
-  // Set engine
-  setEngine('Crypto', crypto, new CryptoEngine({ name: 'Crypto', crypto, subtle: crypto.subtle }));
 
   const {
     publicKey,
     privateKey,
   } = yield crypto.subtle.generateKey(algorithm, extractable, usages);
+
+  pkijs.setEngine('Fortify', crypto, crypto.subtle);
+  let pkcs10 = new pkijs.CertificationRequest();
 
   pkcs10.version = 0;
   pkcs10 = CertHelper.decoratePkcs10Subject(pkcs10, data);
@@ -122,11 +113,11 @@ export function* certificateCreate(crypto, data) {
     { name: algorithmHash },
     pkcs10.subjectPublicKeyInfo.subjectPublicKey.valueBlock.valueHex,
   );
-  const attribute = new Attribute({
+  const attribute = new pkijs.Attribute({
     type: '1.2.840.113549.1.9.14',
-    values: [(new Extensions({
+    values: [(new pkijs.Extensions({
       extensions: [
-        new Extension({
+        new pkijs.Extension({
           extnID: '2.5.29.14',
           critical: false,
           extnValue: (new asn1js.OctetString({ valueHex: hash })).toBER(false),
@@ -165,9 +156,6 @@ export function* CMSCreate(crypto, data) {
   }, data.keyInfo.algorithm))();
   const usages = ['sign', 'verify'];
 
-  // Set engine
-  setEngine('Crypto', crypto, new CryptoEngine({ name: 'Crypto', crypto, subtle: crypto.subtle }));
-
   // Generate key
   const {
     publicKey,
@@ -175,7 +163,9 @@ export function* CMSCreate(crypto, data) {
   } = yield crypto.subtle.generateKey(algorithm, false, usages);
 
   // Generate new certificate
-  let certificate = new Certificate();
+  pkijs.setEngine('Fortify', crypto, crypto.subtle);
+
+  let certificate = new pkijs.Certificate();
   certificate.version = 2;
   certificate.serialNumber = new asn1js.Integer({ value: 1 });
 
@@ -194,7 +184,7 @@ export function* CMSCreate(crypto, data) {
   const keyUsage = new asn1js.BitString({ valueHex: bitArray });
 
   certificate.extensions.push(
-    new Extension({
+    new pkijs.Extension({
       extnID: '2.5.29.15',
       critical: false,
       extnValue: keyUsage.toBER(false),
@@ -204,6 +194,7 @@ export function* CMSCreate(crypto, data) {
 
   yield certificate.subjectPublicKeyInfo.importKey(publicKey);
   yield certificate.sign(privateKey, 'SHA-256');
+
   // Add null param for algorithms
   if (!certificate.signature.algorithmParams) {
     certificate.signature.algorithmParams = new asn1js.Null();

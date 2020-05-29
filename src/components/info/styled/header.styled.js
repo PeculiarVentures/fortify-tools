@@ -196,6 +196,7 @@ export const IconContainer = styled.div`
   display: inline-block;
   vertical-align: middle;
   width: 16px;
+  height: 24px;
   margin-right: 20px;
   fill: rgba(112, 125, 134, .6);
   margin-top: 6px;

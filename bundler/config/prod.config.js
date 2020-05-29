@@ -150,32 +150,8 @@ module.exports = {
           'thread-loader',
           {
             loader: 'babel-loader',
-            options: {
-              babelrc: false,
-              configFile: false,
-              compact: false,
-              // This is a feature of `babel-loader` for webpack (not Babel itself).
-              // It enables caching results in ./node_modules/.cache/babel-loader/
-              // directory for faster rebuilds.
-              cacheDirectory: true,
-              // Don't waste time on Gzipping the cache
-              cacheCompression: false,
-              presets: [
-                '@babel/preset-env',
-                '@babel/preset-react',
-              ],
-              plugins: [
-                '@babel/plugin-transform-runtime',
-                'dynamic-import-node',
-                '@babel/plugin-proposal-class-properties',
-              ],
-            },
           },
         ],
-      },
-      {
-        test: /webcrypto-socket\.js$/,
-        use: ['script-loader'],
       },
       {
         test: /\.yaml$/,
