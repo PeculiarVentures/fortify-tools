@@ -1,6 +1,6 @@
 {
   "name": "fortify-web",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "deploy:gh-pages": "gh-pages -d dist"
   },
   "author": "PeculiarVentures Team",
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PeculiarVentures/fortify-web.git"
