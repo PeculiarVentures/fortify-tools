@@ -13,6 +13,13 @@ const CertificateInfo = (props, context) => {
 
   const renderRowContainer = (title, value, index, monospace) => {
     if (value && title !== 'name') {
+      const isLink = value.toString().indexOf('http') === 0;
+      let valueElement = value;
+
+      if (Object.prototype.toString.call(valueElement) === '[object Object]') {
+        valueElement = null;
+      }
+
       return (
         <RowCertInfo
           key={index}
@@ -21,11 +28,11 @@ const CertificateInfo = (props, context) => {
             {title}{title === 'None' ? '' : ':'}
           </ColCert>
           <ColCert monospace={monospace}>
-            {value.toString().indexOf('http') === 0 ? (
-              <a href={value} target="_blank" rel="noopener noreferrer">
-                {value}
+            {isLink ? (
+              <a href={valueElement} target="_blank" rel="noopener noreferrer">
+                {valueElement}
               </a>
-            ) : value}
+            ) : valueElement}
           </ColCert>
         </RowCertInfo>
       );
@@ -126,7 +133,7 @@ const CertificateInfo = (props, context) => {
           </RowCert>
         )}
       </Row>
-    </Root >
+    </Root>
   );
 };
 

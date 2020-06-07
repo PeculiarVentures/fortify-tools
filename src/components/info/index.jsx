@@ -45,7 +45,6 @@ const InfoContainer = styled.div`
 `;
 
 export default class Info extends Component {
-
   static contextTypes = {
     dispatch: PropTypes.func,
     handleRootAction: PropTypes.func,
@@ -104,6 +103,10 @@ export default class Info extends Component {
     }
 
     return item;
+  }
+
+  componentDidCatch(error) {
+    console.error(error);
   }
 
   renderInfoContent(type, item) {

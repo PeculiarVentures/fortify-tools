@@ -12,13 +12,19 @@ const RequestInfo = (props, context) => {
 
   const renderRowContainer = (title, value, monospace) => {
     if (value && title !== 'name') {
+      let valueElement = value;
+
+      if (Object.prototype.toString.call(valueElement) === '[object Object]') {
+        valueElement = null;
+      }
+
       return (
         <RowCertInfo>
           <ColCert>
             {title}:
           </ColCert>
           <ColCert monospace={monospace}>
-            {value}
+            {valueElement}
           </ColCert>
         </RowCertInfo>
       );
