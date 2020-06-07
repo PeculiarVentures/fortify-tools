@@ -132,7 +132,7 @@ module.exports = {
         },
         parallel: true,
         cache: true,
-        sourceMap: false,
+        sourceMap: env.raw.USE_SOURCE_MAP === 'true',
       }),
     ],
   },
