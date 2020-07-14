@@ -598,15 +598,20 @@ const CertHelper = {
   prepareCertToImport: function prepareCertToImport(value) {
     let certBuf;
 
-    if (regExps.base64.test(value)) { // pem
-      certBuf = pvtsutils.Convert.FromBinary(window.atob(value.replace(/(-----(BEGIN|END) CERTIFICATE-----|\r|\n)/g, '')));
-    } else if (/[a-f\d]/ig.test(value)) { // hex
-      certBuf = pvtsutils.Convert.FromHex(value.replace(/(\r|\n|\s)/g, ''));
-    } else { // der
-      certBuf = pvtsutils.Convert.FromBinary(value);
+    try {
+      if (regExps.base64.test(value)) { // pem
+        certBuf = pvtsutils.Convert.FromBinary(window.atob(value.replace(/(-----(BEGIN|END) CERTIFICATE-----|\r|\n)/g, '')));
+      } else if (/[a-f\d]/ig.test(value)) { // hex
+        certBuf = pvtsutils.Convert.FromHex(value.replace(/(\r|\n|\s)/g, ''));
+      } else { // der
+        certBuf = pvtsutils.Convert.FromBinary(value);
+      }
+    } catch (error) {
+      throw new Error('Can\'t parse X509 certificate, because the file has the wrong format');
     }
 
     const asn1 = asn1js.fromBER(certBuf);
+
     if (asn1.offset > 0) {
       let cert = '';
       let type = '';
@@ -641,6 +646,7 @@ const CertHelper = {
         },
       };
     }
+
     throw new Error('Cannot parse ASN1 data');
   },
 
