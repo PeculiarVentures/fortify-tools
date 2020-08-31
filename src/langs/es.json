@@ -58,9 +58,6 @@
   "CertificateCreate.Options.Title": "Opciones",
   "CertificateCreate.Options.SelfSigned": "Crear un certificado auto-firmado en vez de una solicitud de certificado",
 
-  "Info.Header.Btn.Download": "Descargar",
-  "Info.Header.Download.Pem": "en formato PEM",
-  "Info.Header.Download.Der": "en formato DER",
   "Info.Header.Btn.Copy": "Copiar al Copy to portapapeles",
   "Info.Header.Btn.Remove": "Sacar",
 

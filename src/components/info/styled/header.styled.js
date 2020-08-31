@@ -126,6 +126,7 @@ export const DropdownMenu = styled.div`
   display: table;
   background: ${props => props.theme.info.header.dropdownColor};
   animation: ${props => props.theme.mixins.fadeIn} 300ms;
+  z-index: 1;
 `;
 
 export const DropdownItemsWrapper = styled.div`

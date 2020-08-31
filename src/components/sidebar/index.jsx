@@ -13,6 +13,7 @@ const SidebarStyled = styled.div`
   background: ${props => props.theme.sidebar.background};
   box-shadow: 10px 0 20px 0 rgba(112,125,134,0.05);
   position: relative;
+  z-index: 1;
   @media ${props => props.theme.media.mobile} {
     width: 100%;
     position: fixed;

@@ -58,9 +58,6 @@
 	"CertificateCreate.Options.Title": "选项",
 	"CertificateCreate.Options.SelfSigned": "创建一个自签名证书",
 
-	"Info.Header.Btn.Download": "下载",
-	"Info.Header.Download.Pem": "以PEM",
-	"Info.Header.Download.Der": "以DER",
 	"Info.Header.Btn.Copy": "复制到剪贴板",
 	"Info.Header.Btn.Remove": "删除",
 

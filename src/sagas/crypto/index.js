@@ -17,6 +17,10 @@ import { RoutingController, EventChannel } from '../../controllers';
 
 window.ALLOW_CERTIFICATES_WITHOUT_PRIVATE_KEY = false;
 
+const base64PemFormat = (base64) => {
+  return `${base64.replace(/(.{64})/g, '$1\n')}`;
+};
+
 /**
  * Get provider keys
  */
@@ -109,30 +113,10 @@ function* getProviderCertificates() {
   for (const item of certificatesArr) {
     const raw = yield Certificate.certificateExport(provider, item.data, 'raw');
     const base64 = pvtsutils.Convert.ToBase64(raw);
-
-    // Add \n after each 64 bytes
-    let b64Formated = '';
-    const b64Rows = [];
-    let b64Row = '';
-    for (let i = 0; i < base64.length; i += 1) {
-      if (i && !(i % 64)) {
-        b64Rows.push(b64Row);
-        b64Row = '';
-      }
-
-      b64Row += base64.charAt(i);
-    }
-
-    if (b64Row && b64Row.length % 64) {
-      b64Rows.push(b64Row);
-    }
-
-    b64Formated = b64Rows.join('\n');
-
     let certData = '';
 
     if (item.data.type === 'x509') {
-      const pem = `-----BEGIN CERTIFICATE-----\n${b64Formated}\n-----END CERTIFICATE-----`;
+      const pem = `-----BEGIN CERTIFICATE-----\n${base64PemFormat(base64)}\n-----END CERTIFICATE-----`;
       const thumbprint = yield Certificate.certificateThumbprint(provider, raw);
       const certificateDetails = CertHelper.certRawToJson(raw);
 
@@ -143,7 +127,7 @@ function* getProviderCertificates() {
         thumbprint,
       });
     } else {
-      const pem = `-----BEGIN CERTIFICATE REQUEST-----\n${b64Formated}\n-----END CERTIFICATE REQUEST-----`;
+      const pem = `-----BEGIN CERTIFICATE REQUEST-----\n${base64PemFormat(base64)}\n-----END CERTIFICATE REQUEST-----`;
 
       certData = CertHelper.requestDataHandler({
         ...item.data,

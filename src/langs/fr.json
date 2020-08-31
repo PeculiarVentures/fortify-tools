@@ -58,9 +58,6 @@
   "CertificateCreate.Options.Title": "Options",
   "CertificateCreate.Options.SelfSigned": "Créer un certificat autosingé au lieu d'une demande de signature de certificat",
 
-  "Info.Header.Btn.Download": "Télécharger",
-  "Info.Header.Download.Pem": "au format PEM",
-  "Info.Header.Download.Der": "au format DER",
   "Info.Header.Btn.Copy": "Copier dans le presse-papier",
   "Info.Header.Btn.Remove": "Suppirmer",
 
