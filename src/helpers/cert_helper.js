@@ -1,6 +1,5 @@
 import moment from 'moment';
 import UUID from 'uuid';
-import { OIDS } from '../constants';
 import { regExps } from '../helpers';
 
 const OID = {
@@ -484,101 +483,6 @@ const CertHelper = {
       ).name;
     }
 
-    // Extensions
-    const extensions = [];
-
-    if (x509.extensions) {
-      for (const item of x509.extensions) {
-        const oid = OIDS[item.extnID];
-        const extension = {
-          name: oid ? `${oid} (${item.extnID})` : item.extnID,
-          oid: item.extnID,
-          critical: item.critical || false,
-        };
-
-        // parse extensions
-        try {
-          switch (item.extnID) {
-            case '2.5.29.15': // key usage
-              extension.value = [{}];
-              extension.value[0].Usages = CertHelper.Extensions.keyUsage(item).join(', ');
-              break;
-            case '2.5.29.37': // Extended Key Usage
-              extension.value = item.parsedValue.keyPurposes.map((o) => {
-                const _oid = OIDS[o];
-                return {
-                  Purpose: _oid ? `${_oid} (${o})` : o,
-                };
-              });
-              break;
-            case '2.5.29.31': // CRL Distribution Points
-              extension.value = item.parsedValue.distributionPoints.map(dp => ({
-                URl: dp.distributionPoint[0].value,
-              }));
-              break;
-            case '2.5.29.17': // Subject Alternative Name
-              extension.value = item.parsedValue.altNames.map((name) => {
-                if (typeof name.value === 'string') {
-                  return name.value;
-                }
-
-                return '';
-              });
-              break;
-            case '2.5.29.14': // Subject Key Identifier
-              extension.value = [{}];
-              extension.value[0].KeyID =
-                this.toHexAndFormat(item.parsedValue.valueBlock.valueHex);
-              break;
-            case '2.5.29.35': // Authority Key Identifier
-              extension.value = [{}];
-              if (item.parsedValue.keyIdentifier) {
-                extension.value[0].KeyID = this.toHexAndFormat(item
-                  .parsedValue
-                  .keyIdentifier
-                  .valueBlock
-                  .valueHex,
-                );
-              }
-              if (item.parsedValue.authorityCertSerialNumber) {
-                extension.value[0].AuthorityCertSerialNumber = this.toHexAndFormat(item
-                  .parsedValue
-                  .authorityCertSerialNumber
-                  .valueBlock
-                  .valueHex,
-                );
-              }
-              if (item.parsedValue.authorityCertIssuer) {
-                extension.value[0].AuthorityCertIssuer =
-                  this.name2str(item.parsedValue.authorityCertIssuer[0].value);
-              }
-              break;
-            case '1.3.6.1.5.5.7.1.1': // Authority Info Access
-              extension.value = item.parsedValue.accessDescriptions.map((desc) => {
-                const _oid = OIDS[desc.accessMethod];
-                return {
-                  URl: desc.accessLocation.value,
-                  Method: _oid ? `${_oid} (${desc.accessMethod})` : desc.accessMethod,
-                };
-              });
-              break;
-            case '2.16.840.1.113730.1.1': // Netscape Certificate Type
-              extension.value = [{
-                Type: CertHelper.Extensions.netscapeCertType(item).join(', '),
-              }];
-              break;
-            default:
-              extension.value = this.toHexAndFormat(item.extnValue.valueBlock.valueHex);
-          }
-        } catch (error) {
-          console.error(error);
-          extension.value = this.toHexAndFormat(item.extnValue.valueBlock.valueHex);
-        }
-
-        extensions.push(extension);
-      }
-    }
-
     return {
       version: x509.version,
       serialNumber: this.toHexAndFormat(x509.serialNumber.valueBlock._valueHex),
@@ -587,7 +491,7 @@ const CertHelper = {
       issuerName: this.name2str(x509.issuer),
       subjectName: this.name2str(x509.subject),
       publicKey,
-      extensions,
+      extensions: [],
       signature: {
         algorithm: this.prepareAlgorithm(x509.signature),
         value: this.toHexAndFormat(x509.signatureValue.valueBlock.valueHex),
@@ -810,7 +714,7 @@ const CertHelper = {
 
     arrSubjects.map((sbj) => {
       const arrSubject = sbj.split('=');
-      const subjectName = subjectNames[arrSubject[0]] || OIDS[arrSubject[0]] || arrSubject[0];
+      const subjectName = subjectNames[arrSubject[0]] || arrSubject[0];
       const subjectValue = arrSubject[1];
       subjectObj[subjectName] = subjectValue;
       if (subjectName === 'commonName') {
@@ -820,99 +724,6 @@ const CertHelper = {
     });
 
     return subjectObj;
-  },
-
-  Extensions: {
-    keyUsage: function keyUsage(extension) {
-      const usages = [];
-      // parse key usage BitString
-      const valueHex = new Uint8Array(pvtsutils.Convert.FromHex(extension.parsedValue.valueBlock.valueHex));
-      const unusedBits = extension.parsedValue.valueBlock.unusedBits;
-      let keyUsageByte1 = valueHex[0];
-      let keyUsageByte2 = valueHex.byteLength > 1 ? valueHex[1] : 0;
-      if (valueHex.byteLength === 1) {
-        keyUsageByte1 >>= unusedBits;
-        keyUsageByte1 <<= unusedBits;
-      }
-      if (valueHex.byteLength === 2) {
-        keyUsageByte2 >>= unusedBits;
-        keyUsageByte2 <<= unusedBits;
-      }
-      if (keyUsageByte1 & 0x80) {
-        usages.push('Digital Signature');
-      }
-      if (keyUsageByte1 & 0x40) {
-        usages.push('Non Repudiation');
-      }
-      if (keyUsageByte1 & 0x20) {
-        usages.push('Key Encipherment');
-      }
-      if (keyUsageByte1 & 0x10) {
-        usages.push('Data Encipherment');
-      }
-      if (keyUsageByte1 & 0x08) {
-        usages.push('Key Agreement');
-      }
-      if (keyUsageByte1 & 0x04) {
-        usages.push('Key Cert Sign');
-      }
-      if (keyUsageByte1 & 0x02) {
-        usages.push('cRL Sign');
-      }
-      if (keyUsageByte1 & 0x01) {
-        usages.push('Encipher Only');
-      }
-      if (keyUsageByte2 & 0x80) {
-        usages.push('Decipher Only');
-      }
-      return usages;
-    },
-
-    netscapeCertType: function netscapeCertType(extension) {
-      const usages = [];
-      // parse key usage BitString
-      const valueHex = pvtsutils.Convert.FromHex(extension.extnValue.valueBlock.valueHex);
-      const bitString = asn1js.fromBER(valueHex).result;
-      const unusedBits = bitString.valueBlock.unusedBits;
-      let byte = new Uint8Array(bitString.valueBlock.valueHex)[0];
-      byte >>= unusedBits;
-      byte <<= unusedBits;
-      /**
-       * bit-0 SSL client - this cert is certified for SSL client authentication use
-       * bit-1 SSL server - this cert is certified for SSL server authentication use
-       * bit-2 S/MIME - this cert is certified for use by clients (New in PR3)
-       * bit-3 Object Signing - this cert is certified for signing objects such as Java applets and plugins(New in PR3)
-       * bit-4 Reserved - this bit is reserved for future use
-       * bit-5 SSL CA - this cert is certified for issuing certs for SSL use
-       * bit-6 S/MIME CA - this cert is certified for issuing certs for S/MIME use (New in PR3)
-       * bit-7 Object Signing CA - this cert is certified for issuing certs for Object Signing (New in PR3)
-       */
-      if (byte & 0x80) {
-        usages.push('SSL client');
-      }
-      if (byte & 0x40) {
-        usages.push('SSL server');
-      }
-      if (byte & 0x20) {
-        usages.push('S/MIME');
-      }
-      if (byte & 0x10) {
-        usages.push('Object Signing');
-      }
-      if (byte & 0x08) {
-        usages.push('Reserved');
-      }
-      if (byte & 0x04) {
-        usages.push('SSL CA');
-      }
-      if (byte & 0x02) {
-        usages.push('S/MIME CA');
-      }
-      if (byte & 0x01) {
-        usages.push('Object Signing CA');
-      }
-      return usages;
-    },
   },
 };
 

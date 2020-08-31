@@ -6,7 +6,6 @@ import * as REQUEST from './request';
 import * as KEY from './key';
 import * as PROVIDER from './provider';
 
-import OIDS from './oids';
 import PARAMETERS from './parameters.json';
 import COUNTRIES from './countries.json';
 
@@ -17,7 +16,6 @@ export {
   REQUEST,
   KEY,
   PROVIDER,
-  OIDS,
   PARAMETERS,
   COUNTRIES,
 };
