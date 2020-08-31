@@ -161,6 +161,10 @@ module.exports = {
         test: /\.(woff2?|ttf|otf|eot|png|jp?g)$/,
         use: ['url-loader'],
       },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
     ],
   },
   plugins: [
