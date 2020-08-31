@@ -58,9 +58,6 @@
   "CertificateCreate.Options.Title": "Опции",
   "CertificateCreate.Options.SelfSigned": "Создать самоподписанный сертификат вместо запроса на сертификат",
 
-  "Info.Header.Btn.Download": "Скачать",
-  "Info.Header.Download.Pem": "как PEM",
-  "Info.Header.Download.Der": "как DER",
   "Info.Header.Btn.Copy": "Скопировать в буфер обмена",
   "Info.Header.Btn.Remove": "Удалить",
 

@@ -6,7 +6,6 @@ import {
   HeaderRoot,
   Title,
   ButtonsContainer,
-  DownloadIconStyled,
   CopyIconStyled,
   RemoveIconStyled,
   ArrowBackIconStyled,
@@ -18,8 +17,6 @@ import {
   DropdownItemStyled,
   HeaderBtn,
   IconContainer,
-  BtnDropdown,
-  BtnDropdownItem,
 } from './styled/header.styled';
 import { DocCertIcon, DocRequestIcon, DocKeyIcon } from '../svg';
 
@@ -40,7 +37,6 @@ export default class Header extends Component {
 
   static propTypes = {
     name: PropTypes.string,
-    onDownload: PropTypes.func,
     onCopy: PropTypes.func,
     onRemove: PropTypes.func,
     onMenu: PropTypes.func,
@@ -53,7 +49,6 @@ export default class Header extends Component {
   static defaultProps = {
     loaded: false,
     name: '',
-    onDownload: () => {},
     onCopy: () => {},
     onRemove: () => {},
     onMenu: () => {},
@@ -90,14 +85,6 @@ export default class Header extends Component {
       }
     }
   }
-
-  handleDownload = (format) => {
-    const { onDownload } = this.props;
-
-    if (onDownload) {
-      onDownload(format === 'pem' ? 'pem' : 'raw');
-    }
-  };
 
   handleCopy() {
     const { onCopy } = this.props;
@@ -169,23 +156,15 @@ export default class Header extends Component {
           <DropdownItemsWrapper>
             {
               isKey
-              ? null
-              : <DropdownItemContainer>
-                <DropdownItemStyled onClick={this.handleDownload} secondary>
-                  <DownloadIconStyled />
-                  { lang['Info.Header.Btn.Download'] }
-                </DropdownItemStyled>
-              </DropdownItemContainer>
-            }
-            {
-              isKey
                 ? null
-                : <DropdownItemContainer>
-                  <DropdownItemStyled onClick={this.bindedHandleCopy} secondary>
-                    <CopyIconStyled />
-                    { lang['Info.Header.Btn.Copy'] }
-                  </DropdownItemStyled>
-                </DropdownItemContainer>
+                : (
+                  <DropdownItemContainer>
+                    <DropdownItemStyled onClick={this.bindedHandleCopy} secondary>
+                      <CopyIconStyled />
+                      { lang['Info.Header.Btn.Copy'] }
+                    </DropdownItemStyled>
+                  </DropdownItemContainer>
+                )
             }
             <DropdownItemContainer>
               <DropdownItemStyled onClick={this.bindedHandleRemove} secondary>
@@ -234,37 +213,16 @@ export default class Header extends Component {
       <ButtonsContainer>
         {
           isKey
-          ? null
-            : <HeaderBtn
-              onClick={() => this.handleDownload('pem')}
-              disabled={!loaded}
-              title={lang['Info.Header.Btn.Download']}
-            >
-              <DownloadIconStyled />
-            <BtnDropdown data-class="dropdown">
-              <BtnDropdownItem
-                onClick={(e) => { e.stopPropagation();this.handleDownload('pem'); }}
-              >
-                PEM
-              </BtnDropdownItem>
-              <BtnDropdownItem
-                onClick={(e) => { e.stopPropagation();this.handleDownload('raw'); }}
-              >
-                DER
-              </BtnDropdownItem>
-            </BtnDropdown>
-            </HeaderBtn>
-        }
-        {
-          isKey
             ? null
-            : <HeaderBtn
-              onClick={this.bindedHandleCopy}
-              disabled={!loaded}
-              title={lang['Info.Header.Btn.Copy']}
-            >
-              <CopyIconStyled />
-            </HeaderBtn>
+            : (
+              <HeaderBtn
+                onClick={this.bindedHandleCopy}
+                disabled={!loaded}
+                title={lang['Info.Header.Btn.Copy']}
+              >
+                <CopyIconStyled />
+              </HeaderBtn>
+            )
         }
         <HeaderBtn
           onClick={this.bindedHandleRemove}
