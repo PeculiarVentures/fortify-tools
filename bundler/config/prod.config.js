@@ -170,11 +170,13 @@ module.exports = {
   plugins: [
     // Copies individual files or entire directories to the build directory.
     // https://www.npmjs.com/package/copy-webpack-plugin
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, `../../${env.raw.ENTRY_FOLDER}/assets`),
-      },
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, `../../${env.raw.ENTRY_FOLDER}/assets`),
+        },
+      ],
+    }),
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'production') { ... }.
     // It is absolutely essential that NODE_ENV was set to production here.
