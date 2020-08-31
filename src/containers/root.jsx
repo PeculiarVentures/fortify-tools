@@ -16,7 +16,6 @@ const InfoStyled = styled.div`
   height: 100%;
   display: inline-block;
   vertical-align: top;
-  background: ${props => props.theme.info.background};
   @media ${props => props.theme.media.mobile} {
     width: 100%;
   }

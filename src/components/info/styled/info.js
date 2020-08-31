@@ -2,8 +2,7 @@ import styled from 'styled-components';
 
 export const Root = styled.div`
   width: 100%;
-  max-width: 800px;
-  padding: 86px 10px;
+  padding: 30px;
   margin: 0 auto;
   @media ${props => props.theme.media.mobile} {
     padding: 36px 20px;

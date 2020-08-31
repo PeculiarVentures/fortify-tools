@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { PeculiarCertificateViewer } from '@peculiar/certificates-viewer-react';
+import '@peculiar/certificates-viewer/dist/peculiar/peculiar.css';
 import { CircularLoader } from '../basic';
 import Header from './header';
 import { ACTIONS_CONST } from '../../constants';
-import CertificateInfo from './info_certificate';
 import RequestInfo from './info_request';
 import KeyInfo from './info_key';
 import EmptyBody from './empty_body';
@@ -14,6 +15,7 @@ import { InfoShellIcon } from '../svg';
 import StyledAnimatedIcon from '../sidebar/parts/shell.styles';
 import { EventChannel } from '../../controllers';
 import { copyToClipboard } from '../../helpers';
+import { Root } from './styled/info';
 
 const StyledShellInfo = StyledAnimatedIcon(InfoShellIcon, 'i_gradient');
 
@@ -113,7 +115,12 @@ export default class Info extends Component {
     switch (type) {
       case 'certificate':
         return (
-          <CertificateInfo {...item} />
+          <Root>
+            <PeculiarCertificateViewer
+              certificate={item.pem}
+              download
+            />
+          </Root>
         );
 
       case 'request':
@@ -157,7 +164,9 @@ export default class Info extends Component {
           </InfoContainer>
         </RootStyled>
       );
-    } else if (loaded && !provider.loaded) {
+    }
+
+    if (loaded && !provider.loaded) {
       return (
         <LoaderContainer>
           <CircularLoader
@@ -165,7 +174,9 @@ export default class Info extends Component {
           />
         </LoaderContainer>
       );
-    } else if (Object.keys(selectedItem).length > 0) {
+    }
+
+    if (Object.keys(selectedItem).length > 0) {
       return (
         <RootStyled>
           <HeaderContainer>
@@ -175,18 +186,18 @@ export default class Info extends Component {
               name={selectedItem.name || selectedItem.algorithm}
               isKey={selectedItem.type === 'key'}
               onCopy={this.onCopyHandler}
-              onDownload={this.onDownloadhandler}
               onRemove={this.onRemoveHandler}
               onMenu={this.onMenuHandler}
               type={selectedItem.type}
             />
           </HeaderContainer>
           <InfoContainer>
-            { this.renderInfoContent(selectedItem.type, selectedItem) }
+            {this.renderInfoContent(selectedItem.type, selectedItem)}
           </InfoContainer>
         </RootStyled>
       );
     }
+
     return (
       <RootStyled>
         <EmptyBody />
