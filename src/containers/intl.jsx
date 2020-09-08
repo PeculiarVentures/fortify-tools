@@ -7,6 +7,7 @@ const supportedLangs = [
   'es',
   'fr',
   'zh',
+  'pl',
 ];
 
 export default class Intl extends Component {
