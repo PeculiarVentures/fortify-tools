@@ -118,6 +118,9 @@ export default class Info extends Component {
           <Root>
             <PeculiarCertificateViewer
               certificate={item.pem}
+              authKeyIdParentLink="https://censys.io/certificates?q=parsed.extensions.subject_key_id:%20{{authKeyId}}"
+              authKeyIdSiblingsLink="https://censys.io/certificates?q=parsed.extensions.authority_key_id:%20{{authKeyId}}"
+              subjectKeyIdChildrenLink="https://censys.io/certificates?q=parsed.extensions.authority_key_id:%20{{subjectKeyId}}"
               download
             />
           </Root>
