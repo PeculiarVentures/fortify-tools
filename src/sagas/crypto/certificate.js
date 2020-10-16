@@ -136,17 +136,12 @@ export function* certificateCreate(crypto, data) {
   }
 
   const csrBuffer = pkcs10.toSchema().toBER(false);
-
-  let importCert = '';
-  try {
-    importCert = yield crypto.certStorage.importCert('request', csrBuffer, algorithm, usages);
-  } catch (error) {
-    yield put(ErrorActions.error(error, 'request_create'));
-  }
-
+  const importCert = yield crypto.certStorage.importCert('request', csrBuffer, algorithm, usages);
   const certId = yield certificateSet(crypto, importCert);
+
   yield Key.keySet(crypto, privateKey);
   yield Key.keySet(crypto, publicKey);
+
   return certId;
 }
 
@@ -205,17 +200,12 @@ export function* CMSCreate(crypto, data) {
 
   // Convert certificate to DER
   const derCert = certificate.toSchema(true).toBER(false);
-
-  let importCert = '';
-  try {
-    importCert = yield crypto.certStorage.importCert('x509', derCert, algorithm, usages);
-  } catch (error) {
-    yield put(ErrorActions.error(error, 'request_create'));
-  }
-
+  const importCert = yield crypto.certStorage.importCert('x509', derCert, algorithm, usages);
   const certId = yield certificateSet(crypto, importCert);
+
   yield Key.keySet(crypto, privateKey);
   yield Key.keySet(crypto, publicKey);
+
   return certId;
 }
 
