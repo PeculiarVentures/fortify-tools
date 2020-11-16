@@ -1,5 +1,3 @@
-import { put } from 'redux-saga/effects';
-import { ErrorActions } from '../../actions/state';
 import { CertHelper } from '../../helpers';
 import * as Key from './key';
 
@@ -137,10 +135,11 @@ export function* certificateCreate(crypto, data) {
 
   const csrBuffer = pkcs10.toSchema().toBER(false);
   const importCert = yield crypto.certStorage.importCert('request', csrBuffer, algorithm, usages);
-  const certId = yield certificateSet(crypto, importCert);
 
   yield Key.keySet(crypto, privateKey);
   yield Key.keySet(crypto, publicKey);
+
+  const certId = yield certificateSet(crypto, importCert);
 
   return certId;
 }
@@ -201,10 +200,11 @@ export function* CMSCreate(crypto, data) {
   // Convert certificate to DER
   const derCert = certificate.toSchema(true).toBER(false);
   const importCert = yield crypto.certStorage.importCert('x509', derCert, algorithm, usages);
-  const certId = yield certificateSet(crypto, importCert);
 
   yield Key.keySet(crypto, privateKey);
   yield Key.keySet(crypto, publicKey);
+
+  const certId = yield certificateSet(crypto, importCert);
 
   return certId;
 }
