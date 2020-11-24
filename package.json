@@ -59,7 +59,7 @@
     "workbox-webpack-plugin": "^3.6.3"
   },
   "dependencies": {
-    "@peculiar/certificates-viewer-react": "^0.2.8",
+    "@peculiar/certificates-viewer-react": "^0.3.0",
     "event-emitter": "^0.3.5",
     "history": "^4.7.2",
     "ismobilejs": "^0.5.1",
