@@ -79,6 +79,12 @@ module.exports = (proxy, allowedHost) => ({
   },
   public: allowedHost,
   proxy,
+  // Use 'ws' instead of 'sockjs-node' on server since we're using native
+  // websockets in `webpackHotDevClient`.
+  transportMode: 'ws',
+  // Prevent a WS client from getting injected as we're already including
+  // `webpackHotDevClient`.
+  injectClient: false,
   before(app) {
     // This lets us open files from the runtime error overlay.
     app.use(errorOverlayMiddleware());
@@ -86,6 +92,6 @@ module.exports = (proxy, allowedHost) => ({
     // previous service worker registered for the same host:port combination.
     // We do this in development to avoid hitting the production cache if
     // it used the same host and port.
-    app.use(noopServiceWorkerMiddleware());
+    app.use(noopServiceWorkerMiddleware('/'));
   },
 });
