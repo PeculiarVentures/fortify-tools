@@ -286,7 +286,7 @@ export default class Overlay extends Component {
     if (Overlay.checkNeedRender(this.props)) {
       return (
         <OverlayStyled
-          innerRef={rootNode => (this.refRootNode = rootNode)}
+          ref={rootNode => (this.refRootNode = rootNode)}
         >
           {this.renderModal()}
           {this.renderDialog()}

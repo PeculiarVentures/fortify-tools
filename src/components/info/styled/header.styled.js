@@ -29,8 +29,6 @@ export const HeaderRoot = styled.div`
   padding: 0 10px;
   width: 100%;
   height: 100%;
-  // display: table;
-  // vertical-align: middle;
   @media ${props => props.theme.media.mobile} {
     padding: 0;
     display: block;

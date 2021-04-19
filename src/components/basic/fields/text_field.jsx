@@ -282,7 +282,7 @@ export default class TextField extends Component {
           : null
         }
         <this.FieldStyled
-          innerRef={node => (this.fieldNode = node)}
+          ref={node => (this.fieldNode = node)}
           tabIndex={0}
           id={this.fieldId}
           type={type === 'date' ? 'text' : type}

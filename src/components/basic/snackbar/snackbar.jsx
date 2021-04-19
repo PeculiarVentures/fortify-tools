@@ -232,7 +232,7 @@ export default class Snackbar extends Component {
         {...this.props}
         onMouseOver={this.bindedOnMouseEnter}
         onMouseLeave={this.bindedOnMouseLeave}
-        innerRef={(node) => { this.refRootNode = node; }}
+        ref={(node) => { this.refRootNode = node; }}
       >
         { this.renderSnackbarContent() }
       </SnackbarStyled>

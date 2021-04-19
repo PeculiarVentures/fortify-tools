@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 
 const lineeee = keyframes`
   0% {
@@ -12,7 +12,7 @@ const lineeee = keyframes`
   }
 `;
 
-const linearPart = i => `
+const linearPart = i => css`
   stop-opacity: 0.3;
   animation: ${lineeee} 2s infinite;
   animation-delay: ${i * 0.1}s;
