@@ -11,6 +11,7 @@
   "Dialog.IncorrectPin.Title": "U heeft een onjuiste pincode ingevoerd",
   "Dialog.IncorrectPin.Btn.Accept": "Probeer opnieuw",
   "Dialog.IncorrectLengthPin.Title": "U heeft een ongeldige PIN-lengte ingevoerd",
+  "Dialog.ArgumentsBad.Title": "De doorgegeven argumenten die aan de Cryptoki-functie werden geleverd, waren op de een of andere manier niet geschikt",
   "Dialog.TimeoutPin.Title": "Voer pin time-out in",
   "Dialog.TimeoutPin.Btn.Accept": "Probeer opnieuw",
   "Dialog.UnauthorizePin.Title": "U heeft de pincode niet goedgekeurd.\n Probeer het opnieuw",

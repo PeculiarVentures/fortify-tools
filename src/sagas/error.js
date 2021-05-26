@@ -10,6 +10,7 @@ import { EventChannel } from '../controllers';
 //   0: 'UNKNOWN',
 //   1: 'METHOD_NOT_IMPLEMENTED',
 //   2: 'CASE_ERROR',
+//   7: 'CKR_ARGUMENTS_BAD',
 //   100: 'RATCHET_COMMON',
 //   101: 'RATCHET_KEY_NOT_APPROVED',
 //   160: 'CKR_PIN_INCORRECT',
@@ -64,6 +65,11 @@ function* errorHandler(payload) {
   }
 
   switch (code) {
+    case 7: {
+      yield put(DialogActions.open('arguments_bad'));
+      break;
+    }
+
     case 101: {
       yield put(DialogActions.open('unauthorize_pin'));
       break;

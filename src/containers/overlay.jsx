@@ -288,6 +288,19 @@ export default class Overlay extends Component {
               })
             )}
           />
+          <Dialog.ArgumentsBadDialog
+            name="arguments_bad"
+            onAccept={() => (
+              this.handleAction({
+                type: 'TRY_AGAIN_LOGIN',
+              })
+            )}
+            onCancel={() => (
+              this.handleAction({
+                type: ACTIONS_CONST.DIALOG_CLOSE,
+              })
+            )}
+          />
         </SegueHandler>
       );
     }

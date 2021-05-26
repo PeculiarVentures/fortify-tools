@@ -11,6 +11,7 @@
   "Dialog.IncorrectPin.Title": "Você forneceu um pin incorreto",
   "Dialog.IncorrectPin.Btn.Accept": "Tente novamente",
   "Dialog.IncorrectLengthPin.Title": "Você inseriu um comprimento de PIN inválido",
+  "Dialog.ArgumentsBad.Title": "Os argumentos passados fornecidos para a função Cryptoki eram de alguma forma inadequados",
   "Dialog.TimeoutPin.Title": "Entre com o tempo de duração do pin",
   "Dialog.TimeoutPin.Btn.Accept": "Tente novamente",
   "Dialog.UnauthorizePin.Title": "Você nao aprovou o código PIN code.\n Por favor tente novamente",

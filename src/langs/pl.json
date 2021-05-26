@@ -11,6 +11,7 @@
   "Dialog.IncorrectPin.Title": "Wprowadzony został błędny pin",
   "Dialog.IncorrectPin.Btn.Accept": "Spróbuj ponownie",
   "Dialog.IncorrectLengthPin.Title": "Podałeś nieprawidłową długość kodu PIN",
+  "Dialog.ArgumentsBad.Title": "Przekazane argumenty dostarczone do funkcji Cryptoki były w jakiś sposób nieodpowiednie",
   "Dialog.TimeoutPin.Title": "Upłynął czas na wprowadzenie pinu",
   "Dialog.TimeoutPin.Btn.Accept": "Spróbuj ponownie",
   "Dialog.UnauthorizePin.Title": "Nie zatwierdzony kod PIN.\n Spróbuj ponownie",

@@ -12,3 +12,4 @@ export { default as ServerOfflineDialog } from './server_offline';
 export { default as EmptyProviders } from './empty_providers';
 export { default as RemoveItemErrorDialog } from './remove_item_error';
 export { default as EmptyPinDialog } from './empty_pin';
+export { default as ArgumentsBadDialog } from './arguments_bad';
