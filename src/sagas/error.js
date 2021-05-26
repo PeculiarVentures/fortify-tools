@@ -13,6 +13,7 @@ import { EventChannel } from '../controllers';
 //   100: 'RATCHET_COMMON',
 //   101: 'RATCHET_KEY_NOT_APPROVED',
 //   160: 'CKR_PIN_INCORRECT',
+//   162: 'CKR_PIN_LEN_RANGE',
 //   200: 'ACTION_COMMON',
 //   201: 'ACTION_NOT_IMPLEMENTED',
 //   202: 'ACTION_NOT_SUPPORTED',
@@ -70,6 +71,11 @@ function* errorHandler(payload) {
 
     case 160: {
       yield put(DialogActions.open('incorrect_pin'));
+      break;
+    }
+
+    case 162: {
+      yield put(DialogActions.open('incorrect_length_pin'));
       break;
     }
 

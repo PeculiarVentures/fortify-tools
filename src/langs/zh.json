@@ -10,6 +10,7 @@
 	"Dialog.FortifyAuthorization.Description": "将此代码与Fortify在浏览器外显示的代码进行比较。",
 	"Dialog.IncorrectPin.Title": "您输入的是一个错误的pin码",
 	"Dialog.IncorrectPin.Btn.Accept": "再试一次",
+  "Dialog.IncorrectLengthPin.Title": "您输入了无效的PIN码长度",
 	"Dialog.TimeoutPin.Title": "输入pin超时",
 	"Dialog.TimeoutPin.Btn.Accept": "再试一次",
 	"Dialog.UnauthorizePin.Title": "您没有批准当前这个PIN码.\n 请再尝试一次",

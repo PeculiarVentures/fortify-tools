@@ -10,6 +10,7 @@
   "Dialog.FortifyAuthorization.Description": "Compare este código com o apresentado por Fortify fora do seu navegador.",
   "Dialog.IncorrectPin.Title": "Você forneceu um pin incorreto",
   "Dialog.IncorrectPin.Btn.Accept": "Tente novamente",
+  "Dialog.IncorrectLengthPin.Title": "Você inseriu um comprimento de PIN inválido",
   "Dialog.TimeoutPin.Title": "Entre com o tempo de duração do pin",
   "Dialog.TimeoutPin.Btn.Accept": "Tente novamente",
   "Dialog.UnauthorizePin.Title": "Você nao aprovou o código PIN code.\n Por favor tente novamente",

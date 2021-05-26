@@ -1,6 +1,7 @@
 export { default as ErrorDialog } from './error';
 export { default as RemoveItemDialog } from './remove_item';
 export { default as IncorrectPinDialog } from './incorrect_pin';
+export { default as IncorrectLengthPinDialog } from './incorrect_length_pin';
 export { default as UnauthorizePinDialog } from './unauthorize_pin';
 export { default as NotSupportedLocalhostDialog } from './not_supported_localhost';
 export { default as RequestCreateErrorDialog } from './request_create_error';

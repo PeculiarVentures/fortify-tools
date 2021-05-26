@@ -211,6 +211,19 @@ export default class Overlay extends Component {
               })
             )}
           />
+          <Dialog.IncorrectLengthPinDialog
+            name="incorrect_length_pin"
+            onAccept={() => (
+              this.handleAction({
+                type: 'TRY_AGAIN_LOGIN',
+              })
+            )}
+            onCancel={() => (
+              this.handleAction({
+                type: ACTIONS_CONST.DIALOG_CLOSE,
+              })
+            )}
+          />
           <Dialog.UnauthorizePinDialog
             name="unauthorize_pin"
             onAccept={() => (

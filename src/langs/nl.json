@@ -10,6 +10,7 @@
   "Dialog.FortifyAuthorization.Description": "Vergelijk deze code met de code die door Fortify buiten uw browser wordt weergegeven.",
   "Dialog.IncorrectPin.Title": "U heeft een onjuiste pincode ingevoerd",
   "Dialog.IncorrectPin.Btn.Accept": "Probeer opnieuw",
+  "Dialog.IncorrectLengthPin.Title": "U heeft een ongeldige PIN-lengte ingevoerd",
   "Dialog.TimeoutPin.Title": "Voer pin time-out in",
   "Dialog.TimeoutPin.Btn.Accept": "Probeer opnieuw",
   "Dialog.UnauthorizePin.Title": "U heeft de pincode niet goedgekeurd.\n Probeer het opnieuw",
