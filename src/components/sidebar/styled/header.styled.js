@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ImportIcon, CreateIcon } from '../../svg';
+import { ImportIcon, CreateIcon, InfoIcon } from '../../svg';
 import { Button } from '../../basic';
 
 export const Logo = styled.div`
@@ -122,4 +122,30 @@ export const SidebarHeader = styled.div`
   @media ${props => props.theme.media.mobile} {
     height: 194px;
   }
+`;
+
+export const ReadOnlyStatus = styled.div`
+  height: 32px;
+  &:before {
+    content: '';
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+  }
+`;
+
+export const InfoIconStyles = styled(InfoIcon)`
+  display: inline-block;
+  vertical-align: middle;
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+`;
+
+export const ReadOnlyMessage = styled.p`
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  color: ${props => props.theme.info.header.titleColor};
 `;

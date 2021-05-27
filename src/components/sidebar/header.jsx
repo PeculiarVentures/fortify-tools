@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { SelectField, SelectItem, SelectNative } from '../basic';
 import { ModalActions } from '../../actions/ui';
@@ -54,8 +54,43 @@ export default class SidebarHeader extends Component {
     }
   };
 
+  renderActions() {
+    const { loaded, readOnly } = this.props;
+    const { lang } = this.context;
+
+    return (
+      <Fragment>
+        <S.Btn
+          disabled={!loaded || readOnly}
+          onClick={this.onClickCreateHandler}
+        >
+          <S.CreateIc />
+          { lang['Sidebar.Header.Btn.Create'] }
+        </S.Btn>
+        <S.Btn
+          disabled={!loaded || readOnly}
+          onClick={this.onClickImportHandler}
+        >
+          <S.ImportIc />
+          { lang['Sidebar.Header.Btn.Import'] }
+        </S.Btn>
+      </Fragment>
+    );
+  }
+
+  renderReadOnlyStatus() {
+    return (
+      <S.ReadOnlyStatus>
+        <S.InfoIconStyles />
+        <S.ReadOnlyMessage>
+          Read-only provider
+        </S.ReadOnlyMessage>
+      </S.ReadOnlyStatus>
+    );
+  }
+
   render() {
-    const { loaded, providers, readOnly } = this.props;
+    const { providers, readOnly } = this.props;
     const { deviceType, lang } = this.context;
     const selectedProvider = providers.filter(obj => obj.selected);
     const currentProvider = selectedProvider.length
@@ -72,20 +107,7 @@ export default class SidebarHeader extends Component {
           />
         </S.Logo>
         <S.BtnsContainer>
-          <S.Btn
-            disabled={!loaded || readOnly}
-            onClick={this.onClickCreateHandler}
-          >
-            <S.CreateIc />
-            { lang['Sidebar.Header.Btn.Create'] }
-          </S.Btn>
-          <S.Btn
-            disabled={!loaded || readOnly}
-            onClick={this.onClickImportHandler}
-          >
-            <S.ImportIc />
-            { lang['Sidebar.Header.Btn.Import'] }
-          </S.Btn>
+          {readOnly ? this.renderReadOnlyStatus() : this.renderActions()}
         </S.BtnsContainer>
         <S.Container disabled={!providers.length}>
           <S.SelectContainer>

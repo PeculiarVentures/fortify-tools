@@ -224,13 +224,15 @@ export default class Header extends Component {
               </HeaderBtn>
             )
         }
-        <HeaderBtn
-          onClick={this.bindedHandleRemove}
-          disabled={!loaded || readOnly}
-          title={lang['Info.Header.Btn.Remove']}
-        >
-          <RemoveIconStyled />
-        </HeaderBtn>
+        {!readOnly && (
+          <HeaderBtn
+            onClick={this.bindedHandleRemove}
+            disabled={!loaded}
+            title={lang['Info.Header.Btn.Remove']}
+          >
+            <RemoveIconStyled />
+          </HeaderBtn>
+        )}
       </ButtonsContainer>
     );
   }

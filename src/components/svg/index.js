@@ -15,3 +15,4 @@ export { default as SidebarShellIcon } from './sidebar_shell';
 export { default as TitleShellIcon } from './title_shell';
 export { default as InfoShellIcon } from './info_shell';
 export { default as ReloadIcon } from './reload';
+export { default as InfoIcon } from './info';
