@@ -625,6 +625,7 @@ const CertHelper = {
       thumbprint,
       pem,
       addedId,
+      privateKeyId,
     } = data;
 
     const decodedIssuer = this.decodeSubjectString(issuerName);
@@ -666,6 +667,7 @@ const CertHelper = {
         value: signature.value,
       },
       extensions,
+      privateKeyId,
     };
   },
 

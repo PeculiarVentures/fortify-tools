@@ -188,10 +188,10 @@ export default class Info extends Component {
               loaded={loaded}
               name={selectedItem.name || selectedItem.algorithm}
               isKey={selectedItem.type === 'key'}
+              hasPrivateKey={Boolean(selectedItem.privateKeyId)}
               onCopy={this.onCopyHandler}
               onRemove={this.onRemoveHandler}
               onMenu={this.onMenuHandler}
-              type={selectedItem.type}
             />
           </HeaderContainer>
           <InfoContainer>

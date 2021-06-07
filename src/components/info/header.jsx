@@ -18,23 +18,9 @@ import {
   HeaderBtn,
   IconContainer,
 } from './styled/header.styled';
-import { DocCertIcon, DocRequestIcon, DocKeyIcon } from '../svg';
+import { DocCertIcon, DocCertPrivateIcon } from '../svg';
 
 export default class Header extends Component {
-
-  static renderIcon(certType) {
-    switch (certType) {
-      case 'request':
-        return <DocRequestIcon />;
-      case 'certificate':
-        return <DocCertIcon />;
-      case 'key':
-        return <DocKeyIcon />;
-      default:
-        return null;
-    }
-  }
-
   static propTypes = {
     name: PropTypes.string,
     onCopy: PropTypes.func,
@@ -43,7 +29,7 @@ export default class Header extends Component {
     loaded: PropTypes.bool,
     isKey: PropTypes.bool,
     readOnly: PropTypes.bool,
-    type: PropTypes.string,
+    hasPrivateKey: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -54,7 +40,7 @@ export default class Header extends Component {
     onMenu: () => {},
     isKey: false,
     readOnly: false,
-    type: '',
+    hasPrivateKey: false,
   };
 
   static contextTypes = {
@@ -237,11 +223,24 @@ export default class Header extends Component {
     );
   }
 
+  renderIcon() {
+    const { hasPrivateKey } = this.props;
+
+    if (hasPrivateKey) {
+      return (
+        <DocCertPrivateIcon />
+      );
+    }
+
+    return (
+      <DocCertIcon />
+    );
+  }
+
   render() {
     const {
       loaded,
       name,
-      type,
     } = this.props;
     const { windowSize } = this.context;
     const { device } = windowSize;
@@ -253,11 +252,9 @@ export default class Header extends Component {
     return (
       <HeaderRoot>
         { this.renderMenuButton() }
-        {type && (
-          <IconContainer>
-            { Header.renderIcon(type) }
-          </IconContainer>
-        )}
+        <IconContainer>
+          { this.renderIcon() }
+        </IconContainer>
         <Title>
           { name }
         </Title>

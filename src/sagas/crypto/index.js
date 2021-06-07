@@ -22,38 +22,6 @@ const base64PemFormat = (base64) => {
 };
 
 /**
- * Get provider keys
- */
-// function* getProviderKeys() {
-//   const state = yield select();
-//   const providers = state.find('providers');
-//   const currentProvider = providers.where({ selected: true }).get();
-//
-//   const { provider } = yield Provider.providerGet(currentProvider.id);
-//   const keyIDs = yield Key.keyGetIDs(provider);
-//
-//   if (keyIDs.length) {
-//     const getKeysArr = [];
-//     let index = 0;
-//
-//     for (const keyID of keyIDs) {
-//       getKeysArr.push(Key.keyGet(provider, keyID));
-//     }
-//
-//     const keysArr = yield getKeysArr;
-//
-//     for (const item of keysArr) {
-//       const keyData = CertHelper.keyDataHandler({
-//         ...item,
-//         id: keyIDs[index],
-//       });
-//       index += 1;
-//       yield put(ItemActions.add(keyData, currentProvider.id));
-//     }
-//   }
-// }
-
-/**
  * Get provider certificates
  */
 function* getProviderCertificates() {
@@ -64,35 +32,29 @@ function* getProviderCertificates() {
   const { provider } = yield Provider.providerGet(currentProvider.id);
   const keyIDs = yield Key.keyGetIDs(provider);
   const certIDs = yield Certificate.certificateGetIDs(provider);
-
   const certificatesArr = [];
 
   for (const certID of certIDs) {
-    if (ALLOW_CERTIFICATES_WITHOUT_PRIVATE_KEY) {
-      const cert = yield Certificate.certificateGet(provider, certID);
+    const cert = yield Certificate.certificateGet(provider, certID);
+    const privateKey = keyIDs.filter((o) => {
+      const parts = o.split('-');
 
-      if (cert) {
+      return parts[0] === 'private' && parts[2] === certID.split('-')[2];
+    })[0];
+
+    cert.privateKeyId = privateKey;
+
+    if (cert) {
+      if (ALLOW_CERTIFICATES_WITHOUT_PRIVATE_KEY) {
         certificatesArr.push({
           id: certID,
           data: cert,
         });
-      }
-    } else {
-      // Get certificates with private key only
-      for (const keyID of keyIDs) {
-        const keyParts = keyID.split('-');
-
-        if (keyParts[0] === 'private' && keyParts[2] === certID.split('-')[2]) {
-          const cert = yield Certificate.certificateGet(provider, certID);
-
-          if (cert) {
-            certificatesArr.push({
-              id: certID,
-              data: cert,
-            });
-          }
-          break;
-        }
+      } else if (privateKey) {
+        certificatesArr.push({
+          id: certID,
+          data: cert,
+        });
       }
     }
   }
@@ -125,6 +87,7 @@ function* getProviderCertificates() {
         id: item.id,
         pem,
         thumbprint,
+        privateKeyId: item.data.privateKeyId,
       });
     } else {
       const pem = `-----BEGIN CERTIFICATE REQUEST-----\n${base64PemFormat(base64)}\n-----END CERTIFICATE REQUEST-----`;
@@ -133,6 +96,7 @@ function* getProviderCertificates() {
         ...item.data,
         id: item.id,
         pem,
+        privateKeyId: item.data.privateKeyId,
       });
     }
 
@@ -348,6 +312,7 @@ function* removeItem() {
     } else {
       yield Certificate.certificateRemove(crypto, selectedItem._id);
     }
+
     yield put(ItemActions.remove(selectedItem.id));
     yield put(DialogActions.close());
   } catch (error) {
@@ -366,18 +331,22 @@ function* importItem({ data }) {
     const crypto = yield Provider.cryptoGet(selectedProvider.get().id);
 
     const cert = yield Certificate.certificateImport(crypto, preparedCert);
-    const hasPrivateKey = yield Certificate.certificateHasPrivateKey(crypto, cert);
-    if (!hasPrivateKey && !ALLOW_CERTIFICATES_WITHOUT_PRIVATE_KEY) {
+    const privateKeyId = yield Certificate.certificateGatPrivateKeyID(crypto, cert);
+
+    if (!privateKeyId && !ALLOW_CERTIFICATES_WITHOUT_PRIVATE_KEY) {
       throw new Error("Cannot import certificate item, cause it doesn't have private key in storage");
     }
+
     const certID = yield Certificate.certificateSet(crypto, cert);
 
     // Look for the existing requests and remove them
     try {
       const certIdParts = certID.split('-');
       const certIDs = yield Certificate.certificateGetIDs(crypto);
+
       for (const id of certIDs) {
         const idParts = id.split('-');
+
         if (idParts[0] === 'request' && idParts[2] === certIdParts[2]) {
           yield Certificate.certificateRemove(crypto, id);
           yield put(ItemActions.remove(id));
@@ -405,6 +374,7 @@ function* importItem({ data }) {
           pem,
           thumbprint,
           addedId,
+          privateKeyId,
         });
       } else {
         certData = CertHelper.requestDataHandler({
@@ -412,6 +382,7 @@ function* importItem({ data }) {
           id: certID,
           pem,
           addedId,
+          privateKeyId,
         });
       }
 
@@ -434,18 +405,19 @@ function* createRequest({ data }) {
     const crypto = yield Provider.cryptoGet(selectedProvider.get().id);
 
     if (crypto) {
-      const created = yield Certificate.certificateCreate(crypto, data);
+      const { privateKeyId, certId } = yield Certificate.certificateCreate(crypto, data);
 
-      if (created) {
-        const item = yield Certificate.certificateGet(crypto, created);
+      if (certId) {
+        const item = yield Certificate.certificateGet(crypto, certId);
         const pem = yield Certificate.certificateExport(crypto, item, 'pem');
         const addedId = UUID();
 
         const certData = CertHelper.requestDataHandler({
           ...item,
-          id: created,
+          id: certId,
           pem,
           addedId,
+          privateKeyId,
         });
 
         yield put(ItemActions.add(certData, selectedProvider.get().id));
@@ -468,10 +440,10 @@ function* createSelfSignedCertificate({ data }) {
     const crypto = yield Provider.cryptoGet(selectedProvider.get().id);
 
     if (crypto) {
-      const created = yield Certificate.CMSCreate(crypto, data);
+      const { privateKeyId, certId } = yield Certificate.CMSCreate(crypto, data);
 
-      if (created) {
-        const item = yield Certificate.certificateGet(crypto, created);
+      if (certId) {
+        const item = yield Certificate.certificateGet(crypto, certId);
         const pem = yield Certificate.certificateExport(crypto, item, 'pem');
         const addedId = UUID();
         let certData = '';
@@ -483,17 +455,19 @@ function* createSelfSignedCertificate({ data }) {
 
           certData = CertHelper.certDataHandler({
             ...certificateDetails,
-            id: created,
+            id: certId,
             pem,
             thumbprint,
             addedId,
+            privateKeyId,
           });
         } else {
           certData = CertHelper.requestDataHandler({
             ...item,
-            id: created,
+            id: certId,
             pem,
             addedId,
+            privateKeyId,
           });
         }
 

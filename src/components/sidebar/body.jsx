@@ -55,6 +55,7 @@ export default class SidebarBody extends Component {
         algorithm={item.algorithm || item.publicKey.algorithm}
         size={item.modulusLength || item.namedCurve || item.publicKey.modulusBits || item.publicKey.namedCurve || ''}
         issuer={item.issuer ? (item.issuer['Common Name'] || item.issuer.Organization || item.issuer['Organization Unit']) : ''}
+        hasPrivateKey={Boolean(item.privateKeyId)}
       />
     ));
   }

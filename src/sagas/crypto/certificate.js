@@ -26,7 +26,7 @@ export function* certificateExport(crypto, cert, format = 'pem') {
   return yield crypto.certStorage.exportCert(format, cert);
 }
 
-function* certificateGatPrivateKeyID(crypto, cert) {
+export function* certificateGatPrivateKeyID(crypto, cert) {
   const publicKeyIDsha1 = yield Key.publicKeyThumbprint(crypto, cert.publicKey, 'SHA-1');
   const publicKeyIDsha256 = yield Key.publicKeyThumbprint(crypto, cert.publicKey, 'SHA-256');
   const keyIDs = yield Key.keyGetIDs(crypto);
@@ -41,11 +41,13 @@ function* certificateGatPrivateKeyID(crypto, cert) {
 
 export function* certificateHasPrivateKey(crypto, cert) {
   const keyID = yield certificateGatPrivateKeyID(crypto, cert);
+
   return !!keyID;
 }
 
 export function* certificateGetPrivateKey(crypto, cert) {
   const keyID = yield certificateGatPrivateKeyID(crypto, cert);
+
   return yield Key.keyGet(crypto, keyID);
 }
 
@@ -136,12 +138,12 @@ export function* certificateCreate(crypto, data) {
   const csrBuffer = pkcs10.toSchema().toBER(false);
   const importCert = yield crypto.certStorage.importCert('request', csrBuffer, algorithm, usages);
 
-  yield Key.keySet(crypto, privateKey);
-  yield Key.keySet(crypto, publicKey);
+  const privateKeyId = yield Key.keySet(crypto, privateKey);
+  const publicKeyId = yield Key.keySet(crypto, publicKey);
 
   const certId = yield certificateSet(crypto, importCert);
 
-  return certId;
+  return { privateKeyId, publicKeyId, certId };
 }
 
 export function* CMSCreate(crypto, data) {
@@ -201,12 +203,12 @@ export function* CMSCreate(crypto, data) {
   const derCert = certificate.toSchema(true).toBER(false);
   const importCert = yield crypto.certStorage.importCert('x509', derCert, algorithm, usages);
 
-  yield Key.keySet(crypto, privateKey);
-  yield Key.keySet(crypto, publicKey);
+  const privateKeyId = yield Key.keySet(crypto, privateKey);
+  const publicKeyId = yield Key.keySet(crypto, publicKey);
 
   const certId = yield certificateSet(crypto, importCert);
 
-  return certId;
+  return { privateKeyId, publicKeyId, certId };
 }
 
 export function* certificateRemove(crypto, id) {

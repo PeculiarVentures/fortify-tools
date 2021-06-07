@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ItemActions } from '../../../actions/state';
-import { DocCertIcon, DocRequestIcon, DocKeyIcon } from '../../svg';
+import { DocCertIcon, DocCertPrivateIcon } from '../../svg';
 
 const AlgName = styled.div`
   font-size: 10px;
@@ -40,11 +40,11 @@ const Name = styled.div`
 const CertDescrStyled = styled.div`
   display: inline-block;
   vertical-align: middle;
-  margin-left: 25px;
-  width: calc(100% - 25px - 20px);
+  margin-left: 20px;
+  width: calc(100% - 20px - 40px);
   @media ${props => props.theme.media.mobile} {
     margin-left: 10px;
-    width: calc(100% - 10px - 46px);
+    width: calc(100% - 10px - 40px);
   }
 `;
 
@@ -55,14 +55,14 @@ const ContainerStyled = styled.div`
 const IconStyled = styled.div`
   display: inline-block;
   vertical-align: middle;
-  width: 20px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   transition: fill 300ms;
 `;
 
 const CertificateStyled = styled.div`
   cursor: pointer;
-  padding: 15px 30px 15px 50px;
+  padding: 15px 30px 15px 40px;
   color: #5F6B73;
   fill: rgba(112, 125, 134, .8);
   transition: opacity 300ms;
@@ -92,6 +92,7 @@ const Item = (props, context) => {
     selected,
     size,
     issuer,
+    hasPrivateKey,
   } = props;
   const { dispatch, handleRootAction } = context;
 
@@ -104,17 +105,16 @@ const Item = (props, context) => {
     }
   };
 
-  const renderIcon = (certType) => {
-    switch (certType) {
-      case 'request':
-        return <DocRequestIcon />;
-      case 'certificate':
-        return <DocCertIcon />;
-      case 'key':
-        return <DocKeyIcon />;
-      default:
-        return <DocCertIcon />;
+  const renderIcon = () => {
+    if (hasPrivateKey) {
+      return (
+        <DocCertPrivateIcon />
+      );
     }
+
+    return (
+      <DocCertIcon />
+    );
   };
 
   return (
@@ -124,7 +124,7 @@ const Item = (props, context) => {
     >
       <ContainerStyled>
         <IconStyled>
-          { renderIcon(type) }
+          {renderIcon()}
         </IconStyled>
         <CertDescrStyled>
           <Name>
@@ -158,6 +158,7 @@ Item.propTypes = {
     PropTypes.number,
   ]),
   issuer: PropTypes.string,
+  hasPrivateKey: PropTypes.bool,
 };
 
 Item.defaultProps = {
@@ -168,6 +169,7 @@ Item.defaultProps = {
   selected: false,
   size: '',
   issuer: '',
+  hasPrivateKey: false,
 };
 
 Item.contextTypes = {

@@ -43,13 +43,13 @@ export const Title = styled.div`
   line-height: 75px;
   vertical-align: middle;
   display: inline-block;
-  width: calc(100% - 110px - 16px - 20px);
+  width: calc(100% - 110px - 28px - 20px);
   ${props => props.theme.mixins.truncateText}
   padding-right: 20px;
   @media ${props => props.theme.media.mobile} {
     font-size: 18px;
     text-align: center;
-    width: calc(100% - 38px - 75px);
+    width: calc(100% - 50px - 75px);
     line-height: 56px;
     margin: 0 auto;
     padding: 0;
@@ -194,11 +194,9 @@ export const HeaderBtn = styled.div`
 export const IconContainer = styled.div`
   display: inline-block;
   vertical-align: middle;
-  width: 16px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   margin-right: 20px;
-  fill: rgba(112, 125, 134, .6);
-  margin-top: 6px;
 `;
 
 export const BtnDropdown = styled.div`
