@@ -458,6 +458,7 @@ const CertHelper = {
   certRawToJson: function certRawToJson(raw) {
     const asn1 = asn1js.fromBER(raw);
     const x509 = new pkijs.Certificate({ schema: asn1.result });
+    let isCA = false;
 
     // Public Key
     const publicKey = {
@@ -483,6 +484,15 @@ const CertHelper = {
       ).name;
     }
 
+    // Check if CA using `Basic Constraints` extension.
+    for (let i = 0; i < x509.extensions.length; i += 1) {
+      const extension = x509.extensions[i];
+
+      if (extension.extnID === '2.5.29.19') {
+        isCA = extension.parsedValue.cA;
+      }
+    }
+
     return {
       version: x509.version,
       serialNumber: this.toHexAndFormat(x509.serialNumber.valueBlock._valueHex),
@@ -496,6 +506,7 @@ const CertHelper = {
         algorithm: this.prepareAlgorithm(x509.signature),
         value: this.toHexAndFormat(x509.signatureValue.valueBlock.valueHex),
       },
+      isCA,
     };
   },
 

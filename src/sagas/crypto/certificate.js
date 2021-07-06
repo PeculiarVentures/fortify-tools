@@ -30,12 +30,15 @@ export function* certificateGatPrivateKeyID(crypto, cert) {
   const publicKeyIDsha1 = yield Key.publicKeyThumbprint(crypto, cert.publicKey, 'SHA-1');
   const publicKeyIDsha256 = yield Key.publicKeyThumbprint(crypto, cert.publicKey, 'SHA-256');
   const keyIDs = yield Key.keyGetIDs(crypto);
+
   for (const keyID of keyIDs) {
     const idPart = keyID.split('-')[2];
+
     if (publicKeyIDsha1 === idPart || publicKeyIDsha256 === idPart) {
       return keyID;
     }
   }
+
   return null;
 }
 

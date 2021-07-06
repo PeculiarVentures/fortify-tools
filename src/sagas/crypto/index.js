@@ -35,22 +35,18 @@ function* getProviderCertificates() {
   const certificatesArr = [];
 
   for (const certID of certIDs) {
-    const cert = yield Certificate.certificateGet(provider, certID);
     const privateKey = keyIDs.filter((o) => {
       const parts = o.split('-');
 
       return parts[0] === 'private' && parts[2] === certID.split('-')[2];
     })[0];
 
-    cert.privateKeyId = privateKey;
+    if (ALLOW_CERTIFICATES_WITHOUT_PRIVATE_KEY || privateKey) {
+      const cert = yield Certificate.certificateGet(provider, certID);
 
-    if (cert) {
-      if (ALLOW_CERTIFICATES_WITHOUT_PRIVATE_KEY) {
-        certificatesArr.push({
-          id: certID,
-          data: cert,
-        });
-      } else if (privateKey) {
+      if (cert) {
+        cert.privateKeyId = privateKey;
+
         certificatesArr.push({
           id: certID,
           data: cert,
@@ -81,6 +77,10 @@ function* getProviderCertificates() {
       const pem = `-----BEGIN CERTIFICATE-----\n${base64PemFormat(base64)}\n-----END CERTIFICATE-----`;
       const thumbprint = yield Certificate.certificateThumbprint(provider, raw);
       const certificateDetails = CertHelper.certRawToJson(raw);
+
+      if (certificateDetails.isCA) {
+        continue;
+      }
 
       certData = CertHelper.certDataHandler({
         ...certificateDetails,
