@@ -485,11 +485,13 @@ const CertHelper = {
     }
 
     // Check if CA using `Basic Constraints` extension.
-    for (let i = 0; i < x509.extensions.length; i += 1) {
-      const extension = x509.extensions[i];
+    if (x509.extensions && x509.extensions.length) {
+      for (let i = 0; i < x509.extensions.length; i += 1) {
+        const extension = x509.extensions[i];
 
-      if (extension.extnID === '2.5.29.19') {
-        isCA = extension.parsedValue.cA;
+        if (extension.extnID === '2.5.29.19') {
+          isCA = extension.parsedValue.cA;
+        }
       }
     }
 
