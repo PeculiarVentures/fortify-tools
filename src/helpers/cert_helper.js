@@ -567,17 +567,25 @@ const CertHelper = {
     throw new Error('Cannot parse ASN1 data');
   },
 
+  getAttributeValueBasedOnStringCharCode(value) {
+    return value.charCodeAt() > 0xFF
+      ? new asn1js.Utf8String({ value })
+      : new asn1js.PrintableString({ value });
+  },
+
   decoratePkcs10Subject: function decoratePkcs10Subject(pkcs10, data) {
     Object.keys(data).map((key) => {
       if ({}.hasOwnProperty.call(subjectTypesAndValues, key) && data[key]) {
         pkcs10.subject.typesAndValues.push(new pkijs.AttributeTypeAndValue({
           type: subjectTypesAndValues[key],
-          value: new asn1js.PrintableString({ value: data[key] }),
+          value: this.getAttributeValueBasedOnStringCharCode(data[key]),
         }));
       }
       return true;
     });
+
     fixName(pkcs10.subject);
+
     return pkcs10;
   },
 
@@ -586,17 +594,19 @@ const CertHelper = {
       if ({}.hasOwnProperty.call(subjectTypesAndValues, key) && data[key]) {
         certificate.issuer.typesAndValues.push(new pkijs.AttributeTypeAndValue({
           type: subjectTypesAndValues[key],
-          value: new asn1js.PrintableString({ value: data[key] }),
+          value: this.getAttributeValueBasedOnStringCharCode(data[key]),
         }));
         certificate.subject.typesAndValues.push(new pkijs.AttributeTypeAndValue({
           type: subjectTypesAndValues[key],
-          value: new asn1js.PrintableString({ value: data[key] }),
+          value: this.getAttributeValueBasedOnStringCharCode(data[key]),
         }));
       }
       return true;
     });
+
     fixName(certificate.subject);
     fixName(certificate.issuer);
+
     return certificate;
   },
 
