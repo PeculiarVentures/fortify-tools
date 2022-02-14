@@ -114,10 +114,13 @@ function* providerSelect({ id }) {
   try {
     const state = yield select();
     const providers = state.find('providers');
-    let provider = providers.where({ id }).get();
+    const providersById = providers.where({ id });
+    let provider;
 
-    if (Array.isArray(provider)) {
-      provider = provider[0];
+    if (providersById) {
+      provider = providersById.get();
+    } else {
+      provider = providers.at(0).get();
     }
 
     if (!provider.logged) {
@@ -147,9 +150,10 @@ function* webcryptoOnListening() {
     yield put(ProviderActions.setList([]));
 
     const providers = yield Provider.providerGetList();
+    const providersArray = [];
+    const providersIds = [];
     let index = 0;
     let selected = false;
-    const providersArray = [];
 
     const initState = RoutingController.parseInitState(
       window.location.pathname,
@@ -158,11 +162,20 @@ function* webcryptoOnListening() {
 
     if (!providers.length) {
       yield put(DialogActions.open('empty_providers'));
+
       return false;
     }
 
     for (const prv of providers) {
       const provider = yield Provider.providerGet(prv.id);
+
+      // HACK: Resolve https://github.com/PeculiarVentures/fortify/issues/430.
+      // Fortify can't work with multiple NSS providers.
+      if (providersIds.includes(prv.id)) {
+        break;
+      }
+
+      providersIds.push(prv.id);
 
       if (initState.params.provider === prv.id) {
         selected = prv.id;
