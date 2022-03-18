@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { PeculiarCertificateViewer } from '@peculiar/certificates-viewer-react';
+import { PeculiarCertificateViewer, PeculiarCsrViewer } from '@peculiar/certificates-viewer-react';
 import '@peculiar/certificates-viewer/dist/peculiar/peculiar.css';
 import { CircularLoader } from '../basic';
 import Header from './header';
 import { ACTIONS_CONST } from '../../constants';
-import RequestInfo from './info_request';
 import KeyInfo from './info_key';
 import EmptyBody from './empty_body';
 import { DialogActions } from '../../actions/ui';
@@ -111,6 +110,7 @@ export default class Info extends Component {
     console.error(error);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   renderInfoContent(type, item) {
     switch (type) {
       case 'certificate':
@@ -128,7 +128,12 @@ export default class Info extends Component {
 
       case 'request':
         return (
-          <RequestInfo {...item} />
+          <Root>
+            <PeculiarCsrViewer
+              certificate={item.pem}
+              download
+            />
+          </Root>
         );
 
       case 'key':

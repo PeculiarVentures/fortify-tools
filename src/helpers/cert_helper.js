@@ -728,7 +728,6 @@ const CertHelper = {
       signature: {
         algorithm: algorithm.name,
         hash: algorithm.hash.name,
-        value: this.addSpaceAfterSecondCharset(pvtsutils.Convert.ToHex(algorithm.raw)),
       },
     };
   },
