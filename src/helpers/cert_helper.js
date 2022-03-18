@@ -331,6 +331,7 @@ function fixName(name) {
  *   prepareAlgorithm: CertHelper.prepareAlgorithm,
  *   addSpaceAfterSecondCharset: CertHelper.addSpaceAfterSecondCharset,
  *   certRawToJson: CertHelper.certRawToJson,
+ *   csrRawToJson: CertHelper.csrRawToJson,
  *   prepareCertToImport: CertHelper.prepareCertToImport,
  *   decoratePkcs10Subject: CertHelper.decoratePkcs10Subject,
  *   decorateCertificateSubject: CertHelper.decorateCertificateSubject,
@@ -434,9 +435,34 @@ const CertHelper = {
     return this.addSpaceAfterSecondCharset(pvtsutils.Convert.ToHex(arrayBuffer)).toUpperCase();
   },
 
+  spkiToJson: function spkiToJson(spki) {
+    const publicKey = {
+      algorithm: {
+        name: spki.algorithm.algorithmId === '1.2.840.10045.2.1' ? 'EC' : 'RSA',
+      },
+      value: this.addSpaceAfterSecondCharset(
+        pvtsutils.Convert.ToHex(spki.subjectPublicKey.valueBeforeDecode),
+      ),
+    };
+    if (publicKey.algorithm.name === 'RSA') {
+      const { modulus, publicExponent } = spki.parsedKey;
+  
+      publicKey.algorithm.modulusBits = modulus.valueBlock.valueHex.byteLength << 3;
+      publicKey.algorithm.publicExponent = publicExponent.valueBlock.valueHex.byteLength === 3
+        ? 65537
+        : 3;
+    } else if (publicKey.algorithm.name === 'EC') {
+      publicKey.algorithm.namedCurve = getAlgorithmByOID(
+        spki.toJSON().algorithm.algorithmParams.valueBlock.value,
+      ).name;
+    }
+  
+    return publicKey;
+  },
+
   /**
    * Decode certificate raw format
-   * @param {string} raw
+   * @param {ArrayBuffer} raw
    * @returns {{
    *   version: number,
    *   serialNumber: *,
@@ -461,28 +487,7 @@ const CertHelper = {
     let isCA = false;
 
     // Public Key
-    const publicKey = {
-      algorithm: {
-        name: x509.subjectPublicKeyInfo.algorithm.algorithmId === '1.2.840.10045.2.1' ? 'EC' : 'RSA',
-      },
-      value: this.addSpaceAfterSecondCharset(
-        pvtsutils.Convert.ToHex(x509.subjectPublicKeyInfo.subjectPublicKey.valueBeforeDecode),
-      ),
-    };
-
-    // Add params for Public key
-    if (publicKey.algorithm.name === 'RSA') {
-      const { modulus, publicExponent } = x509.subjectPublicKeyInfo.parsedKey;
-
-      publicKey.algorithm.modulusBits = modulus.valueBlock.valueHex.byteLength << 3;
-      publicKey.algorithm.publicExponent = publicExponent.valueBlock.valueHex.byteLength === 3
-        ? 65537
-        : 3;
-    } else if (publicKey.algorithm.name === 'EC') {
-      publicKey.algorithm.namedCurve = getAlgorithmByOID(
-        x509.subjectPublicKeyInfo.toJSON().algorithm.algorithmParams.valueBlock.value,
-      ).name;
-    }
+    const publicKey = CertHelper.spkiToJson(x509.subjectPublicKeyInfo);
 
     // Check if CA using `Basic Constraints` extension.
     if (x509.extensions && x509.extensions.length) {
@@ -509,6 +514,42 @@ const CertHelper = {
         value: this.toHexAndFormat(x509.signatureValue.valueBlock.valueHex),
       },
       isCA,
+    };
+  },
+
+  /**
+   * Decode certificate request raw format
+   * @param {ArrayBuffer} raw
+   * @returns {{
+   *   version: number,
+   *   subjectName: *,
+   *   publicKey: {
+   *     algorithm: {name},
+   *     value: *
+   *   },
+   *   extensions: Array,
+   *   signature: {
+   *    algorithm: *,
+   *    value: *
+   *   }
+   * }}
+   */
+  csrRawToJson: function csrRawToJson(raw) {
+    const asn1 = asn1js.fromBER(raw);
+    const csr = new pkijs.CertificationRequest({ schema: asn1.result });
+  
+    // Public Key
+    const publicKey = CertHelper.spkiToJson(csr.subjectPublicKeyInfo);
+  
+    return {
+      version: csr.version,
+      subjectName: this.name2str(csr.subject),
+      publicKey,
+      extensions: [],
+      signature: {
+        algorithm: this.prepareAlgorithm(csr.signatureAlgorithm),
+        value: this.toHexAndFormat(csr.signatureValue.valueBlock.valueHex),
+      },
     };
   },
 
@@ -695,15 +736,18 @@ const CertHelper = {
   },
 
   requestDataHandler: function requestDataHandler(data) {
-    const { _publicKey, id, _subjectName, pem, addedId } = data;
-    const { algorithm, raw } = _publicKey;
+    const {
+      extensions,
+      subjectName,
+      publicKey,
+      signature,
+      id,
+      pem,
+      addedId,
+    } = data;
 
-    const decodedSubject = this.decodeSubjectString(_subjectName);
-    let publicExponent = '';
+    const decodedSubject = this.decodeSubjectString(subjectName);
 
-    if (algorithm.publicExponent && algorithm.publicExponent.byteLength) {
-      publicExponent = algorithm.publicExponent.byteLength === 3 ? 65537 : 3;
-    }
     const name = decodedSubject['Common Name']
       || decodedSubject.Email
       || decodedSubject.Surname
@@ -719,16 +763,17 @@ const CertHelper = {
       pem,
       subject: decodedSubject,
       publicKey: {
-        modulusBits: algorithm.modulusLength,
-        namedCurve: algorithm.namedCurve,
-        publicExponent,
-        algorithm: this.getKeyType(algorithm.name),
-        value: this.addSpaceAfterSecondCharset(pvtsutils.Convert.ToHex(raw)),
+        publicExponent: publicKey.algorithm.publicExponent,
+        value: publicKey.value,
+        algorithm: publicKey.algorithm.name,
+        modulusBits: publicKey.algorithm.modulusBits,
+        namedCurve: publicKey.algorithm.namedCurve,
       },
+      extensions,
       signature: {
-        algorithm: algorithm.name,
-        hash: algorithm.hash.name,
-        value: this.addSpaceAfterSecondCharset(pvtsutils.Convert.ToHex(algorithm.raw)),
+        algorithm: signature.algorithm.name,
+        hash: signature.algorithm.hash,
+        value: signature.value,
       },
     };
   },

@@ -92,8 +92,9 @@ function* getProviderCertificates() {
     } else {
       const pem = `-----BEGIN CERTIFICATE REQUEST-----\n${base64PemFormat(base64)}\n-----END CERTIFICATE REQUEST-----`;
 
+      const csrDetails = CertHelper.csrRawToJson(raw);
       certData = CertHelper.requestDataHandler({
-        ...item.data,
+        ...csrDetails,
         id: item.id,
         pem,
         privateKeyId: item.data.privateKeyId,
