@@ -93,7 +93,7 @@ function* getProviderCertificates() {
       const pem = `-----BEGIN CERTIFICATE REQUEST-----\n${base64PemFormat(base64)}\n-----END CERTIFICATE REQUEST-----`;
 
       certData = CertHelper.requestDataHandler({
-        ...item.data,
+        ...CertHelper.csrRawToJson(raw),
         id: item.id,
         pem,
         privateKeyId: item.data.privateKeyId,
@@ -380,7 +380,7 @@ function* importItem({ data }) {
         const raw = yield Certificate.certificateExport(crypto, item, 'raw');
         const thumbprint = yield Certificate.certificateThumbprint(crypto, raw);
         const certificateDetails = CertHelper.certRawToJson(raw);
-
+        
         certData = CertHelper.certDataHandler({
           ...certificateDetails,
           id: certID,
@@ -390,8 +390,9 @@ function* importItem({ data }) {
           privateKeyId,
         });
       } else {
+        const raw = yield Certificate.certificateExport(crypto, item, 'raw');
         certData = CertHelper.requestDataHandler({
-          ...item,
+          ...CertHelper.csrRawToJson(raw),
           id: certID,
           pem,
           addedId,
@@ -422,11 +423,13 @@ function* createRequest({ data }) {
 
       if (certId) {
         const item = yield Certificate.certificateGet(crypto, certId);
-        const pem = yield Certificate.certificateExport(crypto, item, 'pem');
+        const raw = yield Certificate.certificateExport(crypto, item, 'raw');
+        const base64 = pvtsutils.Convert.ToBase64(raw);
+        const pem = `-----BEGIN CERTIFICATE REQUEST-----\n${base64PemFormat(base64)}\n-----END CERTIFICATE REQUEST-----`;
         const addedId = UUID();
 
         const certData = CertHelper.requestDataHandler({
-          ...item,
+          ...CertHelper.csrRawToJson(raw),
           id: certId,
           pem,
           addedId,
@@ -465,7 +468,7 @@ function* createSelfSignedCertificate({ data }) {
           const raw = yield Certificate.certificateExport(crypto, item, 'raw');
           const thumbprint = yield Certificate.certificateThumbprint(crypto, raw);
           const certificateDetails = CertHelper.certRawToJson(raw);
-
+          
           certData = CertHelper.certDataHandler({
             ...certificateDetails,
             id: certId,
@@ -475,8 +478,9 @@ function* createSelfSignedCertificate({ data }) {
             privateKeyId,
           });
         } else {
+          const raw = yield Certificate.certificateExport(crypto, item, 'raw');
           certData = CertHelper.requestDataHandler({
-            ...item,
+            ...CertHelper.csrRawToJson(raw),
             id: certId,
             pem,
             addedId,
