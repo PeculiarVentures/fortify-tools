@@ -9,8 +9,8 @@
 ### Development Start
 
 * Clone latest version this repository
-* `npm install`
-* `npm run start`
+* `yarn install`
+* `yarn start`
 
 ## Thanks
 
