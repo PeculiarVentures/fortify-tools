@@ -63,7 +63,7 @@
     "event-emitter": "^0.3.5",
     "history": "^4.7.2",
     "ismobilejs": "^0.5.1",
-    "moment": "^2.29.2",
+    "moment": "^2.29.4",
     "prop-types": "^15.6.2",
     "quantizer": "^2.2.3",
     "react": "16.8.1",
