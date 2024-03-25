@@ -163,9 +163,9 @@ export function App() {
       onClose: handleClose,
       onProvidersAdded: tryGetData,
       onProvidersRemoved: tryGetData,
-      filters: {
-        onlyWithPrivateKey: true,
-      },
+      // filters: {
+      //   onlyWithPrivateKey: true,
+      // },
     });
 
     start();

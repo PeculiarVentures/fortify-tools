@@ -4,10 +4,8 @@ import { ThemeProvider } from '@peculiar/react-components';
 import { App } from './app';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ThemeProvider>
-      <App />
-    </ThemeProvider>
-  </React.StrictMode>,
+  <ThemeProvider>
+    <App />
+  </ThemeProvider>,
   document.getElementById('root'),
 );
