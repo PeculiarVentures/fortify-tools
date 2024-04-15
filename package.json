@@ -9,7 +9,7 @@
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^16.2.0",
     "typescript": "^5.2.2",
-    "vite": "^5.2.0"
+    "vite": "^5.2.8"
   },
   "dependencies": {
     "@peculiar/certificates-viewer-react": "^4.2.0",
@@ -22,7 +22,9 @@
     "@webcrypto-local/client": "1.7.7"
   },
   "scripts": {
-    "start": "vite",
-    "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx"
+    "start": "vite --port 3003",
+    "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx",
+    "build": "tsc && vite build --emptyOutDir",
+    "preview": "vite preview --port 3005"
   }
 }
