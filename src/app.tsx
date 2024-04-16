@@ -1,18 +1,15 @@
-import React from 'react';
+import React from "react";
 import {
   FortifyAPI,
   IProviderInfo,
   ICertificate,
-} from '@peculiar/fortify-client-core';
-import {
-  Select,
-  CircularProgress,
-} from '@peculiar/react-components';
-import { PeculiarCertificatesViewer } from '@peculiar/certificates-viewer-react';
-import { Convert } from 'pvtsutils';
-import '@peculiar/certificates-viewer/dist/peculiar/peculiar.css';
+} from "@peculiar/fortify-client-core";
+import { Select, CircularProgress } from "@peculiar/react-components";
+import { PeculiarCertificatesViewer } from "@peculiar/certificates-viewer-react";
+import { Convert } from "pvtsutils";
+import "@peculiar/certificates-viewer/dist/peculiar/peculiar.css";
 
-type FetchingStatus = 'pending' | 'resolved' | 'rejected';
+type FetchingStatus = "pending" | "resolved" | "rejected";
 
 interface FetchingType {
   connectionClientUpdate?: FetchingStatus;
@@ -33,13 +30,16 @@ export function App() {
   const [certificates, setCertificates] = React.useState<ICertificate[]>([]);
   const [challenge, setChallenge] = React.useState<string | null>(null);
   const [fetching, setFetching] = React.useState<FetchingType>({
-    connectionDetect: 'pending',
+    connectionDetect: "pending",
   });
   /**
    *
    */
 
-  const setFetchingValue = (name: keyof FetchingType, value: FetchingStatus) => {
+  const setFetchingValue = (
+    name: keyof FetchingType,
+    value: FetchingStatus,
+  ) => {
     setFetching((prevState) => ({
       ...prevState,
       [name]: value,
@@ -49,7 +49,7 @@ export function App() {
   const handleClose = () => {
     setProviders([]);
     setCertificates([]);
-    setFetchingValue('connectionDetect', 'rejected');
+    setFetchingValue("connectionDetect", "rejected");
   };
 
   const tryLogin = async () => {
@@ -57,7 +57,7 @@ export function App() {
       return undefined;
     }
 
-    setFetchingValue('connectionApprove', 'pending');
+    setFetchingValue("connectionApprove", "pending");
     setChallenge(null);
 
     try {
@@ -69,9 +69,9 @@ export function App() {
         await fortifyClient.current.login();
       }
 
-      setFetchingValue('connectionApprove', 'resolved');
+      setFetchingValue("connectionApprove", "resolved");
     } catch (error) {
-      setFetchingValue('connectionApprove', 'rejected');
+      setFetchingValue("connectionApprove", "rejected");
 
       return undefined;
     }
@@ -86,7 +86,7 @@ export function App() {
 
     let providersLocal: IProviderInfo[] = [];
 
-    setFetchingValue('providers', 'pending');
+    setFetchingValue("providers", "pending");
     setProviders([]);
     setCertificates([]);
 
@@ -94,22 +94,24 @@ export function App() {
       providersLocal = await fortifyClient.current.getProviders();
 
       setProviders(providersLocal);
-      setFetchingValue('providers', 'resolved');
+      setFetchingValue("providers", "resolved");
     } catch (error) {
-      setFetchingValue('providers', 'rejected');
+      setFetchingValue("providers", "rejected");
 
       return;
     }
 
-    setFetchingValue('certificates', 'pending');
+    setFetchingValue("certificates", "pending");
 
     try {
       setCertificates(
-        await fortifyClient.current.getCertificatesByProviderId(providersLocal[0].id),
+        await fortifyClient.current.getCertificatesByProviderId(
+          providersLocal[0].id,
+        ),
       );
-      setFetchingValue('certificates', 'resolved');
+      setFetchingValue("certificates", "resolved");
     } catch (error) {
-      setFetchingValue('certificates', 'rejected');
+      setFetchingValue("certificates", "rejected");
     }
   };
 
@@ -118,21 +120,21 @@ export function App() {
       return;
     }
 
-    setFetchingValue('connectionDetect', 'pending');
+    setFetchingValue("connectionDetect", "pending");
 
     if (!fortifyClient.current.isConnectionSupported()) {
-      setFetchingValue('connectionSupport', 'rejected');
+      setFetchingValue("connectionSupport", "rejected");
 
       return;
     }
 
-    if (!await fortifyClient.current.isConnectionDetected()) {
-      setFetchingValue('connectionDetect', 'rejected');
+    if (!(await fortifyClient.current.isConnectionDetected())) {
+      setFetchingValue("connectionDetect", "rejected");
     }
 
     await fortifyClient.current.isConnectionDetectedAuto();
 
-    setFetchingValue('connectionDetect', 'pending');
+    setFetchingValue("connectionDetect", "pending");
 
     try {
       await fortifyClient.current.connect();
@@ -140,8 +142,11 @@ export function App() {
       // console.error(error);
 
       if (error && error instanceof Error) {
-        if (error.message.indexOf('update your client to the latest version') !== -1) {
-          setFetchingValue('connectionClientUpdate', 'rejected');
+        if (
+          error.message.indexOf("update your client to the latest version") !==
+          -1
+        ) {
+          setFetchingValue("connectionClientUpdate", "rejected");
         }
       }
 
@@ -171,39 +176,23 @@ export function App() {
     start();
   }, []);
 
-  if (fetching.connectionClientUpdate === 'rejected') {
-    return (
-      <h1>
-        Update client
-      </h1>
-    );
+  if (fetching.connectionClientUpdate === "rejected") {
+    return <h1>Update client</h1>;
   }
 
-  if (fetching.connectionSupport === 'rejected') {
-    return (
-      <h1>
-        Connection not supported
-      </h1>
-    );
+  if (fetching.connectionSupport === "rejected") {
+    return <h1>Connection not supported</h1>;
   }
 
-  if (fetching.connectionDetect === 'rejected') {
-    return (
-      <h1>
-        Connection not detected
-      </h1>
-    );
+  if (fetching.connectionDetect === "rejected") {
+    return <h1>Connection not detected</h1>;
   }
 
-  if (fetching.connectionApprove === 'rejected') {
-    return (
-      <h1>
-        Connection not approved
-      </h1>
-    );
+  if (fetching.connectionApprove === "rejected") {
+    return <h1>Connection not approved</h1>;
   }
 
-  if (fetching.connectionApprove === 'pending' && !!challenge) {
+  if (fetching.connectionApprove === "pending" && !!challenge) {
     return (
       <h1>
         Approve connection:
@@ -212,15 +201,11 @@ export function App() {
     );
   }
 
-  if (fetching.providers === 'resolved' && !providers.length) {
-    return (
-      <h1>
-        Empty providers list
-      </h1>
-    );
+  if (fetching.providers === "resolved" && !providers.length) {
+    return <h1>Empty providers list</h1>;
   }
 
-  if (fetching.providers === 'pending' && !!providers.length) {
+  if (fetching.providers === "pending" && !!providers.length) {
     return (
       <div>
         <Select
@@ -243,15 +228,17 @@ export function App() {
             value: provider.id,
           }))}
           onChange={async (event) => {
-            setFetchingValue('certificates', 'pending');
+            setFetchingValue("certificates", "pending");
 
             try {
               setCertificates(
-                await fortifyClient.current!.getCertificatesByProviderId(event.target.value),
+                await fortifyClient.current!.getCertificatesByProviderId(
+                  event.target.value,
+                ),
               );
-              setFetchingValue('certificates', 'resolved');
+              setFetchingValue("certificates", "resolved");
             } catch (error) {
-              setFetchingValue('certificates', 'rejected');
+              setFetchingValue("certificates", "rejected");
             }
           }}
         />
@@ -264,19 +251,14 @@ export function App() {
     );
   }
 
-  if (fetching.connectionDetect === 'pending'
-  || fetching.connectionSupport === 'pending'
-  || fetching.connectionApprove === 'pending'
-  || fetching.providers === 'pending'
+  if (
+    fetching.connectionDetect === "pending" ||
+    fetching.connectionSupport === "pending" ||
+    fetching.connectionApprove === "pending" ||
+    fetching.providers === "pending"
   ) {
-    return (
-      <CircularProgress />
-    );
+    return <CircularProgress />;
   }
 
-  return (
-    <h1>
-      Unresolved status
-    </h1>
-  );
+  return <h1>Unresolved status</h1>;
 }
