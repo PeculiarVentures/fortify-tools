@@ -8,6 +8,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^16.2.0",
+    "sass": "^1.75.0",
     "typescript": "^5.2.2",
     "vite": "^5.2.8"
   },
@@ -15,6 +16,7 @@
     "@peculiar/certificates-viewer-react": "^4.2.0",
     "@peculiar/fortify-webcomponents-react": "^4.0.3",
     "@peculiar/react-components": "^0.6.0",
+    "clsx": "^2.1.0",
     "i18next": "^23.11.2",
     "i18next-icu": "^2.3.0",
     "intl-messageformat": "^10.5.11",
