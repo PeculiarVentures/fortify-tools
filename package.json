@@ -15,8 +15,12 @@
     "@peculiar/certificates-viewer-react": "^4.2.0",
     "@peculiar/fortify-webcomponents-react": "^4.0.3",
     "@peculiar/react-components": "^0.6.0",
+    "i18next": "^23.11.2",
+    "i18next-icu": "^2.3.0",
+    "intl-messageformat": "^10.5.11",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-i18next": "^14.1.0"
   },
   "resolutions": {
     "@webcrypto-local/client": "1.7.7"

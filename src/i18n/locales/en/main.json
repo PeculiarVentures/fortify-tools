@@ -1,0 +1,25 @@
+{
+  "connection": {
+    "approve": {
+      "title": "Approve connection"
+    },
+    "error": {
+      "update-client": {
+        "message": "Update client"
+      },
+      "connection-not-supported": {
+        "message": "Connection not supported"
+      },
+      "connection-not-detect": {
+        "message": "Launch your local Fortify application",
+        "description": "It seems Fortify application is turned off on your desktop. Please launch it to continue."
+      },
+      "connection-not-approved": {
+        "message": "Connection not approved"
+      },
+      "unresolved-status": {
+        "message": "Unresolved status"
+      }
+    }
+  }
+}

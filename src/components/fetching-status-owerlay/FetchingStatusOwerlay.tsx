@@ -7,6 +7,7 @@ import {
 } from "@peculiar/react-components";
 import { ApproveConnection } from "./ApproveConnection";
 import { ErrorConnection } from "./ErrorConnection";
+import { useTranslation } from "react-i18next";
 
 export interface FetchingStatusOwerlayProps {
   fetching: CertificatesFetchingType;
@@ -15,33 +16,44 @@ export interface FetchingStatusOwerlayProps {
 export const FetchingStatusOwerlay: React.FunctionComponent<
   FetchingStatusOwerlayProps
 > = ({ fetching, challenge }) => {
+  const { t } = useTranslation();
   const [element, setElement] = useState<React.ReactNode>(null);
 
   useEffect(() => {
     if (fetching.connectionClientUpdate === "rejected") {
-      setElement(<ErrorConnection message={"Update client"} />);
+      setElement(
+        <ErrorConnection
+          message={t("connection.error.update-client.message")}
+        />,
+      );
       return;
     }
 
     if (fetching.connectionSupport === "rejected") {
-      setElement(<ErrorConnection message={"Connection not supported"} />);
+      setElement(
+        <ErrorConnection
+          message={t("connection.error.connection-not-supported.message")}
+        />,
+      );
       return;
     }
 
     if (fetching.connectionDetect === "rejected") {
       setElement(
         <ErrorConnection
-          message={"Launch your local Fortify application"}
-          description={
-            "It seems Fortify application is turned off on your desktop. Please launch it to continue."
-          }
+          message={t("connection.error.connection-not-detect.message")}
+          description={t("connection.error.connection-not-detect.description")}
         />,
       );
       return;
     }
 
     if (fetching.connectionApprove === "rejected") {
-      setElement(<ErrorConnection message={"Connection not approved"} />);
+      setElement(
+        <ErrorConnection
+          message={t("connection.error.connection-not-approved.message")}
+        />,
+      );
       return;
     }
 
@@ -65,7 +77,11 @@ export const FetchingStatusOwerlay: React.FunctionComponent<
       return;
     }
 
-    setElement(<ErrorConnection message={"Unresolved status"} />);
+    setElement(
+      <ErrorConnection
+        message={t("connection.error.unresolved-status.message")}
+      />,
+    );
   }, [
     fetching.connectionDetect,
     fetching.connectionSupport,

@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 interface ApproveConnectionProps {
   challenge: string | null;
@@ -6,10 +7,10 @@ interface ApproveConnectionProps {
 export const ApproveConnection: React.FunctionComponent<
   ApproveConnectionProps
 > = ({ challenge }) => {
+  const { t } = useTranslation();
   return (
     <h1>
-      Approve connection:
-      {challenge}
+      {t("connection.approve.title")}:{challenge}
     </h1>
   );
 };
