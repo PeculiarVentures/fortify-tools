@@ -1,5 +1,10 @@
 import { Certificates } from "./components/certificates";
+import { Providers } from "./components/providers/Providers";
 
 export function App() {
-  return <Certificates />;
+  return (
+    <Providers>
+      <Certificates />
+    </Providers>
+  );
 }
