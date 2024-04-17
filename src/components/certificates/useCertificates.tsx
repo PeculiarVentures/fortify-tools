@@ -14,6 +14,9 @@ export function useCertificates() {
   const fortifyClient = React.useRef<FortifyAPI | null>(null);
 
   const [providers, setProviders] = React.useState<IProviderInfo[]>([]);
+  const [currentProviderId, setCurrentProviderId] = React.useState<
+    string | undefined
+  >(undefined);
   const [certificates, setCertificates] = React.useState<ICertificate[]>([]);
   const [challenge, setChallenge] = React.useState<string | null>(null);
   const [fetching, setFetching] = React.useState<CertificatesFetchingType>({
@@ -96,6 +99,7 @@ export function useCertificates() {
           providersLocal[0].id,
         ),
       );
+      setCurrentProviderId(providersLocal[0].id);
       setFetchingValue("certificates", "resolved");
     } catch (error) {
       setFetchingValue("certificates", "rejected");
@@ -156,6 +160,7 @@ export function useCertificates() {
       setCertificates(
         await fortifyClient.current!.getCertificatesByProviderId(id),
       );
+      setCurrentProviderId(id);
       setFetchingValue("certificates", "resolved");
     } catch (error) {
       setFetchingValue("certificates", "rejected");
@@ -180,6 +185,7 @@ export function useCertificates() {
     fetching,
     challenge,
     providers,
+    currentProviderId,
     certificates,
     getCertificatesByProviderId,
   };
