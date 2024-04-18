@@ -1,9 +1,9 @@
 import { PeculiarCertificatesViewer } from "@peculiar/certificates-viewer-react";
 import { Convert } from "pvtsutils";
-// import "@peculiar/certificates-viewer/dist/peculiar/peculiar.css";
 import { useCertificates } from "./useCertificates";
 import { FetchingStatusOwerlay } from "../fetching-status-owerlay";
 import { CertificatesProvidersList } from "../certificates-providers-list";
+import { CertificatesList } from "../certificates-list";
 
 export const Certificates = () => {
   const {
@@ -16,7 +16,8 @@ export const Certificates = () => {
   } = useCertificates();
 
   return (
-    <div>
+    // TODO: remove styles
+    <div style={{ padding: "20px" }}>
       {fetching.providers === "pending" ? (
         // TODO: add loading sceleton
         "Loading providers..."
@@ -37,6 +38,7 @@ export const Certificates = () => {
       )}
       {fetching.certificates ? (
         <>
+          <CertificatesList certificates={certificates} />
           <PeculiarCertificatesViewer
             certificates={certificates.map((certificate) => ({
               value: Convert.ToBase64(certificate.raw),

@@ -1,4 +1,14 @@
 {
+  "certificates": {
+    "list": {
+      "header": {
+        "type": "Type",
+        "name": "Name",
+        "serial-number": "Serial number",
+        "expires": "Expires"
+      }
+    }
+  },
   "connection": {
     "approve": {
       "title": "Approve connection"

@@ -1,3 +1,13 @@
 .table_header {
-  border-top: 1px solid red;
+  th:first-child {
+    border-left: 1px solid var(--pv-color-gray-4);
+    border-radius: 10px 0 0 0;
+  }
+  th:last-child {
+    border-right: 1px solid var(--pv-color-gray-4);
+    border-radius: 0 10px 0 0;
+  }
+  th {
+    border-top: 1px solid var(--pv-color-gray-4);
+  }
 }

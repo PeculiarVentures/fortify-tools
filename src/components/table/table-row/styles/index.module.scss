@@ -1,3 +1,5 @@
 .table_row {
-  border-top: 1px solid blue;
+  tbody &:hover {
+    box-shadow: var(--pv-shadow-light-medium);
+  }
 }
