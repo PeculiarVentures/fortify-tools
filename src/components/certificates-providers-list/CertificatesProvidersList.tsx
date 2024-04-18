@@ -1,6 +1,7 @@
 import React from "react";
 import { IProviderInfo } from "@peculiar/fortify-client-core";
-import { CertificatesProvidersListItem } from "./CertificatesProvidersListItem";
+import { CertificatesProvidersListItem } from "../certificates-providers-list-item";
+
 interface CertificatesProvidersListProps {
   providers?: IProviderInfo[];
   currentProviderId?: string;

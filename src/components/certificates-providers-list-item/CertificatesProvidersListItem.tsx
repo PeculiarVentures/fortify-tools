@@ -1,6 +1,6 @@
 import React from "react";
 import { IProviderInfo } from "@peculiar/fortify-client-core";
-import styles from "./CertificatesProvidersListItem.module.scss";
+import styles from "./styles/index.module.scss";
 import clsx from "clsx";
 
 interface CertificatesProvidersListItemProps {
@@ -15,7 +15,7 @@ export const CertificatesProvidersListItem: React.FunctionComponent<
   return (
     <div
       className={clsx({
-        [styles.currentListItem]: isSelected,
+        [styles.current_list_item]: isSelected,
       })}
       onClick={() => {
         onClick && onClick(provider.id);

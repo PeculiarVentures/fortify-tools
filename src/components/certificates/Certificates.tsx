@@ -1,6 +1,6 @@
 import { PeculiarCertificatesViewer } from "@peculiar/certificates-viewer-react";
 import { Convert } from "pvtsutils";
-import "@peculiar/certificates-viewer/dist/peculiar/peculiar.css";
+// import "@peculiar/certificates-viewer/dist/peculiar/peculiar.css";
 import { useCertificates } from "./useCertificates";
 import { FetchingStatusOwerlay } from "../fetching-status-owerlay";
 import { CertificatesProvidersList } from "../certificates-providers-list";

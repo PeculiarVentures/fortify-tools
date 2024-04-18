@@ -5,8 +5,8 @@ import {
   Dialog,
   DialogContent,
 } from "@peculiar/react-components";
-import { ApproveConnection } from "./ApproveConnection";
-import { ErrorConnection } from "./ErrorConnection";
+import { ApproveConnection } from "../approve-connection";
+import { ErrorConnection } from "../error-connection";
 import { useTranslation } from "react-i18next";
 
 export interface FetchingStatusOwerlayProps {
