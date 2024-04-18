@@ -1,11 +1,11 @@
 import "./i18n";
 import { Certificates } from "./components/certificates";
-import { Providers } from "./components/providers";
+import { AppProviders } from "./components/app-providers";
 
 export function App() {
   return (
-    <Providers>
+    <AppProviders>
       <Certificates />
-    </Providers>
+    </AppProviders>
   );
 }

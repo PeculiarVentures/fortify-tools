@@ -2,7 +2,7 @@ import React from "react";
 import { ThemeProvider } from "@peculiar/react-components";
 import { theme } from "../../config/theme";
 
-export const Providers: React.FunctionComponent<{
+export const AppProviders: React.FunctionComponent<{
   children: React.ReactElement;
 }> = ({ children }) => {
   return (
