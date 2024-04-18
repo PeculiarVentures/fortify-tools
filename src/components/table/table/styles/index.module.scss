@@ -1,0 +1,10 @@
+.table_wrapper {
+  position: relative;
+  width: 100%;
+  overflow: auto;
+
+  .table {
+    width: 100%;
+    font-size: var(--pv-text-s1);
+  }
+}
