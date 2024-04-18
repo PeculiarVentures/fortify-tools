@@ -1,0 +1,14 @@
+.list_root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  gap: var(--pv-size-base-4);
+  min-width: 724px;
+  max-width: 1620px;
+
+  .list {
+    background-color: var(--pv-color-white);
+    border-radius: 8px 8px 0 0;
+    flex-grow: 1;
+  }
+}

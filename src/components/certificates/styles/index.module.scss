@@ -1,0 +1,26 @@
+.layout {
+  display: flex;
+  flex-direction: row;
+  min-height: 100%;
+  width: 100%;
+  background-color: var(--pv-color-gray-2);
+  min-width: 100%;
+  overflow: auto;
+
+  .sidebar_placeholder {
+    min-width: 300px;
+  }
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 300px;
+    z-index: 99;
+  }
+
+  .content {
+    flex-grow: 1;
+    padding: var(--pv-size-base-6) var(--pv-size-base-8) 0;
+  }
+}

@@ -1,0 +1,10 @@
+.sidebar_root {
+  background-color: var(--pv-color-white);
+  display: flex;
+  flex-direction: column;
+  gap: var(--pv-size-base-6);
+
+  .content {
+    flex-grow: 1;
+  }
+}

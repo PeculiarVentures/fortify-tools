@@ -10,6 +10,8 @@ import {
 } from "../table";
 import { useTranslation } from "react-i18next";
 
+import styles from "./styles/index.module.scss";
+
 interface CertificateProp extends ICertificate {
   id?: string;
   label?: string;
@@ -29,29 +31,34 @@ export const CertificatesList: React.FunctionComponent<
   }
 
   return (
-    <div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>{t("certificates.list.header.type")}</TableHead>
-            <TableHead>{t("certificates.list.header.name")}</TableHead>
-            <TableHead>{t("certificates.list.header.serial-number")}</TableHead>
-            <TableHead>{t("certificates.list.header.expires")}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {certificates.map(({ id, serialNumber, type, label, notAfter }) => (
-            <TableRow key={id}>
-              <TableCell>{type}</TableCell>
-              {/* // TODO: not sure about label as name */}
-              <TableCell>{label}</TableCell>
-              <TableCell>{serialNumber}</TableCell>
-              {/* TODO: add date component */}
-              <TableCell>{notAfter.toLocaleDateString()}</TableCell>
+    <div className={styles.list_root}>
+      <div>Filters</div>
+      <div className={styles.list}>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t("certificates.list.header.type")}</TableHead>
+              <TableHead>{t("certificates.list.header.name")}</TableHead>
+              <TableHead>
+                {t("certificates.list.header.serial-number")}
+              </TableHead>
+              <TableHead>{t("certificates.list.header.expires")}</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {certificates.map(({ id, serialNumber, type, label, notAfter }) => (
+              <TableRow key={id}>
+                <TableCell>{type}</TableCell>
+                {/* // TODO: not sure about label as name */}
+                <TableCell>{label}</TableCell>
+                <TableCell>{serialNumber}</TableCell>
+                {/* TODO: add date component */}
+                <TableCell>{notAfter.toLocaleDateString()}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 };

@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CertificatesFetchingType } from "../certificates/types";
-import {
-  CircularProgress,
-  Dialog,
-  DialogContent,
-} from "@peculiar/react-components";
+import { Dialog, DialogContent } from "@peculiar/react-components";
 import { ApproveConnection } from "../approve-connection";
 import { ErrorConnection } from "../error-connection";
 import { useTranslation } from "react-i18next";
@@ -73,7 +69,7 @@ export const FetchingStatusOwerlay: React.FunctionComponent<
       fetching.connectionApprove === "pending" ||
       fetching.providers === "pending"
     ) {
-      setElement(<CircularProgress />);
+      setElement(null);
       return;
     }
 
