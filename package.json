@@ -2,12 +2,15 @@
   "name": "@peculiar/fortify-tools",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "devDependencies": {
     "@types/react": "^17.0.20",
     "@types/react-dom": "^18.2.25",
     "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.19",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^16.2.0",
+    "postcss": "^8.4.38",
     "sass": "^1.75.0",
     "typescript": "^5.2.2",
     "vite": "^5.2.8"
