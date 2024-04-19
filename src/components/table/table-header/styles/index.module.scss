@@ -1,11 +1,11 @@
 .table_header {
   th:first-child {
     border-left: 1px solid var(--pv-color-gray-4);
-    border-radius: 10px 0 0 0;
+    border-radius: var(--pv-border-radius-base) 0 0 0;
   }
   th:last-child {
     border-right: 1px solid var(--pv-color-gray-4);
-    border-radius: 0 10px 0 0;
+    border-radius: 0 var(--pv-border-radius-base) 0 0;
   }
   th {
     border-top: 1px solid var(--pv-color-gray-4);

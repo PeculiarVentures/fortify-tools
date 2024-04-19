@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
-
+html {
+  --pv-border-radius-base: 8px;
+}
 body {
   font-family: Manrope, Helvetica, Arial, sans-serif;
   line-height: 1.5;
