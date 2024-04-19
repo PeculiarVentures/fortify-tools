@@ -5,9 +5,5 @@ import { theme } from "../../config/theme";
 export const AppProviders: React.FunctionComponent<{
   children: React.ReactElement;
 }> = ({ children }) => {
-  return (
-    <ThemeProvider theme={theme} cssVarsRoot="#root">
-      {children}
-    </ThemeProvider>
-  );
+  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 };
