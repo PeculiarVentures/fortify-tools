@@ -13,7 +13,8 @@
     "postcss": "^8.4.38",
     "sass": "^1.75.0",
     "typescript": "^5.2.2",
-    "vite": "^5.2.8"
+    "vite": "^5.2.8",
+    "vite-plugin-svgr": "^4.2.0"
   },
   "dependencies": {
     "@peculiar/certificates-viewer-react": "^4.2.0",
