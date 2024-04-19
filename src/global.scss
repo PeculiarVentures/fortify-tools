@@ -11,3 +11,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+#root {
+  a {
+    color: var(--pv-color-primary);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

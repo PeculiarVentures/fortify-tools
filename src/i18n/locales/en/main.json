@@ -31,5 +31,10 @@
         "message": "Unresolved status"
       }
     }
+  },
+  "sidebar": {
+    "logo-alt": "Fortify logo",
+    "copyrigth": "Fortify by Peculiar Ventures ©",
+    "contact-support": "Contact support"
   }
 }

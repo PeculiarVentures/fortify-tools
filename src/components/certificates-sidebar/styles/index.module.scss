@@ -1,10 +1,29 @@
 .sidebar_root {
   background-color: var(--pv-color-white);
+  border-right: solid 1px var(--pv-color-gray-4);
   display: flex;
   flex-direction: column;
   gap: var(--pv-size-base-6);
 
+  .header {
+    padding: var(--pv-size-base-4) var(--pv-size-base-2) 0 var(--pv-size-base-2);
+
+    .logo {
+      margin-left: var(--pv-size-base-2);
+    }
+  }
+
   .content {
+    padding: 0 var(--pv-size-base-2);
     flex-grow: 1;
+  }
+
+  .footer {
+    padding: 0 var(--pv-size-base-4) var(--pv-size-base-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--pv-size-base-1);
+    font-size: var(--pv-text-c1-size);
+    color: var(--pv-color-gray-9);
   }
 }
