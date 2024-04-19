@@ -1,4 +1,12 @@
 {
+  "providers": {
+    "list": {
+      "label": "Provider",
+      "item": {
+        "read-only": "Read only"
+      }
+    }
+  },
   "certificates": {
     "list": {
       "header": {

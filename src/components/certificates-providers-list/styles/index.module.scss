@@ -1,0 +1,18 @@
+.list_wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pv-size-base);
+
+  .label {
+    font-size: var(--pv-text-c1-size);
+    line-height: var(--pv-text-c1-height);
+    color: var(--pv-color-gray-9);
+    padding-left: var(--pv-size-base-2);
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pv-size-base);
+  }
+}
