@@ -5,9 +5,9 @@ import {
   ICertificate,
 } from "@peculiar/fortify-client-core";
 
-import { CertificatesFetchingStatus, CertificatesFetchingType } from "./types";
+import { AppFetchingStatus, AppFetchingType } from "./types";
 
-export function useCertificates() {
+export function useApp() {
   /**
    * State.
    */
@@ -19,7 +19,7 @@ export function useCertificates() {
   >(undefined);
   const [certificates, setCertificates] = React.useState<ICertificate[]>([]);
   const [challenge, setChallenge] = React.useState<string | null>(null);
-  const [fetching, setFetching] = React.useState<CertificatesFetchingType>({
+  const [fetching, setFetching] = React.useState<AppFetchingType>({
     connectionDetect: "pending",
   });
   /**
@@ -27,8 +27,8 @@ export function useCertificates() {
    */
 
   const setFetchingValue = (
-    name: keyof CertificatesFetchingType,
-    value: CertificatesFetchingStatus,
+    name: keyof AppFetchingType,
+    value: AppFetchingStatus,
   ) => {
     setFetching((prevState) => ({
       ...prevState,

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { CertificatesFetchingType } from "../certificates/types";
+import { AppFetchingType } from "../../hooks/app";
 import { Dialog, DialogContent } from "@peculiar/react-components";
 import { ApproveConnection } from "../approve-connection";
 import { ErrorConnection } from "../error-connection";
 import { useTranslation } from "react-i18next";
 
 export interface FetchingStatusOwerlayProps {
-  fetching: CertificatesFetchingType;
+  fetching: AppFetchingType;
   challenge: string | null;
 }
 export const FetchingStatusOwerlay: React.FunctionComponent<
