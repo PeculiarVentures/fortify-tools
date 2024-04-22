@@ -16,7 +16,7 @@ export const CertificatesProvidersList: React.FunctionComponent<
 > = ({ providers, currentProviderId, onSelect }) => {
   const { t } = useTranslation();
   if (!providers?.length) {
-    //TODO: return some message
+    // TODO: return some message
     return null;
   }
 

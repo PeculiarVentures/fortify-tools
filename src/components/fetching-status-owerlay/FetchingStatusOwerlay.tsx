@@ -20,7 +20,7 @@ export const FetchingStatusOwerlay: React.FunctionComponent<
       setElement(
         <ErrorConnection
           message={t("connection.error.update-client.message")}
-        />,
+        />
       );
       return;
     }
@@ -29,7 +29,7 @@ export const FetchingStatusOwerlay: React.FunctionComponent<
       setElement(
         <ErrorConnection
           message={t("connection.error.connection-not-supported.message")}
-        />,
+        />
       );
       return;
     }
@@ -39,7 +39,7 @@ export const FetchingStatusOwerlay: React.FunctionComponent<
         <ErrorConnection
           message={t("connection.error.connection-not-detect.message")}
           description={t("connection.error.connection-not-detect.description")}
-        />,
+        />
       );
       return;
     }
@@ -48,7 +48,7 @@ export const FetchingStatusOwerlay: React.FunctionComponent<
       setElement(
         <ErrorConnection
           message={t("connection.error.connection-not-approved.message")}
-        />,
+        />
       );
       return;
     }
@@ -76,7 +76,7 @@ export const FetchingStatusOwerlay: React.FunctionComponent<
     setElement(
       <ErrorConnection
         message={t("connection.error.unresolved-status.message")}
-      />,
+      />
     );
   }, [
     fetching.connectionDetect,

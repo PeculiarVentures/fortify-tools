@@ -28,7 +28,7 @@ export function useApp() {
 
   const setFetchingValue = (
     name: keyof AppFetchingType,
-    value: AppFetchingStatus,
+    value: AppFetchingStatus
   ) => {
     setFetching((prevState) => ({
       ...prevState,
@@ -96,8 +96,8 @@ export function useApp() {
     try {
       setCertificates(
         await fortifyClient.current.getCertificatesByProviderId(
-          providersLocal[0].id,
-        ),
+          providersLocal[0].id
+        )
       );
       setCurrentProviderId(providersLocal[0].id);
       setFetchingValue("certificates", "resolved");
@@ -158,7 +158,7 @@ export function useApp() {
 
     try {
       setCertificates(
-        await fortifyClient.current!.getCertificatesByProviderId(id),
+        await fortifyClient.current!.getCertificatesByProviderId(id)
       );
       setCurrentProviderId(id);
       setFetchingValue("certificates", "resolved");

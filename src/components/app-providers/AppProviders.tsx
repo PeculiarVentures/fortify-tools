@@ -4,10 +4,8 @@ import { theme } from "../../config/theme";
 
 export const AppProviders: React.FunctionComponent<{
   children: React.ReactNode;
-}> = ({ children }) => {
-  return (
-    <ThemeProvider theme={theme}>
-      <ToastProvider>{children}</ToastProvider>
-    </ThemeProvider>
-  );
-};
+}> = ({ children }) => (
+  <ThemeProvider theme={theme}>
+    <ToastProvider>{children}</ToastProvider>
+  </ThemeProvider>
+);

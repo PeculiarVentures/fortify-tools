@@ -7,11 +7,9 @@ interface ErrorConnectionProps {
 export const ErrorConnection: React.FunctionComponent<ErrorConnectionProps> = ({
   message,
   description,
-}) => {
-  return (
-    <>
-      <h1>{message}</h1>
-      {description ? <p>{description}</p> : null}
-    </>
-  );
-};
+}) => (
+  <>
+    <h1>{message}</h1>
+    {description ? <p>{description}</p> : null}
+  </>
+);

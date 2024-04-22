@@ -26,7 +26,7 @@ export const CertificatesList: React.FunctionComponent<
 > = ({ certificates }) => {
   const { t } = useTranslation();
   if (!certificates?.length) {
-    //TODO: return some message
+    // TODO: return some message
     return null;
   }
 
