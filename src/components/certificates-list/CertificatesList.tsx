@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { ICertificate } from "@peculiar/fortify-client-core";
+import { Typography } from "@peculiar/react-components";
 import {
   Table,
   TableBody,
@@ -33,9 +34,9 @@ export const CertificatesList: React.FunctionComponent<
         <div className={styles.empty_list_icon}>
           <CertificatesIcon />
         </div>
-        <div className={styles.empty_list_text}>
+        <Typography variant="b2" color="gray-9">
           {t("certificates.list.empty-text")}
-        </div>
+        </Typography>
       </div>
     );
   }
