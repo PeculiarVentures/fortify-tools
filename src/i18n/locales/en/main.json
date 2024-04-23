@@ -14,7 +14,8 @@
         "name": "Name",
         "serial-number": "Serial number",
         "expires": "Expires"
-      }
+      },
+      "empty-text": "There are no certificates yet."
     }
   },
   "connection": {

@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "../table";
 import { useTranslation } from "react-i18next";
+import CertificatesIcon from "../../icons/certificates.svg?react";
 
 import styles from "./styles/index.module.scss";
 
@@ -26,13 +27,20 @@ export const CertificatesList: React.FunctionComponent<
 > = ({ certificates }) => {
   const { t } = useTranslation();
   if (!certificates?.length) {
-    // TODO: return some message
-    return null;
+    return (
+      <div className={styles.empty_list}>
+        <div className={styles.empty_list_icon}>
+          <CertificatesIcon />
+        </div>
+        <div className={styles.empty_list_text}>
+          {t("certificates.list.empty-text")}
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className={styles.list_root}>
-      <div>Filters</div>
       <div className={styles.list}>
         <Table>
           <TableHeader>

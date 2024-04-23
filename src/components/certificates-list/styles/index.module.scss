@@ -12,3 +12,35 @@
     flex-grow: 1;
   }
 }
+
+.empty_list {
+  background-color: var(--pv-color-white);
+  min-height: 100%;
+  display: flex;
+  gap: var(--pv-size-base-6);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--pv-border-radius-base) var(--pv-border-radius-base) 0 0;
+  border: solid var(--pv-color-gray-4);
+  border-width: 1px 1px 0 1px;
+
+  .empty_list_icon {
+    width: 180px;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--pv-color-gray-2);
+    border-radius: 50%;
+
+    svg {
+      height: 100px;
+    }
+  }
+
+  .empty_list_text {
+    font-size: var(--pv-text-b2-size);
+    color: var(--pv-color-gray-9);
+  }
+}
