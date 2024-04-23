@@ -5,9 +5,17 @@ import styles from "./styles/index.module.scss";
 export const TableHead = React.forwardRef<
   HTMLTableCellElement,
   React.ThHTMLAttributes<HTMLTableCellElement>
->(({ className, ...props }, ref) => (
-  <th ref={ref} className={clsx(styles.table_head, className)} {...props} />
-));
+>((props, ref) => {
+  const { className, ...restProps } = props;
+
+  return (
+    <th
+      ref={ref}
+      className={clsx(styles.table_head, className)}
+      {...restProps}
+    />
+  );
+});
 TableHead.displayName = "TableHead";
 
 export default TableHead;

@@ -10,7 +10,8 @@ interface CertificatesSidebarProps {
 }
 export const CertificatesSidebar: React.FunctionComponent<
   CertificatesSidebarProps
-> = ({ children, className }) => {
+> = (props) => {
+  const { children, className } = props;
   const { t } = useTranslation();
 
   return (

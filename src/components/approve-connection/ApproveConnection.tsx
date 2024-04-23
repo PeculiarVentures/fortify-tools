@@ -6,8 +6,10 @@ interface ApproveConnectionProps {
 }
 export const ApproveConnection: React.FunctionComponent<
   ApproveConnectionProps
-> = ({ challenge }) => {
+> = (props) => {
+  const { challenge } = props;
   const { t } = useTranslation();
+
   return (
     <h1>
       {t("connection.approve.title")}:{challenge}

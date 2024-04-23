@@ -11,7 +11,8 @@ export interface FetchingStatusOwerlayProps {
 }
 export const FetchingStatusOwerlay: React.FunctionComponent<
   FetchingStatusOwerlayProps
-> = ({ fetching, challenge }) => {
+> = (props) => {
+  const { fetching, challenge } = props;
   const { t } = useTranslation();
   const [element, setElement] = useState<React.ReactNode>(null);
 

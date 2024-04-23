@@ -23,8 +23,10 @@ interface CertificatesListProps {
 
 export const CertificatesList: React.FunctionComponent<
   CertificatesListProps
-> = ({ certificates }) => {
+> = (props) => {
+  const { certificates } = props;
   const { t } = useTranslation();
+
   if (!certificates?.length) {
     return (
       <div className={styles.empty_list}>

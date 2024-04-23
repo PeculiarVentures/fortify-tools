@@ -14,8 +14,10 @@ interface CertificatesProvidersListItemProps {
 
 export const CertificatesProvidersListItem: React.FunctionComponent<
   CertificatesProvidersListItemProps
-> = ({ provider, isSelected, onClick }) => {
+> = (props) => {
+  const { provider, isSelected, onClick } = props;
   const { t } = useTranslation();
+
   return (
     <li
       className={clsx(styles.list_item, {

@@ -13,7 +13,8 @@ interface CertificatesProvidersListProps {
 
 export const CertificatesProvidersList: React.FunctionComponent<
   CertificatesProvidersListProps
-> = ({ providers, currentProviderId, onSelect }) => {
+> = (props) => {
+  const { providers, currentProviderId, onSelect } = props;
   const { t } = useTranslation();
 
   return (
