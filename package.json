@@ -25,7 +25,6 @@
     "@peculiar/react-components": "^0.6.0",
     "clsx": "^2.1.0",
     "i18next": "^23.11.2",
-    "i18next-icu": "^2.3.0",
     "intl-messageformat": "^10.5.11",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
