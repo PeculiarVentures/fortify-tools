@@ -8,8 +8,8 @@ import styles from "./styles/index.module.scss";
 
 interface CertificatesProvidersListItemProps {
   provider: IProviderInfo;
-  isSelected?: boolean;
-  onClick?: (id: string) => void;
+  isSelected: boolean;
+  onClick: (id: string) => void;
 }
 
 export const CertificatesProvidersListItem: React.FunctionComponent<
