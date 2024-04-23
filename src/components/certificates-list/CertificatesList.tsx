@@ -19,7 +19,7 @@ interface CertificateProp extends ICertificate {
 }
 
 interface CertificatesListProps {
-  certificates?: CertificateProp[];
+  certificates: CertificateProp[];
 }
 
 export const CertificatesList: React.FunctionComponent<
