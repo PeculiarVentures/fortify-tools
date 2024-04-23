@@ -42,7 +42,7 @@
     "eslint-plugin-react": "^7.12.4",
     "express": "^4.16.2",
     "generate-json-webpack-plugin": "^0.3.1",
-    "gh-pages": "^2.0.1",
+    "gh-pages": "^5.0.0",
     "html-webpack-plugin": "^4.4.1",
     "react-dev-utils": "^11.0.4",
     "rimraf": "^2.6.3",
