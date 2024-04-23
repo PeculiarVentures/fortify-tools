@@ -16,7 +16,7 @@ export const CertificatesProvidersListItem: React.FunctionComponent<
 > = ({ provider, isSelected, onClick }) => {
   const { t } = useTranslation();
   return (
-    <div
+    <li
       className={clsx(styles.list_item, {
         [styles.current_list_item]: isSelected,
       })}
@@ -35,6 +35,6 @@ export const CertificatesProvidersListItem: React.FunctionComponent<
           </div>
         ) : null}
       </div>
-    </div>
+    </li>
   );
 };

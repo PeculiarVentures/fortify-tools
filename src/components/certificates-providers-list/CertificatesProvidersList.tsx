@@ -20,18 +20,19 @@ export const CertificatesProvidersList: React.FunctionComponent<
   return (
     <div className={styles.list_wrapper}>
       <div className={styles.label}>{t("providers.list.label")}</div>
-      <div className={styles.list}>
-        {!providers?.length ? (
-          <div className={styles.empty_list}>
-            <div className={styles.empty_list_icon}>
-              <AttentionCircleIcon />
-            </div>
-            <div className={styles.empty_list_text}>
-              {t("providers.list.empty-text")}
-            </div>
+
+      {!providers?.length ? (
+        <div className={styles.empty_list}>
+          <div className={styles.empty_list_icon}>
+            <AttentionCircleIcon />
           </div>
-        ) : (
-          providers.map((provider) => (
+          <div className={styles.empty_list_text}>
+            {t("providers.list.empty-text")}
+          </div>
+        </div>
+      ) : (
+        <ul className={styles.list}>
+          {providers.map((provider) => (
             <CertificatesProvidersListItem
               isSelected={currentProviderId === provider.id}
               onClick={(id) => {
@@ -40,9 +41,9 @@ export const CertificatesProvidersList: React.FunctionComponent<
               key={provider.id}
               provider={provider}
             />
-          ))
-        )}
-      </div>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
