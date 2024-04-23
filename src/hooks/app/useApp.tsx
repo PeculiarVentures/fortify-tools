@@ -153,7 +153,7 @@ export function useApp() {
     await tryGetData();
   };
 
-  const getCertificatesByProviderId = async (id: string) => {
+  const handleProviderChange = async (id: string) => {
     setFetchingValue("certificates", "pending");
 
     try {
@@ -187,6 +187,6 @@ export function useApp() {
     providers,
     currentProviderId,
     certificates,
-    getCertificatesByProviderId,
+    handleProviderChange,
   };
 }

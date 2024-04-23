@@ -15,7 +15,7 @@ export function App() {
     providers,
     currentProviderId,
     certificates,
-    getCertificatesByProviderId,
+    handleProviderChange,
   } = useApp();
 
   return (
@@ -37,7 +37,7 @@ export function App() {
                   ) {
                     return;
                   }
-                  getCertificatesByProviderId(id);
+                  handleProviderChange(id);
                 }}
               />
             )}
