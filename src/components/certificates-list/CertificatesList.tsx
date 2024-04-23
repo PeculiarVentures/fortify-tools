@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { ICertificate } from "@peculiar/fortify-client-core";
 import {
   Table,
@@ -8,9 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "../table";
-import { useTranslation } from "react-i18next";
 import CertificatesIcon from "../../icons/certificates.svg?react";
-
 import styles from "./styles/index.module.scss";
 
 interface CertificateProp extends ICertificate {

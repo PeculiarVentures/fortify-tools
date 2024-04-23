@@ -1,9 +1,8 @@
 import React from "react";
 import { IProviderInfo } from "@peculiar/fortify-client-core";
-import { CertificatesProvidersListItem } from "../certificates-providers-list-item";
 import { useTranslation } from "react-i18next";
+import { CertificatesProvidersListItem } from "../certificates-providers-list-item";
 import AttentionCircleIcon from "../../icons/attention-circle.svg?react";
-
 import styles from "./styles/index.module.scss";
 
 interface CertificatesProvidersListProps {
