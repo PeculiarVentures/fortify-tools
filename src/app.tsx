@@ -45,27 +45,11 @@ export function App() {
         </div>
         <div className={styles.content}>
           {fetching.certificates ? (
-            <>
-              <CertificatesList certificates={certificates} />
-              {/* <PeculiarCertificatesViewer
-            certificates={certificates.map((certificate) => ({
-              value: Convert.ToBase64(certificate.raw),
-            }))}
-          /> */}
-            </>
+            <CertificatesList certificates={certificates} />
           ) : null}
         </div>
       </div>
       <FetchingStatusOwerlay fetching={fetching} challenge={challenge} />
-      {/* {certificates.map((certificate) => {
-          return (
-            <PeculiarCertificateViewer
-              key={certificate.index}
-              certificate={Convert.ToBase64(certificate.raw)}
-              download={true}
-            />
-          );
-        })} */}
     </AppProviders>
   );
 }
