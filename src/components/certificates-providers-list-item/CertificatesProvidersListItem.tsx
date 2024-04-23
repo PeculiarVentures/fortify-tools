@@ -1,9 +1,10 @@
 import React from "react";
 import { IProviderInfo } from "@peculiar/fortify-client-core";
-import styles from "./styles/index.module.scss";
-import clsx from "clsx";
 import { useTranslation } from "react-i18next";
+import clsx from "clsx";
+import { Typography } from "@peculiar/react-components";
 import ProviderIcon from "../../icons/provider.svg?react";
+import styles from "./styles/index.module.scss";
 
 interface CertificatesProvidersListItemProps {
   provider: IProviderInfo;
@@ -28,11 +29,13 @@ export const CertificatesProvidersListItem: React.FunctionComponent<
         <ProviderIcon />
       </div>
       <div className={styles.list_item_name_wrapper}>
-        <div className={styles.list_item_name}>{provider.name}</div>
+        <Typography variant="s1" color={isSelected ? "primary" : "gray-10"}>
+          {provider.name}
+        </Typography>
         {!provider.readOnly ? (
-          <div className={styles.list_item_read_only}>
+          <Typography variant="c1">
             {t("providers.list.item.read-only")}
-          </div>
+          </Typography>
         ) : null}
       </div>
     </li>
