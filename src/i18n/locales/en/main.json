@@ -4,7 +4,8 @@
       "label": "Provider",
       "item": {
         "read-only": "Read only"
-      }
+      },
+      "empty-text": "No providers connected"
     }
   },
   "certificates": {

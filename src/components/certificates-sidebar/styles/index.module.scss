@@ -16,6 +16,8 @@
   .content {
     padding: 0 var(--pv-size-base-2);
     flex-grow: 1;
+    overflow-y: auto;
+    max-height: 100%;
   }
 
   .footer {
