@@ -11,6 +11,37 @@
     top: var(--pv-top-header-height);
     z-index: 99;
   }
+
+  th:nth-child(1) {
+    width: 30%;
+  }
+  th:nth-child(3) {
+    width: 20%;
+  }
+  th:nth-child(4),
+  td:nth-child(4) {
+    width: 15%;
+    text-align: right;
+  }
+
+  tbody tr {
+    position: relative;
+    .list_table_actions {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background-color: var(--pv-color-white);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      width: 0;
+    }
+    &:hover .list_table_actions {
+      width: 160px;
+    }
+  }
 }
 
 .table_wrapper,

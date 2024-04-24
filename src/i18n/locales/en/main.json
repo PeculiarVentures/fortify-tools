@@ -19,6 +19,9 @@
       "cell": {
         "certificate": "Certificate"
       },
+      "action": {
+        "view-details": "View details"
+      },
       "empty-text": "There are no certificates yet."
     }
   },

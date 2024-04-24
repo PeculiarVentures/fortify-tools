@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { ICertificate } from "@peculiar/fortify-client-core";
-import { Typography } from "@peculiar/react-components";
+import { Button, Typography } from "@peculiar/react-components";
 import {
   Table,
   TableBody,
@@ -67,7 +67,14 @@ export const CertificatesList: React.FunctionComponent<
               </TableCell>
               <TableCell>{serialNumber}</TableCell>
               {/* TODO: add date component */}
-              <TableCell>{notAfter.toLocaleDateString()}</TableCell>
+              <TableCell>
+                <div>{notAfter.toLocaleDateString()}</div>
+                <div className={styles.list_table_actions}>
+                  <Button variant="outlined" size="small">
+                    {t("certificates.list.action.view-details")}
+                  </Button>
+                </div>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
