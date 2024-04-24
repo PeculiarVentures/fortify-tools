@@ -1,12 +1,5 @@
-.table_wrapper {
-  position: relative;
+.table {
   width: 100%;
-  overflow: auto;
-
-  .table {
-    width: 100%;
-    font-size: var(--pv-text-s1);
-    border-collapse: separate;
-    border-bottom: 1px solid var(--pv-color-gray-4);
-  }
+  font-size: var(--pv-text-s1);
+  border-collapse: separate;
 }

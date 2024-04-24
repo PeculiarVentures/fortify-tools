@@ -1,7 +1,9 @@
 .table_cell {
+  position: relative;
+  z-index: 2;
   font-size: var(--pv-text-b2-size);
   padding: var(--pv-size-base-4);
-  border-top: 1px solid var(--pv-color-gray-4);
+  border-bottom: 1px solid var(--pv-color-gray-4);
   &:first-child {
     padding-left: var(--pv-size-base-6);
     border-left: 1px solid var(--pv-color-gray-4);

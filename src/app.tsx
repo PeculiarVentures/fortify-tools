@@ -20,35 +20,30 @@ export function App() {
 
   return (
     <AppProviders>
-      <div className={styles.layout}>
-        <div className={styles.sidebar_placeholder}>
-          <CertificatesSidebar className={styles.sidebar}>
-            {fetching.providers === "pending" ? (
-              // TODO: add loading skeleton
-              "Loading providers list..."
-            ) : (
-              <CertificatesProvidersList
-                providers={providers}
-                currentProviderId={currentProviderId}
-                onSelect={(id) => {
-                  if (
-                    currentProviderId === id ||
-                    fetching.certificates === "pending"
-                  ) {
-                    return;
-                  }
-                  handleProviderChange(id);
-                }}
-              />
-            )}
-          </CertificatesSidebar>
-        </div>
-        <div className={styles.content}>
-          {fetching.certificates ? (
-            <CertificatesList certificates={certificates} />
-          ) : null}
-        </div>
-      </div>
+      <CertificatesSidebar className={styles.sidebar}>
+        {fetching.providers === "pending" ? (
+          // TODO: add loading skeleton
+          "Loading providers list..."
+        ) : (
+          <CertificatesProvidersList
+            providers={providers}
+            currentProviderId={currentProviderId}
+            onSelect={(id) => {
+              if (
+                currentProviderId === id ||
+                fetching.certificates === "pending"
+              ) {
+                return;
+              }
+              handleProviderChange(id);
+            }}
+          />
+        )}
+      </CertificatesSidebar>
+      <div className={styles.top_bar}></div>
+      {fetching.certificates ? (
+        <CertificatesList certificates={certificates} />
+      ) : null}
       <FetchingStatusOwerlay fetching={fetching} challenge={challenge} />
     </AppProviders>
   );

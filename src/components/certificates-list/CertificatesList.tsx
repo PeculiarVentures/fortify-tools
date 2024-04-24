@@ -42,33 +42,29 @@ export const CertificatesList: React.FunctionComponent<
   }
 
   return (
-    <div className={styles.list_root}>
-      <div className={styles.list}>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>{t("certificates.list.header.type")}</TableHead>
-              <TableHead>{t("certificates.list.header.name")}</TableHead>
-              <TableHead>
-                {t("certificates.list.header.serial-number")}
-              </TableHead>
-              <TableHead>{t("certificates.list.header.expires")}</TableHead>
+    <div className={styles.table_wrapper}>
+      <Table className={styles.list_table}>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t("certificates.list.header.type")}</TableHead>
+            <TableHead>{t("certificates.list.header.name")}</TableHead>
+            <TableHead>{t("certificates.list.header.serial-number")}</TableHead>
+            <TableHead>{t("certificates.list.header.expires")}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {certificates.map(({ id, serialNumber, type, label, notAfter }) => (
+            <TableRow key={id}>
+              <TableCell>{type}</TableCell>
+              {/* // TODO: not sure about label as name */}
+              <TableCell>{label}</TableCell>
+              <TableCell>{serialNumber}</TableCell>
+              {/* TODO: add date component */}
+              <TableCell>{notAfter.toLocaleDateString()}</TableCell>
             </TableRow>
-          </TableHeader>
-          <TableBody>
-            {certificates.map(({ id, serialNumber, type, label, notAfter }) => (
-              <TableRow key={id}>
-                <TableCell>{type}</TableCell>
-                {/* // TODO: not sure about label as name */}
-                <TableCell>{label}</TableCell>
-                <TableCell>{serialNumber}</TableCell>
-                {/* TODO: add date component */}
-                <TableCell>{notAfter.toLocaleDateString()}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 };

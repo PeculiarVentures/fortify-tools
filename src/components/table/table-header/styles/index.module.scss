@@ -10,4 +10,7 @@
   th {
     border-top: 1px solid var(--pv-color-gray-4);
   }
+  tr:last-child th {
+    border-bottom: 1px solid var(--pv-color-gray-4);
+  }
 }

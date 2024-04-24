@@ -25,7 +25,6 @@ button {
 }
 
 table {
-  cellspacing: 0 !important;
   border-spacing: 0 !important;
 }
 
@@ -39,9 +38,4 @@ body {
 body {
   color: var(--pv-color-black);
   background-color: #ffffff;
-}
-
-#root {
-  height: 100%;
-  -webkit-overflow-scrolling: touch;
 }

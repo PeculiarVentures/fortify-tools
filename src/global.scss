@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
 html {
   --pv-border-radius-base: 8px;
+  --pv-top-header-height: 90px;
 }
 body {
   font-family: Manrope, Helvetica, Arial, sans-serif;
@@ -12,6 +13,32 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  background-color: var(--pv-color-gray-2);
+}
+
+#root {
+  margin: 0 40px 0 340px;
+  min-height: 100%;
+  min-width: 724px;
+  max-width: 1200px;
+  position: relative;
+
+  &::after,
+  &::before {
+    content: "";
+    width: 10px;
+    background-color: var(--pv-color-gray-2);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 99;
+  }
+  &::after {
+    right: -10px;
+  }
+  &::before {
+    left: -10px;
+  }
 }
 
 a {

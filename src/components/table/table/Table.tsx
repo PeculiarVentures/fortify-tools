@@ -10,13 +10,7 @@ export const Table = React.forwardRef<
   const { className, ...restProps } = props;
 
   return (
-    <div className={styles.table_wrapper}>
-      <table
-        ref={ref}
-        className={clsx(styles.table, className)}
-        {...restProps}
-      />
-    </div>
+    <table ref={ref} className={clsx(styles.table, className)} {...restProps} />
   );
 });
 Table.displayName = "Table";
