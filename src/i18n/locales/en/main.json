@@ -16,6 +16,9 @@
         "serial-number": "Serial number",
         "expires": "Expires"
       },
+      "cell": {
+        "certificate": "Certificate"
+      },
       "empty-text": "There are no certificates yet."
     }
   },

@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "../table";
 import CertificatesIcon from "../../icons/certificates.svg?react";
+import { CertificateTypeLabel } from "../certificate-type-label";
 import styles from "./styles/index.module.scss";
 
 interface CertificateProp extends ICertificate {
@@ -55,9 +56,15 @@ export const CertificatesList: React.FunctionComponent<
         <TableBody>
           {certificates.map(({ id, serialNumber, type, label, notAfter }) => (
             <TableRow key={id}>
-              <TableCell>{type}</TableCell>
+              <TableCell>
+                <CertificateTypeLabel type={type} />
+              </TableCell>
               {/* // TODO: not sure about label as name */}
-              <TableCell>{label}</TableCell>
+              <TableCell>
+                <Typography variant="b2" color="black">
+                  {label}
+                </Typography>
+              </TableCell>
               <TableCell>{serialNumber}</TableCell>
               {/* TODO: add date component */}
               <TableCell>{notAfter.toLocaleDateString()}</TableCell>
