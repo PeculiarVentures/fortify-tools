@@ -22,23 +22,6 @@ body {
   min-width: 724px;
   max-width: 980px;
   position: relative;
-
-  &::after,
-  &::before {
-    content: "";
-    width: 10px;
-    background-color: var(--pv-color-gray-2);
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    z-index: 99;
-  }
-  &::after {
-    right: -10px;
-  }
-  &::before {
-    left: -10px;
-  }
 }
 
 a {
