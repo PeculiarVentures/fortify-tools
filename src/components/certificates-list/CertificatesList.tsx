@@ -12,6 +12,7 @@ import {
 } from "../table";
 import CertificatesIcon from "../../icons/certificates.svg?react";
 import { CertificateTypeLabel } from "../certificate-type-label";
+import { Date } from "../date";
 import styles from "./styles/index.module.scss";
 
 interface CertificateProp extends ICertificate {
@@ -28,6 +29,8 @@ export const CertificatesList: React.FunctionComponent<
 > = (props) => {
   const { certificates } = props;
   const { t } = useTranslation();
+
+  console.log(certificates);
 
   if (!certificates?.length) {
     return (
@@ -66,9 +69,8 @@ export const CertificatesList: React.FunctionComponent<
                 </Typography>
               </TableCell>
               <TableCell>{serialNumber}</TableCell>
-              {/* TODO: add date component */}
               <TableCell>
-                <div>{notAfter.toLocaleDateString()}</div>
+                <Date date={notAfter} />
                 <div className={styles.list_table_actions}>
                   <Button variant="outlined" size="small">
                     {t("certificates.list.action.view-details")}
