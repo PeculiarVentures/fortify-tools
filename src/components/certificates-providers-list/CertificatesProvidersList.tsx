@@ -3,6 +3,7 @@ import { IProviderInfo } from "@peculiar/fortify-client-core";
 import { useTranslation } from "react-i18next";
 import { CertificatesProvidersListItem } from "../certificates-providers-list-item";
 import AttentionCircleIcon from "../../icons/attention-circle.svg?react";
+import { Typography } from "@peculiar/react-components";
 import styles from "./styles/index.module.scss";
 
 interface CertificatesProvidersListProps {
@@ -19,16 +20,18 @@ export const CertificatesProvidersList: React.FunctionComponent<
 
   return (
     <div className={styles.list_wrapper}>
-      <div className={styles.label}>{t("providers.list.label")}</div>
+      <Typography className={styles.label} variant="c1" color="gray-9">
+        {t("providers.list.label")}
+      </Typography>
 
       {!providers?.length ? (
         <div className={styles.empty_list}>
           <div className={styles.empty_list_icon}>
             <AttentionCircleIcon />
           </div>
-          <div className={styles.empty_list_text}>
+          <Typography variant="s1" color="gray-8">
             {t("providers.list.empty-text")}
-          </div>
+          </Typography>
         </div>
       ) : (
         <ul className={styles.list}>

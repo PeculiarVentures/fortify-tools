@@ -4,9 +4,6 @@
   gap: var(--pv-size-base);
 
   .label {
-    font-size: var(--pv-text-c1-size);
-    line-height: var(--pv-text-c1-height);
-    color: var(--pv-color-gray-9);
     padding-left: var(--pv-size-base-2);
   }
 
@@ -31,11 +28,5 @@
       width: var(--pv-size-base-4);
       height: var(--pv-size-base-4);
     }
-  }
-
-  .empty_list_text {
-    font-size: var(--pv-text-s1-size);
-    font-weight: var(--pv-text-s1-weight);
-    color: var(--pv-color-gray-8);
   }
 }
