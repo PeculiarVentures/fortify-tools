@@ -14,6 +14,7 @@ import CertificatesIcon from "../../icons/certificates.svg?react";
 import { CertificateTypeLabel } from "../certificate-type-label";
 import { Date } from "../date";
 import { CertificateName } from "../certificate-name";
+import { CertificateSerialNumber } from "../certificate-serial-number";
 import styles from "./styles/index.module.scss";
 
 interface CertificateProp extends ICertificate {
@@ -30,8 +31,6 @@ export const CertificatesList: React.FunctionComponent<
 > = (props) => {
   const { certificates } = props;
   const { t } = useTranslation();
-
-  console.log(certificates);
 
   if (!certificates?.length) {
     return (
@@ -67,7 +66,9 @@ export const CertificatesList: React.FunctionComponent<
               <TableCell>
                 <CertificateName name={label} />
               </TableCell>
-              <TableCell>{serialNumber}</TableCell>
+              <TableCell>
+                <CertificateSerialNumber value={serialNumber} />
+              </TableCell>
               <TableCell>
                 <Date date={notAfter} />
                 <div className={styles.list_table_actions}>
