@@ -21,6 +21,13 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    overflow: hidden;
+    .list_item_name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+    }
   }
 
   &:hover {

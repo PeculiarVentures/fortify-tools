@@ -31,7 +31,12 @@ export const CertificatesProvidersListItem: React.FunctionComponent<
         <ProviderIcon />
       </div>
       <div className={styles.list_item_name_wrapper}>
-        <Typography variant="s1" color={isSelected ? "primary" : "gray-10"}>
+        <Typography
+          title={provider.name}
+          className={styles.list_item_name}
+          variant="s1"
+          color={isSelected ? "primary" : "gray-10"}
+        >
           {provider.name}
         </Typography>
         {!provider.readOnly ? (
