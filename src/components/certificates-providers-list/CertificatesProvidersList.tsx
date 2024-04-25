@@ -19,7 +19,7 @@ export const CertificatesProvidersList: React.FunctionComponent<
   const { t } = useTranslation();
 
   return (
-    <div className={styles.list_wrapper}>
+    <div className={styles.list_box_wrapper}>
       <Typography className={styles.label} variant="c1" color="gray-9">
         {t("providers.list.label")}
       </Typography>
@@ -34,18 +34,20 @@ export const CertificatesProvidersList: React.FunctionComponent<
           </Typography>
         </div>
       ) : (
-        <ul className={styles.list}>
-          {providers.map((provider) => (
-            <CertificatesProvidersListItem
-              isSelected={currentProviderId === provider.id}
-              onClick={(id) => {
-                onSelect && onSelect(id);
-              }}
-              key={provider.id}
-              provider={provider}
-            />
-          ))}
-        </ul>
+        <div className={styles.list_wrapper}>
+          <ul className={styles.list}>
+            {providers.map((provider) => (
+              <CertificatesProvidersListItem
+                isSelected={currentProviderId === provider.id}
+                onClick={(id) => {
+                  onSelect && onSelect(id);
+                }}
+                key={provider.id}
+                provider={provider}
+              />
+            ))}
+          </ul>
+        </div>
       )}
     </div>
   );
