@@ -13,6 +13,7 @@ import {
 import CertificatesIcon from "../../icons/certificates.svg?react";
 import { CertificateTypeLabel } from "../certificate-type-label";
 import { Date } from "../date";
+import { CertificateName } from "../certificate-name";
 import styles from "./styles/index.module.scss";
 
 interface CertificateProp extends ICertificate {
@@ -64,9 +65,7 @@ export const CertificatesList: React.FunctionComponent<
               </TableCell>
               {/* // TODO: not sure about label as name */}
               <TableCell>
-                <Typography variant="b2" color="black">
-                  {label}
-                </Typography>
+                <CertificateName name={label} />
               </TableCell>
               <TableCell>{serialNumber}</TableCell>
               <TableCell>

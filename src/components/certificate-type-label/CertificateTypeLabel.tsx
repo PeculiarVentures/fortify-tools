@@ -14,11 +14,11 @@ interface CertificateTypeLabelProps {
 export const CertificateTypeLabel: React.FunctionComponent<
   CertificateTypeLabelProps
 > = (props) => {
-  const { type } = props;
+  const { type, className } = props;
   const { t } = useTranslation();
 
   return (
-    <div className={clsx(styles.certificate_type_label)}>
+    <div className={clsx(className, styles.certificate_type_label)}>
       {type === "x509" ? (
         <>
           <span className={styles.icon_wrapper}>

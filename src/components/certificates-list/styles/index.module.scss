@@ -1,5 +1,6 @@
 .list_table {
   background-color: var(--pv-color-gray-2);
+  table-layout: fixed;
 
   thead th,
   tbody {
