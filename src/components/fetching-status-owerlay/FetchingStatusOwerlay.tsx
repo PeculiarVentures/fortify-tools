@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Dialog, DialogContent } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
 import { AppFetchingType } from "../../hooks/app";
@@ -14,54 +14,67 @@ export const FetchingStatusOwerlay: React.FunctionComponent<
 > = (props) => {
   const { fetching, challenge } = props;
   const { t } = useTranslation();
-  const [element, setElement] = useState<React.ReactNode>(null);
 
-  useEffect(() => {
+  function dialogAttrs() {
     if (fetching.connectionClientUpdate === "rejected") {
-      setElement(
-        <ErrorConnection
-          message={t("connection.error.update-client.message")}
-        />
-      );
-      return;
+      return {
+        isShow: true,
+        element: (
+          <ErrorConnection
+            message={t("connection.error.update-client.message")}
+          />
+        ),
+      };
     }
 
     if (fetching.connectionSupport === "rejected") {
-      setElement(
-        <ErrorConnection
-          message={t("connection.error.connection-not-supported.message")}
-        />
-      );
-      return;
+      return {
+        isShow: true,
+        element: (
+          <ErrorConnection
+            message={t("connection.error.connection-not-supported.message")}
+          />
+        ),
+      };
     }
 
     if (fetching.connectionDetect === "rejected") {
-      setElement(
-        <ErrorConnection
-          message={t("connection.error.connection-not-detect.message")}
-          description={t("connection.error.connection-not-detect.description")}
-        />
-      );
-      return;
+      return {
+        isShow: true,
+        element: (
+          <ErrorConnection
+            message={t("connection.error.connection-not-detect.message")}
+            description={t(
+              "connection.error.connection-not-detect.description"
+            )}
+          />
+        ),
+      };
     }
 
     if (fetching.connectionApprove === "rejected") {
-      setElement(
-        <ErrorConnection
-          message={t("connection.error.connection-not-approved.message")}
-        />
-      );
-      return;
+      return {
+        isShow: true,
+        element: (
+          <ErrorConnection
+            message={t("connection.error.connection-not-approved.message")}
+          />
+        ),
+      };
     }
 
     if (fetching.connectionApprove === "pending" && !!challenge) {
-      setElement(<ApproveConnection challenge={challenge} />);
-      return;
+      return {
+        isShow: true,
+        element: <ApproveConnection challenge={challenge} />,
+      };
     }
 
     if (fetching.certificates) {
-      setElement(null);
-      return;
+      return {
+        isShow: false,
+        element: null,
+      };
     }
 
     if (
@@ -70,28 +83,27 @@ export const FetchingStatusOwerlay: React.FunctionComponent<
       fetching.connectionApprove === "pending" ||
       fetching.providers === "pending"
     ) {
-      setElement(null);
-      return;
+      return {
+        isShow: false,
+        element: null,
+      };
     }
 
-    setElement(
-      <ErrorConnection
-        message={t("connection.error.unresolved-status.message")}
-      />
-    );
-  }, [
-    fetching.connectionDetect,
-    fetching.connectionSupport,
-    fetching.connectionApprove,
-    fetching.connectionClientUpdate,
-    fetching.providers,
-    fetching.certificates,
-    challenge,
-  ]);
+    return {
+      isShow: true,
+      element: (
+        <ErrorConnection
+          message={t("connection.error.unresolved-status.message")}
+        />
+      ),
+    };
+  }
+
+  const { isShow, element } = dialogAttrs();
 
   return (
     <Dialog
-      open={!!element}
+      open={isShow}
       disableBackdropClick={true}
       disableEscapeKeyDown={true}
     >
