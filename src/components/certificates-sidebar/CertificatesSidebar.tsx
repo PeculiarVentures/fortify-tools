@@ -1,11 +1,11 @@
 import clsx from "clsx";
-import React, { ComponentProps } from "react";
+import React, { ComponentProps, PropsWithChildren } from "react";
 import { useTranslation } from "react-i18next";
 import { Typography } from "@peculiar/react-components";
 import { APP_CONTACT_SUPPORT_URL } from "../../config";
 import styles from "./styles/index.module.scss";
 
-interface CertificatesSidebarProps {
+interface CertificatesSidebarProps extends PropsWithChildren {
   className?: ComponentProps<"div">["className"];
 }
 export const CertificatesSidebar: React.FunctionComponent<
