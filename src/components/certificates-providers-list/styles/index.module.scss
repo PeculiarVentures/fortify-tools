@@ -5,10 +5,11 @@
   max-height: 100%;
 
   .label {
-    padding-left: var(--pv-size-base-2);
+    padding-left: var(--pv-size-base-4);
   }
 
   .list_wrapper {
+    padding: 0 var(--pv-size-base-2);
     max-height: 100%;
     overflow-y: scroll;
     .list {
