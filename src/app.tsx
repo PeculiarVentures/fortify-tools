@@ -6,6 +6,7 @@ import { FetchingStatusOwerlay } from "./components/fetching-status-owerlay";
 import { CertificatesList } from "./components/certificates-list";
 import { CertificatesSidebar } from "./components/certificates-sidebar";
 import { CertificatesProvidersList } from "./components/certificates-providers-list";
+import { CertificatesTopbar } from "./components/certificates-topbar";
 import styles from "./app.module.scss";
 
 export function App() {
@@ -16,6 +17,9 @@ export function App() {
     currentProviderId,
     certificates,
     handleProviderChange,
+    handleCertificatesSearch,
+    handleCertificateImport,
+    handleCertificateCreate,
   } = useApp();
 
   return (
@@ -40,7 +44,12 @@ export function App() {
           />
         )}
       </CertificatesSidebar>
-      <div className={styles.top_bar}></div>
+      <CertificatesTopbar
+        className={styles.top_bar}
+        onSearch={handleCertificatesSearch}
+        onImport={handleCertificateImport}
+        onCreate={handleCertificateCreate}
+      ></CertificatesTopbar>
       {fetching.certificates ? (
         <CertificatesList certificates={certificates} />
       ) : null}

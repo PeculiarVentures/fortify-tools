@@ -181,6 +181,21 @@ export function useApp() {
     start();
   }, []);
 
+  const handleCertificatesSearch = (value: string) => {
+    // TODO: add logic
+    console.log(value);
+  };
+
+  const handleCertificateImport = () => {
+    // TODO: add logic
+    console.log("Import");
+  };
+
+  const handleCertificateCreate = () => {
+    // TODO: add logic
+    console.log("Create");
+  };
+
   return {
     fetching,
     challenge,
@@ -188,5 +203,8 @@ export function useApp() {
     currentProviderId,
     certificates,
     handleProviderChange,
+    handleCertificatesSearch,
+    handleCertificateImport,
+    handleCertificateCreate,
   };
 }

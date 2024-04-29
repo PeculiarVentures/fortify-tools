@@ -52,5 +52,10 @@
     "logo-alt": "Fortify logo",
     "copyrigth": "Fortify by Peculiar Ventures ©",
     "contact-support": "Contact support"
+  },
+  "topbar": {
+    "search-placeholder": "Search",
+    "import-certificate": "Import certificate",
+    "create-certificate": "Create"
   }
 }
