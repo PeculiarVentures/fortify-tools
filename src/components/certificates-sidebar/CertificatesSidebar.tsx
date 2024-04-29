@@ -28,7 +28,7 @@ export const CertificatesSidebar: React.FunctionComponent<
         <Typography variant="c1" color="gray-9">
           {t("sidebar.copyrigth")}
         </Typography>
-        <div>
+        <div className={styles.footer_contact}>
           <Typography
             variant="c1"
             color="primary"
