@@ -2,27 +2,43 @@
   "name": "@peculiar/fortify-tools",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "devDependencies": {
-    "@types/react": "^17.0.20",
-    "@types/react-dom": "^17.0.9",
+    "@eslint/js": "^9.1.1",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.2.1",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-airbnb-typescript": "^16.2.0",
-    "typescript": "^5.2.2",
-    "vite": "^5.2.0"
+    "autoprefixer": "^10.4.19",
+    "eslint": "^9.1.1",
+    "eslint-config-prettier": "^9.1.0",
+    "postcss": "^8.4.38",
+    "prettier": "^3.2.5",
+    "sass": "^1.75.0",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.7.1",
+    "vite": "^5.2.10",
+    "vite-plugin-svgr": "^4.2.0"
   },
   "dependencies": {
-    "@peculiar/certificates-viewer-react": "^4.2.0",
+    "@peculiar/certificates-viewer-react": "^4.2.1",
     "@peculiar/fortify-webcomponents-react": "^4.0.3",
     "@peculiar/react-components": "^0.6.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "clsx": "^2.1.1",
+    "i18next": "^23.11.2",
+    "intl-messageformat": "^10.5.11",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "react-i18next": "^14.1.1"
   },
   "resolutions": {
     "@webcrypto-local/client": "1.7.7"
   },
   "scripts": {
-    "start": "vite",
-    "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx"
+    "start": "vite --port 3003",
+    "lint": "eslint ./src ",
+    "lint:ts": "tsc --noEmit",
+    "build": "tsc && vite build --emptyOutDir",
+    "preview": "vite preview --port 3005",
+    "format": "prettier --write 'src/**/*.{ts,tsx}'"
   }
 }

@@ -1,0 +1,22 @@
+.topbar_root {
+  padding-top: var(--pv-size-base-6);
+  display: flex;
+  gap: var(--pv-size-base-2);
+
+  .topbar_divider {
+    flex-grow: 1;
+  }
+
+  .search_field {
+    position: relative;
+    width: 400px;
+    input {
+      padding-left: var(--pv-size-base-8);
+    }
+    svg {
+      position: absolute;
+      left: 8px;
+      top: 5px;
+    }
+  }
+}

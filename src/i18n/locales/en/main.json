@@ -1,0 +1,61 @@
+{
+  "providers": {
+    "list": {
+      "label": "Provider",
+      "item": {
+        "read-only": "Read only"
+      },
+      "empty-text": "No providers connected"
+    }
+  },
+  "certificates": {
+    "list": {
+      "header": {
+        "type": "Type",
+        "name": "Name",
+        "serial-number": "Serial number",
+        "expires": "Expires"
+      },
+      "cell": {
+        "certificate": "Certificate"
+      },
+      "action": {
+        "view-details": "View details"
+      },
+      "empty-text": "There are no certificates yet."
+    }
+  },
+  "connection": {
+    "approve": {
+      "title": "Approve connection"
+    },
+    "error": {
+      "update-client": {
+        "message": "Update client"
+      },
+      "connection-not-supported": {
+        "message": "Connection not supported"
+      },
+      "connection-not-detect": {
+        "message": "Launch your local Fortify application",
+        "description": "It seems Fortify application is turned off on your desktop. Please launch it to continue."
+      },
+      "connection-not-approved": {
+        "message": "Connection not approved"
+      },
+      "unresolved-status": {
+        "message": "Unresolved status"
+      }
+    }
+  },
+  "sidebar": {
+    "logo-alt": "Fortify logo",
+    "copyrigth": "Fortify by Peculiar Ventures ©",
+    "contact-support": "Contact support"
+  },
+  "topbar": {
+    "search-placeholder": "Search",
+    "import-certificate": "Import certificate",
+    "create-certificate": "Create"
+  }
+}
