@@ -7,6 +7,7 @@ import { CertificatesList } from "./components/certificates-list";
 import { CertificatesSidebar } from "./components/certificates-sidebar";
 import { CertificatesProvidersList } from "./components/certificates-providers-list";
 import { CertificatesTopbar } from "./components/certificates-topbar";
+import { CertificateViewerDialog } from "./components/certificate-viewer-dialog";
 import styles from "./app.module.scss";
 
 export function App() {
@@ -16,10 +17,13 @@ export function App() {
     providers,
     currentProviderId,
     certificates,
+    currentCertificateViewerValue,
     handleProviderChange,
     handleCertificatesSearch,
     handleCertificateImport,
     handleCertificateCreate,
+    handleCertificateViewerOpen,
+    handleCertificateViewerClose,
   } = useApp();
 
   return (
@@ -51,9 +55,16 @@ export function App() {
         onCreate={handleCertificateCreate}
       ></CertificatesTopbar>
       {fetching.certificates ? (
-        <CertificatesList certificates={certificates} />
+        <CertificatesList
+          certificates={certificates}
+          onViewDetails={handleCertificateViewerOpen}
+        />
       ) : null}
       <FetchingStatusOwerlay fetching={fetching} challenge={challenge} />
+      <CertificateViewerDialog
+        certificate={currentCertificateViewerValue}
+        onClose={handleCertificateViewerClose}
+      />
     </AppProviders>
   );
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { ICertificate } from "@peculiar/fortify-client-core";
+import { CertificateProps } from "../../types";
 import { Button, Typography } from "@peculiar/react-components";
 import {
   Table,
@@ -17,19 +17,15 @@ import { CertificateName } from "../certificate-name";
 import { CertificateSerialNumber } from "../certificate-serial-number";
 import styles from "./styles/index.module.scss";
 
-interface CertificateProp extends ICertificate {
-  id?: string;
-  label?: string;
-}
-
 interface CertificatesListProps {
-  certificates: CertificateProp[];
+  certificates: CertificateProps[];
+  onViewDetails: (certificate: CertificateProps) => void;
 }
 
 export const CertificatesList: React.FunctionComponent<
   CertificatesListProps
 > = (props) => {
-  const { certificates } = props;
+  const { certificates, onViewDetails } = props;
   const { t } = useTranslation();
 
   if (!certificates?.length) {
@@ -57,28 +53,31 @@ export const CertificatesList: React.FunctionComponent<
           </TableRow>
         </TableHeader>
         <TableBody>
-          {certificates.map(({ id, serialNumber, type, label, notAfter }) => (
-            <TableRow key={id}>
-              <TableCell>
-                <CertificateTypeLabel type={type} />
-              </TableCell>
-              {/* // TODO: not sure about label as name */}
-              <TableCell>
-                <CertificateName name={label} />
-              </TableCell>
-              <TableCell>
-                <CertificateSerialNumber value={serialNumber} />
-              </TableCell>
-              <TableCell>
-                <Date date={notAfter} />
-                <div className={styles.list_table_actions}>
-                  <Button variant="outlined" size="small">
-                    {t("certificates.list.action.view-details")}
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
+          {certificates.map((certificate) => {
+            const { id, serialNumber, type, label, notAfter } = certificate;
+            return (
+              <TableRow key={id} onClick={() => onViewDetails(certificate)}>
+                <TableCell>
+                  <CertificateTypeLabel type={type} />
+                </TableCell>
+                {/* // TODO: not sure about label as name */}
+                <TableCell>
+                  <CertificateName name={label} />
+                </TableCell>
+                <TableCell>
+                  <CertificateSerialNumber value={serialNumber} />
+                </TableCell>
+                <TableCell>
+                  <Date date={notAfter} />
+                  <div className={styles.list_table_actions}>
+                    <Button variant="outlined" size="small">
+                      {t("certificates.list.action.view-details")}
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </div>

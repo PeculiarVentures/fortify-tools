@@ -4,7 +4,6 @@ import {
   IProviderInfo,
   ICertificate,
 } from "@peculiar/fortify-client-core";
-
 import { AppFetchingStatus, AppFetchingType } from "./types";
 
 export function useApp() {
@@ -22,6 +21,9 @@ export function useApp() {
   const [fetching, setFetching] = React.useState<AppFetchingType>({
     connectionDetect: "pending",
   });
+
+  const [currentCertificateViewerValue, setCurrentCertificateViewerValue] =
+    React.useState<ICertificate | undefined>(undefined);
   /**
    *
    */
@@ -196,15 +198,26 @@ export function useApp() {
     console.log("Create");
   };
 
+  const handleCertificateViewerOpen = (certificate: ICertificate) => {
+    setCurrentCertificateViewerValue(certificate);
+  };
+
+  const handleCertificateViewerClose = () => {
+    setCurrentCertificateViewerValue(undefined);
+  };
+
   return {
     fetching,
     challenge,
     providers,
     currentProviderId,
     certificates,
+    currentCertificateViewerValue,
     handleProviderChange,
     handleCertificatesSearch,
     handleCertificateImport,
     handleCertificateCreate,
+    handleCertificateViewerOpen,
+    handleCertificateViewerClose,
   };
 }

@@ -26,6 +26,7 @@
   }
 
   tbody tr {
+    cursor: pointer;
     position: relative;
     .list_table_actions {
       position: absolute;
