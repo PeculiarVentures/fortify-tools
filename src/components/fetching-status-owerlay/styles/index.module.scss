@@ -1,4 +1,7 @@
-.dialog_content {
-  padding: var(--pv-size-base-7) var(--pv-size-base-2) var(--pv-size-base-4)
-    var(--pv-size-base-2);
+.dialog {
+  max-width: 500px !important;
+  .dialog_content {
+    padding: var(--pv-size-base-7) var(--pv-size-base-2) var(--pv-size-base-4)
+      var(--pv-size-base-2);
+  }
 }

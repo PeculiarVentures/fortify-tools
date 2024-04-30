@@ -94,7 +94,7 @@ export const FetchingStatusOwerlay: React.FunctionComponent<
 
   return (
     <Dialog
-      style={{ width: "500px" }}
+      className={styles.dialog}
       open={isShow}
       disableBackdropClick={true}
       disableEscapeKeyDown={true}
