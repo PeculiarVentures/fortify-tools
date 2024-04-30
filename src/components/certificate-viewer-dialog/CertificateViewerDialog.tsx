@@ -24,7 +24,7 @@ export const CertificateViewerDialog: React.FunctionComponent<
   const { t } = useTranslation();
 
   return (
-    <Dialog open={true} onClose={onClose} style={{ maxWidth: "870px" }}>
+    <Dialog open={true} onClose={onClose} className={styles.dialog}>
       <DialogTitle>
         {t("certificate-viewer-dialog.title", { name: certificate.label })}
       </DialogTitle>
