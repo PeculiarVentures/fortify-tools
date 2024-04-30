@@ -27,24 +27,30 @@
   },
   "connection": {
     "approve": {
-      "title": "Approve connection"
+      "message": "Fortify authorization",
+      "description": "Compare this code to the one shown by your operating system for Fortify."
     },
     "error": {
       "update-client": {
-        "message": "Update client"
+        "message": "Update your local Fortify application",
+        "description": "Your current version is outdated. Please go to your local Fortify application settings and check for updates."
       },
       "connection-not-supported": {
         "message": "Connection not supported"
       },
       "connection-not-detect": {
         "message": "Launch your local Fortify application",
-        "description": "It seems Fortify application is turned off on your desktop. Please launch it to continue."
+        "description": "It seems Fortify application is turned off on your desktop. Please launch it to continue.",
+        "button": "I don’t have one"
       },
       "connection-not-approved": {
-        "message": "Connection not approved"
+        "message": "You did not approve <0>{{name}}</0> use of Fortify",
+        "description": "If you want to try again click button below.",
+        "button": "Try again"
       },
       "unresolved-status": {
-        "message": "Unresolved status"
+        "message": "Oops! Something went wrong.",
+        "description": "Sorry, please try again later."
       }
     }
   },
