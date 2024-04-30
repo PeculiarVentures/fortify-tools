@@ -11,6 +11,8 @@ import { PeculiarCertificateViewer } from "@peculiar/certificates-viewer-react";
 import { useTranslation } from "react-i18next";
 import { CertificateProps } from "../../types";
 
+import styles from "./styles/index.module.scss";
+
 interface CertificateViewerDialogProps {
   certificate?: CertificateProps;
   onClose?: () => void;
@@ -30,7 +32,7 @@ export const CertificateViewerDialog: React.FunctionComponent<
       <DialogTitle>
         {t("certificate-viewer-dialog.title", { name: certificate.label })}
       </DialogTitle>
-      <DialogContent>
+      <DialogContent className={styles.dialog_content}>
         <PeculiarCertificateViewer
           certificate={Convert.ToBase64(certificate?.raw)}
           download={true}
