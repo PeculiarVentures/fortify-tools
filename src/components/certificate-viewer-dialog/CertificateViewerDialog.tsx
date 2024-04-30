@@ -14,7 +14,7 @@ import { CertificateProps } from "../../types";
 import styles from "./styles/index.module.scss";
 
 interface CertificateViewerDialogProps {
-  certificate?: CertificateProps;
+  certificate: CertificateProps;
   onClose?: () => void;
 }
 export const CertificateViewerDialog: React.FunctionComponent<
@@ -22,10 +22,6 @@ export const CertificateViewerDialog: React.FunctionComponent<
 > = (props) => {
   const { certificate, onClose } = props;
   const { t } = useTranslation();
-
-  if (!certificate) {
-    return null;
-  }
 
   return (
     <Dialog open={true} onClose={onClose} style={{ maxWidth: "870px" }}>

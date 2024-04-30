@@ -61,10 +61,12 @@ export function App() {
         />
       ) : null}
       <FetchingStatusOwerlay fetching={fetching} challenge={challenge} />
-      <CertificateViewerDialog
-        certificate={currentCertificateViewerValue}
-        onClose={handleCertificateViewerClose}
-      />
+      {currentCertificateViewerValue ? (
+        <CertificateViewerDialog
+          certificate={currentCertificateViewerValue}
+          onClose={handleCertificateViewerClose}
+        />
+      ) : null}
     </AppProviders>
   );
 }
