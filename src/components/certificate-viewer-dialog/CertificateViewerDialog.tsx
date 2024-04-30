@@ -26,8 +26,8 @@ export const CertificateViewerDialog: React.FunctionComponent<
   }
 
   return (
-    <Dialog open={true} onClose={onClose}>
-      <DialogTitle style={{ width: "870px" }}>
+    <Dialog open={true} onClose={onClose} style={{ maxWidth: "870px" }}>
+      <DialogTitle>
         {t("certificate-viewer-dialog.title", { name: certificate.label })}
       </DialogTitle>
       <DialogContent>
