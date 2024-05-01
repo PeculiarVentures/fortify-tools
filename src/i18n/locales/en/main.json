@@ -57,5 +57,11 @@
     "search-placeholder": "Search",
     "import-certificate": "Import certificate",
     "create-certificate": "Create"
+  },
+  "certificate-viewer-dialog": {
+    "title": "“{{name}}” details"
+  },
+  "button": {
+    "cancel": "Cancel"
   }
 }
