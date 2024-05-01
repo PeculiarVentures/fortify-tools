@@ -15,6 +15,7 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    actions: { argTypesRegex: "^on.*" },
   },
   decorators: [
     (Story) => (
