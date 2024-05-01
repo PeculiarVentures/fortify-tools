@@ -4,6 +4,11 @@ import { useTranslation } from "react-i18next";
 import { AppFetchingType } from "../../hooks/app";
 import { ApproveConnection } from "../approve-connection";
 import { ErrorConnection } from "../error-connection";
+import { UpdateClient } from "../update-client";
+import { ConnectionNotDetected } from "../connection-not-detected";
+import { ConnectionNotApproved } from "../connection-not-approved";
+
+import styles from "./styles/index.module.scss";
 
 export interface FetchingStatusOwerlayProps {
   fetching: AppFetchingType;
@@ -19,11 +24,7 @@ export const FetchingStatusOwerlay: React.FunctionComponent<
     if (fetching.connectionClientUpdate === "rejected") {
       return {
         isShow: true,
-        element: (
-          <ErrorConnection
-            message={t("connection.error.update-client.message")}
-          />
-        ),
+        element: <UpdateClient />,
       };
     }
 
@@ -41,25 +42,14 @@ export const FetchingStatusOwerlay: React.FunctionComponent<
     if (fetching.connectionDetect === "rejected") {
       return {
         isShow: true,
-        element: (
-          <ErrorConnection
-            message={t("connection.error.connection-not-detect.message")}
-            description={t(
-              "connection.error.connection-not-detect.description"
-            )}
-          />
-        ),
+        element: <ConnectionNotDetected />,
       };
     }
 
     if (fetching.connectionApprove === "rejected") {
       return {
         isShow: true,
-        element: (
-          <ErrorConnection
-            message={t("connection.error.connection-not-approved.message")}
-          />
-        ),
+        element: <ConnectionNotApproved />,
       };
     }
 
@@ -94,6 +84,7 @@ export const FetchingStatusOwerlay: React.FunctionComponent<
       element: (
         <ErrorConnection
           message={t("connection.error.unresolved-status.message")}
+          description={t("connection.error.unresolved-status.description")}
         />
       ),
     };
@@ -103,11 +94,12 @@ export const FetchingStatusOwerlay: React.FunctionComponent<
 
   return (
     <Dialog
+      className={styles.dialog}
       open={isShow}
       disableBackdropClick={true}
       disableEscapeKeyDown={true}
     >
-      <DialogContent>{element}</DialogContent>
+      <DialogContent className={styles.dialog_content}>{element}</DialogContent>
     </Dialog>
   );
 };
