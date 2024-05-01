@@ -33,7 +33,9 @@
         "button": {
           "cancel": "Cancel",
           "delete": "Delete"
-        }
+        },
+        "success-message": "Certificate deleted.",
+        "failure-message": "Can't delete certificate"
       }
     }
   },

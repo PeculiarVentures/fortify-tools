@@ -6,10 +6,9 @@ export const AppProviders: React.FunctionComponent<{
   children: React.ReactNode;
 }> = (props) => {
   const { children } = props;
-
   return (
     <ThemeProvider theme={theme}>
-      <ToastProvider>{children}</ToastProvider>
+      <ToastProvider maxToasts={4}>{children}</ToastProvider>
     </ThemeProvider>
   );
 };

@@ -1,12 +1,12 @@
 import "./global.scss";
 import "./i18n";
-import { AppProviders } from "./components/app-providers";
 import { useApp } from "./hooks/app";
 import { FetchingStatusOwerlay } from "./components/fetching-status-owerlay";
 import { CertificatesList } from "./components/certificates-list";
 import { CertificatesSidebar } from "./components/certificates-sidebar";
 import { CertificatesProvidersList } from "./components/certificates-providers-list";
 import { CertificatesTopbar } from "./components/certificates-topbar";
+import { CertificateDeleteDialog } from "./components/certificate-delete-dialog";
 import styles from "./app.module.scss";
 
 export function App() {
@@ -16,14 +16,18 @@ export function App() {
     providers,
     currentProviderId,
     certificates,
+    currentCertificatDelete,
     handleProviderChange,
     handleCertificatesSearch,
     handleCertificateImport,
     handleCertificateCreate,
+    handleCertificateDeleteDialogOpen,
+    handleCertificateDeleteDialogClose,
+    handleCertificateDelete,
   } = useApp();
 
   return (
-    <AppProviders>
+    <>
       <CertificatesSidebar className={styles.sidebar}>
         {fetching.providers === "pending" ? (
           // TODO: add loading skeleton
@@ -51,9 +55,22 @@ export function App() {
         onCreate={handleCertificateCreate}
       ></CertificatesTopbar>
       {fetching.certificates ? (
-        <CertificatesList certificates={certificates} />
+        <CertificatesList
+          certificates={certificates}
+          onDelete={handleCertificateDeleteDialogOpen}
+        />
       ) : null}
+      {currentCertificatDelete?.id ? (
+        <CertificateDeleteDialog
+          certificateId={currentCertificatDelete.id}
+          certificateName={currentCertificatDelete.name}
+          loading={currentCertificatDelete?.loading}
+          onDialogClose={handleCertificateDeleteDialogClose}
+          onDeleteClick={handleCertificateDelete}
+        />
+      ) : null}
+
       <FetchingStatusOwerlay fetching={fetching} challenge={challenge} />
-    </AppProviders>
+    </>
   );
 }

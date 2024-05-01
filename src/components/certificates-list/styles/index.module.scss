@@ -38,9 +38,17 @@
       align-items: center;
       overflow: hidden;
       width: 0;
+      gap: var(--pv-size-base-4);
+      > button {
+        &:first-child {
+          margin-right: var(--pv-size-base-2);
+        }
+      }
     }
     &:hover .list_table_actions {
-      width: 160px;
+      min-width: 190px;
+      overflow: visible;
+      padding-right: var(--pv-size-base-6);
     }
   }
 }

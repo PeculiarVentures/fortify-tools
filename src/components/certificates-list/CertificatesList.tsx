@@ -15,6 +15,8 @@ import { CertificateTypeLabel } from "../certificate-type-label";
 import { Date } from "../date";
 import { CertificateName } from "../certificate-name";
 import { CertificateSerialNumber } from "../certificate-serial-number";
+import { CertificateDeleteButton } from "../certificate-delete-button";
+
 import styles from "./styles/index.module.scss";
 
 interface CertificateProp extends ICertificate {
@@ -24,12 +26,13 @@ interface CertificateProp extends ICertificate {
 
 interface CertificatesListProps {
   certificates: CertificateProp[];
+  onDelete: (id: string, name: string) => void;
 }
 
 export const CertificatesList: React.FunctionComponent<
   CertificatesListProps
 > = (props) => {
-  const { certificates } = props;
+  const { certificates, onDelete } = props;
   const { t } = useTranslation();
 
   if (!certificates?.length) {
@@ -75,6 +78,9 @@ export const CertificatesList: React.FunctionComponent<
                   <Button variant="outlined" size="small">
                     {t("certificates.list.action.view-details")}
                   </Button>
+                  <CertificateDeleteButton
+                    onClick={() => onDelete(id as string, label as string)}
+                  />
                 </div>
               </TableCell>
             </TableRow>
