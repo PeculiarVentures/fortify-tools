@@ -5,7 +5,7 @@ import { IconButton, Tooltip } from "@peculiar/react-components";
 import DeleteIcon from "../../icons/delete.svg?react";
 
 interface CertificateDeleteButtonProps {
-  onClick?: () => void;
+  onClick: () => void;
 }
 
 export const CertificateDeleteButton: React.FunctionComponent<
@@ -16,7 +16,13 @@ export const CertificateDeleteButton: React.FunctionComponent<
 
   return (
     <Tooltip title={t("certificates.list.action.delete")} offset={5}>
-      <IconButton onClick={onClick} size="small">
+      <IconButton
+        onClick={(event) => {
+          event.stopPropagation();
+          onClick();
+        }}
+        size="small"
+      >
         <DeleteIcon />
       </IconButton>
     </Tooltip>

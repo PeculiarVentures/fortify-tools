@@ -20,7 +20,7 @@ import { CertificateDeleteButton } from "../certificate-delete-button";
 import styles from "./styles/index.module.scss";
 
 interface CertificatesListProps {
-  certificates: CertificateProp[];
+  certificates: CertificateProps[];
   onDelete: (id: string, name: string) => void;
   onViewDetails: (certificate: CertificateProps) => void;
 }
@@ -28,7 +28,6 @@ interface CertificatesListProps {
 export const CertificatesList: React.FunctionComponent<
   CertificatesListProps
 > = (props) => {
-
   const { certificates, onViewDetails, onDelete } = props;
 
   const { t } = useTranslation();
@@ -58,31 +57,34 @@ export const CertificatesList: React.FunctionComponent<
           </TableRow>
         </TableHeader>
         <TableBody>
-          {certificates.map(({ id, serialNumber, type, label, notAfter }) => (
-            <TableRow key={id} onClick={() => onViewDetails(certificate)}>
-              <TableCell>
-                <CertificateTypeLabel type={type} />
-              </TableCell>
-              {/* // TODO: not sure about label as name */}
-              <TableCell>
-                <CertificateName name={label} />
-              </TableCell>
-              <TableCell>
-                <CertificateSerialNumber value={serialNumber} />
-              </TableCell>
-              <TableCell>
-                <Date date={notAfter} />
-                <div className={styles.list_table_actions}>
-                  <Button variant="outlined" size="small">
-                    {t("certificates.list.action.view-details")}
-                  </Button>
-                  <CertificateDeleteButton
-                    onClick={() => onDelete(id as string, label as string)}
-                  />
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
+          {certificates.map((certificate) => {
+            const { id, serialNumber, type, label, notAfter } = certificate;
+            return (
+              <TableRow key={id} onClick={() => onViewDetails(certificate)}>
+                <TableCell>
+                  <CertificateTypeLabel type={type} />
+                </TableCell>
+                {/* // TODO: not sure about label as name */}
+                <TableCell>
+                  <CertificateName name={label} />
+                </TableCell>
+                <TableCell>
+                  <CertificateSerialNumber value={serialNumber} />
+                </TableCell>
+                <TableCell>
+                  <Date date={notAfter} />
+                  <div className={styles.list_table_actions}>
+                    <Button variant="outlined" size="small">
+                      {t("certificates.list.action.view-details")}
+                    </Button>
+                    <CertificateDeleteButton
+                      onClick={() => onDelete(id as string, label as string)}
+                    />
+                  </div>
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </div>

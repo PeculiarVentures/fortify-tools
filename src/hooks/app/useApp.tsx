@@ -236,6 +236,7 @@ export function useApp() {
         isClosable: true,
       });
     }, 1000);
+  };
 
   const handleCertificateViewerOpen = (certificate: ICertificate) => {
     setCurrentCertificateViewerValue(certificate);
