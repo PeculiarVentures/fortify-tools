@@ -1,0 +1,10 @@
+.box_wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pv-size-base-6);
+  text-align: center;
+  align-items: center;
+  .icon_wrapper {
+    font-size: 0;
+  }
+}

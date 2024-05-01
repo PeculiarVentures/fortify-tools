@@ -5,6 +5,7 @@ import {
   IProviderInfo,
   ICertificate,
 } from "@peculiar/fortify-client-core";
+
 import { useToast } from "@peculiar/react-components";
 
 import { AppFetchingStatus, AppFetchingType } from "./types";
@@ -28,6 +29,10 @@ export function useApp() {
   const [currentCertificatDelete, setCurrentCetificateDelete] = React.useState<
     undefined | { id: string; name: string; loading?: boolean }
   >();
+
+  const [currentCertificateViewerValue, setCurrentCertificateViewerValue] =
+    React.useState<ICertificate | undefined>(undefined);
+
   /**
    *
    */
@@ -231,6 +236,13 @@ export function useApp() {
         isClosable: true,
       });
     }, 1000);
+
+  const handleCertificateViewerOpen = (certificate: ICertificate) => {
+    setCurrentCertificateViewerValue(certificate);
+  };
+
+  const handleCertificateViewerClose = () => {
+    setCurrentCertificateViewerValue(undefined);
   };
 
   return {
@@ -240,6 +252,7 @@ export function useApp() {
     currentProviderId,
     certificates,
     currentCertificatDelete,
+    currentCertificateViewerValue,
     handleProviderChange,
     handleCertificatesSearch,
     handleCertificateImport,
@@ -247,5 +260,7 @@ export function useApp() {
     handleCertificateDeleteDialogOpen,
     handleCertificateDeleteDialogClose,
     handleCertificateDelete,
+    handleCertificateViewerOpen,
+    handleCertificateViewerClose,
   };
 }

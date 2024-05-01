@@ -7,6 +7,8 @@ import { CertificatesSidebar } from "./components/certificates-sidebar";
 import { CertificatesProvidersList } from "./components/certificates-providers-list";
 import { CertificatesTopbar } from "./components/certificates-topbar";
 import { CertificateDeleteDialog } from "./components/certificate-delete-dialog";
+import { CertificateViewerDialog } from "./components/certificate-viewer-dialog";
+
 import styles from "./app.module.scss";
 
 export function App() {
@@ -17,6 +19,7 @@ export function App() {
     currentProviderId,
     certificates,
     currentCertificatDelete,
+    currentCertificateViewerValue,
     handleProviderChange,
     handleCertificatesSearch,
     handleCertificateImport,
@@ -24,6 +27,8 @@ export function App() {
     handleCertificateDeleteDialogOpen,
     handleCertificateDeleteDialogClose,
     handleCertificateDelete,
+    handleCertificateViewerOpen,
+    handleCertificateViewerClose,
   } = useApp();
 
   return (
@@ -58,6 +63,7 @@ export function App() {
         <CertificatesList
           certificates={certificates}
           onDelete={handleCertificateDeleteDialogOpen}
+          onViewDetails={handleCertificateViewerOpen}
         />
       ) : null}
       {currentCertificatDelete?.id ? (
@@ -71,6 +77,13 @@ export function App() {
       ) : null}
 
       <FetchingStatusOwerlay fetching={fetching} challenge={challenge} />
+      {currentCertificateViewerValue ? (
+        <CertificateViewerDialog
+          certificate={currentCertificateViewerValue}
+          onClose={handleCertificateViewerClose}
+        />
+      ) : null}
     </>
+
   );
 }

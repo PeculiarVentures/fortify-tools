@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { ICertificate } from "@peculiar/fortify-client-core";
+import { CertificateProps } from "../../types";
 import { Button, Typography } from "@peculiar/react-components";
 import {
   Table,
@@ -19,20 +19,18 @@ import { CertificateDeleteButton } from "../certificate-delete-button";
 
 import styles from "./styles/index.module.scss";
 
-interface CertificateProp extends ICertificate {
-  id?: string;
-  label?: string;
-}
-
 interface CertificatesListProps {
   certificates: CertificateProp[];
   onDelete: (id: string, name: string) => void;
+  onViewDetails: (certificate: CertificateProps) => void;
 }
 
 export const CertificatesList: React.FunctionComponent<
   CertificatesListProps
 > = (props) => {
-  const { certificates, onDelete } = props;
+
+  const { certificates, onViewDetails, onDelete } = props;
+
   const { t } = useTranslation();
 
   if (!certificates?.length) {
@@ -61,7 +59,7 @@ export const CertificatesList: React.FunctionComponent<
         </TableHeader>
         <TableBody>
           {certificates.map(({ id, serialNumber, type, label, notAfter }) => (
-            <TableRow key={id}>
+            <TableRow key={id} onClick={() => onViewDetails(certificate)}>
               <TableCell>
                 <CertificateTypeLabel type={type} />
               </TableCell>
