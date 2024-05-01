@@ -20,7 +20,8 @@
         "certificate": "Certificate"
       },
       "action": {
-        "view-details": "View details"
+        "view-details": "View details",
+        "delete": "Delete certificate"
       },
       "empty-text": "There are no certificates yet."
     }
