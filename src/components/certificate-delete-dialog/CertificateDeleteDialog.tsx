@@ -33,11 +33,7 @@ export const CertificateDeleteDialog: React.FunctionComponent<
   const { t } = useTranslation();
 
   return (
-    <Dialog
-      open={!!certificateId}
-      onClose={onDialogClose}
-      className={styles.dialog}
-    >
+    <Dialog open onClose={onDialogClose} className={styles.dialog}>
       {loading ? (
         <DialogContent className={styles.dialog_content_loading}>
           <div>
