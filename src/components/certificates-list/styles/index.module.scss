@@ -31,8 +31,8 @@
     .list_table_actions {
       position: absolute;
       right: 0;
-      top: 0;
-      bottom: 0;
+      top: 10px;
+      bottom: 10px;
       background-color: var(--pv-color-white);
       display: flex;
       justify-content: center;
@@ -44,6 +44,7 @@
         margin-right: var(--pv-size-base-2);
       }
     }
+    &[class~="current"] .list_table_actions,
     &:hover .list_table_actions {
       width: fit-content;
       overflow: visible;

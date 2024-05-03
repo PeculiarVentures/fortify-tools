@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { CertificateProps } from "../../types";
+import clsx from "clsx";
 import { Button, IconButton, Typography } from "@peculiar/react-components";
 import {
   Table,
@@ -15,6 +15,8 @@ import { CertificateTypeLabel } from "../certificate-type-label";
 import { Date } from "../date";
 import { CertificateName } from "../certificate-name";
 import { CertificateSerialNumber } from "../certificate-serial-number";
+
+import { CertificateProps } from "../../types";
 
 import DeleteIcon from "../../icons/delete.svg?react";
 
@@ -32,6 +34,8 @@ export const CertificatesList: React.FunctionComponent<
   const { certificates, onViewDetails, onDelete } = props;
 
   const { t } = useTranslation();
+
+  const [isRowFocused, setIsRowFocused] = useState<string>();
 
   if (!certificates?.length) {
     return (
@@ -61,7 +65,21 @@ export const CertificatesList: React.FunctionComponent<
           {certificates.map((certificate) => {
             const { id, serialNumber, type, label, notAfter } = certificate;
             return (
-              <TableRow key={id} onClick={() => onViewDetails(certificate)}>
+              <TableRow
+                tabIndex={0}
+                key={id}
+                onClick={() => onViewDetails(certificate)}
+                onFocus={() => setIsRowFocused(id)}
+                onBlur={() => setIsRowFocused(undefined)}
+                onKeyDown={(event) =>
+                  ["Space", "Enter"].includes(event.code) &&
+                  onViewDetails(certificate)
+                }
+                onMouseOver={() => isRowFocused && setIsRowFocused(undefined)}
+                className={clsx({
+                  ["current"]: isRowFocused === id,
+                })}
+              >
                 <TableCell>
                   <CertificateTypeLabel type={type} />
                 </TableCell>
@@ -74,20 +92,24 @@ export const CertificatesList: React.FunctionComponent<
                 </TableCell>
                 <TableCell>
                   <Date date={notAfter} />
-                  <div className={styles.list_table_actions}>
+                  <div
+                    className={styles.list_table_actions}
+                    onClick={(event) => event.stopPropagation()}
+                    onKeyDown={(event) => event.stopPropagation()}
+                  >
                     <Button
+                      tabIndex={0}
                       className={styles.view_details_button}
                       variant="outlined"
                       size="small"
+                      onClick={() => onViewDetails(certificate)}
                     >
                       {t("certificates.list.action.view-details")}
                     </Button>
                     <IconButton
+                      tabIndex={0}
                       title={t("certificates.list.action.delete")}
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        onDelete(id as string, label as string);
-                      }}
+                      onClick={() => onDelete(id as string, label as string)}
                       size="small"
                     >
                       <DeleteIcon />
