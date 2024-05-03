@@ -5,6 +5,11 @@
     border-bottom: none;
   }
 
+  .dialog_title {
+    padding-left: var(--pv-size-base-6);
+    padding-right: var(--pv-size-base-6);
+  }
+
   .dialog_content_loading {
     height: 175px;
     display: flex;

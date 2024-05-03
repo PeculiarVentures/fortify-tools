@@ -45,7 +45,9 @@ export const CertificateDeleteDialog: React.FunctionComponent<
         </DialogContent>
       ) : (
         <>
-          <DialogTitle>{t("certificates.dialog.delete.title")}</DialogTitle>
+          <DialogTitle className={styles.dialog_title}>
+            {t("certificates.dialog.delete.title")}
+          </DialogTitle>
           <DialogContent className={styles.dialog_content}>
             <Typography
               variant="b2"
