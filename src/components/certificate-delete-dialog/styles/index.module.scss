@@ -6,20 +6,13 @@
   }
 
   .dialog_content_loading {
-    height: 236px;
-    > div:nth-child(2) {
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      > div {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: var(--pv-size-base-6);
-      }
-    }
+    height: 175px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--pv-size-base-6);
+    margin-top: var(--pv-size-base-3);
   }
 
   .dialog_message {

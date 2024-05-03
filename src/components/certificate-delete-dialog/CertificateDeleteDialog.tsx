@@ -35,8 +35,8 @@ export const CertificateDeleteDialog: React.FunctionComponent<
   return (
     <Dialog open onClose={onDialogClose} className={styles.dialog}>
       {loading ? (
-        <DialogContent className={styles.dialog_content_loading}>
-          <div>
+        <DialogContent>
+          <div className={styles.dialog_content_loading}>
             <CircularProgress />
             <Typography variant="b2" color="gray-9">
               {t("certificates.dialog.delete.loading-message")}
