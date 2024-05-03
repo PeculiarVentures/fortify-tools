@@ -75,7 +75,11 @@ export const CertificatesList: React.FunctionComponent<
                 <TableCell>
                   <Date date={notAfter} />
                   <div className={styles.list_table_actions}>
-                    <Button variant="outlined" size="small">
+                    <Button
+                      className={styles.view_details_button}
+                      variant="outlined"
+                      size="small"
+                    >
                       {t("certificates.list.action.view-details")}
                     </Button>
                     <IconButton
