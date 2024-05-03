@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { CertificateProps } from "../../types";
-import { Button, Typography } from "@peculiar/react-components";
+import { Button, IconButton, Typography } from "@peculiar/react-components";
 import {
   Table,
   TableBody,
@@ -15,7 +15,8 @@ import { CertificateTypeLabel } from "../certificate-type-label";
 import { Date } from "../date";
 import { CertificateName } from "../certificate-name";
 import { CertificateSerialNumber } from "../certificate-serial-number";
-import { CertificateDeleteButton } from "../certificate-delete-button";
+
+import DeleteIcon from "../../icons/delete.svg?react";
 
 import styles from "./styles/index.module.scss";
 
@@ -77,9 +78,16 @@ export const CertificatesList: React.FunctionComponent<
                     <Button variant="outlined" size="small">
                       {t("certificates.list.action.view-details")}
                     </Button>
-                    <CertificateDeleteButton
-                      onClick={() => onDelete(id as string, label as string)}
-                    />
+                    <IconButton
+                      title={t("certificates.list.action.delete")}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        onDelete(id as string, label as string);
+                      }}
+                      size="small"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
                   </div>
                 </TableCell>
               </TableRow>
