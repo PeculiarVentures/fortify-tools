@@ -1,4 +1,6 @@
 import React from "react";
+import { useDropzone } from "react-dropzone";
+import { Trans, useTranslation } from "react-i18next";
 import { IProviderInfo } from "@peculiar/fortify-client-core";
 import {
   Dialog,
@@ -6,10 +8,16 @@ import {
   LinearProgress,
   IconButton,
   Typography,
+  useToast,
 } from "@peculiar/react-components";
+import { CertificatesProvidersSelectList } from "../certificates-providers-select-list";
 
 import styles from "./styles/index.module.scss";
-import { CertificatesProvidersSelectList } from "../certificates-providers-select-list";
+
+import {
+  APP_CERTIFICATE_ALLOWED_MIMES,
+  APP_CERTIFICATE_MAX_SIZE_BYTES,
+} from "../../config";
 
 interface CertificateImportDialogProps {
   currentProviderId?: string;
@@ -29,6 +37,47 @@ export const CertificateImportDialog: React.FunctionComponent<
     onProviderSelect,
     onDialogClose,
   } = props;
+
+  const { addToast } = useToast();
+  const { t } = useTranslation();
+
+  const { getRootProps, open } = useDropzone({
+    multiple: false,
+    accept: APP_CERTIFICATE_ALLOWED_MIMES,
+    maxSize: APP_CERTIFICATE_MAX_SIZE_BYTES,
+    onDropRejected: (files) => {
+      files.forEach((file) => {
+        file.errors.forEach((err) => {
+          let msg;
+          if (err.code === "file-too-large") {
+            msg = t("certificates.dialog.import.file.error.too-large", {
+              size: APP_CERTIFICATE_MAX_SIZE_BYTES,
+            });
+          }
+          if (err.code === "file-invalid-type") {
+            msg = t("certificates.dialog.import.file.error.invalid-type");
+          }
+
+          if (msg) {
+            addToast({
+              message: msg,
+              variant: "wrong",
+              disableIcon: true,
+              isClosable: true,
+            });
+          }
+        });
+      });
+    },
+    onError: (error) => {
+      addToast({
+        message: error?.message,
+        variant: "wrong",
+        disableIcon: true,
+        isClosable: true,
+      });
+    },
+  });
 
   return (
     <Dialog open fullScreen className={styles.dialog} onClose={onDialogClose}>
@@ -64,7 +113,37 @@ export const CertificateImportDialog: React.FunctionComponent<
         <div className={styles.divider} />
       )}
       <div className={styles.content}>
-        <div className={styles.centered}></div>
+        <div className={styles.centered}>
+          <div
+            {...getRootProps({
+              className: styles.drop_zone,
+              onClick: (event) => event.stopPropagation(),
+            })}
+          >
+            <Typography variant="s2" color="gray-9">
+              <Trans
+                i18nKey="certificates.dialog.import.drop-zone.title"
+                components={[
+                  <Typography
+                    className={styles.drop_zone_title_link}
+                    color="primary"
+                    variant="s2"
+                    component="a"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      open();
+                    }}
+                  >
+                    {0}
+                  </Typography>,
+                ]}
+              />
+            </Typography>
+            <Typography variant="c2" color="gray-9">
+              {t("certificates.dialog.import.drop-zone.description")}
+            </Typography>
+          </div>
+        </div>
       </div>
     </Dialog>
   );

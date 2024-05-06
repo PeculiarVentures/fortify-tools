@@ -46,4 +46,20 @@
       height: 30px;
     }
   }
+
+  .drop_zone {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pv-size-base);
+    align-items: center;
+    padding: var(--pv-size-base-6);
+
+    border: 1px dashed var(--pv-color-gray-8);
+    border-radius: var(--pv-border-radius-small);
+
+    .drop_zone_title_link {
+      display: inline;
+      cursor: pointer;
+    }
+  }
 }
