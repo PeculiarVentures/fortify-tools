@@ -20,9 +20,23 @@
         "certificate": "Certificate"
       },
       "action": {
-        "view-details": "View details"
+        "view-details": "View details",
+        "delete": "Delete certificate"
       },
       "empty-text": "There are no certificates yet."
+    },
+    "dialog": {
+      "delete": {
+        "title": "Delete certificate",
+        "message": "Are you sure you want to delete “{{name}}”?",
+        "loading-message": "Deleting certificate...",
+        "button": {
+          "cancel": "Cancel",
+          "delete": "Delete"
+        },
+        "success-message": "Certificate deleted.",
+        "failure-message": "Can't delete certificate"
+      }
     }
   },
   "connection": {

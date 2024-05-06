@@ -8,6 +8,10 @@
       }
     }
   }
+  tbody &:focus {
+    outline: none;
+  }
+  tbody &[class~="current"],
   tbody &:hover {
     td {
       position: relative;
