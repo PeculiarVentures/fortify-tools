@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { CertificateProps } from "../../types";
-import { Button, Typography } from "@peculiar/react-components";
+import clsx from "clsx";
+import { Button, IconButton, Typography } from "@peculiar/react-components";
 import {
   Table,
   TableBody,
@@ -15,18 +15,27 @@ import { CertificateTypeLabel } from "../certificate-type-label";
 import { Date } from "../date";
 import { CertificateName } from "../certificate-name";
 import { CertificateSerialNumber } from "../certificate-serial-number";
+
+import { CertificateProps } from "../../types";
+
+import DeleteIcon from "../../icons/delete.svg?react";
+
 import styles from "./styles/index.module.scss";
 
 interface CertificatesListProps {
   certificates: CertificateProps[];
+  onDelete: (id: string, name: string) => void;
   onViewDetails: (certificate: CertificateProps) => void;
 }
 
 export const CertificatesList: React.FunctionComponent<
   CertificatesListProps
 > = (props) => {
-  const { certificates, onViewDetails } = props;
+  const { certificates, onViewDetails, onDelete } = props;
+
   const { t } = useTranslation();
+
+  const [currentRow, setCurrentRow] = useState<string>();
 
   if (!certificates?.length) {
     return (
@@ -56,7 +65,21 @@ export const CertificatesList: React.FunctionComponent<
           {certificates.map((certificate) => {
             const { id, serialNumber, type, label, notAfter } = certificate;
             return (
-              <TableRow key={id} onClick={() => onViewDetails(certificate)}>
+              <TableRow
+                tabIndex={0}
+                key={id}
+                onClick={() => onViewDetails(certificate)}
+                onFocus={() => setCurrentRow(id)}
+                onBlur={() => setCurrentRow(undefined)}
+                onKeyDown={(event) =>
+                  ["Space", "Enter"].includes(event.code) &&
+                  onViewDetails(certificate)
+                }
+                onMouseOver={() => currentRow && setCurrentRow(undefined)}
+                className={clsx({
+                  ["current"]: currentRow === id,
+                })}
+              >
                 <TableCell>
                   <CertificateTypeLabel type={type} />
                 </TableCell>
@@ -69,10 +92,28 @@ export const CertificatesList: React.FunctionComponent<
                 </TableCell>
                 <TableCell>
                   <Date date={notAfter} />
-                  <div className={styles.list_table_actions}>
-                    <Button variant="outlined" size="small">
+                  <div
+                    className={styles.list_table_actions}
+                    onClick={(event) => event.stopPropagation()}
+                    onKeyDown={(event) => event.stopPropagation()}
+                  >
+                    <Button
+                      tabIndex={0}
+                      className={styles.view_details_button}
+                      variant="outlined"
+                      size="small"
+                      onClick={() => onViewDetails(certificate)}
+                    >
                       {t("certificates.list.action.view-details")}
                     </Button>
+                    <IconButton
+                      tabIndex={0}
+                      title={t("certificates.list.action.delete")}
+                      onClick={() => onDelete(id as string, label as string)}
+                      size="small"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
                   </div>
                 </TableCell>
               </TableRow>
