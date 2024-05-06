@@ -35,7 +35,7 @@ export const CertificatesList: React.FunctionComponent<
 
   const { t } = useTranslation();
 
-  const [isRowFocused, setIsRowFocused] = useState<string>();
+  const [currentRow, setCurrentRow] = useState<string>();
 
   if (!certificates?.length) {
     return (
@@ -69,15 +69,15 @@ export const CertificatesList: React.FunctionComponent<
                 tabIndex={0}
                 key={id}
                 onClick={() => onViewDetails(certificate)}
-                onFocus={() => setIsRowFocused(id)}
-                onBlur={() => setIsRowFocused(undefined)}
+                onFocus={() => setCurrentRow(id)}
+                onBlur={() => setCurrentRow(undefined)}
                 onKeyDown={(event) =>
                   ["Space", "Enter"].includes(event.code) &&
                   onViewDetails(certificate)
                 }
-                onMouseOver={() => isRowFocused && setIsRowFocused(undefined)}
+                onMouseOver={() => currentRow && setCurrentRow(undefined)}
                 className={clsx({
-                  ["current"]: isRowFocused === id,
+                  ["current"]: currentRow === id,
                 })}
               >
                 <TableCell>
