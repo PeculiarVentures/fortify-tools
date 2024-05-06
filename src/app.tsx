@@ -8,6 +8,7 @@ import { CertificatesProvidersList } from "./components/certificates-providers-l
 import { CertificatesTopbar } from "./components/certificates-topbar";
 import { CertificateDeleteDialog } from "./components/certificate-delete-dialog";
 import { CertificateViewerDialog } from "./components/certificate-viewer-dialog";
+import { CertificateImportDialog } from "./components/certificate-import-dialog";
 
 import styles from "./app.module.scss";
 
@@ -20,15 +21,17 @@ export function App() {
     certificates,
     currentCertificatDelete,
     currentCertificateViewerValue,
+    isCertificateImportDialogShow,
     handleProviderChange,
     handleCertificatesSearch,
-    handleCertificateImport,
     handleCertificateCreate,
     handleCertificateDeleteDialogOpen,
     handleCertificateDeleteDialogClose,
     handleCertificateDelete,
     handleCertificateViewerOpen,
     handleCertificateViewerClose,
+    handleCertificateImportDialogOpen,
+    handleCertificateImportDialogClose,
   } = useApp();
 
   return (
@@ -41,22 +44,14 @@ export function App() {
           <CertificatesProvidersList
             providers={providers}
             currentProviderId={currentProviderId}
-            onSelect={(id) => {
-              if (
-                currentProviderId === id ||
-                fetching.certificates === "pending"
-              ) {
-                return;
-              }
-              handleProviderChange(id);
-            }}
+            onSelect={handleProviderChange}
           />
         )}
       </CertificatesSidebar>
       <CertificatesTopbar
         className={styles.top_bar}
         onSearch={handleCertificatesSearch}
-        onImport={handleCertificateImport}
+        onImport={handleCertificateImportDialogOpen}
         onCreate={handleCertificateCreate}
       ></CertificatesTopbar>
       {fetching.certificates ? (
@@ -81,6 +76,14 @@ export function App() {
         <CertificateViewerDialog
           certificate={currentCertificateViewerValue}
           onClose={handleCertificateViewerClose}
+        />
+      ) : null}
+      {isCertificateImportDialogShow ? (
+        <CertificateImportDialog
+          onDialogClose={handleCertificateImportDialogClose}
+          onProviderSelect={handleProviderChange}
+          providers={providers}
+          currentProviderId={currentProviderId}
         />
       ) : null}
     </>

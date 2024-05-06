@@ -33,6 +33,9 @@ export function useApp() {
   const [currentCertificateViewerValue, setCurrentCertificateViewerValue] =
     React.useState<ICertificate | undefined>(undefined);
 
+  const [isCertificateImportDialogShow, SetIsCertificateImportDialogShow] =
+    React.useState(false);
+
   /**
    *
    */
@@ -168,6 +171,10 @@ export function useApp() {
   };
 
   const handleProviderChange = async (id: string) => {
+    if (currentProviderId === id || fetching.certificates === "pending") {
+      return;
+    }
+
     setFetchingValue("certificates", "pending");
 
     try {
@@ -246,6 +253,14 @@ export function useApp() {
     setCurrentCertificateViewerValue(undefined);
   };
 
+  const handleCertificateImportDialogOpen = () => {
+    SetIsCertificateImportDialogShow(true);
+  };
+
+  const handleCertificateImportDialogClose = () => {
+    SetIsCertificateImportDialogShow(false);
+  };
+
   return {
     fetching,
     challenge,
@@ -254,6 +269,7 @@ export function useApp() {
     certificates,
     currentCertificatDelete,
     currentCertificateViewerValue,
+    isCertificateImportDialogShow,
     handleProviderChange,
     handleCertificatesSearch,
     handleCertificateImport,
@@ -263,5 +279,7 @@ export function useApp() {
     handleCertificateDelete,
     handleCertificateViewerOpen,
     handleCertificateViewerClose,
+    handleCertificateImportDialogOpen,
+    handleCertificateImportDialogClose,
   };
 }
