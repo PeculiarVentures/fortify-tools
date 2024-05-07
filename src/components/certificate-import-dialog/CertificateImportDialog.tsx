@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { Convert } from "pvtsutils";
 import { useDropzone } from "react-dropzone";
 import { Trans, useTranslation } from "react-i18next";
 import { IProviderInfo } from "@peculiar/fortify-client-core";
@@ -10,8 +11,11 @@ import {
   IconButton,
   Typography,
   useToast,
+  TextareaField,
 } from "@peculiar/react-components";
+import { X509Certificate } from "@peculiar/x509";
 import { CertificatesProvidersSelectList } from "../certificates-providers-select-list";
+import { base64Clarify, certificateRawToBuffer } from "../../utils";
 
 import styles from "./styles/index.module.scss";
 
@@ -42,6 +46,9 @@ export const CertificateImportDialog: React.FunctionComponent<
   const { addToast } = useToast();
   const { t } = useTranslation();
 
+  const [certificate, setCertificate] = useState("");
+  const [isTextAreaError, setIsTextAreaError] = useState(false);
+
   const { getRootProps, open, isFocused, isDragActive, isDragReject } =
     useDropzone({
       multiple: false,
@@ -69,6 +76,28 @@ export const CertificateImportDialog: React.FunctionComponent<
               });
             }
           });
+        });
+      },
+      onDropAccepted: (files) => {
+        files.forEach(async (file) => {
+          const fbuf = await file?.arrayBuffer();
+
+          try {
+            const rawClarified = base64Clarify(Convert.ToBase64(fbuf));
+            const buffer = certificateRawToBuffer(rawClarified);
+            const x509Cert = new X509Certificate(buffer);
+
+            setCertificate(x509Cert.toString("pem"));
+          } catch (error) {
+            addToast({
+              message: t(
+                "certificates.dialog.import.certificate.error.invalid-data"
+              ),
+              variant: "wrong",
+              disableIcon: true,
+              isClosable: true,
+            });
+          }
         });
       },
       onError: (error) => {
@@ -148,6 +177,32 @@ export const CertificateImportDialog: React.FunctionComponent<
             <Typography variant="c2" color="gray-9">
               {t("certificates.dialog.import.drop-zone.description")}
             </Typography>
+          </div>
+          <div>
+            <TextareaField
+              value={certificate}
+              onChange={(event) => {
+                setCertificate(event.target.value);
+                setIsTextAreaError(false);
+              }}
+              size="large"
+              onBlur={() => {
+                try {
+                  certificate?.length && new X509Certificate(certificate);
+                  setIsTextAreaError(false);
+                } catch (error) {
+                  setIsTextAreaError(true);
+                }
+              }}
+              error={isTextAreaError}
+              errorText={
+                isTextAreaError
+                  ? t(
+                      "certificates.dialog.import.certificate.error.invalid-data"
+                    )
+                  : undefined
+              }
+            />
           </div>
         </div>
       </div>

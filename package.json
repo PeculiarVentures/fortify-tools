@@ -33,6 +33,7 @@
     "@peculiar/certificates-viewer-react": "^4.2.1",
     "@peculiar/fortify-webcomponents-react": "^4.0.3",
     "@peculiar/react-components": "^0.6.0",
+    "@peculiar/x509": "^1.9.7",
     "clsx": "^2.1.1",
     "i18next": "^23.11.2",
     "intl-messageformat": "^10.5.11",

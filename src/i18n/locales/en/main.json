@@ -47,6 +47,11 @@
             "too-large": "File is larger than {{size}} bytes",
             "invalid-type": "Wrong file format. Use PEM or DER formats."
           }
+        },
+        "certificate": {
+          "error": {
+            "invalid-data": "Certificate is invalid. Please check your data and try again."
+          }
         }
       }
     }

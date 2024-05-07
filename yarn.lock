@@ -1915,7 +1915,7 @@
     react-popper "^2.3.0"
     react-transition-group "^4.4.5"
 
-"@peculiar/x509@^1.9.6":
+"@peculiar/x509@^1.9.6", "@peculiar/x509@^1.9.7":
   version "1.9.7"
   resolved "https://registry.yarnpkg.com/@peculiar/x509/-/x509-1.9.7.tgz#1f7c5889931cac8230832fdd8ab671d911c4600b"
   integrity sha512-O+fR1ge6U8upO52q5b3d4tF4SxUdK4IQ0y++Z/Wlqq+ySZUf+deHnbMlDB1YZsIQ/DXU0i5M7Y1DyF5kwpXouQ==
