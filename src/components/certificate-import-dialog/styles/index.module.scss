@@ -57,9 +57,28 @@
     border: 1px dashed var(--pv-color-gray-8);
     border-radius: var(--pv-border-radius-small);
 
+    transition: background linear 0.3s;
+
     .drop_zone_title_link {
       display: inline;
       cursor: pointer;
+    }
+    &:focus {
+      outline: none;
+    }
+
+    &.drop_zone_focused,
+    &.drop_zone_active {
+      border-color: var(--pv-color-primary-tint-3);
+      background-color: var(--pv-color-primary-tint-5);
+    }
+
+    &.drop_zone_focused {
+      border-style: solid;
+    }
+    &.drop_zone_reject {
+      border-color: var(--pv-color-wrong-tint-3);
+      background-color: var(--pv-color-wrong-tint-5);
     }
   }
 }

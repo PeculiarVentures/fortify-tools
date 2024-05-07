@@ -2,6 +2,7 @@ import React from "react";
 import { useDropzone } from "react-dropzone";
 import { Trans, useTranslation } from "react-i18next";
 import { IProviderInfo } from "@peculiar/fortify-client-core";
+import clsx from "clsx";
 import {
   Dialog,
   ArrowRightIcon,
@@ -41,43 +42,44 @@ export const CertificateImportDialog: React.FunctionComponent<
   const { addToast } = useToast();
   const { t } = useTranslation();
 
-  const { getRootProps, open } = useDropzone({
-    multiple: false,
-    accept: APP_CERTIFICATE_ALLOWED_MIMES,
-    maxSize: APP_CERTIFICATE_MAX_SIZE_BYTES,
-    onDropRejected: (files) => {
-      files.forEach((file) => {
-        file.errors.forEach((err) => {
-          let msg;
-          if (err.code === "file-too-large") {
-            msg = t("certificates.dialog.import.file.error.too-large", {
-              size: APP_CERTIFICATE_MAX_SIZE_BYTES,
-            });
-          }
-          if (err.code === "file-invalid-type") {
-            msg = t("certificates.dialog.import.file.error.invalid-type");
-          }
+  const { getRootProps, open, isFocused, isDragActive, isDragReject } =
+    useDropzone({
+      multiple: false,
+      accept: APP_CERTIFICATE_ALLOWED_MIMES,
+      maxSize: APP_CERTIFICATE_MAX_SIZE_BYTES,
+      onDropRejected: (files) => {
+        files.forEach((file) => {
+          file.errors.forEach((err) => {
+            let msg;
+            if (err.code === "file-too-large") {
+              msg = t("certificates.dialog.import.file.error.too-large", {
+                size: APP_CERTIFICATE_MAX_SIZE_BYTES,
+              });
+            }
+            if (err.code === "file-invalid-type") {
+              msg = t("certificates.dialog.import.file.error.invalid-type");
+            }
 
-          if (msg) {
-            addToast({
-              message: msg,
-              variant: "wrong",
-              disableIcon: true,
-              isClosable: true,
-            });
-          }
+            if (msg) {
+              addToast({
+                message: msg,
+                variant: "wrong",
+                disableIcon: true,
+                isClosable: true,
+              });
+            }
+          });
         });
-      });
-    },
-    onError: (error) => {
-      addToast({
-        message: error?.message,
-        variant: "wrong",
-        disableIcon: true,
-        isClosable: true,
-      });
-    },
-  });
+      },
+      onError: (error) => {
+        addToast({
+          message: error?.message,
+          variant: "wrong",
+          disableIcon: true,
+          isClosable: true,
+        });
+      },
+    });
 
   return (
     <Dialog open fullScreen className={styles.dialog} onClose={onDialogClose}>
@@ -116,7 +118,11 @@ export const CertificateImportDialog: React.FunctionComponent<
         <div className={styles.centered}>
           <div
             {...getRootProps({
-              className: styles.drop_zone,
+              className: clsx(styles.drop_zone, {
+                [styles.drop_zone_focused]: isFocused,
+                [styles.drop_zone_active]: isDragActive,
+                [styles.drop_zone_reject]: isDragReject,
+              }),
               onClick: (event) => event.stopPropagation(),
             })}
           >

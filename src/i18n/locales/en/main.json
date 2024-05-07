@@ -40,12 +40,12 @@
       "import": {
         "drop-zone": {
           "title": "Drag and drop certificate file here or <0>click to upload</0>",
-          "description": "Supports PEM, and DER formats."
+          "description": "Supports PEM and DER formats."
         },
         "file": {
           "error": {
             "too-large": "File is larger than {{size}} bytes",
-            "invalid-type": "Unsupported file format"
+            "invalid-type": "Wrong file format. Use PEM or DER formats."
           }
         }
       }
