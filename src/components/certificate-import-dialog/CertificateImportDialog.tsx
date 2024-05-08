@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Convert } from "pvtsutils";
 import { useDropzone } from "react-dropzone";
 import { Trans, useTranslation } from "react-i18next";
 import { IProviderInfo } from "@peculiar/fortify-client-core";
@@ -49,50 +48,35 @@ export const CertificateImportDialog: React.FunctionComponent<
   const [certificate, setCertificate] = useState("");
   const [isTextAreaError, setIsTextAreaError] = useState(false);
 
+  function addInvalidDataToast() {
+    addToast({
+      message: t("certificates.dialog.import.certificate.error.invalid-data"),
+      variant: "wrong",
+      disableIcon: true,
+      isClosable: true,
+    });
+  }
+
   const { getRootProps, open, isFocused, isDragActive, isDragReject } =
     useDropzone({
       multiple: false,
       accept: APP_CERTIFICATE_ALLOWED_MIMES,
       maxSize: APP_CERTIFICATE_MAX_SIZE_BYTES,
-      onDropRejected: (files) => {
-        files.forEach((file) => {
-          file.errors.forEach((err) => {
-            let msg;
-            if (err.code === "file-too-large") {
-              msg = t("certificates.dialog.import.file.error.too-large", {
-                size: APP_CERTIFICATE_MAX_SIZE_BYTES,
-              });
-            }
-            if (err.code === "file-invalid-type") {
-              msg = t("certificates.dialog.import.file.error.invalid-type");
-            }
+      onDropRejected: ([file]) => {
+        file.errors.forEach((err) => {
+          let msg;
+          if (err.code === "file-too-large") {
+            msg = t("certificates.dialog.import.file.error.too-large", {
+              size: APP_CERTIFICATE_MAX_SIZE_BYTES,
+            });
+          }
+          if (err.code === "file-invalid-type") {
+            msg = t("certificates.dialog.import.file.error.invalid-type");
+          }
 
-            if (msg) {
-              addToast({
-                message: msg,
-                variant: "wrong",
-                disableIcon: true,
-                isClosable: true,
-              });
-            }
-          });
-        });
-      },
-      onDropAccepted: (files) => {
-        files.forEach(async (file) => {
-          const fbuf = await file?.arrayBuffer();
-
-          try {
-            const rawClarified = base64Clarify(Convert.ToBase64(fbuf));
-            const buffer = certificateRawToBuffer(rawClarified);
-            const x509Cert = new X509Certificate(buffer);
-
-            setCertificate(x509Cert.toString("pem"));
-          } catch (error) {
+          if (msg) {
             addToast({
-              message: t(
-                "certificates.dialog.import.certificate.error.invalid-data"
-              ),
+              message: msg,
               variant: "wrong",
               disableIcon: true,
               isClosable: true,
@@ -100,14 +84,31 @@ export const CertificateImportDialog: React.FunctionComponent<
           }
         });
       },
-      onError: (error) => {
-        addToast({
-          message: error?.message,
-          variant: "wrong",
-          disableIcon: true,
-          isClosable: true,
-        });
+      onDropAccepted: ([file]) => {
+        if (!file) {
+          return false;
+        }
+        const reader = new FileReader();
+
+        reader.readAsText(file);
+
+        reader.onload = (event) => {
+          try {
+            const content = event.target?.result as string;
+            const rawClarified = base64Clarify(content);
+            const buffer = certificateRawToBuffer(rawClarified);
+            const x509Cert = new X509Certificate(buffer);
+
+            setCertificate(x509Cert.toString("pem"));
+            setIsTextAreaError(false);
+          } catch (error) {
+            addInvalidDataToast();
+          }
+        };
+
+        reader.onerror = addInvalidDataToast;
       },
+      onError: addInvalidDataToast,
     });
 
   return (
