@@ -48,6 +48,7 @@
       display: block;
       width: 30px;
       height: 30px;
+      color: var(--pv-color-gray-10);
     }
   }
 
@@ -66,20 +67,17 @@
     .drop_zone_title_link {
       display: inline;
       cursor: pointer;
+      background: none;
     }
     &:focus {
       outline: none;
     }
 
-    &.drop_zone_focused,
     &.drop_zone_active {
       border-color: var(--pv-color-primary-tint-3);
       background-color: var(--pv-color-primary-tint-5);
     }
 
-    &.drop_zone_focused {
-      border-style: solid;
-    }
     &.drop_zone_reject {
       border-color: var(--pv-color-wrong-tint-3);
       background-color: var(--pv-color-wrong-tint-5);
@@ -120,6 +118,10 @@
   .buttons_group {
     display: flex;
     justify-content: space-between;
+  }
+
+  .cancel_button:disabled svg path {
+    stroke: var(--pv-color-gray-6);
   }
 
   .loading {

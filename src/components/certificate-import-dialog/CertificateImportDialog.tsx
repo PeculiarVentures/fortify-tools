@@ -62,59 +62,58 @@ export const CertificateImportDialog: React.FunctionComponent<
     });
   }
 
-  const { getRootProps, open, isFocused, isDragActive, isDragReject } =
-    useDropzone({
-      multiple: false,
-      accept: APP_CERTIFICATE_ALLOWED_MIMES,
-      maxSize: APP_CERTIFICATE_MAX_SIZE_BYTES,
-      onDropRejected: ([file]) => {
-        file.errors.forEach((err) => {
-          let msg;
-          if (err.code === "file-too-large") {
-            msg = t("certificates.dialog.import.file.error.too-large", {
-              size: APP_CERTIFICATE_MAX_SIZE_BYTES,
-            });
-          }
-          if (err.code === "file-invalid-type") {
-            msg = t("certificates.dialog.import.file.error.invalid-type");
-          }
-
-          if (msg) {
-            addToast({
-              message: msg,
-              variant: "wrong",
-              disableIcon: true,
-              isClosable: true,
-            });
-          }
-        });
-      },
-      onDropAccepted: ([file]) => {
-        if (!file) {
-          return false;
+  const { getRootProps, open, isDragActive, isDragReject } = useDropzone({
+    multiple: false,
+    accept: APP_CERTIFICATE_ALLOWED_MIMES,
+    maxSize: APP_CERTIFICATE_MAX_SIZE_BYTES,
+    onDropRejected: ([file]) => {
+      file.errors.forEach((err) => {
+        let msg;
+        if (err.code === "file-too-large") {
+          msg = t("certificates.dialog.import.file.error.too-large", {
+            size: APP_CERTIFICATE_MAX_SIZE_BYTES,
+          });
         }
-        const reader = new FileReader();
+        if (err.code === "file-invalid-type") {
+          msg = t("certificates.dialog.import.file.error.invalid-type");
+        }
 
-        reader.readAsText(file);
+        if (msg) {
+          addToast({
+            message: msg,
+            variant: "wrong",
+            disableIcon: true,
+            isClosable: true,
+          });
+        }
+      });
+    },
+    onDropAccepted: ([file]) => {
+      if (!file) {
+        return false;
+      }
+      const reader = new FileReader();
 
-        reader.onload = (event) => {
-          try {
-            const content = event.target?.result as string;
-            const rawClarified = base64Clarify(content);
-            const buffer = certificateRawToBuffer(rawClarified);
-            const x509Cert = new X509Certificate(buffer);
+      reader.readAsText(file);
 
-            setCertificate(x509Cert.toString("pem"));
-            setIsTextAreaError(false);
-          } catch (error) {
-            addInvalidDataToast();
-          }
-        };
+      reader.onload = (event) => {
+        try {
+          const content = event.target?.result as string;
+          const rawClarified = base64Clarify(content);
+          const buffer = certificateRawToBuffer(rawClarified);
+          const x509Cert = new X509Certificate(buffer);
 
-        reader.onerror = addInvalidDataToast;
-      },
-      onError: addInvalidDataToast,
-    });
+          setCertificate(x509Cert.toString("pem"));
+          setIsTextAreaError(false);
+        } catch (error) {
+          addInvalidDataToast();
+        }
+      };
+
+      reader.onerror = addInvalidDataToast;
+    },
+    onError: addInvalidDataToast,
+  });
 
   return (
     <Dialog open fullScreen className={styles.dialog} onClose={onDialogClose}>
@@ -127,7 +126,7 @@ export const CertificateImportDialog: React.FunctionComponent<
                 className={styles.button_back}
                 size="small"
               >
-                <ArrowRightIcon className={styles.arrow_back} color="black" />
+                <ArrowRightIcon className={styles.arrow_back} />
               </IconButton>
             </div>
             <div className={styles.title_label}>
@@ -150,7 +149,6 @@ export const CertificateImportDialog: React.FunctionComponent<
             <div
               {...getRootProps({
                 className: clsx(styles.drop_zone, {
-                  [styles.drop_zone_focused]: isFocused,
                   [styles.drop_zone_active]: isDragActive,
                   [styles.drop_zone_reject]: isDragReject,
                 }),
@@ -165,7 +163,7 @@ export const CertificateImportDialog: React.FunctionComponent<
                       className={styles.drop_zone_title_link}
                       color="primary"
                       variant="s2"
-                      component="a"
+                      component="button"
                       onClick={(event) => {
                         event.preventDefault();
                         open();
@@ -225,6 +223,7 @@ export const CertificateImportDialog: React.FunctionComponent<
                   setCertificate("");
                   setIsTextAreaError(false);
                 }}
+                className={styles.cancel_button}
               >
                 {t("button.clear")}
               </Button>
