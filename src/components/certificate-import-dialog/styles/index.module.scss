@@ -73,9 +73,15 @@
       outline: none;
     }
 
+    &:hover,
     &.drop_zone_active {
       border-color: var(--pv-color-primary-tint-3);
       background-color: var(--pv-color-primary-tint-5);
+    }
+
+    &:hover {
+      border-style: solid;
+      cursor: pointer;
     }
 
     &.drop_zone_reject {

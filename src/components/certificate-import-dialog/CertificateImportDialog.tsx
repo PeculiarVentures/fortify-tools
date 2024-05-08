@@ -62,7 +62,7 @@ export const CertificateImportDialog: React.FunctionComponent<
     });
   }
 
-  const { getRootProps, open, isDragActive, isDragReject } = useDropzone({
+  const { getRootProps, isDragActive, isDragReject } = useDropzone({
     multiple: false,
     accept: APP_CERTIFICATE_ALLOWED_MIMES,
     maxSize: APP_CERTIFICATE_MAX_SIZE_BYTES,
@@ -152,7 +152,6 @@ export const CertificateImportDialog: React.FunctionComponent<
                   [styles.drop_zone_active]: isDragActive,
                   [styles.drop_zone_reject]: isDragReject,
                 }),
-                onClick: (event) => event.stopPropagation(),
               })}
             >
               <Typography variant="s2" color="gray-10">
@@ -164,10 +163,6 @@ export const CertificateImportDialog: React.FunctionComponent<
                       color="primary"
                       variant="s2"
                       component="button"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        open();
-                      }}
                     >
                       {0}
                     </Typography>,
