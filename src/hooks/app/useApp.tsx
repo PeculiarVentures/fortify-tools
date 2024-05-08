@@ -29,6 +29,8 @@ export function useApp() {
   const [currentCertificatDelete, setCurrentCetificateDelete] = React.useState<
     undefined | { id: string; name: string; loading?: boolean }
   >();
+  const [isCertificatImporting, setIsCetificateImporting] =
+    React.useState(false);
 
   const [currentCertificateViewerValue, setCurrentCertificateViewerValue] =
     React.useState<ICertificate | undefined>(undefined);
@@ -207,9 +209,20 @@ export function useApp() {
     console.log(value);
   };
 
-  const handleCertificateImport = () => {
+  const handleCertificateImport = (certificate: string) => {
     // TODO: add logic
-    console.log("Import");
+    console.log("Import", certificate);
+    // temporary behaviour
+    setIsCetificateImporting(true);
+    setTimeout(function () {
+      setIsCetificateImporting(false);
+      addToast({
+        message: t("certificates.dialog.import.failure-message"),
+        variant: "wrong",
+        disableIcon: true,
+        isClosable: true,
+      });
+    }, 1000);
   };
 
   const handleCertificateCreate = () => {
@@ -270,6 +283,7 @@ export function useApp() {
     currentCertificatDelete,
     currentCertificateViewerValue,
     isCertificateImportDialogShow,
+    isCertificatImporting,
     handleProviderChange,
     handleCertificatesSearch,
     handleCertificateImport,

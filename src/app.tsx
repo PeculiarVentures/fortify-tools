@@ -22,6 +22,7 @@ export function App() {
     currentCertificatDelete,
     currentCertificateViewerValue,
     isCertificateImportDialogShow,
+    isCertificatImporting,
     handleProviderChange,
     handleCertificatesSearch,
     handleCertificateCreate,
@@ -32,6 +33,7 @@ export function App() {
     handleCertificateViewerClose,
     handleCertificateImportDialogOpen,
     handleCertificateImportDialogClose,
+    handleCertificateImport,
   } = useApp();
 
   return (
@@ -84,6 +86,8 @@ export function App() {
           onProviderSelect={handleProviderChange}
           providers={providers}
           currentProviderId={currentProviderId}
+          onImportClick={handleCertificateImport}
+          loading={isCertificatImporting}
         />
       ) : null}
     </>
