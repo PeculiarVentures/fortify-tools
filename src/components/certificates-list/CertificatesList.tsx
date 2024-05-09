@@ -114,7 +114,11 @@ export const CertificatesList: React.FunctionComponent<
                       tabIndex={0}
                       title={t("certificates.list.action.download")}
                       onClick={() =>
-                        downloadCertificate(Convert.ToBase64(raw), type)
+                        downloadCertificate(
+                          label as string,
+                          Convert.ToBase64(raw),
+                          type
+                        )
                       }
                       size="small"
                       className={styles.action_icon_button}

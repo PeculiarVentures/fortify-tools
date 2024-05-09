@@ -1,4 +1,3 @@
-import { Convert } from "pvtsutils";
 import { Pkcs10CertificateRequest, X509Certificate } from "@peculiar/x509";
 
 function downloadFile(name: string, data: string | ArrayBuffer) {
@@ -12,36 +11,24 @@ function downloadFile(name: string, data: string | ArrayBuffer) {
   window.URL.revokeObjectURL(url);
 }
 
-async function base64ToPEM(base64: string) {
-  const req = new Pkcs10CertificateRequest(base64);
-  const thumbprintBuffer = await crypto.subtle.digest("SHA-1", req.rawData);
-  const thumbprint = Convert.ToHex(thumbprintBuffer);
-  const pem = req.toString("pem");
-
-  return {
-    thumbprint,
-    pem,
-  };
-}
-
 export async function downloadCertificate(
+  label: string,
   certBase64: string,
   type: "x509" | "csr"
 ) {
   switch (type) {
     case "x509": {
       const cert = new X509Certificate(certBase64);
-      const thumbprintBuffer = await cert.getThumbprint();
-      const thumbprint = Convert.ToHex(thumbprintBuffer);
       const pem = cert.toString("pem");
 
-      downloadFile(`${thumbprint}.cer`, pem);
+      downloadFile(`${label}.cer`, pem);
       break;
     }
     case "csr": {
-      const { thumbprint, pem } = await base64ToPEM(certBase64);
+      const req = new Pkcs10CertificateRequest(certBase64);
+      const pem = req.toString("pem");
 
-      downloadFile(`${thumbprint}.csr`, pem);
+      downloadFile(`${label}.csr`, pem);
       break;
     }
     default:
