@@ -19,7 +19,7 @@ interface CertificatesTopbarProps {
   className?: ComponentProps<"div">["className"];
   onSearch: (value: string) => void;
   onImport: () => void;
-  onCreate: (type: "csr" | "ssc") => void;
+  onCreate: (type: "csr" | "x509") => void;
 }
 export const CertificatesTopbar: React.FunctionComponent<
   CertificatesTopbarProps
@@ -81,7 +81,7 @@ export const CertificatesTopbar: React.FunctionComponent<
               startIcon: (
                 <CertificatSSCIcon className={styles.creation_menu_icon} />
               ),
-              onClick: () => onCreate("ssc"),
+              onClick: () => onCreate("x509"),
             },
           ]}
         >
