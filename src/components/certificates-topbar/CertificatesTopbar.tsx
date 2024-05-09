@@ -3,19 +3,23 @@ import React, { ComponentProps, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Button,
-  PlusIcon,
+  Menu,
   TextField,
   useDebounceCallback,
 } from "@peculiar/react-components";
 import ImportIcon from "../../icons/import.svg?react";
 import SearchIcon from "../../icons/search.svg?react";
+import PlusIcon from "../../icons/plus-20.svg?react";
+import CertificatCSRIcon from "../../icons/csr-30.svg?react";
+import CertificatSSCIcon from "../../icons/certificate-30.svg?react";
+
 import styles from "./styles/index.module.scss";
 
 interface CertificatesTopbarProps {
   className?: ComponentProps<"div">["className"];
   onSearch: (value: string) => void;
   onImport: () => void;
-  onCreate: () => void;
+  onCreate: (type: "csr" | "ssc") => void;
 }
 export const CertificatesTopbar: React.FunctionComponent<
   CertificatesTopbarProps
@@ -60,15 +64,36 @@ export const CertificatesTopbar: React.FunctionComponent<
         </Button>
       </div>
       <div>
-        <Button
-          color="primary"
-          variant="contained"
-          size="large"
-          startIcon={<PlusIcon />}
-          onClick={onCreate}
+        <Menu
+          popoverProps={{
+            className: styles.creation_menu,
+          }}
+          options={[
+            {
+              label: t("topbar.create-certificate-scr"),
+              startIcon: (
+                <CertificatCSRIcon className={styles.creation_menu_icon} />
+              ),
+              onClick: () => onCreate("csr"),
+            },
+            {
+              label: t("topbar.create-certificate-ssc"),
+              startIcon: (
+                <CertificatSSCIcon className={styles.creation_menu_icon} />
+              ),
+              onClick: () => onCreate("ssc"),
+            },
+          ]}
         >
-          {t("topbar.create-certificate")}
-        </Button>
+          <Button
+            color="primary"
+            variant="contained"
+            size="large"
+            startIcon={<PlusIcon />}
+          >
+            {t("topbar.create-certificate")}
+          </Button>
+        </Menu>
       </div>
     </div>
   );
