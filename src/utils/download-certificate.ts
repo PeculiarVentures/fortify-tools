@@ -11,7 +11,7 @@ function downloadFile(name: string, data: string | ArrayBuffer) {
   window.URL.revokeObjectURL(url);
 }
 
-export async function downloadCertificate(
+export function downloadCertificate(
   label: string,
   certBase64: string,
   type: "x509" | "csr"
