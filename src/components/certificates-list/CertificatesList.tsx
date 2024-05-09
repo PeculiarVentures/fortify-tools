@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Convert } from "pvtsutils";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 import { Button, IconButton, Typography } from "@peculiar/react-components";
@@ -15,10 +16,12 @@ import { CertificateTypeLabel } from "../certificate-type-label";
 import { Date } from "../date";
 import { CertificateName } from "../certificate-name";
 import { CertificateSerialNumber } from "../certificate-serial-number";
+import { downloadCertificate } from "../../utils/download-certificate";
 
 import { CertificateProps } from "../../types";
 
 import DeleteIcon from "../../icons/delete.svg?react";
+import DownloadIcon from "../../icons/download-20.svg?react";
 
 import styles from "./styles/index.module.scss";
 
@@ -63,7 +66,8 @@ export const CertificatesList: React.FunctionComponent<
         </TableHeader>
         <TableBody>
           {certificates.map((certificate) => {
-            const { id, serialNumber, type, label, notAfter } = certificate;
+            const { id, serialNumber, type, label, notAfter, raw } =
+              certificate;
             return (
               <TableRow
                 tabIndex={0}
@@ -108,9 +112,21 @@ export const CertificatesList: React.FunctionComponent<
                     </Button>
                     <IconButton
                       tabIndex={0}
+                      title={t("certificates.list.action.download")}
+                      onClick={() =>
+                        downloadCertificate(Convert.ToBase64(raw), type)
+                      }
+                      size="small"
+                      className={styles.action_icon_button}
+                    >
+                      <DownloadIcon />
+                    </IconButton>
+                    <IconButton
+                      tabIndex={0}
                       title={t("certificates.list.action.delete")}
                       onClick={() => onDelete(id as string, label as string)}
                       size="small"
+                      className={styles.action_icon_button}
                     >
                       <DeleteIcon />
                     </IconButton>
