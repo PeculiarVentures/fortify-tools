@@ -8,7 +8,7 @@ import {
 import CopyIcon from "../../icons/copy-20.svg?react";
 import CheckIcon from "../../icons/check-20.svg?react";
 
-interface CopyIconButtonProps extends IconButtonProps {
+interface CopyIconButtonProps extends Omit<IconButtonProps, "children"> {
   value: string;
 }
 
