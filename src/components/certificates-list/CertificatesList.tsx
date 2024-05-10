@@ -15,7 +15,7 @@ import { CertificateTypeLabel } from "../certificate-type-label";
 import { Date } from "../date";
 import { CertificateName } from "../certificate-name";
 import { CertificateSerialNumber } from "../certificate-serial-number";
-import { downloadFromBuffer } from "@peculiar/certificates-viewer";
+import { downloadCertificate } from "../../utils/download-certificate";
 
 import { CertificateProps } from "../../types";
 
@@ -113,7 +113,7 @@ export const CertificatesList: React.FunctionComponent<
                       tabIndex={0}
                       title={t("certificates.list.action.download")}
                       onClick={() =>
-                        downloadFromBuffer(raw, label as string, "cer")
+                        downloadCertificate(label as string, raw, type)
                       }
                       size="small"
                       className={styles.action_icon_button}
