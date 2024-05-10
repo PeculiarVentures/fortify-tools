@@ -30,7 +30,7 @@
     "vite-plugin-svgr": "^4.2.0"
   },
   "dependencies": {
-    "@peculiar/certificates-viewer-react": "^4.2.1",
+    "@peculiar/certificates-viewer-react": "^4.2.2",
     "@peculiar/fortify-webcomponents-react": "^4.0.3",
     "@peculiar/react-components": "^0.6.0",
     "clsx": "^2.1.1",

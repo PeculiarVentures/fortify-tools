@@ -43,6 +43,10 @@
       .view_details_button {
         margin-right: var(--pv-size-base-2);
       }
+
+      .action_icon_button {
+        color: var(--pv-color-gray-10);
+      }
     }
     &[class~="current"] .list_table_actions,
     &:hover .list_table_actions {
