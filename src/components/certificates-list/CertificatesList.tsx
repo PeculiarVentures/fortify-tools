@@ -16,6 +16,8 @@ import { Date } from "../date";
 import { CertificateName } from "../certificate-name";
 import { CertificateSerialNumber } from "../certificate-serial-number";
 import { downloadCertificate } from "../../utils/download-certificate";
+import { CopyIconButton } from "../copy-icon-button";
+import { certificateRawToPem } from "../../utils/certificate";
 
 import { CertificateProps } from "../../types";
 
@@ -109,6 +111,10 @@ export const CertificatesList: React.FunctionComponent<
                     >
                       {t("certificates.list.action.view-details")}
                     </Button>
+                    <CopyIconButton
+                      value={certificateRawToPem(raw, type)}
+                      className={styles.action_icon_button}
+                    />
                     <IconButton
                       tabIndex={0}
                       title={t("certificates.list.action.download")}
