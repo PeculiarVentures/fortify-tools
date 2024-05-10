@@ -21,7 +21,8 @@
       },
       "action": {
         "view-details": "View details",
-        "delete": "Delete certificate"
+        "delete": "Delete certificate",
+        "download": "Download certificate"
       },
       "empty-text": "There are no certificates yet."
     },
