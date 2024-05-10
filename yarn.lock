@@ -1788,12 +1788,12 @@
     pvtsutils "^1.3.5"
     tslib "^2.6.2"
 
-"@peculiar/certificates-viewer-react@^4.2.1":
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/@peculiar/certificates-viewer-react/-/certificates-viewer-react-4.2.1.tgz#102c6d8693afd982e6a182766c5b0419e5d9a1e1"
-  integrity sha512-eqBnjxt4IumHSy8LRMfILwdFxu6WJP9RJPizu1313KLEUHZ93jrkDZzK111FoAYJkL2jZhqHLThpMbIDIpELqQ==
+"@peculiar/certificates-viewer-react@^4.2.2":
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/@peculiar/certificates-viewer-react/-/certificates-viewer-react-4.2.2.tgz#fa0e30dfc3bf54a37ef6c884d2305f2b1e09067d"
+  integrity sha512-t6Kml/eSoSZvnik2LTtyQ6HxWRCsIdLzagX/Hkw3KWrYWXEIc6cHVzVA7RnJjBpOkkZrFMpDzMO/K+d46Pkegw==
   dependencies:
-    "@peculiar/certificates-viewer" "^4.2.1"
+    "@peculiar/certificates-viewer" "^4.2.2"
     tslib "^2.4.1"
 
 "@peculiar/certificates-viewer@^4.2.0":
@@ -1824,10 +1824,10 @@
     dayjs "^1.11.7"
     pvtsutils "^1.3.5"
 
-"@peculiar/certificates-viewer@^4.2.1":
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/@peculiar/certificates-viewer/-/certificates-viewer-4.2.1.tgz#6da34db9d6e992d030acdd5191244e0e3a9d4b18"
-  integrity sha512-8BiWKy4lgs85ZBqgsmek3nRaIMH4kPuc8QW/r74MkTrDk6iNXQCaJZJ5txiaVLVtWZUgEZFp/B6LnL25lw4P8Q==
+"@peculiar/certificates-viewer@^4.2.2":
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/@peculiar/certificates-viewer/-/certificates-viewer-4.2.2.tgz#8a44ce00f63e9fc712b6a79cf07c208eaa7c4676"
+  integrity sha512-/aHEYQAwA0GQxq1jBsl6yuOWako6HqMpCQOBlvp5ULIjuY4Sg4VC9xj5mx6BYnseocUFUDjVkuFpJc8Dladzhg==
   dependencies:
     "@peculiar/asn1-adobe-acrobat" "^2.3.8"
     "@peculiar/asn1-android" "^2.3.10"

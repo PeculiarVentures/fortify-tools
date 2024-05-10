@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Convert } from "pvtsutils";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 import { Button, IconButton, Typography } from "@peculiar/react-components";
@@ -16,7 +15,7 @@ import { CertificateTypeLabel } from "../certificate-type-label";
 import { Date } from "../date";
 import { CertificateName } from "../certificate-name";
 import { CertificateSerialNumber } from "../certificate-serial-number";
-import { downloadCertificate } from "../../utils/download-certificate";
+import { downloadFromBuffer } from "@peculiar/certificates-viewer";
 
 import { CertificateProps } from "../../types";
 
@@ -114,11 +113,7 @@ export const CertificatesList: React.FunctionComponent<
                       tabIndex={0}
                       title={t("certificates.list.action.download")}
                       onClick={() =>
-                        downloadCertificate(
-                          label as string,
-                          Convert.ToBase64(raw),
-                          type
-                        )
+                        downloadFromBuffer(raw, label as string, "cer")
                       }
                       size="small"
                       className={styles.action_icon_button}
