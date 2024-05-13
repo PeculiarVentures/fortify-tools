@@ -1,0 +1,21 @@
+.certificate_type_select_option {
+  padding: calc(var(--pv-size-base-half) + var(--pv-size-base))
+    var(--pv-size-base-2);
+  &[data-focused="true"] {
+    background-color: var(--pv-color-gray-4);
+  }
+  &:hover {
+    background-color: var(--pv-color-gray-3);
+    cursor: pointer;
+  }
+}
+.certificate_type_select_divider {
+  height: 1px;
+  background-color: var(--pv-color-gray-5);
+  margin: var(--pv-size-base);
+}
+.certificate_type_select_popover {
+  & > ul[role="listbox"] {
+    padding: 7px 0;
+  }
+}

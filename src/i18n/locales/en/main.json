@@ -38,7 +38,17 @@
         "success-message": "Certificate deleted.",
         "failure-message": "Can't delete certificate"
       }
-    }
+    },
+    "key-usage-extension": {
+      "id-kp-emailProtection": "S/MIME",
+      "id-kp-codeSigning": "Code signing",
+      "id-kp-documentSigning": "Document signing",
+      "id-kp-clientAuth": "TLS Client Authentication",
+      "id-kp-serverAuth": "TLS Server Authentication"
+    },
+    "custom-csr-option": "Custom CSR",
+    "custom-certificate-option": "Custom certificate",
+    "select-type-placeholder": "Select type"
   },
   "connection": {
     "approve": {
