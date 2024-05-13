@@ -2,7 +2,7 @@ import { defineConfig, mergeConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import svgr from "vite-plugin-svgr";
-import viteConfig from "./vite.config.ts";
+import vitestConfig from "./vitest.config.ts";
 
 // https://vitejs.dev/config/
 export default mergeConfig(
@@ -16,5 +16,5 @@ export default mergeConfig(
       outDir: "./dist",
     },
   }),
-  viteConfig
+  vitestConfig
 );
