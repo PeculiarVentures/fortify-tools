@@ -29,14 +29,9 @@ export function useApp() {
   const [currentCertificatDelete, setCurrentCetificateDelete] = React.useState<
     undefined | { id: string; name: string; loading?: boolean }
   >();
-  const [isCertificatImporting, setIsCetificateImporting] =
-    React.useState(false);
 
   const [currentCertificateViewerValue, setCurrentCertificateViewerValue] =
     React.useState<ICertificate | undefined>(undefined);
-
-  const [isCertificateImportDialogShow, SetIsCertificateImportDialogShow] =
-    React.useState(false);
 
   /**
    *
@@ -209,22 +204,6 @@ export function useApp() {
     console.log(value);
   };
 
-  const handleCertificateImport = (certificate: string) => {
-    // TODO: add logic
-    console.log("Import", certificate);
-    // temporary behaviour
-    setIsCetificateImporting(true);
-    setTimeout(function () {
-      setIsCetificateImporting(false);
-      addToast({
-        message: t("certificates.dialog.import.failure-message"),
-        variant: "wrong",
-        disableIcon: true,
-        isClosable: true,
-      });
-    }, 1000);
-  };
-
   const handleCertificateCreate = () => {
     // TODO: add logic
     console.log("Create");
@@ -266,14 +245,6 @@ export function useApp() {
     setCurrentCertificateViewerValue(undefined);
   };
 
-  const handleCertificateImportDialogOpen = () => {
-    SetIsCertificateImportDialogShow(true);
-  };
-
-  const handleCertificateImportDialogClose = () => {
-    SetIsCertificateImportDialogShow(false);
-  };
-
   return {
     fetching,
     challenge,
@@ -282,18 +253,13 @@ export function useApp() {
     certificates,
     currentCertificatDelete,
     currentCertificateViewerValue,
-    isCertificateImportDialogShow,
-    isCertificatImporting,
     handleProviderChange,
     handleCertificatesSearch,
-    handleCertificateImport,
     handleCertificateCreate,
     handleCertificateDeleteDialogOpen,
     handleCertificateDeleteDialogClose,
     handleCertificateDelete,
     handleCertificateViewerOpen,
     handleCertificateViewerClose,
-    handleCertificateImportDialogOpen,
-    handleCertificateImportDialogClose,
   };
 }

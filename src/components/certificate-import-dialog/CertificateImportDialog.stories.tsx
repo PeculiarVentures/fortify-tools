@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { fn } from "@storybook/test";
 import { CertificateImportDialog } from "./CertificateImportDialog";
 
 const meta: Meta<typeof CertificateImportDialog> = {
@@ -24,7 +25,8 @@ export const Default: Story = {
   args: {
     currentProviderId: "2",
     providers,
-    onProviderSelect: () => {},
+    onProviderSelect: fn(),
+    onTextAreaChange: fn(),
   },
 };
 
@@ -32,6 +34,6 @@ export const isLoading: Story = {
   args: {
     loading: true,
     providers,
-    onProviderSelect: () => {},
+    onProviderSelect: fn(),
   },
 };

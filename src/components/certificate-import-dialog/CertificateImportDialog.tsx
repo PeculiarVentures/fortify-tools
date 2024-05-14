@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDropzone } from "react-dropzone";
 import { Trans, useTranslation } from "react-i18next";
 import { IProviderInfo } from "@peculiar/fortify-client-core";
@@ -8,14 +8,11 @@ import {
   ArrowRightIcon,
   IconButton,
   Typography,
-  useToast,
   TextareaField,
   Button,
   CircularProgress,
 } from "@peculiar/react-components";
-import { X509Certificate } from "@peculiar/x509";
 import { CertificatesProvidersSelectList } from "../certificates-providers-select-list";
-import { base64Clarify, certificateRawToBuffer } from "../../utils";
 
 import CrossIcon from "../../icons/cross.svg?react";
 
@@ -30,9 +27,17 @@ interface CertificateImportDialogProps {
   currentProviderId?: string;
   providers: Pick<IProviderInfo, "id" | "name">[];
   loading?: boolean;
+  certificate: string;
+  isTextAreaError: boolean;
+  onTextAreaChange: (certificate: string) => void;
+  onTextAreaBlur: () => void;
   onProviderSelect: (id: string) => void;
   onDialogClose: () => void;
-  onImportClick: (certificate: string) => void;
+  onImportButtonClick: () => void;
+  onDropError: (error?: unknown) => void;
+  onDropRejected: (error: string) => void;
+  onDropAccepted: (fileContent: string) => void;
+  onClearButtonClick: () => void;
 }
 
 export const CertificateImportDialog: React.FunctionComponent<
@@ -42,25 +47,20 @@ export const CertificateImportDialog: React.FunctionComponent<
     loading,
     providers,
     currentProviderId,
+    certificate,
+    isTextAreaError,
+    onTextAreaChange,
+    onTextAreaBlur,
     onProviderSelect,
     onDialogClose,
-    onImportClick,
+    onImportButtonClick,
+    onDropError,
+    onDropRejected,
+    onDropAccepted,
+    onClearButtonClick,
   } = props;
 
-  const { addToast } = useToast();
   const { t } = useTranslation();
-
-  const [certificate, setCertificate] = useState("");
-  const [isTextAreaError, setIsTextAreaError] = useState(false);
-
-  function addInvalidDataToast() {
-    addToast({
-      message: t("certificates.dialog.import.certificate.error.invalid-data"),
-      variant: "wrong",
-      disableIcon: true,
-      isClosable: true,
-    });
-  }
 
   const { getRootProps, isDragActive, isDragReject } = useDropzone({
     multiple: false,
@@ -79,12 +79,7 @@ export const CertificateImportDialog: React.FunctionComponent<
         }
 
         if (msg) {
-          addToast({
-            message: msg,
-            variant: "wrong",
-            disableIcon: true,
-            isClosable: true,
-          });
+          onDropRejected(msg);
         }
       });
     },
@@ -98,21 +93,15 @@ export const CertificateImportDialog: React.FunctionComponent<
 
       reader.onload = (event) => {
         try {
-          const content = event.target?.result as string;
-          const rawClarified = base64Clarify(content);
-          const buffer = certificateRawToBuffer(rawClarified);
-          const x509Cert = new X509Certificate(buffer);
-
-          setCertificate(x509Cert.toString("pem"));
-          setIsTextAreaError(false);
+          onDropAccepted(event.target?.result as string);
         } catch (error) {
-          addInvalidDataToast();
+          onDropError(error);
         }
       };
 
-      reader.onerror = addInvalidDataToast;
+      reader.onerror = onDropError;
     },
-    onError: addInvalidDataToast,
+    onError: onDropError,
   });
 
   return (
@@ -187,19 +176,9 @@ export const CertificateImportDialog: React.FunctionComponent<
               <TextareaField
                 className={styles.text_area}
                 value={certificate}
-                onChange={(event) => {
-                  setCertificate(event.target.value);
-                  setIsTextAreaError(false);
-                }}
+                onChange={(event) => onTextAreaChange(event.target.value)}
                 size="large"
-                onBlur={() => {
-                  try {
-                    certificate?.length && new X509Certificate(certificate);
-                    setIsTextAreaError(false);
-                  } catch (error) {
-                    setIsTextAreaError(true);
-                  }
-                }}
+                onBlur={onTextAreaBlur}
                 error={isTextAreaError}
                 errorText={
                   isTextAreaError
@@ -214,11 +193,8 @@ export const CertificateImportDialog: React.FunctionComponent<
               <Button
                 variant="outlined"
                 startIcon={<CrossIcon />}
-                disabled={!certificate.length}
-                onClick={() => {
-                  setCertificate("");
-                  setIsTextAreaError(false);
-                }}
+                disabled={!certificate?.length}
+                onClick={onClearButtonClick}
                 className={styles.cancel_button}
               >
                 {t("button.clear")}
@@ -226,8 +202,8 @@ export const CertificateImportDialog: React.FunctionComponent<
               <Button
                 variant="contained"
                 color="primary"
-                disabled={!certificate.length || isTextAreaError}
-                onClick={() => onImportClick(certificate)}
+                disabled={!certificate?.length || isTextAreaError}
+                onClick={onImportButtonClick}
               >
                 {t("button.import-certificate")}
               </Button>

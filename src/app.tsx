@@ -8,7 +8,7 @@ import { CertificatesProvidersList } from "./components/certificates-providers-l
 import { CertificatesTopbar } from "./components/certificates-topbar";
 import { CertificateDeleteDialog } from "./components/certificate-delete-dialog";
 import { CertificateViewerDialog } from "./components/certificate-viewer-dialog";
-import { CertificateImportDialog } from "./components/certificate-import-dialog";
+import { useCertificateImportDialog } from "./dialogs/certificate-import-dialog";
 
 import styles from "./app.module.scss";
 
@@ -21,8 +21,6 @@ export function App() {
     certificates,
     currentCertificatDelete,
     currentCertificateViewerValue,
-    isCertificateImportDialogShow,
-    isCertificatImporting,
     handleProviderChange,
     handleCertificatesSearch,
     handleCertificateCreate,
@@ -31,10 +29,16 @@ export function App() {
     handleCertificateDelete,
     handleCertificateViewerOpen,
     handleCertificateViewerClose,
-    handleCertificateImportDialogOpen,
-    handleCertificateImportDialogClose,
-    handleCertificateImport,
   } = useApp();
+
+  const {
+    open: handleCertificateImportDialogOpen,
+    dialog: certificateImportDialog,
+  } = useCertificateImportDialog({
+    providers,
+    handleProviderChange,
+    currentProviderId,
+  });
 
   return (
     <>
@@ -80,16 +84,7 @@ export function App() {
           onClose={handleCertificateViewerClose}
         />
       ) : null}
-      {isCertificateImportDialogShow ? (
-        <CertificateImportDialog
-          onDialogClose={handleCertificateImportDialogClose}
-          onProviderSelect={handleProviderChange}
-          providers={providers}
-          currentProviderId={currentProviderId}
-          onImportClick={handleCertificateImport}
-          loading={isCertificatImporting}
-        />
-      ) : null}
+      {certificateImportDialog()}
     </>
   );
 }
