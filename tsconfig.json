@@ -18,7 +18,12 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "types": ["vitest-dom/extend-expect"],
+    "baseUrl": "./",
+    "paths": {
+      "@testing": ["utils/testing/index.ts"]
+    }
   },
-  "include": ["src"],
+  "include": ["src"]
 }
