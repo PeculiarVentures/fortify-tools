@@ -140,6 +140,7 @@ export const CertificateImportDialog: React.FunctionComponent<
                 currentProviderId={currentProviderId}
                 onSelect={onProviderSelect}
                 className={styles.provider_select}
+                popoverClassName={styles.provider_select_popover}
               />
             </div>
           </div>

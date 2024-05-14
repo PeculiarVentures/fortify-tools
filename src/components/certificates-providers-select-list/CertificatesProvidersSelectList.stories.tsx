@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { fn } from "@storybook/test";
 import { CertificatesProvidersSelectList } from "./CertificatesProvidersSelectList";
 
 const meta: Meta<typeof CertificatesProvidersSelectList> = {
@@ -22,7 +23,7 @@ export const Default: Story = {
         name: "Provider 2",
       },
     ],
-    onSelect: () => {},
+    onSelect: fn(),
   },
 };
 
