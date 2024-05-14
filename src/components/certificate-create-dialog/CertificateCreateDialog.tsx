@@ -2,6 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { IProviderInfo } from "@peculiar/fortify-client-core";
 import clsx from "clsx";
+import { CertificateTypeSelect } from "../certificate-type-select/CertificateTypeSelect";
 import {
   Dialog,
   ArrowRightIcon,
@@ -69,9 +70,12 @@ export const CertificateCreateDialog: React.FunctionComponent<
         </div>
         <div className={styles.content}>
           <div className={clsx(styles.centered, styles.content_box)}>
-            {
-              // content
-            }
+            <div className={styles.card}>
+              <CertificateTypeSelect
+                type={type}
+                onSelect={(alias) => console.log(alias)}
+              />
+            </div>
           </div>
         </div>
         {loading ? (
