@@ -1,7 +1,7 @@
 import React, { ComponentProps } from "react";
 import { Autocomplete, Typography } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
-import { CertificateKeyUsageExtensions } from "../../config/data";
+import { certificateKeyUsageExtensions } from "../../config/data";
 
 import styles from "./styles/index.module.scss";
 
@@ -18,7 +18,7 @@ export const CertificateTypeSelect: React.FunctionComponent<
 
   const { t } = useTranslation();
   const list = [
-    ...Object.keys(CertificateKeyUsageExtensions).map((key) => ({
+    ...Object.keys(certificateKeyUsageExtensions).map((key) => ({
       value: key,
       label: t(`certificates.key-usage-extension.${key}`),
     })),

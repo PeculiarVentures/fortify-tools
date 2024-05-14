@@ -7,7 +7,7 @@ import {
 } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
 import {
-  CertificateKeyUsageExtensions,
+  certificateKeyUsageExtensions,
   ICertificateKeyUsageExtensions,
 } from "../../config/data";
 
@@ -33,7 +33,7 @@ export const KeyUsagesCheckboxGroup: React.FunctionComponent<
         {t("certificates.extended-key-usages")}
       </Typography>
       <div className={styles.key_usages_checkbox_group}>
-        {Object.entries(CertificateKeyUsageExtensions).map(([key, value]) => (
+        {Object.entries(certificateKeyUsageExtensions).map(([key, value]) => (
           <label
             key={`key-usage-checkbox-${key}`}
             className={styles.key_usages_checkbox}

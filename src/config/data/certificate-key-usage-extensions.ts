@@ -1,4 +1,4 @@
-export const CertificateKeyUsageExtensions = {
+export const certificateKeyUsageExtensions = {
   // http://oid-info.com/get/1.3.6.1.5.5.7.3.4
   "id-kp-emailProtection": "1.3.6.1.5.5.7.3.4",
   // http://oid-info.com/get/1.3.6.1.5.5.7.3.3
@@ -12,4 +12,4 @@ export const CertificateKeyUsageExtensions = {
 };
 
 export type ICertificateKeyUsageExtensions =
-  keyof typeof CertificateKeyUsageExtensions;
+  keyof typeof certificateKeyUsageExtensions;
