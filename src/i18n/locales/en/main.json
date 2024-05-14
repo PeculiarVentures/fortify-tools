@@ -49,7 +49,11 @@
     "custom-csr-option": "Custom CSR",
     "custom-certificate-option": "Custom certificate",
     "select-type-placeholder": "Select type",
-    "extended-key-usages": "Extended key usages"
+    "extended-key-usages": "Extended key usages",
+    "key-properties": "Key properties",
+    "key-algorithm": "Key algorithm",
+    "key-size": "Key size",
+    "key-named-curve": "Named curve"
   },
   "connection": {
     "approve": {

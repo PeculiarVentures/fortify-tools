@@ -1,0 +1,15 @@
+.certificate_key_prop_select_box {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pv-size-base-3);
+
+  .certificate_key_prop_selects {
+    display: flex;
+    width: 100%;
+    gap: var(--pv-size-base-3);
+
+    .certificate_key_prop_select {
+      flex: 1;
+    }
+  }
+}
