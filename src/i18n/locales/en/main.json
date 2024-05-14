@@ -27,6 +27,13 @@
       "empty-text": "There are no certificates yet."
     },
     "dialog": {
+      "create": {
+        "title": {
+          "x509": "Create Self-signed certificate",
+          "csr": "Create Certificate Signing Request (CSR)"
+        },
+        "loading-text": "Creating certificate..."
+      },
       "delete": {
         "title": "Delete certificate",
         "message": "Are you sure you want to delete “{{name}}”?",
