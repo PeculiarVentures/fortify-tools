@@ -131,7 +131,7 @@ export const CertificateImportDialog: React.FunctionComponent<
             </div>
             <div className={styles.title_label}>
               <Typography variant="h4" color="black">
-                Import certificate
+                {t("certificates.dialog.import.title")}
               </Typography>
             </div>
             <div>

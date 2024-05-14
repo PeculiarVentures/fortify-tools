@@ -38,6 +38,7 @@
         "failure-message": "Failed to delete certificate because of error. Please try again."
       },
       "import": {
+        "title": "Import certificate",
         "drop-zone": {
           "title": "Drag and drop certificate file here or <0>click to upload</0>",
           "description": "Supports PEM and DER formats."
