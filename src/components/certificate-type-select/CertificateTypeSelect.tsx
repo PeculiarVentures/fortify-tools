@@ -1,25 +1,42 @@
 import React, { ComponentProps } from "react";
-import { Autocomplete, Typography } from "@peculiar/react-components";
+import {
+  Autocomplete,
+  Typography,
+  useControllableState,
+} from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
-import { certificateKeyUsageExtensions } from "../../config/data";
+import {
+  ICertificateKeyUsageExtensions,
+  certificateKeyUsageExtensions,
+} from "../../config/data";
 
 import styles from "./styles/index.module.scss";
+
+type IKeyUsageExtensions = ICertificateKeyUsageExtensions | "custom";
+
+export type ICertificateTypeSelectValue = {
+  value: IKeyUsageExtensions;
+  label: string;
+};
 
 interface CertificateTypeSelectProps {
   className?: ComponentProps<"select">["className"];
   type: "x509" | "csr";
-  onSelect: (alias: string) => void;
+  onChange: (data: ICertificateTypeSelectValue) => void;
 }
 
 export const CertificateTypeSelect: React.FunctionComponent<
   CertificateTypeSelectProps
 > = (props) => {
-  const { className, type = "csr", onSelect } = props;
+  const { className, type = "csr", onChange } = props;
+
+  const [currentValue, setCurrentValue] =
+    useControllableState<ICertificateTypeSelectValue>({ onChange });
 
   const { t } = useTranslation();
-  const list = [
+  const list: ICertificateTypeSelectValue[] = [
     ...Object.keys(certificateKeyUsageExtensions).map((key) => ({
-      value: key,
+      value: key as IKeyUsageExtensions,
       label: t(`certificates.key-usage-extension.${key}`),
     })),
     {
@@ -34,10 +51,14 @@ export const CertificateTypeSelect: React.FunctionComponent<
 
   return (
     <Autocomplete
+      value={currentValue}
       disableSearch={true}
       className={className}
       options={list}
-      onChange={(_, value) => onSelect(value?.value as string)}
+      onChange={(_, value) =>
+        setCurrentValue(value as ICertificateTypeSelectValue)
+      }
+      getOptionLabel={({ label }) => label}
       placeholder={t("certificates.select-type-placeholder")}
       popoverProps={{
         className: styles.certificate_type_select_popover,
@@ -47,7 +68,11 @@ export const CertificateTypeSelect: React.FunctionComponent<
           {value === "custom" ? (
             <div className={styles.certificate_type_select_divider} />
           ) : null}
-          <li {...props} className={styles.certificate_type_select_option}>
+          <li
+            {...props}
+            aria-selected={value === currentValue?.value}
+            className={styles.certificate_type_select_option}
+          >
             <Typography variant="b3" color="black">
               {label}
             </Typography>

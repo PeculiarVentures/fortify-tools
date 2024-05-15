@@ -8,6 +8,9 @@
     background-color: var(--pv-color-gray-3);
     cursor: pointer;
   }
+  &[aria-selected="true"] {
+    background-color: var(--pv-color-gray-5);
+  }
 }
 .certificate_type_select_divider {
   height: 1px;
