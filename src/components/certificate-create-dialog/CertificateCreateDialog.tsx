@@ -14,6 +14,7 @@ import {
   CircularProgress,
 } from "@peculiar/react-components";
 import { Card } from "../card";
+import { CertificateCreateByEmail } from "../certificate-create-by-email";
 
 import styles from "./styles/index.module.scss";
 
@@ -24,7 +25,7 @@ interface CertificateCreateDialogProps {
   loading?: boolean;
   onProviderSelect: (id: string) => void;
   onDialogClose: () => void;
-  onCreateClick: (certificate: string) => void;
+  onCreateButtonClick: (data: unknown) => void;
 }
 
 export const CertificateCreateDialog: React.FunctionComponent<
@@ -37,7 +38,7 @@ export const CertificateCreateDialog: React.FunctionComponent<
     // currentProviderId,
     // onProviderSelect,
     onDialogClose,
-    // onCreateButtonClick,
+    onCreateButtonClick,
   } = props;
 
   const [currentTypeSelect, setCurrentTypeSelect] = React.useState<
@@ -55,7 +56,12 @@ export const CertificateCreateDialog: React.FunctionComponent<
           "id-kp-documentSigning",
         ].includes(currentTypeSelect.value)
       ) {
-        return <>By Email</>;
+        return (
+          <CertificateCreateByEmail
+            type={type}
+            onCreateButtonClick={onCreateButtonClick}
+          />
+        );
       }
       if (
         ["id-kp-clientAuth", "id-kp-serverAuth"].includes(

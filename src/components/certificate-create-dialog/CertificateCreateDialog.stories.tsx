@@ -26,6 +26,7 @@ export const Default: Story = {
     currentProviderId: "2",
     providers,
     onProviderSelect: fn(),
+    onCreateButtonClick: fn(),
   },
 };
 
