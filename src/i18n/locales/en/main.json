@@ -32,6 +32,10 @@
           "x509": "Create Self-signed certificate",
           "csr": "Create Certificate Signing Request (CSR)"
         },
+        "select-type": {
+          "x509": "What do you need certificate for?",
+          "csr": "What do you need CSR for?"
+        },
         "loading-text": "Creating certificate..."
       },
       "delete": {

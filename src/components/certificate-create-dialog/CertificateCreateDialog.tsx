@@ -13,6 +13,7 @@ import {
   Typography,
   CircularProgress,
 } from "@peculiar/react-components";
+import { Card } from "../card";
 
 import styles from "./styles/index.module.scss";
 
@@ -31,7 +32,7 @@ export const CertificateCreateDialog: React.FunctionComponent<
 > = (props) => {
   const {
     loading,
-    type,
+    type = "x509",
     // providers,
     // currentProviderId,
     // onProviderSelect,
@@ -85,11 +86,7 @@ export const CertificateCreateDialog: React.FunctionComponent<
             </div>
             <div className={styles.title_label}>
               <Typography variant="h4" color="black">
-                {t(
-                  type === "csr"
-                    ? "certificates.dialog.create.title.csr"
-                    : "certificates.dialog.create.title.x509"
-                )}
+                {t(`certificates.dialog.create.title.${type}`)}
               </Typography>
             </div>
             <div>
@@ -101,12 +98,15 @@ export const CertificateCreateDialog: React.FunctionComponent<
         </div>
         <div className={styles.content}>
           <div className={clsx(styles.centered, styles.content_box)}>
-            <div className={styles.card}>
+            <Card>
+              <Typography variant="h5" color="black">
+                {t(`certificates.dialog.create.select-type.${type}`)}
+              </Typography>
               <CertificateTypeSelect
                 type={type}
                 onChange={setCurrentTypeSelect}
               />
-            </div>
+            </Card>
             {renderContent()}
           </div>
         </div>
