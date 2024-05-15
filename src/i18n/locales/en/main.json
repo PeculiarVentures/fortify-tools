@@ -66,6 +66,13 @@
     "key-size": "Key size",
     "key-named-curve": "Named curve",
     "subject": {
+      "cname": {
+        "label": "Common name",
+        "placeholder": "company.com",
+        "error": {
+          "required": "Common name field must not be empty"
+        }
+      },
       "email-address": {
         "label": "Email address",
         "placeholder": "company@example.com",

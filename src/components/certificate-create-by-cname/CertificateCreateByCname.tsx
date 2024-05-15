@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Card } from "../card";
 import { Button, TextField, Typography } from "@peculiar/react-components";
-import { validateEmail } from "src/utils/validators";
 import { certificateKeyProperties } from "src/config/data";
 
 import styles from "./styles/index.module.scss";
 
-export interface ICertificateCreateByEmailData {
+export interface ICertificateCreateByCnameData {
   subject: {
-    emailAddress: string;
     commonName: string;
   };
   algorithm: {
@@ -19,23 +17,20 @@ export interface ICertificateCreateByEmailData {
   };
 }
 
-interface CertificateCreateByEmailProps {
+interface CertificateCreateByCnameProps {
   type: "x509" | "csr";
-  onCreateButtonClick: (data: ICertificateCreateByEmailData) => void;
+  onCreateButtonClick: (data: ICertificateCreateByCnameData) => void;
 }
 
-export const CertificateCreateByEmail: React.FunctionComponent<
-  CertificateCreateByEmailProps
+export const CertificateCreateByCname: React.FunctionComponent<
+  CertificateCreateByCnameProps
 > = (props) => {
   const { type = "x509", onCreateButtonClick } = props;
 
   const { t } = useTranslation();
-  const [emailAddress, setEmailAddress] = useState<string>("");
+  const [cname, setCname] = useState<string>("");
   const [isError, setIsError] = useState<boolean>(false);
   const [isDirty, setIsDirty] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string | undefined>(
-    undefined
-  );
 
   const algorithm = {
     hash: "SHA-256",
@@ -48,36 +43,18 @@ export const CertificateCreateByEmail: React.FunctionComponent<
       <Card>
         <TextField
           className="required_text_field"
-          value={emailAddress}
+          value={cname}
           onChange={(event) => {
-            setEmailAddress(event.target.value);
+            setCname(event.target.value);
             if (!isDirty) {
               setIsDirty(true);
             }
           }}
-          label={t("certificates.subject.email-address.label")}
-          placeholder={t("certificates.subject.email-address.placeholder")}
-          onBlur={() => {
-            if (isDirty) {
-              if (!emailAddress.length) {
-                setIsError(true);
-                setErrorMessage(
-                  t("certificates.subject.email-address.error.required")
-                );
-                return;
-              } else if (!validateEmail(emailAddress)) {
-                setIsError(true);
-                setErrorMessage(
-                  t("certificates.subject.email-address.error.type")
-                );
-                return;
-              }
-              setIsError(false);
-            }
-          }}
+          label={t("certificates.subject.cname.label")}
+          placeholder={t("certificates.subject.cname.placeholder")}
+          onBlur={() => isDirty && setIsError(!cname.length)}
           error={isError}
-          errorText={errorMessage}
-          type="email"
+          errorText={t("certificates.subject.cname.error.required")}
         />
         <div className={styles.algorithm}>
           <Typography variant="c1" color="gray-9">
@@ -93,12 +70,11 @@ export const CertificateCreateByEmail: React.FunctionComponent<
         <Button
           variant="contained"
           color="primary"
-          disabled={!emailAddress.length || isError}
+          disabled={!cname.length || isError}
           onClick={() =>
             onCreateButtonClick({
               subject: {
-                commonName: emailAddress,
-                emailAddress,
+                commonName: cname,
               },
               algorithm,
             })

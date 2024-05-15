@@ -15,6 +15,7 @@ import {
 } from "@peculiar/react-components";
 import { Card } from "../card";
 import { CertificateCreateByEmail } from "../certificate-create-by-email";
+import { CertificateCreateByCname } from "../certificate-create-by-cname";
 
 import styles from "./styles/index.module.scss";
 
@@ -68,7 +69,12 @@ export const CertificateCreateDialog: React.FunctionComponent<
           currentTypeSelect.value
         )
       ) {
-        return <>By Common name</>;
+        return (
+          <CertificateCreateByCname
+            type={type}
+            onCreateButtonClick={onCreateButtonClick}
+          />
+        );
       }
       if (currentTypeSelect.value) {
         return <>Custom</>;
