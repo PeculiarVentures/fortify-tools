@@ -2,7 +2,10 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { IProviderInfo } from "@peculiar/fortify-client-core";
 import clsx from "clsx";
-import { CertificateTypeSelect } from "../certificate-type-select/CertificateTypeSelect";
+import {
+  CertificateTypeSelect,
+  ICertificateTypeSelectValue,
+} from "../certificate-type-select";
 import {
   Dialog,
   ArrowRightIcon,
@@ -33,10 +36,38 @@ export const CertificateCreateDialog: React.FunctionComponent<
     // currentProviderId,
     // onProviderSelect,
     onDialogClose,
-    // onCreateClick,
+    // onCreateButtonClick,
   } = props;
 
+  const [currentTypeSelect, setCurrentTypeSelect] = React.useState<
+    ICertificateTypeSelectValue | undefined
+  >(undefined);
+
   const { t } = useTranslation();
+
+  const renderContent = () => {
+    if (currentTypeSelect) {
+      if (
+        [
+          "id-kp-emailProtection",
+          "id-kp-codeSigning",
+          "id-kp-documentSigning",
+        ].includes(currentTypeSelect.value)
+      ) {
+        return <>By Email</>;
+      }
+      if (
+        ["id-kp-clientAuth", "id-kp-serverAuth"].includes(
+          currentTypeSelect.value
+        )
+      ) {
+        return <>By Common name</>;
+      }
+      if (currentTypeSelect.value) {
+        return <>Custom</>;
+      }
+    }
+  };
 
   return (
     <Dialog open fullScreen className={styles.dialog} onClose={onDialogClose}>
@@ -73,9 +104,10 @@ export const CertificateCreateDialog: React.FunctionComponent<
             <div className={styles.card}>
               <CertificateTypeSelect
                 type={type}
-                onSelect={(alias) => console.log(alias)}
+                onChange={setCurrentTypeSelect}
               />
             </div>
+            {renderContent()}
           </div>
         </div>
         {loading ? (
