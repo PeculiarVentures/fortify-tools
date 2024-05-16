@@ -11,11 +11,7 @@ export interface ICertificateCreateByCnameData {
   subject: {
     commonName: string;
   };
-  algorithm: {
-    hash: string;
-    name: string;
-    modulusLength: string | number;
-  };
+  algorithm: RsaHashedKeyGenParams | Partial<EcKeyGenParams>;
 }
 
 interface CertificateCreateByCnameProps {

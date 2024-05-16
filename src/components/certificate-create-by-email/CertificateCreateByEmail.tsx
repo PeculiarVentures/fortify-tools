@@ -13,11 +13,7 @@ export interface ICertificateCreateByEmailData {
     emailAddress: string;
     commonName: string;
   };
-  algorithm: {
-    hash: string;
-    name: string;
-    modulusLength: string | number;
-  };
+  algorithm: RsaHashedKeyGenParams | Partial<EcKeyGenParams>;
 }
 
 interface CertificateCreateByEmailProps {

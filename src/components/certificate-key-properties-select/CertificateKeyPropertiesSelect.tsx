@@ -13,12 +13,7 @@ import {
 
 import styles from "./styles/index.module.scss";
 
-type KeyProperties = {
-  hash: string;
-  name: string;
-  namedCurve?: string | number;
-  modulusLength?: string | number;
-};
+type KeyProperties = RsaHashedKeyGenParams | Partial<EcKeyGenParams>;
 interface CertificateKeyPropertiesSelectProps {
   className?: ComponentProps<"select">["className"];
   onSelect: (value: KeyProperties) => void;
@@ -47,12 +42,9 @@ export const CertificateKeyPropertiesSelect: React.FunctionComponent<
     const algorithmData: KeyProperties = {
       hash: "SHA-256",
       name: algorithm.name,
+      namedCurve: isECType ? (size as string) : undefined,
+      modulusLength: !isECType ? (size as number) : undefined,
     };
-    if (isECType) {
-      algorithmData.namedCurve = size;
-    } else {
-      algorithmData.modulusLength = size;
-    }
     onSelect(algorithmData);
   }, [algorithm, size, isECType]);
 

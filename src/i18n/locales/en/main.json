@@ -65,10 +65,17 @@
     "key-algorithm": "Key algorithm",
     "key-size": "Key size",
     "key-named-curve": "Named curve",
+    "general": {
+      "title": "General",
+      "friendly-name": "Friendly name",
+      "description": "Description"
+    },
     "subject": {
+      "title": "Subject",
       "cname": {
         "label": "Common name",
         "placeholder": "company.com",
+        "placeholder-2": "example.com",
         "error": {
           "required": "Common name field must not be empty"
         }
