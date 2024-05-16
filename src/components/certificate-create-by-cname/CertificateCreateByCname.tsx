@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Button, TextField } from "@peculiar/react-components";
+import { CertificateAlgorithmInfo } from "../certificate-algorithm-info";
 import { Card } from "../card";
-import { Button, TextField, Typography } from "@peculiar/react-components";
-import { certificateKeyProperties } from "src/config/data";
+import { certificateKeyProperties } from "../../config/data";
 
 import styles from "./styles/index.module.scss";
 
@@ -56,14 +57,10 @@ export const CertificateCreateByCname: React.FunctionComponent<
           error={isError}
           errorText={t("certificates.subject.cname.error.required")}
         />
-        <div className={styles.algorithm}>
-          <Typography variant="c1" color="gray-9">
-            {t("certificates.key-algorithm")}: {algorithm.name}
-          </Typography>
-          <Typography variant="c1" color="gray-9">
-            {t("certificates.key-size")}: {algorithm.modulusLength}
-          </Typography>
-        </div>
+        <CertificateAlgorithmInfo
+          algorithmNname={algorithm.name}
+          algorithmModulusLength={algorithm.modulusLength}
+        />
       </Card>
 
       <div className={styles.button_group}>
