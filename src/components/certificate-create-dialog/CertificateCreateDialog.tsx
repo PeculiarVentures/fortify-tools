@@ -17,11 +17,12 @@ import { Card } from "../card";
 import { CertificateCreateByEmail } from "../certificate-create-by-email";
 import { CertificateCreateByCname } from "../certificate-create-by-cname";
 import { CertificateCreateByCustom } from "../certificate-create-by-custom";
+import { CertificateType } from "../../types";
 
 import styles from "./styles/index.module.scss";
 
 interface CertificateCreateDialogProps {
-  type: "x509" | "csr";
+  type: CertificateType;
   currentProviderId?: string;
   providers: Pick<IProviderInfo, "id" | "name">[];
   loading?: boolean;

@@ -5,7 +5,7 @@ import { CertificateAlgorithmInfo } from "../certificate-algorithm-info";
 import { Card } from "../card";
 import { validateEmail } from "../../utils/validators";
 import { certificateKeyProperties } from "../../config/data";
-import { CertificateAlgorithmProps } from "../../types";
+import { CertificateAlgorithmProps, CertificateType } from "../../types";
 
 import styles from "./styles/index.module.scss";
 
@@ -18,7 +18,7 @@ export interface ICertificateCreateByEmailData {
 }
 
 interface CertificateCreateByEmailProps {
-  type: "x509" | "csr";
+  type: CertificateType;
   onCreateButtonClick: (data: ICertificateCreateByEmailData) => void;
 }
 

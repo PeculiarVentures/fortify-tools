@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import {
   CertificateAlgorithmProps,
   CertificateSubjectProps,
+  CertificateType,
 } from "../../types";
 import { Button, TextField, Typography } from "@peculiar/react-components";
 import { CertificateKeyPropertiesSelect } from "../certificate-key-properties-select";
@@ -22,7 +23,7 @@ export interface ICertificateCreateByCustomData {
 }
 
 interface CertificateCreateByCustomProps {
-  type: "x509" | "csr";
+  type: CertificateType;
   onCreateButtonClick: (data: ICertificateCreateByCustomData) => void;
 }
 

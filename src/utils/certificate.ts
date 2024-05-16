@@ -1,7 +1,8 @@
 import { Convert } from "pvtsutils";
 import { Pkcs10CertificateRequest, X509Certificate } from "@peculiar/x509";
+import { CertificateType } from "../types";
 
-export function certificateRawToPem(raw: ArrayBuffer, type: "x509" | "csr") {
+export function certificateRawToPem(raw: ArrayBuffer, type: CertificateType) {
   let pem;
   switch (type) {
     case "x509": {

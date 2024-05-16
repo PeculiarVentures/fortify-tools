@@ -36,7 +36,9 @@
           "x509": "What do you need certificate for?",
           "csr": "What do you need CSR for?"
         },
-        "loading-text": "Creating certificate..."
+        "loading-text": "Creating certificate...",
+        "success-message": "Certificate created.",
+        "failure-message": "Can't create certificate"
       },
       "delete": {
         "title": "Delete certificate",

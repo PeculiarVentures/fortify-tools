@@ -4,7 +4,7 @@ import { Button, TextField } from "@peculiar/react-components";
 import { CertificateAlgorithmInfo } from "../certificate-algorithm-info";
 import { Card } from "../card";
 import { certificateKeyProperties } from "../../config/data";
-import { CertificateAlgorithmProps } from "../../types";
+import { CertificateAlgorithmProps, CertificateType } from "../../types";
 
 import styles from "./styles/index.module.scss";
 
@@ -16,7 +16,7 @@ export interface ICertificateCreateByCnameData {
 }
 
 interface CertificateCreateByCnameProps {
-  type: "x509" | "csr";
+  type: CertificateType;
   onCreateButtonClick: (data: ICertificateCreateByCnameData) => void;
 }
 

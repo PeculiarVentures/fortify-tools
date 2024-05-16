@@ -16,3 +16,5 @@ export interface CertificateSubjectProps {
 export type CertificateAlgorithmProps =
   | RsaHashedKeyGenParams
   | Partial<EcKeyGenParams>;
+
+export type CertificateType = "x509" | "csr";

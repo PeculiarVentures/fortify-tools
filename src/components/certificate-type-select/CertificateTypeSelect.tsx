@@ -9,6 +9,7 @@ import {
   ICertificateKeyUsageExtensions,
   certificateKeyUsageExtensions,
 } from "../../config/data";
+import { CertificateType } from "../../types";
 
 import styles from "./styles/index.module.scss";
 
@@ -21,7 +22,7 @@ export type ICertificateTypeSelectValue = {
 
 interface CertificateTypeSelectProps {
   className?: ComponentProps<"select">["className"];
-  type: "x509" | "csr";
+  type: CertificateType;
   onChange: (data: ICertificateTypeSelectValue) => void;
 }
 
