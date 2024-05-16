@@ -16,6 +16,7 @@ import {
 import { Card } from "../card";
 import { CertificateCreateByEmail } from "../certificate-create-by-email";
 import { CertificateCreateByCname } from "../certificate-create-by-cname";
+import { CertificateCreateByCustom } from "../certificate-create-by-custom";
 
 import styles from "./styles/index.module.scss";
 
@@ -35,6 +36,7 @@ export const CertificateCreateDialog: React.FunctionComponent<
   const {
     loading,
     type = "x509",
+    // TODO: need merge another PR first where providers list component present
     // providers,
     // currentProviderId,
     // onProviderSelect,
@@ -76,8 +78,13 @@ export const CertificateCreateDialog: React.FunctionComponent<
           />
         );
       }
-      if (currentTypeSelect.value) {
-        return <>Custom</>;
+      if (currentTypeSelect.value === "custom") {
+        return (
+          <CertificateCreateByCustom
+            type={type}
+            onCreateButtonClick={onCreateButtonClick}
+          />
+        );
       }
     }
   };
@@ -103,6 +110,7 @@ export const CertificateCreateDialog: React.FunctionComponent<
             </div>
             <div>
               {
+                // TODO: need merge another PR first where providers list component present
                 // CertificatesProvidersSelectList
               }
             </div>
