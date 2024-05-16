@@ -3,3 +3,16 @@ export interface CertificateProps extends ICertificate {
   id?: string;
   label?: string;
 }
+export interface CertificateSubjectProps {
+  commonName: string;
+  emailAddress?: string;
+  organizationName?: string;
+  organizationalUnitName?: string;
+  localityName?: string;
+  stateOrProvinceName?: string;
+  countryName?: string;
+}
+
+export type CertificateAlgorithmProps =
+  | RsaHashedKeyGenParams
+  | Partial<EcKeyGenParams>;

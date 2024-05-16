@@ -4,6 +4,7 @@ import { Button, TextField } from "@peculiar/react-components";
 import { CertificateAlgorithmInfo } from "../certificate-algorithm-info";
 import { Card } from "../card";
 import { certificateKeyProperties } from "../../config/data";
+import { CertificateAlgorithmProps } from "../../types";
 
 import styles from "./styles/index.module.scss";
 
@@ -11,7 +12,7 @@ export interface ICertificateCreateByCnameData {
   subject: {
     commonName: string;
   };
-  algorithm: RsaHashedKeyGenParams | Partial<EcKeyGenParams>;
+  algorithm: CertificateAlgorithmProps;
 }
 
 interface CertificateCreateByCnameProps {
@@ -34,6 +35,8 @@ export const CertificateCreateByCname: React.FunctionComponent<
     name: certificateKeyProperties[0].name,
     modulusLength: certificateKeyProperties[0].modulusLength[0],
   };
+
+  const isCreateButtonDisabled = !cname.length || isError;
 
   return (
     <div className={styles.form_box}>
@@ -63,7 +66,7 @@ export const CertificateCreateByCname: React.FunctionComponent<
         <Button
           variant="contained"
           color="primary"
-          disabled={!cname.length || isError}
+          disabled={isCreateButtonDisabled}
           onClick={() =>
             onCreateButtonClick({
               subject: {
@@ -72,8 +75,13 @@ export const CertificateCreateByCname: React.FunctionComponent<
               algorithm,
             })
           }
+          title={
+            isCreateButtonDisabled
+              ? t("certificates.button-create.title")
+              : undefined
+          }
         >
-          {t(`certificates.button-create.${type}`)}
+          {t(`certificates.button-create.text.${type}`)}
         </Button>
       </div>
     </div>

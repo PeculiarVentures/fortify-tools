@@ -87,11 +87,33 @@
           "required": "Email address field must not be empty",
           "type": "Please enter valid email address"
         }
+      },
+      "organization-name": {
+        "label": "Organization",
+        "placeholder": "Company name"
+      },
+      "organization-unit-name": {
+        "label": "Organization unit"
+      },
+      "locality-name": {
+        "label": "Locality",
+        "placeholder": "Town, city, village, etc."
+      },
+      "state-or-province-name": {
+        "label": "State",
+        "placeholder": "Province, region, county or state"
+      },
+      "country-name": {
+        "label": "Country",
+        "placeholder": "Select country"
       }
     },
     "button-create": {
-      "x509": "Create certificate",
-      "csr": "Create CSR"
+      "text": {
+        "x509": "Create certificate",
+        "csr": "Create CSR"
+      },
+      "title": "Please fill required fields"
     }
   },
   "connection": {

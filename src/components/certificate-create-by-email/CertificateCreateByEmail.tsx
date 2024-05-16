@@ -5,6 +5,7 @@ import { CertificateAlgorithmInfo } from "../certificate-algorithm-info";
 import { Card } from "../card";
 import { validateEmail } from "../../utils/validators";
 import { certificateKeyProperties } from "../../config/data";
+import { CertificateAlgorithmProps } from "../../types";
 
 import styles from "./styles/index.module.scss";
 
@@ -13,7 +14,7 @@ export interface ICertificateCreateByEmailData {
     emailAddress: string;
     commonName: string;
   };
-  algorithm: RsaHashedKeyGenParams | Partial<EcKeyGenParams>;
+  algorithm: CertificateAlgorithmProps;
 }
 
 interface CertificateCreateByEmailProps {
@@ -39,6 +40,8 @@ export const CertificateCreateByEmail: React.FunctionComponent<
     name: certificateKeyProperties[0].name,
     modulusLength: certificateKeyProperties[0].modulusLength[0],
   };
+
+  const isCreateButtonDisabled = !emailAddress.length || isError;
 
   return (
     <div className={styles.form_box}>
@@ -86,7 +89,7 @@ export const CertificateCreateByEmail: React.FunctionComponent<
         <Button
           variant="contained"
           color="primary"
-          disabled={!emailAddress.length || isError}
+          disabled={isCreateButtonDisabled}
           onClick={() =>
             onCreateButtonClick({
               subject: {
@@ -96,8 +99,13 @@ export const CertificateCreateByEmail: React.FunctionComponent<
               algorithm,
             })
           }
+          title={
+            isCreateButtonDisabled
+              ? t("certificates.button-create.title")
+              : undefined
+          }
         >
-          {t(`certificates.button-create.${type}`)}
+          {t(`certificates.button-create.text.${type}`)}
         </Button>
       </div>
     </div>

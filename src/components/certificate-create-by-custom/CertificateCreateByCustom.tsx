@@ -1,9 +1,14 @@
 import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import {
+  CertificateAlgorithmProps,
+  CertificateSubjectProps,
+} from "../../types";
 import { Button, TextField, Typography } from "@peculiar/react-components";
 import { CertificateKeyPropertiesSelect } from "../certificate-key-properties-select";
 import { Card } from "../card";
 import { KeyUsagesCheckboxGroup } from "../key-usages-checkbox-group";
+import { CountrySelect } from "../country-select";
 
 import { validateEmail } from "../../utils/validators";
 import { ICertificateKeyUsageExtensions } from "../../config/data";
@@ -11,11 +16,8 @@ import { ICertificateKeyUsageExtensions } from "../../config/data";
 import styles from "./styles/index.module.scss";
 
 export interface ICertificateCreateByCustomData {
-  subject: {
-    emailAddress: string;
-    commonName: string;
-  };
-  algorithm?: RsaHashedKeyGenParams | Partial<EcKeyGenParams>;
+  subject: CertificateSubjectProps;
+  algorithm?: CertificateAlgorithmProps;
   extendedKeyUsageExtension: ICertificateKeyUsageExtensions[];
 }
 
@@ -48,6 +50,20 @@ export const CertificateCreateByCustom: React.FunctionComponent<
   );
 
   const algorithm = useRef<ICertificateCreateByCustomData["algorithm"]>();
+  const organizationName =
+    useRef<CertificateSubjectProps["organizationName"]>();
+  const organizationalUnitName =
+    useRef<CertificateSubjectProps["organizationalUnitName"]>();
+  const localityName = useRef<CertificateSubjectProps["localityName"]>();
+  const stateOrProvinceName =
+    useRef<CertificateSubjectProps["stateOrProvinceName"]>();
+  const countryName = useRef<CertificateSubjectProps["countryName"]>();
+
+  const isCreateButtonDisabled =
+    !emailAddress.length ||
+    isEmailAddressError ||
+    !cname.length ||
+    isCnameError;
 
   return (
     <div className={styles.form_box}>
@@ -118,6 +134,44 @@ export const CertificateCreateByCustom: React.FunctionComponent<
               errorText={emailAddressErrorMessage}
               type="email"
             />
+            <TextField
+              onChange={(event) => {
+                organizationName.current = event.target.value;
+              }}
+              label={t("certificates.subject.organization-name.label")}
+              placeholder={t(
+                "certificates.subject.organization-name.placeholder"
+              )}
+            />
+            <TextField
+              onChange={(event) => {
+                organizationalUnitName.current = event.target.value;
+              }}
+              label={t("certificates.subject.organization-unit-name.label")}
+            />
+            <CountrySelect
+              label={t("certificates.subject.country-name.label")}
+              placeholder={t("certificates.subject.country-name.placeholder")}
+              onSelect={(code) => {
+                countryName.current = code;
+              }}
+            />
+            <TextField
+              onChange={(event) => {
+                localityName.current = event.target.value;
+              }}
+              label={t("certificates.subject.locality-name.label")}
+              placeholder={t("certificates.subject.locality-name.placeholder")}
+            />
+            <TextField
+              onChange={(event) => {
+                stateOrProvinceName.current = event.target.value;
+              }}
+              label={t("certificates.subject.state-or-province-name.label")}
+              placeholder={t(
+                "certificates.subject.state-or-province-name.placeholder"
+              )}
+            />
           </div>
         </div>
         <div className={styles.divider}></div>
@@ -139,24 +193,41 @@ export const CertificateCreateByCustom: React.FunctionComponent<
         <Button
           variant="contained"
           color="primary"
-          disabled={
-            !emailAddress.length ||
-            isEmailAddressError ||
-            !cname.length ||
-            isCnameError
-          }
-          onClick={() =>
-            onCreateButtonClick({
+          disabled={isCreateButtonDisabled}
+          onClick={() => {
+            const data: ICertificateCreateByCustomData = {
               subject: {
                 commonName: cname,
                 emailAddress,
               },
               algorithm: algorithm.current,
               extendedKeyUsageExtension: extendedKeyUsageExtension.current,
-            })
+            };
+            if (organizationName?.current) {
+              data.subject.organizationName = organizationName.current;
+            }
+            if (organizationalUnitName?.current) {
+              data.subject.organizationalUnitName =
+                organizationalUnitName.current;
+            }
+            if (localityName?.current) {
+              data.subject.localityName = localityName.current;
+            }
+            if (stateOrProvinceName?.current) {
+              data.subject.stateOrProvinceName = stateOrProvinceName.current;
+            }
+            if (countryName?.current) {
+              data.subject.countryName = countryName.current;
+            }
+            onCreateButtonClick(data);
+          }}
+          title={
+            isCreateButtonDisabled
+              ? t("certificates.button-create.title")
+              : undefined
           }
         >
-          {t(`certificates.button-create.${type}`)}
+          {t(`certificates.button-create.text.${type}`)}
         </Button>
       </div>
     </div>

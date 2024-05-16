@@ -10,13 +10,13 @@ import {
   ICertificateKeyProperties,
   certificateKeyProperties,
 } from "../../config/data";
+import { CertificateAlgorithmProps } from "../../types";
 
 import styles from "./styles/index.module.scss";
 
-type KeyProperties = RsaHashedKeyGenParams | Partial<EcKeyGenParams>;
 interface CertificateKeyPropertiesSelectProps {
   className?: ComponentProps<"select">["className"];
-  onSelect: (value: KeyProperties) => void;
+  onSelect: (value: CertificateAlgorithmProps) => void;
 }
 
 export const CertificateKeyPropertiesSelect: React.FunctionComponent<
@@ -39,7 +39,7 @@ export const CertificateKeyPropertiesSelect: React.FunctionComponent<
   const isECType = algorithm.name.slice(0, 2) === "EC";
 
   useEffect(() => {
-    const algorithmData: KeyProperties = {
+    const algorithmData: CertificateAlgorithmProps = {
       hash: "SHA-256",
       name: algorithm.name,
       namedCurve: isECType ? (size as string) : undefined,
