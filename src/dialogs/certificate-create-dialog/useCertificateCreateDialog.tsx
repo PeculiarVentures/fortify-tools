@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { IProviderInfo } from "@peculiar/fortify-client-core";
 import { useToast } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
-import { CertificateCreateDialog } from "src/components/certificate-create-dialog";
+import { CertificateCreateDialog } from "../../components/certificate-create-dialog";
 import { CertificateType } from "../../types";
 
 export function useCertificateCreateDialog(props: {
