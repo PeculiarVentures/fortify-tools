@@ -36,7 +36,6 @@ export function App() {
     dialog: certificateImportDialog,
   } = useCertificateImportDialog({
     providers,
-    handleProviderChange,
     currentProviderId,
   });
 

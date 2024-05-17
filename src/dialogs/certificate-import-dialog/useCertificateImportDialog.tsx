@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { IProviderInfo } from "@peculiar/fortify-client-core";
 import { X509Certificate } from "@peculiar/x509";
 import { useToast } from "@peculiar/react-components";
@@ -9,9 +9,8 @@ import { base64Clarify, certificateRawToBuffer } from "../../utils";
 export function useCertificateImportDialog(props: {
   providers: IProviderInfo[];
   currentProviderId?: string;
-  handleProviderChange: (certificate: string) => void;
 }) {
-  const { providers, currentProviderId, handleProviderChange } = props;
+  const { providers, currentProviderId } = props;
   const { addToast } = useToast();
   const { t } = useTranslation();
 
@@ -21,9 +20,12 @@ export function useCertificateImportDialog(props: {
   const [certificate, setCertificate] = React.useState("");
   const [isTextAreaError, setIsTextAreaError] = React.useState(false);
 
+  const localCurrentProviderId = useRef(currentProviderId);
+
   const handleCertificateImport = () => {
     // TODO: add logic
     console.log("Import", certificate);
+    console.log("localCurrentProviderId", localCurrentProviderId?.current);
     // temporary behaviour
     setIsLoading(true);
     setTimeout(function () {
@@ -85,7 +87,9 @@ export function useCertificateImportDialog(props: {
             });
           }}
           onDialogClose={() => setIsOpen(false)}
-          onProviderSelect={handleProviderChange}
+          onProviderSelect={(id) => {
+            localCurrentProviderId.current = id;
+          }}
           providers={providers}
           currentProviderId={currentProviderId}
           onImportButtonClick={handleCertificateImport}

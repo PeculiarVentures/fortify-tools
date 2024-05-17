@@ -13,6 +13,7 @@ import {
   CircularProgress,
 } from "@peculiar/react-components";
 import { CertificatesProvidersSelectList } from "../certificates-providers-select-list";
+import { formatBytes } from "../../utils";
 
 import CrossIcon from "../../icons/cross.svg?react";
 
@@ -71,7 +72,7 @@ export const CertificateImportDialog: React.FunctionComponent<
         let msg;
         if (err.code === "file-too-large") {
           msg = t("certificates.dialog.import.file.error.too-large", {
-            size: APP_CERTIFICATE_MAX_SIZE_BYTES,
+            size: formatBytes(APP_CERTIFICATE_MAX_SIZE_BYTES),
           });
         }
         if (err.code === "file-invalid-type") {

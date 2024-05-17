@@ -10,4 +10,4 @@ export const APP_CERTIFICATE_ALLOWED_MIMES = {
   "application/pkcs10": [".csr"],
 };
 
-export const APP_CERTIFICATE_MAX_SIZE_BYTES = 10 * 1024; // 10KB in bytes
+export const APP_CERTIFICATE_MAX_SIZE_BYTES = 5242880; // 5mb in bytes
