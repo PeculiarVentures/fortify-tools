@@ -37,7 +37,7 @@ interface CertificateImportDialogProps {
   onImportButtonClick: () => void;
   onDropError: (error?: unknown) => void;
   onDropRejected: (error: string) => void;
-  onDropAccepted: (fileContent: string) => void;
+  onDropAccepted: (fileContent: ArrayBuffer) => void;
   onClearButtonClick: () => void;
 }
 
@@ -90,11 +90,11 @@ export const CertificateImportDialog: React.FunctionComponent<
       }
       const reader = new FileReader();
 
-      reader.readAsText(file);
+      reader.readAsArrayBuffer(file);
 
       reader.onload = (event) => {
         try {
-          onDropAccepted(event.target?.result as string);
+          onDropAccepted(event.target?.result as ArrayBuffer);
         } catch (error) {
           onDropError(error);
         }

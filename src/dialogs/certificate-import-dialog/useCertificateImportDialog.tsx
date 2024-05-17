@@ -4,7 +4,6 @@ import { X509Certificate } from "@peculiar/x509";
 import { useToast } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
 import { CertificateImportDialog } from "../../components/certificate-import-dialog";
-import { base64Clarify, certificateRawToBuffer } from "../../utils";
 
 export function useCertificateImportDialog(props: {
   providers: IProviderInfo[];
@@ -39,10 +38,8 @@ export function useCertificateImportDialog(props: {
     }, 1000);
   };
 
-  const onDropAccepted = (fileContent: string) => {
-    const rawClarified = base64Clarify(fileContent);
-    const buffer = certificateRawToBuffer(rawClarified);
-    const x509Cert = new X509Certificate(buffer);
+  const onDropAccepted = (fileContent: ArrayBuffer) => {
+    const x509Cert = new X509Certificate(fileContent);
 
     setCertificate(x509Cert.toString("pem"));
     setIsTextAreaError(false);
@@ -61,7 +58,8 @@ export function useCertificateImportDialog(props: {
           }}
           onTextAreaBlur={() => {
             try {
-              certificate?.length && new X509Certificate(certificate);
+              // certificate?.length && new X509Certificate(certificate);
+
               setIsTextAreaError(false);
             } catch (error) {
               setIsTextAreaError(true);
