@@ -10,6 +10,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+        name: Setup node
       - name: Install dependencies
         run: yarn
       - name: Run linter
