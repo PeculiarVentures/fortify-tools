@@ -21,7 +21,8 @@
       },
       "action": {
         "view-details": "View details",
-        "delete": "Delete certificate"
+        "delete": "Delete certificate",
+        "download": "Download certificate"
       },
       "empty-text": "There are no certificates yet."
     },
@@ -98,7 +99,9 @@
   "topbar": {
     "search-placeholder": "Search",
     "import-certificate": "Import certificate",
-    "create-certificate": "Create"
+    "create-certificate": "Create",
+    "create-certificate-scr": "Certificate signing request (CSR)",
+    "create-certificate-ssc": "Self-signed certificate"
   },
   "certificate-viewer-dialog": {
     "title": "“{{name}}” details"
