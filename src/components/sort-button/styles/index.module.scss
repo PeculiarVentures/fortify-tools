@@ -22,4 +22,7 @@
       color: var(--pv-color-black);
     }
   }
+  &:focus {
+    background-color: var(--pv-color-gray-3) !important;
+  }
 }
