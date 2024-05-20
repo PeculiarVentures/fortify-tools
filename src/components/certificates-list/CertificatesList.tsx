@@ -80,11 +80,7 @@ export const CertificatesList: React.FunctionComponent<
       onClick={() =>
         onSort(
           name,
-          currentSortName === name
-            ? currentSortDir === "asc"
-              ? "desc"
-              : "asc"
-            : "asc"
+          currentSortName === name && currentSortDir === "asc" ? "desc" : "asc"
         )
       }
     >
