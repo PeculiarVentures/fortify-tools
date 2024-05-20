@@ -66,3 +66,7 @@
     gap: var(--pv-size-base-6);
   }
 }
+
+.provider_select_popover {
+  min-width: 200px !important;
+}

@@ -17,6 +17,7 @@ import { Card } from "../card";
 import { CertificateCreateByEmail } from "../certificate-create-by-email";
 import { CertificateCreateByCname } from "../certificate-create-by-cname";
 import { CertificateCreateByCustom } from "../certificate-create-by-custom";
+import { CertificatesProvidersSelectList } from "../certificates-providers-select-list";
 import { CertificateType } from "../../types";
 
 import styles from "./styles/index.module.scss";
@@ -37,10 +38,9 @@ export const CertificateCreateDialog: React.FunctionComponent<
   const {
     loading,
     type = "x509",
-    // TODO: need merge another PR first where providers list component present
-    // providers,
-    // currentProviderId,
-    // onProviderSelect,
+    providers,
+    currentProviderId,
+    onProviderSelect,
     onDialogClose,
     onCreateButtonClick,
   } = props;
@@ -110,10 +110,13 @@ export const CertificateCreateDialog: React.FunctionComponent<
               </Typography>
             </div>
             <div>
-              {
-                // TODO: need merge another PR first where providers list component present
-                // CertificatesProvidersSelectList
-              }
+              <CertificatesProvidersSelectList
+                providers={providers}
+                currentProviderId={currentProviderId}
+                onSelect={onProviderSelect}
+                className={styles.provider_select}
+                popoverClassName={styles.provider_select_popover}
+              />
             </div>
           </div>
         </div>

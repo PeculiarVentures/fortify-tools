@@ -22,6 +22,10 @@ export function useCertificateImportDialog(props: {
   const localCurrentProviderId = useRef(currentProviderId);
 
   const handleCertificateImport = () => {
+    // Check provider
+    if (!localCurrentProviderId?.current) {
+      localCurrentProviderId.current = currentProviderId;
+    }
     // TODO: add logic
     console.log("Import", certificate);
     console.log("localCurrentProviderId", localCurrentProviderId?.current);
@@ -58,7 +62,7 @@ export function useCertificateImportDialog(props: {
           }}
           onTextAreaBlur={() => {
             try {
-              // certificate?.length && new X509Certificate(certificate);
+              certificate?.length && new X509Certificate(certificate);
 
               setIsTextAreaError(false);
             } catch (error) {

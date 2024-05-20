@@ -9,6 +9,7 @@ import { CertificatesTopbar } from "./components/certificates-topbar";
 import { CertificateDeleteDialog } from "./components/certificate-delete-dialog";
 import { CertificateViewerDialog } from "./components/certificate-viewer-dialog";
 import { useCertificateImportDialog } from "./dialogs/certificate-import-dialog";
+import { useCertificateCreateDialog } from "./dialogs/certificate-create-dialog";
 
 import styles from "./app.module.scss";
 
@@ -23,7 +24,6 @@ export function App() {
     currentCertificateViewerValue,
     handleProviderChange,
     handleCertificatesSearch,
-    handleCertificateCreate,
     handleCertificateDeleteDialogOpen,
     handleCertificateDeleteDialogClose,
     handleCertificateDelete,
@@ -35,6 +35,14 @@ export function App() {
     open: handleCertificateImportDialogOpen,
     dialog: certificateImportDialog,
   } = useCertificateImportDialog({
+    providers,
+    currentProviderId,
+  });
+
+  const {
+    open: handleCertificateCreateDialogOpen,
+    dialog: certificateCreateDialog,
+  } = useCertificateCreateDialog({
     providers,
     currentProviderId,
   });
@@ -57,7 +65,7 @@ export function App() {
         className={styles.top_bar}
         onSearch={handleCertificatesSearch}
         onImport={handleCertificateImportDialogOpen}
-        onCreate={handleCertificateCreate}
+        onCreate={handleCertificateCreateDialogOpen}
       ></CertificatesTopbar>
       {fetching.certificates ? (
         <CertificatesList
@@ -84,6 +92,7 @@ export function App() {
         />
       ) : null}
       {certificateImportDialog()}
+      {certificateCreateDialog()}
     </>
   );
 }

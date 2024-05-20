@@ -8,21 +8,27 @@ import { CertificateType } from "../../types";
 export function useCertificateCreateDialog(props: {
   providers: IProviderInfo[];
   currentProviderId?: string;
-  handleProviderChange: (certificate: string) => void;
 }) {
-  const { providers, currentProviderId, handleProviderChange } = props;
+  const { providers, currentProviderId } = props;
   const { addToast } = useToast();
   const { t } = useTranslation();
 
   const [isOpen, setIsOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
+  const localCurrentProviderId = useRef(currentProviderId);
+
   const dialogType = useRef<CertificateType>("x509");
 
   // TODO: fix unknown
   const handleCertificateCreate = (data: unknown) => {
+    // Check provider
+    if (!localCurrentProviderId?.current) {
+      localCurrentProviderId.current = currentProviderId;
+    }
     // TODO: add logic
     console.log("Create", data);
+    console.log("localCurrentProviderId", localCurrentProviderId.current);
     // temporary behaviour
     setIsLoading(true);
     setTimeout(function () {
@@ -47,7 +53,9 @@ export function useCertificateCreateDialog(props: {
           onCreateButtonClick={handleCertificateCreate}
           type={dialogType.current}
           onDialogClose={() => setIsOpen(false)}
-          onProviderSelect={handleProviderChange}
+          onProviderSelect={(id) => {
+            localCurrentProviderId.current = id;
+          }}
           providers={providers}
           currentProviderId={currentProviderId}
           loading={isLoading}
