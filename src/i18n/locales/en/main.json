@@ -49,7 +49,29 @@
           "delete": "Delete"
         },
         "success-message": "Certificate deleted.",
-        "failure-message": "Can't delete certificate"
+        "failure-message": "Failed to delete certificate because of error. Please try again."
+      },
+      "import": {
+        "title": "Import certificate",
+        "drop-zone": {
+          "title": "Drag and drop certificate file here or <0>click to upload</0>",
+          "description": "Supports PEM and DER formats."
+        },
+        "file": {
+          "error": {
+            "too-large": "File is larger than {{size}}.",
+            "invalid-type": "Wrong file format. Use PEM or DER formats."
+          }
+        },
+        "certificate": {
+          "error": {
+            "invalid-data": "Certificate is invalid. Please check your data and try again."
+          }
+        },
+        "divider-label": "Or paste certificate in Base64 format below",
+        "loading-text": "Importing certificate...",
+        "success-message": "Certificate imported.",
+        "failure-message": "Failed to import certificate because of error. Please try again."
       }
     },
     "key-usage-extension": {
@@ -163,6 +185,8 @@
     "title": "“{{name}}” details"
   },
   "button": {
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "clear": "Clear",
+    "import-certificate": "Import certificate"
   }
 }

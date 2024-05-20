@@ -168,6 +168,10 @@ export function useApp() {
   };
 
   const handleProviderChange = async (id: string) => {
+    if (currentProviderId === id || fetching.certificates === "pending") {
+      return;
+    }
+
     setFetchingValue("certificates", "pending");
 
     try {
@@ -198,11 +202,6 @@ export function useApp() {
   const handleCertificatesSearch = (value: string) => {
     // TODO: add logic
     console.log(value);
-  };
-
-  const handleCertificateImport = () => {
-    // TODO: add logic
-    console.log("Import");
   };
 
   const handleCertificateCreate = () => {
@@ -256,7 +255,6 @@ export function useApp() {
     currentCertificateViewerValue,
     handleProviderChange,
     handleCertificatesSearch,
-    handleCertificateImport,
     handleCertificateCreate,
     handleCertificateDeleteDialogOpen,
     handleCertificateDeleteDialogClose,
