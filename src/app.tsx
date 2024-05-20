@@ -8,6 +8,7 @@ import { CertificatesProvidersList } from "./components/certificates-providers-l
 import { CertificatesTopbar } from "./components/certificates-topbar";
 import { CertificateDeleteDialog } from "./components/certificate-delete-dialog";
 import { CertificateViewerDialog } from "./components/certificate-viewer-dialog";
+import { useSortList } from "./hooks/sort-list";
 import { useCertificateImportDialog } from "./dialogs/certificate-import-dialog";
 
 import styles from "./app.module.scss";
@@ -30,6 +31,13 @@ export function App() {
     handleCertificateViewerOpen,
     handleCertificateViewerClose,
   } = useApp();
+
+  const {
+    list: sortedCertificates,
+    name: currentSortName,
+    derection: currentSortDir,
+    handleSort,
+  } = useSortList(certificates, "notAfter");
 
   const {
     open: handleCertificateImportDialogOpen,
@@ -61,7 +69,11 @@ export function App() {
       ></CertificatesTopbar>
       {fetching.certificates ? (
         <CertificatesList
-          certificates={certificates}
+          currentSortName={currentSortName}
+          currentSortDir={currentSortDir}
+          onSort={handleSort}
+          className={styles.certificate_list}
+          certificates={sortedCertificates}
           onDelete={handleCertificateDeleteDialogOpen}
           onViewDetails={handleCertificateViewerOpen}
         />
