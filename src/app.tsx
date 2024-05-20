@@ -8,6 +8,7 @@ import { CertificatesProvidersList } from "./components/certificates-providers-l
 import { CertificatesTopbar } from "./components/certificates-topbar";
 import { CertificateDeleteDialog } from "./components/certificate-delete-dialog";
 import { CertificateViewerDialog } from "./components/certificate-viewer-dialog";
+import { useCertificateImportDialog } from "./dialogs/certificate-import-dialog";
 
 import styles from "./app.module.scss";
 
@@ -22,7 +23,6 @@ export function App() {
     currentCertificateViewerValue,
     handleProviderChange,
     handleCertificatesSearch,
-    handleCertificateImport,
     handleCertificateCreate,
     handleCertificateDeleteDialogOpen,
     handleCertificateDeleteDialogClose,
@@ -30,6 +30,14 @@ export function App() {
     handleCertificateViewerOpen,
     handleCertificateViewerClose,
   } = useApp();
+
+  const {
+    open: handleCertificateImportDialogOpen,
+    dialog: certificateImportDialog,
+  } = useCertificateImportDialog({
+    providers,
+    currentProviderId,
+  });
 
   return (
     <>
@@ -41,22 +49,14 @@ export function App() {
           <CertificatesProvidersList
             providers={providers}
             currentProviderId={currentProviderId}
-            onSelect={(id) => {
-              if (
-                currentProviderId === id ||
-                fetching.certificates === "pending"
-              ) {
-                return;
-              }
-              handleProviderChange(id);
-            }}
+            onSelect={handleProviderChange}
           />
         )}
       </CertificatesSidebar>
       <CertificatesTopbar
         className={styles.top_bar}
         onSearch={handleCertificatesSearch}
-        onImport={handleCertificateImport}
+        onImport={handleCertificateImportDialogOpen}
         onCreate={handleCertificateCreate}
       ></CertificatesTopbar>
       {fetching.certificates ? (
@@ -83,6 +83,7 @@ export function App() {
           onClose={handleCertificateViewerClose}
         />
       ) : null}
+      {certificateImportDialog()}
     </>
   );
 }
