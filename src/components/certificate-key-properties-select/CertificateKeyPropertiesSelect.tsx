@@ -26,17 +26,16 @@ export const CertificateKeyPropertiesSelect: React.FunctionComponent<
   const hashAlgorithm = Object.values(EHashAlgorithm);
 
   const [currentHashAlgorithm, setCurrentHashAlgorithm] = useState(
-    hashAlgorithm[0] as string
+    hashAlgorithm[0]
   );
   const [currentSignatureAlgorithm, setCurrentSignatureAlgorithm] = useState(
-    signatureAlgorithm[0] as string
+    signatureAlgorithm[0]
   );
 
   useEffect(() => {
     const algorithmData: CertificateAlgorithmProps = {
-      hash: currentHashAlgorithm as CertificateAlgorithmProps["hash"],
-      signature:
-        currentSignatureAlgorithm as CertificateAlgorithmProps["signature"],
+      hash: currentHashAlgorithm,
+      signature: currentSignatureAlgorithm,
     };
     onSelect(algorithmData);
   }, [currentSignatureAlgorithm, currentHashAlgorithm]);
@@ -52,7 +51,9 @@ export const CertificateKeyPropertiesSelect: React.FunctionComponent<
           value={currentSignatureAlgorithm}
           disableSearch={true}
           options={signatureAlgorithm}
-          onChange={(_, value) => setCurrentSignatureAlgorithm(value as string)}
+          onChange={(_, value) =>
+            setCurrentSignatureAlgorithm(value as ESignatureAlgorithm)
+          }
           label={t("certificates.signature-algorithm")}
         />
         <Autocomplete
@@ -60,7 +61,9 @@ export const CertificateKeyPropertiesSelect: React.FunctionComponent<
           value={currentHashAlgorithm}
           disableSearch={true}
           options={hashAlgorithm}
-          onChange={(_, value) => setCurrentHashAlgorithm(value as string)}
+          onChange={(_, value) =>
+            setCurrentHashAlgorithm(value as EHashAlgorithm)
+          }
           label={t("certificates.hash-algorithm")}
         />
       </div>

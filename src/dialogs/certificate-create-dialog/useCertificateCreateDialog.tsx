@@ -2,7 +2,10 @@ import React, { useRef } from "react";
 import { IProviderInfo } from "@peculiar/fortify-client-core";
 import { useToast } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
-import { CertificateCreateDialog } from "../../components/certificate-create-dialog";
+import {
+  CertificateCreateDataProps,
+  CertificateCreateDialog,
+} from "../../components/certificate-create-dialog";
 import { CertificateType } from "../../types";
 
 export function useCertificateCreateDialog(props: {
@@ -20,8 +23,7 @@ export function useCertificateCreateDialog(props: {
 
   const dialogType = useRef<CertificateType>("x509");
 
-  // TODO: fix unknown
-  const handleCertificateCreate = (data: unknown) => {
+  const handleCertificateCreate = (data: CertificateCreateDataProps) => {
     // Check provider
     if (!localCurrentProviderId?.current) {
       localCurrentProviderId.current = currentProviderId;

@@ -14,13 +14,27 @@ import {
   CircularProgress,
 } from "@peculiar/react-components";
 import { Card } from "../card";
-import { CertificateCreateByEmail } from "../certificate-create-by-email";
-import { CertificateCreateByCname } from "../certificate-create-by-cname";
-import { CertificateCreateByCustom } from "../certificate-create-by-custom";
+import {
+  CertificateCreateByEmail,
+  ICertificateCreateByEmailData,
+} from "../certificate-create-by-email";
+import {
+  CertificateCreateByCname,
+  ICertificateCreateByCnameData,
+} from "../certificate-create-by-cname";
+import {
+  CertificateCreateByCustom,
+  ICertificateCreateByCustomData,
+} from "../certificate-create-by-custom";
 import { CertificatesProvidersSelectList } from "../certificates-providers-select-list";
 import { CertificateType } from "../../types";
 
 import styles from "./styles/index.module.scss";
+
+export type CertificateCreateDataProps =
+  | ICertificateCreateByCnameData
+  | ICertificateCreateByEmailData
+  | ICertificateCreateByCustomData;
 
 interface CertificateCreateDialogProps {
   type: CertificateType;
@@ -29,7 +43,7 @@ interface CertificateCreateDialogProps {
   loading?: boolean;
   onProviderSelect: (id: string) => void;
   onDialogClose: () => void;
-  onCreateButtonClick: (data: unknown) => void;
+  onCreateButtonClick: (data: CertificateCreateDataProps) => void;
 }
 
 export const CertificateCreateDialog: React.FunctionComponent<
