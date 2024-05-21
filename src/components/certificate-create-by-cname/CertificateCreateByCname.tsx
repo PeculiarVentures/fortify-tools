@@ -16,6 +16,7 @@ export interface ICertificateCreateByCnameData {
     commonName: string;
   };
   algorithm: CertificateAlgorithmProps;
+  type: CertificateType;
 }
 
 interface CertificateCreateByCnameProps {
@@ -75,6 +76,7 @@ export const CertificateCreateByCname: React.FunctionComponent<
                 commonName: cname,
               },
               algorithm,
+              type,
             })
           }
           title={

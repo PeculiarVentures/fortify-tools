@@ -20,6 +20,7 @@ export interface ICertificateCreateByCustomData {
   subject: CertificateSubjectProps;
   algorithm?: CertificateAlgorithmProps;
   extendedKeyUsageExtension: ICertificateKeyUsageExtensions[];
+  type: CertificateType;
 }
 
 interface CertificateCreateByCustomProps {
@@ -197,6 +198,7 @@ export const CertificateCreateByCustom: React.FunctionComponent<
           disabled={isCreateButtonDisabled}
           onClick={() => {
             const data: ICertificateCreateByCustomData = {
+              type,
               subject: {
                 commonName: cname,
                 emailAddress,

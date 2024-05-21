@@ -18,6 +18,7 @@ export interface ICertificateCreateByEmailData {
     commonName: string;
   };
   algorithm: CertificateAlgorithmProps;
+  type: CertificateType;
 }
 
 interface CertificateCreateByEmailProps {
@@ -99,6 +100,7 @@ export const CertificateCreateByEmail: React.FunctionComponent<
                 emailAddress,
               },
               algorithm,
+              type,
             })
           }
           title={
