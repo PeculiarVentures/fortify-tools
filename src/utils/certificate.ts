@@ -1,6 +1,6 @@
 import { Convert } from "pvtsutils";
 import { Pkcs10CertificateRequest, X509Certificate } from "@peculiar/x509";
-import { CertificateType } from "../types";
+import { CertificateSubjectProps, CertificateType } from "../types";
 
 export function certificateRawToPem(raw: ArrayBuffer, type: CertificateType) {
   let pem;
@@ -19,4 +19,27 @@ export function certificateRawToPem(raw: ArrayBuffer, type: CertificateType) {
       throw new Error(`Unsupported certificate type: ${type}`);
   }
   return pem;
+}
+
+export function certificateSubjectToString(
+  attrs: CertificateSubjectProps
+): string {
+  const keyMap: { [key: string]: string } = {
+    countryName: "C",
+    stateOrProvinceName: "ST",
+    localityName: "L",
+    organizationName: "O",
+    organizationalUnitName: "OU",
+    commonName: "CN",
+  };
+
+  const parts: string[] = [];
+
+  for (const key in attrs) {
+    parts.push(
+      `${keyMap[key] ? keyMap[key] : key}=${attrs[key as keyof CertificateSubjectProps]}`
+    );
+  }
+
+  return parts.join(", ");
 }

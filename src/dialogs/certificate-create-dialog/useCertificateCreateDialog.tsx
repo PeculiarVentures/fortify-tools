@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { IProviderInfo } from "@peculiar/fortify-client-core";
 import { useToast } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
+import { certificateSubjectToString } from "../../utils/certificate";
 import {
   CertificateCreateDataProps,
   CertificateCreateDialog,
@@ -31,6 +32,8 @@ export function useCertificateCreateDialog(props: {
     // TODO: add logic
     console.log("Create", data);
     console.log("localCurrentProviderId", localCurrentProviderId.current);
+    const subject = certificateSubjectToString(data.subject);
+    console.log("subject => ", subject);
     // temporary behaviour
     setIsLoading(true);
     setTimeout(function () {
