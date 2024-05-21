@@ -1,4 +1,8 @@
-import { ICertificate } from "@peculiar/fortify-client-core";
+import {
+  ICertificate,
+  EHashAlgorithm,
+  ESignatureAlgorithm,
+} from "@peculiar/fortify-client-core";
 export interface CertificateProps extends ICertificate {
   id?: string;
   label?: string;
@@ -13,8 +17,9 @@ export interface CertificateSubjectProps {
   countryName?: string;
 }
 
-export type CertificateAlgorithmProps =
-  | RsaHashedKeyGenParams
-  | Partial<EcKeyGenParams>;
+export type CertificateAlgorithmProps = {
+  signature: ESignatureAlgorithm;
+  hash: EHashAlgorithm;
+};
 
 export type CertificateType = "x509" | "csr";

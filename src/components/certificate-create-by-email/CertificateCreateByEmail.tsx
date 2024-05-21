@@ -4,7 +4,10 @@ import { Button, TextField } from "@peculiar/react-components";
 import { CertificateAlgorithmInfo } from "../certificate-algorithm-info";
 import { Card } from "../card";
 import { validateEmail } from "../../utils/validators";
-import { certificateKeyProperties } from "../../config/data";
+import {
+  EHashAlgorithm,
+  ESignatureAlgorithm,
+} from "@peculiar/fortify-client-core";
 import { CertificateAlgorithmProps, CertificateType } from "../../types";
 
 import styles from "./styles/index.module.scss";
@@ -35,10 +38,9 @@ export const CertificateCreateByEmail: React.FunctionComponent<
     undefined
   );
 
-  const algorithm = {
-    hash: "SHA-256",
-    name: certificateKeyProperties[0].name,
-    modulusLength: certificateKeyProperties[0].modulusLength[0],
+  const algorithm: CertificateAlgorithmProps = {
+    hash: EHashAlgorithm.SHA_256,
+    signature: ESignatureAlgorithm.RSA2048,
   };
 
   const isCreateButtonDisabled = !emailAddress.length || isError;
@@ -80,8 +82,8 @@ export const CertificateCreateByEmail: React.FunctionComponent<
           type="email"
         />
         <CertificateAlgorithmInfo
-          algorithmNname={algorithm.name}
-          algorithmModulusLength={algorithm.modulusLength}
+          algorithmSignature={algorithm.signature}
+          algorithmHash={algorithm.hash}
         />
       </Card>
 

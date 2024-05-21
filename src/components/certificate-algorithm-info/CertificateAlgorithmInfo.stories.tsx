@@ -1,5 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { CertificateAlgorithmInfo } from "./CertificateAlgorithmInfo";
+import {
+  EHashAlgorithm,
+  ESignatureAlgorithm,
+} from "@peculiar/fortify-client-core";
 
 const meta: Meta<typeof CertificateAlgorithmInfo> = {
   title: "Components/CertificateAlgorithmInfo",
@@ -11,7 +15,7 @@ type Story = StoryObj<typeof CertificateAlgorithmInfo>;
 
 export const Default: Story = {
   args: {
-    algorithmNname: "RSASSA-PKCS1-v1_5",
-    algorithmModulusLength: 2048,
+    algorithmSignature: ESignatureAlgorithm.RSA4096,
+    algorithmHash: EHashAlgorithm.SHA_256,
   },
 };

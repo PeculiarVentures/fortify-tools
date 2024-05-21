@@ -86,8 +86,8 @@
     "select-type-placeholder": "Select type",
     "extended-key-usages": "Extended key usages",
     "key-properties": "Key properties",
-    "key-algorithm": "Key algorithm",
-    "key-size": "Key size",
+    "signature-algorithm": "Signature Algorithm",
+    "hash-algorithm": "Hash Algorithm",
     "key-named-curve": "Named curve",
     "general": {
       "title": "General",

@@ -1,15 +1,12 @@
-import React, { ComponentProps, useEffect } from "react";
+import React, { ComponentProps, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 import {
-  Autocomplete,
-  Typography,
-  useControllableState,
-} from "@peculiar/react-components";
-import {
-  ICertificateKeyProperties,
-  certificateKeyProperties,
-} from "../../config/data";
+  EHashAlgorithm,
+  ESignatureAlgorithm,
+} from "@peculiar/fortify-client-core";
+import { Autocomplete, Typography } from "@peculiar/react-components";
+
 import { CertificateAlgorithmProps } from "../../types";
 
 import styles from "./styles/index.module.scss";
@@ -25,28 +22,24 @@ export const CertificateKeyPropertiesSelect: React.FunctionComponent<
   const { className, onSelect } = props;
   const { t } = useTranslation();
 
-  const [algorithm, setAlgorithm] =
-    useControllableState<ICertificateKeyProperties>({
-      defaultValue: certificateKeyProperties[0],
-      onChange: (value) => {
-        setSize(value.modulusLength[0]);
-      },
-    });
-  const [size, setSize] = useControllableState<string | number>({
-    defaultValue: certificateKeyProperties[0].modulusLength[0],
-  });
+  const signatureAlgorithm = Object.values(ESignatureAlgorithm);
+  const hashAlgorithm = Object.values(EHashAlgorithm);
 
-  const isECType = algorithm.name.slice(0, 2) === "EC";
+  const [currentHashAlgorithm, setCurrentHashAlgorithm] = useState(
+    hashAlgorithm[0] as string
+  );
+  const [currentSignatureAlgorithm, setCurrentSignatureAlgorithm] = useState(
+    signatureAlgorithm[0] as string
+  );
 
   useEffect(() => {
     const algorithmData: CertificateAlgorithmProps = {
-      hash: "SHA-256",
-      name: algorithm.name,
-      namedCurve: isECType ? (size as string) : undefined,
-      modulusLength: !isECType ? (size as number) : undefined,
+      hash: currentHashAlgorithm as CertificateAlgorithmProps["hash"],
+      signature:
+        currentSignatureAlgorithm as CertificateAlgorithmProps["signature"],
     };
     onSelect(algorithmData);
-  }, [algorithm, size, isECType]);
+  }, [currentSignatureAlgorithm, currentHashAlgorithm]);
 
   return (
     <div className={clsx(styles.certificate_key_prop_select_box, className)}>
@@ -56,25 +49,19 @@ export const CertificateKeyPropertiesSelect: React.FunctionComponent<
       <div className={styles.certificate_key_prop_selects}>
         <Autocomplete
           className={styles.certificate_key_prop_select}
-          value={algorithm}
+          value={currentSignatureAlgorithm}
           disableSearch={true}
-          getOptionLabel={({ name }) => name}
-          options={certificateKeyProperties}
-          onChange={(_, value) =>
-            setAlgorithm(value as ICertificateKeyProperties)
-          }
-          label={t("certificates.key-algorithm")}
+          options={signatureAlgorithm}
+          onChange={(_, value) => setCurrentSignatureAlgorithm(value as string)}
+          label={t("certificates.signature-algorithm")}
         />
         <Autocomplete
           className={styles.certificate_key_prop_select}
-          value={size as string}
+          value={currentHashAlgorithm}
           disableSearch={true}
-          getOptionLabel={(el) => el.toString()}
-          options={algorithm.modulusLength as string[]}
-          onChange={(_, value) => setSize(value as string)}
-          label={t(
-            isECType ? "certificates.key-named-curve" : "certificates.key-size"
-          )}
+          options={hashAlgorithm}
+          onChange={(_, value) => setCurrentHashAlgorithm(value as string)}
+          label={t("certificates.hash-algorithm")}
         />
       </div>
     </div>

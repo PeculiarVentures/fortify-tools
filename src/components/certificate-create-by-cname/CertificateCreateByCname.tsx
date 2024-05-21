@@ -3,7 +3,10 @@ import { useTranslation } from "react-i18next";
 import { Button, TextField } from "@peculiar/react-components";
 import { CertificateAlgorithmInfo } from "../certificate-algorithm-info";
 import { Card } from "../card";
-import { certificateKeyProperties } from "../../config/data";
+import {
+  EHashAlgorithm,
+  ESignatureAlgorithm,
+} from "@peculiar/fortify-client-core";
 import { CertificateAlgorithmProps, CertificateType } from "../../types";
 
 import styles from "./styles/index.module.scss";
@@ -30,10 +33,9 @@ export const CertificateCreateByCname: React.FunctionComponent<
   const [isError, setIsError] = useState<boolean>(false);
   const [isDirty, setIsDirty] = useState<boolean>(false);
 
-  const algorithm = {
-    hash: "SHA-256",
-    name: certificateKeyProperties[0].name,
-    modulusLength: certificateKeyProperties[0].modulusLength[0],
+  const algorithm: CertificateAlgorithmProps = {
+    hash: EHashAlgorithm.SHA_256,
+    signature: ESignatureAlgorithm.RSA2048,
   };
 
   const isCreateButtonDisabled = !cname.length || isError;
@@ -57,8 +59,8 @@ export const CertificateCreateByCname: React.FunctionComponent<
           errorText={t("certificates.subject.cname.error.required")}
         />
         <CertificateAlgorithmInfo
-          algorithmNname={algorithm.name}
-          algorithmModulusLength={algorithm.modulusLength}
+          algorithmSignature={algorithm.signature}
+          algorithmHash={algorithm.hash}
         />
       </Card>
 
