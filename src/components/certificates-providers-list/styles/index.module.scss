@@ -12,6 +12,7 @@
     padding: 0 var(--pv-size-base-2);
     max-height: 100%;
     overflow-y: auto;
+    overscroll-behavior: none;
     .list {
       display: flex;
       flex-direction: column;
