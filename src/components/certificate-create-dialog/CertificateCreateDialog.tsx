@@ -68,11 +68,9 @@ export const CertificateCreateDialog: React.FunctionComponent<
   const renderContent = () => {
     if (currentTypeSelect) {
       if (
-        [
-          "id-kp-emailProtection",
-          "id-kp-codeSigning",
-          "id-kp-documentSigning",
-        ].includes(currentTypeSelect.value)
+        ["emailProtection", "codeSigning", "documentSigning"].includes(
+          currentTypeSelect.value
+        )
       ) {
         return (
           <CertificateCreateByEmail
@@ -81,11 +79,7 @@ export const CertificateCreateDialog: React.FunctionComponent<
           />
         );
       }
-      if (
-        ["id-kp-clientAuth", "id-kp-serverAuth"].includes(
-          currentTypeSelect.value
-        )
-      ) {
+      if (["clientAuth", "serverAuth"].includes(currentTypeSelect.value)) {
         return (
           <CertificateCreateByCname
             type={type}
