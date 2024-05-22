@@ -1,9 +1,5 @@
 import React, { ComponentProps } from "react";
-import {
-  Autocomplete,
-  Typography,
-  useControllableState,
-} from "@peculiar/react-components";
+import { Autocomplete, useControllableState } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
 import {
   ICertificateKeyUsageExtensions,
@@ -64,22 +60,6 @@ export const CertificateTypeSelect: React.FunctionComponent<
       popoverProps={{
         className: styles.certificate_type_select_popover,
       }}
-      renderOption={(props, { label, value }) => (
-        <>
-          {value === "custom" ? (
-            <div className={styles.certificate_type_select_divider} />
-          ) : null}
-          <li
-            {...props}
-            aria-selected={value === currentValue?.value}
-            className={styles.certificate_type_select_option}
-          >
-            <Typography variant="b3" color="black">
-              {label}
-            </Typography>
-          </li>
-        </>
-      )}
     />
   );
 };

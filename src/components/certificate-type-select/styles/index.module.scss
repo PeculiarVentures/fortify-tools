@@ -1,24 +1,19 @@
-.certificate_type_select_option {
-  padding: calc(var(--pv-size-base-half) + var(--pv-size-base))
-    var(--pv-size-base-2);
-  &[data-focused="true"] {
-    background-color: var(--pv-color-gray-4);
-  }
-  &:hover {
-    background-color: var(--pv-color-gray-3);
-    cursor: pointer;
-  }
-  &[aria-selected="true"] {
-    background-color: var(--pv-color-gray-5);
-  }
-}
-.certificate_type_select_divider {
-  height: 1px;
-  background-color: var(--pv-color-gray-5);
-  margin: var(--pv-size-base);
-}
 .certificate_type_select_popover {
   & > ul[role="listbox"] {
     padding: 7px 0;
+
+    li:last-child {
+      margin-top: 11px;
+      position: relative;
+      &:before {
+        content: "";
+        height: 1px;
+        background-color: var(--pv-color-gray-5);
+        position: absolute;
+        top: -6px;
+        left: 0;
+        right: 0;
+      }
+    }
   }
 }
