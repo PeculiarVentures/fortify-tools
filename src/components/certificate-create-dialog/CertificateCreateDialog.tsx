@@ -79,6 +79,7 @@ export const CertificateCreateDialog: React.FunctionComponent<
           />
         );
       }
+
       if (["clientAuth", "serverAuth"].includes(currentTypeSelect.value)) {
         return (
           <CertificateCreateByCname
@@ -87,6 +88,7 @@ export const CertificateCreateDialog: React.FunctionComponent<
           />
         );
       }
+
       if (currentTypeSelect.value === "custom") {
         return (
           <CertificateCreateByCustom
@@ -100,57 +102,55 @@ export const CertificateCreateDialog: React.FunctionComponent<
 
   return (
     <Dialog open fullScreen className={styles.dialog} onClose={onDialogClose}>
-      <>
-        <div className={styles.title}>
-          <div className={styles.centered}>
-            <div>
-              <IconButton
-                onClick={onDialogClose}
-                className={styles.button_back}
-                size="small"
-              >
-                <ArrowRightIcon className={styles.arrow_back} />
-              </IconButton>
-            </div>
-            <div className={styles.title_label}>
-              <Typography variant="h4" color="black">
-                {t(`certificates.dialog.create.title.${type}`)}
-              </Typography>
-            </div>
-            <div>
-              <CertificatesProvidersSelectList
-                providers={providers}
-                currentProviderId={currentProviderId}
-                onSelect={onProviderSelect}
-                className={styles.provider_select}
-                popoverClassName={styles.provider_select_popover}
-              />
-            </div>
+      <div className={styles.title}>
+        <div className={styles.centered}>
+          <div>
+            <IconButton
+              onClick={onDialogClose}
+              className={styles.button_back}
+              size="small"
+            >
+              <ArrowRightIcon className={styles.arrow_back} />
+            </IconButton>
           </div>
-        </div>
-        <div className={styles.content}>
-          <div className={clsx(styles.centered, styles.content_box)}>
-            <Card>
-              <Typography variant="h5" color="black">
-                {t(`certificates.dialog.create.select-type.${type}`)}
-              </Typography>
-              <CertificateTypeSelect
-                type={type}
-                onChange={setCurrentTypeSelect}
-              />
-            </Card>
-            {renderContent()}
-          </div>
-        </div>
-        {loading ? (
-          <div className={styles.loading}>
-            <CircularProgress />
-            <Typography variant="b2" color="gray-9">
-              {t("certificates.dialog.create.loading-text")}
+          <div className={styles.title_label}>
+            <Typography variant="h4" color="black">
+              {t(`certificates.dialog.create.title.${type}`)}
             </Typography>
           </div>
-        ) : null}
-      </>
+          <div>
+            <CertificatesProvidersSelectList
+              providers={providers}
+              currentProviderId={currentProviderId}
+              onSelect={onProviderSelect}
+              className={styles.provider_select}
+              popoverClassName={styles.provider_select_popover}
+            />
+          </div>
+        </div>
+      </div>
+      <div className={styles.content}>
+        <div className={clsx(styles.centered, styles.content_box)}>
+          <Card>
+            <Typography variant="h5" color="black">
+              {t(`certificates.dialog.create.select-type.${type}`)}
+            </Typography>
+            <CertificateTypeSelect
+              type={type}
+              onChange={setCurrentTypeSelect}
+            />
+          </Card>
+          {renderContent()}
+        </div>
+      </div>
+      {loading ? (
+        <div className={styles.loading}>
+          <CircularProgress />
+          <Typography variant="b2" color="gray-9">
+            {t("certificates.dialog.create.loading-text")}
+          </Typography>
+        </div>
+      ) : null}
     </Dialog>
   );
 };
