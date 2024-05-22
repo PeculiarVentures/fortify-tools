@@ -3,6 +3,7 @@ import { IProviderInfo } from "@peculiar/fortify-client-core";
 import { X509Certificate } from "@peculiar/x509";
 import { useToast } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
+import { useLockBodyScroll } from "react-use";
 import { CertificateImportDialog } from "../../components/certificate-import-dialog";
 
 export function useCertificateImportDialog(props: {
@@ -48,6 +49,8 @@ export function useCertificateImportDialog(props: {
     setCertificate(x509Cert.toString("pem"));
     setIsTextAreaError(false);
   };
+
+  useLockBodyScroll(isOpen);
 
   return {
     open: () => setIsOpen(true),

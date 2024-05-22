@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { IProviderInfo } from "@peculiar/fortify-client-core";
 import { useToast } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
+import { useLockBodyScroll } from "react-use";
 import { certificateSubjectToString } from "../../utils/certificate";
 import {
   CertificateCreateDataProps,
@@ -46,6 +47,8 @@ export function useCertificateCreateDialog(props: {
       });
     }, 1000);
   };
+
+  useLockBodyScroll(isOpen);
 
   return {
     open: (type: CertificateType) => {
