@@ -24,21 +24,11 @@ export function certificateRawToPem(raw: ArrayBuffer, type: CertificateType) {
 export function certificateSubjectToString(
   attrs: CertificateSubjectProps
 ): string {
-  const keyMap: { [key: string]: string } = {
-    countryName: "C",
-    stateOrProvinceName: "ST",
-    localityName: "L",
-    organizationName: "O",
-    organizationalUnitName: "OU",
-    commonName: "CN",
-  };
-
   const parts: string[] = [];
 
   for (const key in attrs) {
-    parts.push(
-      `${keyMap[key] ? keyMap[key] : key}=${attrs[key as keyof CertificateSubjectProps]}`
-    );
+    const val = attrs[key as keyof CertificateSubjectProps];
+    val?.length && parts.push(`${key}=${val}`);
   }
 
   return parts.join(", ");

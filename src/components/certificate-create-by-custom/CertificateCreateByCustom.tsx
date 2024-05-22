@@ -5,21 +5,26 @@ import {
   CertificateSubjectProps,
   CertificateType,
 } from "../../types";
-import { Button, TextField, Typography } from "@peculiar/react-components";
+import {
+  Autocomplete,
+  Button,
+  TextField,
+  Typography,
+} from "@peculiar/react-components";
 import { CertificateKeyPropertiesSelect } from "../certificate-key-properties-select";
 import { Card } from "../card";
 import { KeyUsagesCheckboxGroup } from "../key-usages-checkbox-group";
-import { CountrySelect } from "../country-select";
 
 import { validateEmail } from "../../utils/validators";
 import { ICertificateKeyUsageExtensions } from "../../config/data";
+import { countries } from "../../config/data";
 
 import styles from "./styles/index.module.scss";
 
 export interface ICertificateCreateByCustomData {
   subject: CertificateSubjectProps;
   algorithm?: CertificateAlgorithmProps;
-  extendedKeyUsageExtension: ICertificateKeyUsageExtensions[];
+  extensions: ICertificateKeyUsageExtensions[];
   type: CertificateType;
 }
 
@@ -51,24 +56,44 @@ export const CertificateCreateByCustom: React.FunctionComponent<
     []
   );
 
-  const algorithm = useRef<ICertificateCreateByCustomData["algorithm"]>();
-  const organizationName =
-    useRef<CertificateSubjectProps["organizationName"]>();
-  const organizationalUnitName =
-    useRef<CertificateSubjectProps["organizationalUnitName"]>();
-  const localityName = useRef<CertificateSubjectProps["localityName"]>();
-  const stateOrProvinceName =
-    useRef<CertificateSubjectProps["stateOrProvinceName"]>();
-  const countryName = useRef<CertificateSubjectProps["countryName"]>();
-
   const isCreateButtonDisabled =
     !emailAddress.length ||
     isEmailAddressError ||
     !cname.length ||
     isCnameError;
 
+  const handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const { hashAlgorithm, signatureAlgorithm, C, ...subject } =
+      Object.fromEntries(formData);
+
+    const hash = hashAlgorithm
+      .toString()
+      .replace(/"/g, "") as CertificateAlgorithmProps["hash"];
+    const signature = signatureAlgorithm
+      .toString()
+      .replace(/"/g, "") as CertificateAlgorithmProps["signature"];
+
+    const country = C ? JSON.parse(C as string)?.code : "";
+
+    const submitedData: ICertificateCreateByCustomData = {
+      subject: {
+        ...(subject as unknown as ICertificateCreateByCustomData["subject"]),
+        C: country,
+      },
+      extensions: extendedKeyUsageExtension.current,
+      type,
+      algorithm: {
+        hash,
+        signature,
+      },
+    };
+    onCreateButtonClick(submitedData);
+  };
+
   return (
-    <div className={styles.form_box}>
+    <form className={styles.form_box} onSubmit={handleSubmit}>
       <Card className={styles.card}>
         <div className={styles.general_box}>
           <Typography variant="s2" color="black">
@@ -91,6 +116,7 @@ export const CertificateCreateByCustom: React.FunctionComponent<
             <TextField
               className="required_text_field"
               value={cname}
+              name="CN"
               onChange={(event) => {
                 setCname(event.target.value);
                 if (!isDirty) {
@@ -106,6 +132,7 @@ export const CertificateCreateByCustom: React.FunctionComponent<
             <TextField
               className="required_text_field"
               value={emailAddress}
+              name="E"
               onChange={(event) => {
                 setEmailAddress(event.target.value);
                 if (!isDirty) {
@@ -137,38 +164,30 @@ export const CertificateCreateByCustom: React.FunctionComponent<
               type="email"
             />
             <TextField
-              onChange={(event) => {
-                organizationName.current = event.target.value;
-              }}
+              name="O"
               label={t("certificates.subject.organization-name.label")}
               placeholder={t(
                 "certificates.subject.organization-name.placeholder"
               )}
             />
             <TextField
-              onChange={(event) => {
-                organizationalUnitName.current = event.target.value;
-              }}
+              name="OU"
               label={t("certificates.subject.organization-unit-name.label")}
             />
-            <CountrySelect
-              label={t("certificates.subject.country-name.label")}
+            <Autocomplete
+              getOptionLabel={({ value }) => value}
+              options={countries}
+              name="C"
               placeholder={t("certificates.subject.country-name.placeholder")}
-              onSelect={(code) => {
-                countryName.current = code;
-              }}
+              label={t("certificates.subject.country-name.label")}
             />
             <TextField
-              onChange={(event) => {
-                localityName.current = event.target.value;
-              }}
+              name="L"
               label={t("certificates.subject.locality-name.label")}
               placeholder={t("certificates.subject.locality-name.placeholder")}
             />
             <TextField
-              onChange={(event) => {
-                stateOrProvinceName.current = event.target.value;
-              }}
+              name="ST"
               label={t("certificates.subject.state-or-province-name.label")}
               placeholder={t(
                 "certificates.subject.state-or-province-name.placeholder"
@@ -185,9 +204,6 @@ export const CertificateCreateByCustom: React.FunctionComponent<
         <div className={styles.divider}></div>
         <CertificateKeyPropertiesSelect
           className={styles.key_properties_select}
-          onSelect={(val) => {
-            algorithm.current = val;
-          }}
         />
       </Card>
 
@@ -196,34 +212,7 @@ export const CertificateCreateByCustom: React.FunctionComponent<
           variant="contained"
           color="primary"
           disabled={isCreateButtonDisabled}
-          onClick={() => {
-            const data: ICertificateCreateByCustomData = {
-              type,
-              subject: {
-                commonName: cname,
-                emailAddress,
-              },
-              algorithm: algorithm.current,
-              extendedKeyUsageExtension: extendedKeyUsageExtension.current,
-            };
-            if (organizationName?.current) {
-              data.subject.organizationName = organizationName.current;
-            }
-            if (organizationalUnitName?.current) {
-              data.subject.organizationalUnitName =
-                organizationalUnitName.current;
-            }
-            if (localityName?.current) {
-              data.subject.localityName = localityName.current;
-            }
-            if (stateOrProvinceName?.current) {
-              data.subject.stateOrProvinceName = stateOrProvinceName.current;
-            }
-            if (countryName?.current) {
-              data.subject.countryName = countryName.current;
-            }
-            onCreateButtonClick(data);
-          }}
+          type="submit"
           title={
             isCreateButtonDisabled
               ? t("certificates.button-create.title")
@@ -233,6 +222,6 @@ export const CertificateCreateByCustom: React.FunctionComponent<
           {t(`certificates.button-create.text.${type}`)}
         </Button>
       </div>
-    </div>
+    </form>
   );
 };

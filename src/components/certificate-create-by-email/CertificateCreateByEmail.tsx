@@ -14,8 +14,8 @@ import styles from "./styles/index.module.scss";
 
 export interface ICertificateCreateByEmailData {
   subject: {
-    emailAddress: string;
-    commonName: string;
+    E: string;
+    CN: string;
   };
   algorithm: CertificateAlgorithmProps;
   type: CertificateType;
@@ -96,8 +96,8 @@ export const CertificateCreateByEmail: React.FunctionComponent<
           onClick={() =>
             onCreateButtonClick({
               subject: {
-                commonName: emailAddress,
-                emailAddress,
+                CN: emailAddress,
+                E: emailAddress,
               },
               algorithm,
               type,

@@ -8,13 +8,13 @@ export interface CertificateProps extends ICertificate {
   label?: string;
 }
 export interface CertificateSubjectProps {
-  commonName: string;
-  emailAddress?: string;
-  organizationName?: string;
-  organizationalUnitName?: string;
-  localityName?: string;
-  stateOrProvinceName?: string;
-  countryName?: string;
+  CN: string;
+  E?: string;
+  O?: string;
+  OU?: string;
+  L?: string;
+  ST?: string;
+  C?: string;
 }
 
 export type CertificateAlgorithmProps = {

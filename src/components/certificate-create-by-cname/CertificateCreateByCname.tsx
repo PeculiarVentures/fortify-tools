@@ -13,7 +13,7 @@ import styles from "./styles/index.module.scss";
 
 export interface ICertificateCreateByCnameData {
   subject: {
-    commonName: string;
+    CN: string;
   };
   algorithm: CertificateAlgorithmProps;
   type: CertificateType;
@@ -73,7 +73,7 @@ export const CertificateCreateByCname: React.FunctionComponent<
           onClick={() =>
             onCreateButtonClick({
               subject: {
-                commonName: cname,
+                CN: cname,
               },
               algorithm,
               type,
