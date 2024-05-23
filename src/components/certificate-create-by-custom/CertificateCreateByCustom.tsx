@@ -15,7 +15,6 @@ import { CertificateKeyPropertiesSelect } from "../certificate-key-properties-se
 import { Card } from "../card";
 import { KeyUsagesCheckboxGroup } from "../key-usages-checkbox-group";
 
-import { validateEmail } from "../../utils/validators";
 import { ICertificateKeyUsageExtensions } from "../../config/data";
 import { countries } from "../../config/data";
 
@@ -40,14 +39,8 @@ export const CertificateCreateByCustom: React.FunctionComponent<
 
   const { t } = useTranslation();
 
-  const [isDirty, setIsDirty] = useState<boolean>(false);
-
-  const [cname, setCname] = useState<string>("");
-  const [isCnameError, setIsCnameError] = useState<boolean>(false);
-
-  const [emailAddress, setEmailAddress] = useState<string>("");
-  const [isEmailAddressError, setIsEmailAddressError] =
-    useState<boolean>(false);
+  const [isCnameValid, setIsCnameValid] = useState(false);
+  const [isEmailAddresValid, setIsEmailAddresValid] = useState(false);
   const [emailAddressErrorMessage, setEmailAddressErrorMessage] = useState<
     string | undefined
   >(undefined);
@@ -57,10 +50,21 @@ export const CertificateCreateByCustom: React.FunctionComponent<
   );
 
   const isCreateButtonDisabled =
-    !emailAddress.length ||
-    isEmailAddressError ||
-    !cname.length ||
-    isCnameError;
+    !isCnameValid || !isEmailAddresValid || !!emailAddressErrorMessage;
+
+  const validateEmailAddress = (
+    event: React.SyntheticEvent<HTMLInputElement>
+  ) => {
+    if (!event.currentTarget.checkValidity()) {
+      setIsEmailAddresValid(false);
+      setEmailAddressErrorMessage(
+        t("certificates.subject.email-address.error.type")
+      );
+      return;
+    }
+    setIsEmailAddresValid(true);
+    setEmailAddressErrorMessage(undefined);
+  };
 
   const handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -115,53 +119,24 @@ export const CertificateCreateByCustom: React.FunctionComponent<
           <div className={styles.subject_fields}>
             <TextField
               className="required_text_field"
-              value={cname}
               name="CN"
-              onChange={(event) => {
-                setCname(event.target.value);
-                if (!isDirty) {
-                  setIsDirty(true);
-                }
-              }}
+              onChange={(event) =>
+                setIsCnameValid(event.currentTarget.checkValidity())
+              }
               label={t("certificates.subject.cname.label")}
               placeholder={t("certificates.subject.cname.placeholder-2")}
-              onBlur={() => isDirty && setIsCnameError(!cname.length)}
-              error={isCnameError}
-              errorText={t("certificates.subject.cname.error.required")}
+              required
             />
             <TextField
               className="required_text_field"
-              value={emailAddress}
               name="E"
-              onChange={(event) => {
-                setEmailAddress(event.target.value);
-                if (!isDirty) {
-                  setIsDirty(true);
-                }
-              }}
+              onChange={validateEmailAddress}
               label={t("certificates.subject.email-address.label")}
               placeholder={t("certificates.subject.email-address.placeholder")}
-              onBlur={() => {
-                if (isDirty) {
-                  if (!emailAddress.length) {
-                    setIsEmailAddressError(true);
-                    setEmailAddressErrorMessage(
-                      t("certificates.subject.email-address.error.required")
-                    );
-                    return;
-                  } else if (!validateEmail(emailAddress)) {
-                    setIsEmailAddressError(true);
-                    setEmailAddressErrorMessage(
-                      t("certificates.subject.email-address.error.type")
-                    );
-                    return;
-                  }
-                  setIsEmailAddressError(false);
-                }
-              }}
-              error={isEmailAddressError}
+              error={!!emailAddressErrorMessage}
               errorText={emailAddressErrorMessage}
               type="email"
+              required
             />
             <TextField
               name="O"

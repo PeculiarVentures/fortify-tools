@@ -30,34 +30,38 @@ export const CertificateCreateByCname: React.FunctionComponent<
   const { type = "x509", onCreateButtonClick } = props;
 
   const { t } = useTranslation();
-  const [cname, setCname] = useState<string>("");
-  const [isError, setIsError] = useState<boolean>(false);
-  const [isDirty, setIsDirty] = useState<boolean>(false);
+  const [isCnameValid, setIsCnameValid] = useState(false);
 
   const algorithm: CertificateAlgorithmProps = {
     hash: EHashAlgorithm.SHA_256,
     signature: ESignatureAlgorithm.RSA2048,
   };
 
-  const isCreateButtonDisabled = !cname.length || isError;
+  const handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
+    onCreateButtonClick({
+      subject: {
+        CN: formData.get("CN") as string,
+      },
+      algorithm,
+      type,
+    });
+  };
 
   return (
-    <div className={styles.form_box}>
+    <form className={styles.form_box} onSubmit={handleSubmit}>
       <Card>
         <TextField
           className="required_text_field"
-          value={cname}
-          onChange={(event) => {
-            setCname(event.target.value);
-            if (!isDirty) {
-              setIsDirty(true);
-            }
-          }}
+          name="CN"
+          onChange={(event) =>
+            setIsCnameValid(event.currentTarget.checkValidity())
+          }
           label={t("certificates.subject.cname.label")}
           placeholder={t("certificates.subject.cname.placeholder")}
-          onBlur={() => isDirty && setIsError(!cname.length)}
-          error={isError}
-          errorText={t("certificates.subject.cname.error.required")}
+          required
         />
         <CertificateAlgorithmInfo
           algorithmSignature={algorithm.signature}
@@ -69,25 +73,15 @@ export const CertificateCreateByCname: React.FunctionComponent<
         <Button
           variant="contained"
           color="primary"
-          disabled={isCreateButtonDisabled}
-          onClick={() =>
-            onCreateButtonClick({
-              subject: {
-                CN: cname,
-              },
-              algorithm,
-              type,
-            })
-          }
+          disabled={!isCnameValid}
+          type="submit"
           title={
-            isCreateButtonDisabled
-              ? t("certificates.button-create.title")
-              : undefined
+            !isCnameValid ? t("certificates.button-create.title") : undefined
           }
         >
           {t(`certificates.button-create.text.${type}`)}
         </Button>
       </div>
-    </div>
+    </form>
   );
 };

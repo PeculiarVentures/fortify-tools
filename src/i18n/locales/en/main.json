@@ -99,16 +99,12 @@
       "cname": {
         "label": "Common name",
         "placeholder": "company.com",
-        "placeholder-2": "example.com",
-        "error": {
-          "required": "Common name field must not be empty"
-        }
+        "placeholder-2": "example.com"
       },
       "email-address": {
         "label": "Email address",
         "placeholder": "company@example.com",
         "error": {
-          "required": "Email address field must not be empty",
           "type": "Please enter valid email address"
         }
       },

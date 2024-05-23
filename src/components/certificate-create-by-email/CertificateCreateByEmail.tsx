@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { Button, TextField } from "@peculiar/react-components";
 import { CertificateAlgorithmInfo } from "../certificate-algorithm-info";
 import { Card } from "../card";
-import { validateEmail } from "../../utils/validators";
 import {
   EHashAlgorithm,
   ESignatureAlgorithm,
@@ -32,55 +31,63 @@ export const CertificateCreateByEmail: React.FunctionComponent<
   const { type = "x509", onCreateButtonClick } = props;
 
   const { t } = useTranslation();
-  const [emailAddress, setEmailAddress] = useState<string>("");
-  const [isError, setIsError] = useState<boolean>(false);
-  const [isDirty, setIsDirty] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string | undefined>(
-    undefined
-  );
+
+  const [isEmailAddresValid, setIsEmailAddresValid] = useState(false);
+  const [emailAddressErrorMessage, setEmailAddressErrorMessage] = useState<
+    string | undefined
+  >(undefined);
 
   const algorithm: CertificateAlgorithmProps = {
     hash: EHashAlgorithm.SHA_256,
     signature: ESignatureAlgorithm.RSA2048,
   };
 
-  const isCreateButtonDisabled = !emailAddress.length || isError;
+  const isCreateButtonDisabled =
+    !isEmailAddresValid || !!emailAddressErrorMessage;
+
+  const validateEmailAddress = (
+    event: React.SyntheticEvent<HTMLInputElement>
+  ) => {
+    if (!event.currentTarget.checkValidity()) {
+      setIsEmailAddresValid(false);
+      setEmailAddressErrorMessage(
+        t("certificates.subject.email-address.error.type")
+      );
+      return;
+    }
+    setIsEmailAddresValid(true);
+    setEmailAddressErrorMessage(undefined);
+  };
+
+  const handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
+    const emailAddress = formData.get("email") as string;
+
+    onCreateButtonClick({
+      subject: {
+        CN: emailAddress,
+        E: emailAddress,
+      },
+      algorithm,
+      type,
+    });
+  };
 
   return (
-    <div className={styles.form_box}>
+    <form className={styles.form_box} onSubmit={handleSubmit}>
       <Card>
         <TextField
           className="required_text_field"
-          value={emailAddress}
-          onChange={(event) => {
-            setEmailAddress(event.target.value);
-            if (!isDirty) {
-              setIsDirty(true);
-            }
-          }}
+          onChange={validateEmailAddress}
           label={t("certificates.subject.email-address.label")}
           placeholder={t("certificates.subject.email-address.placeholder")}
-          onBlur={() => {
-            if (isDirty) {
-              if (!emailAddress.length) {
-                setIsError(true);
-                setErrorMessage(
-                  t("certificates.subject.email-address.error.required")
-                );
-                return;
-              } else if (!validateEmail(emailAddress)) {
-                setIsError(true);
-                setErrorMessage(
-                  t("certificates.subject.email-address.error.type")
-                );
-                return;
-              }
-              setIsError(false);
-            }
-          }}
-          error={isError}
-          errorText={errorMessage}
+          error={!!emailAddressErrorMessage}
+          errorText={emailAddressErrorMessage}
           type="email"
+          name="email"
+          required
         />
         <CertificateAlgorithmInfo
           algorithmSignature={algorithm.signature}
@@ -93,16 +100,7 @@ export const CertificateCreateByEmail: React.FunctionComponent<
           variant="contained"
           color="primary"
           disabled={isCreateButtonDisabled}
-          onClick={() =>
-            onCreateButtonClick({
-              subject: {
-                CN: emailAddress,
-                E: emailAddress,
-              },
-              algorithm,
-              type,
-            })
-          }
+          type="submit"
           title={
             isCreateButtonDisabled
               ? t("certificates.button-create.title")
@@ -112,6 +110,6 @@ export const CertificateCreateByEmail: React.FunctionComponent<
           {t(`certificates.button-create.text.${type}`)}
         </Button>
       </div>
-    </div>
+    </form>
   );
 };
