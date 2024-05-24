@@ -7,7 +7,7 @@ import { Typography } from "@peculiar/react-components";
 import styles from "./styles/index.module.scss";
 
 interface CertificatesProvidersListProps {
-  providers: IProviderInfo[];
+  providers: Pick<IProviderInfo, "id" | "name" | "isRemovable" | "readOnly">[];
   currentProviderId?: string;
   onSelect?: (id: string) => void;
 }
