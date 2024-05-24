@@ -3,19 +3,20 @@ import { IProviderInfo } from "@peculiar/fortify-client-core";
 import { useTranslation } from "react-i18next";
 import { CertificatesProvidersListItem } from "../certificates-providers-list-item";
 import AttentionCircleIcon from "../../icons/attention-circle.svg?react";
-import { Typography } from "@peculiar/react-components";
+import { Skeleton, Typography } from "@peculiar/react-components";
 import styles from "./styles/index.module.scss";
 
 interface CertificatesProvidersListProps {
   providers: Pick<IProviderInfo, "id" | "name" | "isRemovable" | "readOnly">[];
   currentProviderId?: string;
   onSelect?: (id: string) => void;
+  loading?: boolean;
 }
 
 export const CertificatesProvidersList: React.FunctionComponent<
   CertificatesProvidersListProps
 > = (props) => {
-  const { providers, currentProviderId, onSelect } = props;
+  const { providers, currentProviderId, loading, onSelect } = props;
   const { t } = useTranslation();
 
   return (
@@ -24,7 +25,17 @@ export const CertificatesProvidersList: React.FunctionComponent<
         {t("providers.list.label")}
       </Typography>
 
-      {!providers?.length ? (
+      {loading ? (
+        <div>
+          {[...Array(4).keys()].map((index) => (
+            <Skeleton
+              className={styles.loading_skeleton_item}
+              key={`scel-itm-${index}`}
+              height={50}
+            />
+          ))}
+        </div>
+      ) : !providers?.length ? (
         <div className={styles.empty_list}>
           <div className={styles.empty_list_icon}>
             <AttentionCircleIcon />
