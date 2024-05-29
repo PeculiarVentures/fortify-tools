@@ -11,6 +11,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    color: var(--pv-color-gray-9);
     svg {
       width: var(--pv-size-base-6);
       height: var(--pv-size-base-6);
@@ -39,11 +40,13 @@
     background-color: var(--pv-color-primary-tint-5);
     cursor: default;
 
-    .list_item_icon_wrapper svg circle {
-      fill: var(--pv-color-primary);
+    .list_item_icon_wrapper {
+      color: var(--pv-color-primary);
     }
-    .list_item_icon_wrapper svg path {
-      stroke: var(--pv-color-primary);
-    }
+  }
+
+  &:focus-visible {
+    outline: 1px solid var(--pv-color-primary);
+    z-index: 1;
   }
 }
