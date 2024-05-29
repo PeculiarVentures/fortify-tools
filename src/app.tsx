@@ -50,16 +50,12 @@ export function App() {
   return (
     <>
       <CertificatesSidebar className={styles.sidebar}>
-        {fetching.providers === "pending" ? (
-          // TODO: add loading skeleton
-          "Loading providers list..."
-        ) : (
-          <CertificatesProvidersList
-            providers={providers}
-            currentProviderId={currentProviderId}
-            onSelect={handleProviderChange}
-          />
-        )}
+        <CertificatesProvidersList
+          providers={providers}
+          currentProviderId={currentProviderId}
+          onSelect={handleProviderChange}
+          loading={!fetching.providers || fetching.providers === "pending"}
+        />
       </CertificatesSidebar>
       <CertificatesTopbar
         className={styles.top_bar}
