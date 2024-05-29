@@ -26,7 +26,7 @@ export const CertificatesProvidersList: React.FunctionComponent<
       </Typography>
 
       {loading ? (
-        <div>
+        <div className={styles.loading_skeleton}>
           {[...Array(4).keys()].map((index) => (
             <Skeleton
               className={styles.loading_skeleton_item}
