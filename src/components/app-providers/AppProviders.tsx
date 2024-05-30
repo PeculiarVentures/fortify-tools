@@ -1,5 +1,7 @@
 import React from "react";
 import { ThemeProvider, ToastProvider } from "@peculiar/react-components";
+import { ErrorBoundary } from "../error-boundary";
+import { AppFallback } from "../app-fallback";
 import { theme } from "../../config/theme";
 
 export const AppProviders: React.FunctionComponent<{
@@ -8,7 +10,9 @@ export const AppProviders: React.FunctionComponent<{
   const { children } = props;
   return (
     <ThemeProvider theme={theme}>
-      <ToastProvider maxToasts={4}>{children}</ToastProvider>
+      <ErrorBoundary fallbackComponent={AppFallback}>
+        <ToastProvider maxToasts={4}>{children}</ToastProvider>
+      </ErrorBoundary>
     </ThemeProvider>
   );
 };

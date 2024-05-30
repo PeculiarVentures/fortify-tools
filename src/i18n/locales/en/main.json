@@ -110,5 +110,13 @@
     "cancel": "Cancel",
     "clear": "Clear",
     "import-certificate": "Import certificate"
+  },
+  "app-error": {
+    "message": "Oops! Something went wrong.",
+    "description": "Sorry, an error has occurred. Please try again.",
+    "button": {
+      "try-again": "Try again",
+      "home-page": "Home page"
+    }
   }
 }
