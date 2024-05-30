@@ -39,8 +39,7 @@ export const CertificateCreateByCustom: React.FunctionComponent<
 
   const { t } = useTranslation();
 
-  const [isCnameValid, setIsCnameValid] = useState(false);
-  const [isEmailAddresValid, setIsEmailAddresValid] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
   const [emailAddressErrorMessage, setEmailAddressErrorMessage] = useState<
     string | undefined
   >(undefined);
@@ -49,20 +48,15 @@ export const CertificateCreateByCustom: React.FunctionComponent<
     []
   );
 
-  const isCreateButtonDisabled =
-    !isCnameValid || !isEmailAddresValid || !!emailAddressErrorMessage;
-
   const validateEmailAddress = (
     event: React.SyntheticEvent<HTMLInputElement>
   ) => {
     if (!event.currentTarget.checkValidity()) {
-      setIsEmailAddresValid(false);
       setEmailAddressErrorMessage(
         t("certificates.subject.email-address.error.type")
       );
       return;
     }
-    setIsEmailAddresValid(true);
     setEmailAddressErrorMessage(undefined);
   };
 
@@ -97,7 +91,11 @@ export const CertificateCreateByCustom: React.FunctionComponent<
   };
 
   return (
-    <form className={styles.form_box} onSubmit={handleSubmit}>
+    <form
+      className={styles.form_box}
+      onSubmit={handleSubmit}
+      onChange={(event) => setIsFormValid(event.currentTarget.checkValidity())}
+    >
       <Card className={styles.card}>
         <div className={styles.general_box}>
           <Typography variant="s2" color="black">
@@ -120,9 +118,6 @@ export const CertificateCreateByCustom: React.FunctionComponent<
             <TextField
               className="required_text_field"
               name="CN"
-              onChange={(event) =>
-                setIsCnameValid(event.currentTarget.checkValidity())
-              }
               label={t("certificates.subject.cname.label")}
               placeholder={t("certificates.subject.cname.placeholder-2")}
               required
@@ -186,13 +181,8 @@ export const CertificateCreateByCustom: React.FunctionComponent<
         <Button
           variant="contained"
           color="primary"
-          disabled={isCreateButtonDisabled}
+          disabled={!isFormValid}
           type="submit"
-          title={
-            isCreateButtonDisabled
-              ? t("certificates.button-create.title")
-              : undefined
-          }
         >
           {t(`certificates.button-create.text.${type}`)}
         </Button>
