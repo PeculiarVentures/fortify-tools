@@ -32,7 +32,7 @@ export const CertificateCreateByEmail: React.FunctionComponent<
 
   const { t } = useTranslation();
 
-  const [isEmailAddresValid, setIsEmailAddresValid] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
   const [emailAddressErrorMessage, setEmailAddressErrorMessage] = useState<
     string | undefined
   >(undefined);
@@ -42,20 +42,15 @@ export const CertificateCreateByEmail: React.FunctionComponent<
     signature: ESignatureAlgorithm.RSA2048,
   };
 
-  const isCreateButtonDisabled =
-    !isEmailAddresValid || !!emailAddressErrorMessage;
-
   const validateEmailAddress = (
     event: React.SyntheticEvent<HTMLInputElement>
   ) => {
     if (!event.currentTarget.checkValidity()) {
-      setIsEmailAddresValid(false);
       setEmailAddressErrorMessage(
         t("certificates.subject.email-address.error.type")
       );
       return;
     }
-    setIsEmailAddresValid(true);
     setEmailAddressErrorMessage(undefined);
   };
 
@@ -76,7 +71,11 @@ export const CertificateCreateByEmail: React.FunctionComponent<
   };
 
   return (
-    <form className={styles.form_box} onSubmit={handleSubmit}>
+    <form
+      className={styles.form_box}
+      onSubmit={handleSubmit}
+      onChange={(event) => setIsFormValid(event.currentTarget.checkValidity())}
+    >
       <Card>
         <TextField
           className="required_text_field"
@@ -99,13 +98,8 @@ export const CertificateCreateByEmail: React.FunctionComponent<
         <Button
           variant="contained"
           color="primary"
-          disabled={isCreateButtonDisabled}
+          disabled={!isFormValid}
           type="submit"
-          title={
-            isCreateButtonDisabled
-              ? t("certificates.button-create.title")
-              : undefined
-          }
         >
           {t(`certificates.button-create.text.${type}`)}
         </Button>
