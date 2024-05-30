@@ -30,7 +30,7 @@ export const CertificateCreateByCname: React.FunctionComponent<
   const { type = "x509", onCreateButtonClick } = props;
 
   const { t } = useTranslation();
-  const [isCnameValid, setIsCnameValid] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
 
   const algorithm: CertificateAlgorithmProps = {
     hash: EHashAlgorithm.SHA_256,
@@ -51,14 +51,15 @@ export const CertificateCreateByCname: React.FunctionComponent<
   };
 
   return (
-    <form className={styles.form_box} onSubmit={handleSubmit}>
+    <form
+      className={styles.form_box}
+      onSubmit={handleSubmit}
+      onChange={(event) => setIsFormValid(event.currentTarget.checkValidity())}
+    >
       <Card>
         <TextField
           className="required_text_field"
           name="CN"
-          onChange={(event) =>
-            setIsCnameValid(event.currentTarget.checkValidity())
-          }
           label={t("certificates.subject.cname.label")}
           placeholder={t("certificates.subject.cname.placeholder")}
           required
@@ -73,11 +74,8 @@ export const CertificateCreateByCname: React.FunctionComponent<
         <Button
           variant="contained"
           color="primary"
-          disabled={!isCnameValid}
+          disabled={!isFormValid}
           type="submit"
-          title={
-            !isCnameValid ? t("certificates.button-create.title") : undefined
-          }
         >
           {t(`certificates.button-create.text.${type}`)}
         </Button>
