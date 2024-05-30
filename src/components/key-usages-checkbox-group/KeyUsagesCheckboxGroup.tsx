@@ -1,31 +1,20 @@
 import React, { ComponentProps } from "react";
 import clsx from "clsx";
-import {
-  Checkbox,
-  Typography,
-  useControllableState,
-} from "@peculiar/react-components";
+import { Checkbox, Typography } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
-import {
-  certificateKeyUsageExtensions,
-  ICertificateKeyUsageExtensions,
-} from "../../config/data";
+import { certificateKeyUsageExtensions } from "../../config/data";
 
 import styles from "./styles/index.module.scss";
 
 interface KeyUsagesCheckboxGroupProps {
-  onChange: (extensions: ICertificateKeyUsageExtensions[]) => void;
   className?: ComponentProps<"div">["className"];
 }
 
 export const KeyUsagesCheckboxGroup: React.FunctionComponent<
   KeyUsagesCheckboxGroupProps
 > = (props) => {
-  const { onChange, className } = props;
+  const { className } = props;
   const { t } = useTranslation();
-  const [extensions, setExtensions] = useControllableState<
-    ICertificateKeyUsageExtensions[]
-  >({ defaultValue: [], onChange });
 
   return (
     <div className={clsx(styles.key_usages_checkbox_group_box, className)}>
@@ -39,15 +28,9 @@ export const KeyUsagesCheckboxGroup: React.FunctionComponent<
             className={styles.key_usages_checkbox}
           >
             <Checkbox
-              onChange={(event) => {
-                setExtensions(
-                  event.target.checked &&
-                    !extensions.includes(
-                      value as ICertificateKeyUsageExtensions
-                    )
-                    ? [...extensions, value as ICertificateKeyUsageExtensions]
-                    : extensions.filter((e) => e !== value)
-                );
+              name="keyUsage"
+              inputProps={{
+                value,
               }}
             />
             <Typography variant="b2" color="black">

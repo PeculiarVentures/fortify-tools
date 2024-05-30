@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   CertificateAlgorithmProps,
@@ -15,7 +15,7 @@ import { CertificateKeyPropertiesSelect } from "../certificate-key-properties-se
 import { Card } from "../card";
 import { KeyUsagesCheckboxGroup } from "../key-usages-checkbox-group";
 
-import { ICertificateKeyUsageExtensions } from "../../config/data";
+import { ICertificateExtendedKeyUsages } from "../../config/data";
 import { countries } from "../../config/data";
 
 import styles from "./styles/index.module.scss";
@@ -23,7 +23,7 @@ import styles from "./styles/index.module.scss";
 export interface ICertificateCreateByCustomData {
   subject: CertificateSubjectProps;
   algorithm?: CertificateAlgorithmProps;
-  extensions: ICertificateKeyUsageExtensions[];
+  extendedKeyUsages: ICertificateExtendedKeyUsages[];
   type: CertificateType;
 }
 
@@ -44,10 +44,6 @@ export const CertificateCreateByCustom: React.FunctionComponent<
     string | undefined
   >(undefined);
 
-  const extendedKeyUsageExtension = useRef<ICertificateKeyUsageExtensions[]>(
-    []
-  );
-
   const validateEmailAddress = (
     event: React.SyntheticEvent<HTMLInputElement>
   ) => {
@@ -63,8 +59,12 @@ export const CertificateCreateByCustom: React.FunctionComponent<
   const handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const { hashAlgorithm, signatureAlgorithm, C, ...subject } =
+    const { hashAlgorithm, signatureAlgorithm, C, keyUsage, ...subject } =
       Object.fromEntries(formData);
+
+    const extendedKeyUsages = keyUsage
+      ? (formData.getAll("keyUsage") as ICertificateExtendedKeyUsages[])
+      : [];
 
     const hash = hashAlgorithm
       .toString()
@@ -80,7 +80,7 @@ export const CertificateCreateByCustom: React.FunctionComponent<
         ...(subject as unknown as ICertificateCreateByCustomData["subject"]),
         C: country,
       },
-      extensions: extendedKeyUsageExtension.current,
+      extendedKeyUsages,
       type,
       algorithm: {
         hash,
@@ -166,11 +166,7 @@ export const CertificateCreateByCustom: React.FunctionComponent<
           </div>
         </div>
         <div className={styles.divider}></div>
-        <KeyUsagesCheckboxGroup
-          onChange={(val) => {
-            extendedKeyUsageExtension.current = val;
-          }}
-        />
+        <KeyUsagesCheckboxGroup />
         <div className={styles.divider}></div>
         <CertificateKeyPropertiesSelect
           className={styles.key_properties_select}

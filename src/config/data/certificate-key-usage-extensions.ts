@@ -9,5 +9,5 @@ export const certificateKeyUsageExtensions = {
   serverAuth: ExtendedKeyUsage.serverAuth,
 };
 
-export type ICertificateKeyUsageExtensions =
+export type ICertificateExtendedKeyUsages =
   keyof typeof certificateKeyUsageExtensions;

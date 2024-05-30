@@ -2,17 +2,17 @@ import React, { ComponentProps } from "react";
 import { Autocomplete, useControllableState } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
 import {
-  ICertificateKeyUsageExtensions,
+  ICertificateExtendedKeyUsages,
   certificateKeyUsageExtensions,
 } from "../../config/data";
 import { CertificateType } from "../../types";
 
 import styles from "./styles/index.module.scss";
 
-type IKeyUsageExtensions = ICertificateKeyUsageExtensions | "custom";
+type IExtendedKeyUsages = ICertificateExtendedKeyUsages | "custom";
 
 export type ICertificateTypeSelectValue = {
-  value: IKeyUsageExtensions;
+  value: IExtendedKeyUsages;
   label: string;
 };
 
@@ -33,7 +33,7 @@ export const CertificateTypeSelect: React.FunctionComponent<
   const { t } = useTranslation();
   const list: ICertificateTypeSelectValue[] = [
     ...Object.keys(certificateKeyUsageExtensions).map((key) => ({
-      value: key as IKeyUsageExtensions,
+      value: key as IExtendedKeyUsages,
       label: t(`certificates.key-usage-extension.${key}`),
     })),
     {
