@@ -15,6 +15,7 @@ import styles from "./app.module.scss";
 
 export function App() {
   const {
+    fortifyClient,
     fetching,
     challenge,
     providers,
@@ -22,6 +23,8 @@ export function App() {
     certificates,
     currentCertificatDelete,
     currentCertificateViewerValue,
+    handleCertificatesDataReload,
+    handleAddCSRToList,
     handleProviderChange,
     handleCertificatesSearch,
     handleCertificateDeleteDialogOpen,
@@ -45,6 +48,14 @@ export function App() {
   } = useCertificateCreateDialog({
     providers,
     currentProviderId,
+    fortifyClient,
+    onSuccess: (type, providerId, certRaw, label) => {
+      if (type === "x509") {
+        handleCertificatesDataReload(providerId);
+      } else if (type === "csr") {
+        handleAddCSRToList(providerId, certRaw, label);
+      }
+    },
   });
 
   return (

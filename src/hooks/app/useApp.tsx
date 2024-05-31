@@ -199,6 +199,52 @@ export function useApp() {
     start();
   }, []);
 
+  const handleCertificatesDataReload = async (providerId: string) => {
+    if (!fortifyClient.current) {
+      return;
+    }
+
+    setFetchingValue("certificates", "pending");
+
+    try {
+      setCertificates(
+        await fortifyClient.current.getCertificatesByProviderId(providerId)
+      );
+      setCurrentProviderId(providerId);
+      setFetchingValue("certificates", "resolved");
+    } catch (error) {
+      setFetchingValue("certificates", "rejected");
+    }
+  };
+
+  const handleAddCSRToList = (
+    providerId: string,
+    certRaw: ArrayBuffer,
+    label: string
+  ) => {
+    setCurrentProviderId(providerId);
+
+    const today = new Date();
+    const nextYear = new Date(
+      today.getFullYear() + 1,
+      today.getMonth(),
+      today.getDate()
+    );
+
+    setCertificates([
+      ...certificates,
+      {
+        id: today.getTime(),
+        notAfter: nextYear,
+        notBefore: today,
+        raw: certRaw,
+        serialNumber: "01",
+        type: "csr" as unknown as "x509",
+        label,
+      } as unknown as ICertificate,
+    ]);
+  };
+
   const handleCertificatesSearch = (value: string) => {
     // TODO: add logic
     console.log(value);
@@ -241,6 +287,7 @@ export function useApp() {
   };
 
   return {
+    fortifyClient: fortifyClient.current,
     fetching,
     challenge,
     providers,
@@ -248,6 +295,8 @@ export function useApp() {
     certificates,
     currentCertificatDelete,
     currentCertificateViewerValue,
+    handleCertificatesDataReload,
+    handleAddCSRToList,
     handleProviderChange,
     handleCertificatesSearch,
     handleCertificateDeleteDialogOpen,
