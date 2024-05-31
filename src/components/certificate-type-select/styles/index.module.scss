@@ -1,0 +1,19 @@
+.certificate_type_select_popover {
+  & > ul[role="listbox"] {
+    padding: 7px 0;
+
+    li:last-child {
+      margin-top: 11px;
+      position: relative;
+      &:before {
+        content: "";
+        height: 1px;
+        background-color: var(--pv-color-gray-5);
+        position: absolute;
+        top: -6px;
+        left: 0;
+        right: 0;
+      }
+    }
+  }
+}

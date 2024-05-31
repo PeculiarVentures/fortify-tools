@@ -1,0 +1,14 @@
+.form_box {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pv-size-base-6);
+
+  .button_group {
+    display: flex;
+    justify-content: end;
+  }
+  .algorithm {
+    display: flex;
+    gap: var(--pv-size-base-6);
+  }
+}

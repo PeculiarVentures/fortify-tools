@@ -1,0 +1,17 @@
+.key_usages_checkbox_group_box {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pv-size-base-3);
+
+  .key_usages_checkbox_group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pv-size-base-2);
+    align-items: flex-start;
+
+    .key_usages_checkbox {
+      display: flex;
+      gap: var(--pv-size-base-2);
+    }
+  }
+}

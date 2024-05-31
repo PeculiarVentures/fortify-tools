@@ -204,11 +204,6 @@ export function useApp() {
     console.log(value);
   };
 
-  const handleCertificateCreate = () => {
-    // TODO: add logic
-    console.log("Create");
-  };
-
   const handleCertificateDeleteDialogOpen = (id: string, name: string) => {
     setCurrentCetificateDelete({
       id,
@@ -255,7 +250,6 @@ export function useApp() {
     currentCertificateViewerValue,
     handleProviderChange,
     handleCertificatesSearch,
-    handleCertificateCreate,
     handleCertificateDeleteDialogOpen,
     handleCertificateDeleteDialogClose,
     handleCertificateDelete,
