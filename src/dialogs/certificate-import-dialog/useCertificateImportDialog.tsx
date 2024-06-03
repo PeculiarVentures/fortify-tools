@@ -1,10 +1,11 @@
 import React, { useRef } from "react";
 import { IProviderInfo } from "@peculiar/fortify-client-core";
-import { X509Certificate } from "@peculiar/x509";
+import { Pkcs10CertificateRequest, X509Certificate } from "@peculiar/x509";
 import { useToast } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
 import { useLockBodyScroll } from "react-use";
 import { CertificateImportDialog } from "../../components/certificate-import-dialog";
+import { certificateConvertRaw } from "../../utils/certificate";
 
 export function useCertificateImportDialog(props: {
   providers: IProviderInfo[];
@@ -17,7 +18,7 @@ export function useCertificateImportDialog(props: {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const [certificate, setCertificate] = React.useState("");
+  const [certificatePem, setCertificatePem] = React.useState("");
   const [isTextAreaError, setIsTextAreaError] = React.useState(false);
 
   const localCurrentProviderId = useRef(currentProviderId);
@@ -28,7 +29,7 @@ export function useCertificateImportDialog(props: {
       localCurrentProviderId.current = currentProviderId;
     }
     // TODO: add logic
-    console.log("Import", certificate);
+    console.log("Import", certificatePem);
     console.log("localCurrentProviderId", localCurrentProviderId?.current);
     // temporary behaviour
     setIsLoading(true);
@@ -43,11 +44,61 @@ export function useCertificateImportDialog(props: {
     }, 1000);
   };
 
-  const onDropAccepted = (fileContent: ArrayBuffer) => {
-    const x509Cert = new X509Certificate(fileContent);
+  const onDropAccepted = (
+    fileContent: ArrayBuffer,
+    extension: string,
+    fileType: string
+  ) => {
+    const buf = certificateConvertRaw(fileContent);
 
-    setCertificate(x509Cert.toString("pem"));
+    try {
+      if (extension === "csr" || fileType === "application/pkcs10") {
+        const certr = new Pkcs10CertificateRequest(buf);
+        setCertificatePem(certr.toString("pem"));
+      } else {
+        const cert = new X509Certificate(buf);
+        setCertificatePem(cert.toString("pem"));
+      }
+    } catch (error) {
+      addToast({
+        message: t("certificates.dialog.import.certificate.error.invalid-data"),
+        variant: "wrong",
+        disableIcon: true,
+        isClosable: true,
+      });
+    }
+
     setIsTextAreaError(false);
+  };
+
+  const handleTextAreaBlur = () => {
+    if (!certificatePem?.length) {
+      setIsTextAreaError(true);
+      return;
+    }
+
+    const buf = certificateConvertRaw(certificatePem);
+    let isInValid = false;
+
+    try {
+      const cert = new X509Certificate(buf);
+      setCertificatePem(cert.toString("pem"));
+      setIsTextAreaError(false);
+      return;
+    } catch (error) {
+      isInValid = true;
+    }
+
+    try {
+      const certr = new Pkcs10CertificateRequest(buf);
+      setCertificatePem(certr.toString("pem"));
+      setIsTextAreaError(false);
+      return;
+    } catch (error) {
+      isInValid = true;
+    }
+
+    setIsTextAreaError(isInValid);
   };
 
   useLockBodyScroll(isOpen);
@@ -57,21 +108,13 @@ export function useCertificateImportDialog(props: {
     dialog: () =>
       isOpen ? (
         <CertificateImportDialog
-          certificate={certificate}
+          certificate={certificatePem}
           isTextAreaError={isTextAreaError}
           onTextAreaChange={(value) => {
-            setCertificate(value);
+            setCertificatePem(value);
             setIsTextAreaError(false);
           }}
-          onTextAreaBlur={() => {
-            try {
-              certificate?.length && new X509Certificate(certificate);
-
-              setIsTextAreaError(false);
-            } catch (error) {
-              setIsTextAreaError(true);
-            }
-          }}
+          onTextAreaBlur={handleTextAreaBlur}
           onDropAccepted={onDropAccepted}
           onDropError={() => {
             addToast({
@@ -99,7 +142,7 @@ export function useCertificateImportDialog(props: {
           currentProviderId={currentProviderId}
           onImportButtonClick={handleCertificateImport}
           onClearButtonClick={() => {
-            setCertificate("");
+            setCertificatePem("");
             setIsTextAreaError(false);
           }}
           loading={isLoading}
