@@ -1,10 +1,11 @@
 import React from "react";
-import { FallbackProps } from "../error-boundary";
+import { useTranslation } from "react-i18next";
 import { Button, Typography } from "@peculiar/react-components";
+import { FallbackProps } from "../error-boundary";
+
 import ErrorIcon from "../../icons/error-big.svg?react";
 
 import styles from "./styles/index.module.scss";
-import { useTranslation } from "react-i18next";
 
 export const AppFallback: React.FunctionComponent<FallbackProps> = (props) => {
   const { resetErrorBoundary } = props;
