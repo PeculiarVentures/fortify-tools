@@ -2,7 +2,7 @@ import React from "react";
 import { useToast } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
 import { useLockBodyScroll } from "react-use";
-import { CertificateDeleteDialog } from "src/components/certificate-delete-dialog";
+import { CertificateDeleteDialog } from "../../components/certificate-delete-dialog";
 
 export function useCertificateDeleteDialog() {
   const { addToast } = useToast();
@@ -10,13 +10,18 @@ export function useCertificateDeleteDialog() {
 
   const [isLoading, setIsLoading] = React.useState(false);
   const [currentCertificatDelete, setCurrentCetificateDelete] = React.useState<
-    undefined | { id: string; name: string }
+    undefined | { certificateId: string; providerId: string; label: string }
   >();
 
-  const handleOpen = (id: string, name: string) => {
+  const handleOpen = (
+    certificateId: string,
+    providerId: string,
+    label: string
+  ) => {
     setCurrentCetificateDelete({
-      id,
-      name,
+      certificateId,
+      providerId,
+      label,
     });
   };
 
@@ -26,7 +31,7 @@ export function useCertificateDeleteDialog() {
 
   const handleCertificateDelete = (id: string) => {
     // TODO: add logic
-    console.log("Delete certificate: ", id);
+    console.log("Delete certificate: ", id, currentCertificatDelete);
     // temporary behaviour
     setIsLoading(true);
     setTimeout(function () {
@@ -41,7 +46,7 @@ export function useCertificateDeleteDialog() {
     }, 1000);
   };
 
-  const isOpen = !!currentCertificatDelete?.id;
+  const isOpen = !!currentCertificatDelete?.certificateId;
 
   useLockBodyScroll(isOpen);
 
@@ -50,8 +55,8 @@ export function useCertificateDeleteDialog() {
     dialog: () =>
       isOpen ? (
         <CertificateDeleteDialog
-          certificateId={currentCertificatDelete.id}
-          certificateName={currentCertificatDelete.name}
+          certificateId={currentCertificatDelete.certificateId}
+          certificateName={currentCertificatDelete.label}
           loading={isLoading}
           onDialogClose={handleClose}
           onDeleteClick={handleCertificateDelete}
