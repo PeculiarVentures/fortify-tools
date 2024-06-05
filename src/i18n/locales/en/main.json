@@ -27,6 +27,19 @@
       "empty-text": "There are no certificates yet."
     },
     "dialog": {
+      "create": {
+        "title": {
+          "x509": "Create Self-signed certificate",
+          "csr": "Create Certificate Signing Request (CSR)"
+        },
+        "select-type": {
+          "x509": "What do you need certificate for?",
+          "csr": "What do you need CSR for?"
+        },
+        "loading-text": "Creating certificate...",
+        "success-message": "Certificate created.",
+        "failure-message": "Can't create certificate"
+      },
       "delete": {
         "title": "Delete certificate",
         "message": "Are you sure you want to delete “{{name}}”?",
@@ -60,6 +73,67 @@
         "success-message": "Certificate imported.",
         "failure-message": "Failed to import certificate because of error. Please try again."
       }
+    },
+    "key-usage-extension": {
+      "emailProtection": "S/MIME",
+      "codeSigning": "Code signing",
+      "documentSigning": "Document signing",
+      "clientAuth": "TLS Client Authentication",
+      "serverAuth": "TLS Server Authentication"
+    },
+    "custom-csr-option": "Custom CSR",
+    "custom-certificate-option": "Custom certificate",
+    "select-type-placeholder": "Select type",
+    "extended-key-usages": "Extended key usages",
+    "key-properties": "Key properties",
+    "signature-algorithm": "Signature Algorithm",
+    "hash-algorithm": "Hash Algorithm",
+    "key-named-curve": "Named curve",
+    "general": {
+      "title": "General",
+      "friendly-name": "Friendly name",
+      "description": "Description"
+    },
+    "subject": {
+      "title": "Subject",
+      "cname": {
+        "label": "Common name",
+        "placeholder": "company.com",
+        "placeholder-2": "example.com"
+      },
+      "email-address": {
+        "label": "Email address",
+        "placeholder": "company@example.com",
+        "error": {
+          "type": "Please enter valid email address"
+        }
+      },
+      "organization-name": {
+        "label": "Organization",
+        "placeholder": "Company name"
+      },
+      "organization-unit-name": {
+        "label": "Organization unit"
+      },
+      "locality-name": {
+        "label": "Locality",
+        "placeholder": "Town, city, village, etc."
+      },
+      "state-or-province-name": {
+        "label": "State",
+        "placeholder": "Province, region, county or state"
+      },
+      "country-name": {
+        "label": "Country",
+        "placeholder": "Select country"
+      }
+    },
+    "button-create": {
+      "text": {
+        "x509": "Create certificate",
+        "csr": "Create CSR"
+      },
+      "title": "Please fill required fields"
     }
   },
   "connection": {
