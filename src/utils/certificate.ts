@@ -39,11 +39,6 @@ export function certificateSubjectToString(
   return parts.join(", ");
 }
 
-export function bufferToString(buffer: ArrayBuffer) {
-  const bytes = new Uint8Array(buffer);
-  return bytes.reduce((string, byte) => string + String.fromCharCode(byte), "");
-}
-
 export const isBase64 = (value: string) => {
   try {
     window.atob(value);
@@ -68,11 +63,11 @@ export function certificateConvertRaw(cert: string | ArrayBuffer): ArrayBuffer {
   let certificate = cert;
 
   if (typeof certificate !== "string") {
-    certificate = bufferToString(cert as ArrayBuffer);
+    certificate = Convert.ToBinary(cert as BufferSource);
   }
 
   if (PemConverter.isPem(certificate)) {
-    return cert as ArrayBuffer;
+    return PemConverter.decode(certificate)[0];
   }
 
   if (isHex(certificate)) {
@@ -83,6 +78,10 @@ export function certificateConvertRaw(cert: string | ArrayBuffer): ArrayBuffer {
 
   if (isBase64(base64)) {
     return Convert.FromBase64(base64);
+  }
+
+  if (Convert.isBase64Url(certificate)) {
+    return Convert.FromBase64Url(certificate);
   }
 
   return Convert.FromBinary(certificate);
