@@ -24,7 +24,6 @@ export function App() {
     currentCertificatDelete,
     currentCertificateViewerValue,
     handleCertificatesDataReload,
-    handleAddCSRToList,
     handleProviderChange,
     handleCertificatesSearch,
     handleCertificateDeleteDialogOpen,
@@ -49,12 +48,8 @@ export function App() {
     providers,
     currentProviderId,
     fortifyClient,
-    onSuccess: (type, providerId, certRaw, label) => {
-      if (type === "x509") {
-        handleCertificatesDataReload(providerId);
-      } else if (type === "csr") {
-        handleAddCSRToList(providerId, certRaw, label);
-      }
+    onSuccess: (providerId) => {
+      handleCertificatesDataReload(providerId);
     },
   });
 

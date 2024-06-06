@@ -18,13 +18,8 @@ import { CertificateType } from "../../types";
 export function useCertificateCreateDialog(props: {
   providers: IProviderInfo[];
   currentProviderId?: string;
-  fortifyClient: FortifyAPI | null;
-  onSuccess: (
-    type: CertificateType,
-    providerId: string,
-    certRaw: ArrayBuffer,
-    label: string
-  ) => void;
+  fortifyClient?: FortifyAPI | null;
+  onSuccess: (providerId: string) => void;
 }) {
   const { providers, currentProviderId, fortifyClient, onSuccess } = props;
   const { addToast } = useToast();
@@ -38,6 +33,9 @@ export function useCertificateCreateDialog(props: {
   const dialogType = useRef<CertificateType>("x509");
 
   const handleCertificateCreate = async (data: CertificateCreateDataProps) => {
+    if (!fortifyClient) {
+      return;
+    }
     if (!localCurrentProviderId?.current) {
       localCurrentProviderId.current = currentProviderId;
     }
@@ -47,7 +45,7 @@ export function useCertificateCreateDialog(props: {
     try {
       let newCert;
       if (type === "x509") {
-        newCert = await fortifyClient?.createX509(
+        newCert = await fortifyClient.createX509(
           localCurrentProviderId.current as string,
           {
             subjectName: subject,
@@ -56,7 +54,7 @@ export function useCertificateCreateDialog(props: {
           }
         );
       } else if (type === "csr") {
-        newCert = await fortifyClient?.createPKCS10(
+        newCert = await fortifyClient.createPKCS10(
           localCurrentProviderId.current as string,
           {
             subjectName: subject,
@@ -66,12 +64,7 @@ export function useCertificateCreateDialog(props: {
         );
       }
       if (newCert) {
-        onSuccess(
-          type,
-          localCurrentProviderId.current as string,
-          newCert.der,
-          data.subject.CN
-        );
+        onSuccess(localCurrentProviderId.current as string);
         setIsOpen(false);
         addToast({
           message: t("certificates.dialog.create.success-message"),
