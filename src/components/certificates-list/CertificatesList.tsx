@@ -38,7 +38,7 @@ interface CertificatesListProps {
   currentSortName: TSortColumnName | string;
   currentSortDir: TSortColumnDir;
   onSort: (name: TSortColumnName, dir: TSortColumnDir) => void;
-  onDelete: (id: string, name: string) => void;
+  onDelete: (certificateId: string, providerId: string, label: string) => void;
   onViewDetails: (certificate: CertificateProps) => void;
   className?: ComponentProps<"table">["className"];
 }
@@ -110,7 +110,7 @@ export const CertificatesList: React.FunctionComponent<
         </TableHeader>
         <TableBody>
           {certificates.map((certificate) => {
-            const { id, serialNumber, type, label, notAfter, raw } =
+            const { id, providerID, serialNumber, type, label, notAfter, raw } =
               certificate;
             return (
               <TableRow
@@ -175,7 +175,9 @@ export const CertificatesList: React.FunctionComponent<
                     <IconButton
                       tabIndex={0}
                       title={t("certificates.list.action.delete")}
-                      onClick={() => onDelete(id as string, label as string)}
+                      onClick={() =>
+                        onDelete(id as string, providerID, label as string)
+                      }
                       size="small"
                       className={styles.action_icon_button}
                     >

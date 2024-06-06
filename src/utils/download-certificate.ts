@@ -1,11 +1,12 @@
 import { Convert } from "pvtsutils";
 import { Pkcs10CertificateRequest, X509Certificate } from "@peculiar/x509";
 import { Download } from "@peculiar/certificates-viewer";
+import { CertificateType } from "../types";
 
 export function downloadCertificate(
   label: string,
   certRaw: ArrayBuffer,
-  type: "x509" | "csr"
+  type: CertificateType
 ) {
   switch (type) {
     case "x509": {

@@ -4,10 +4,11 @@ import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 import { Typography } from "@peculiar/react-components";
 import ProviderIcon from "../../icons/provider.svg?react";
+import SmartcardIcon from "../../icons/smartcard.svg?react";
 import styles from "./styles/index.module.scss";
 
 interface CertificatesProvidersListItemProps {
-  provider: IProviderInfo;
+  provider: Pick<IProviderInfo, "id" | "name" | "isRemovable" | "readOnly">;
   isSelected: boolean;
   onClick: (id: string) => void;
 }
@@ -20,15 +21,19 @@ export const CertificatesProvidersListItem: React.FunctionComponent<
 
   return (
     <li
+      tabIndex={0}
       className={clsx(styles.list_item, {
         [styles.current_list_item]: isSelected,
       })}
       onClick={() => {
-        onClick && onClick(provider.id);
+        onClick(provider.id);
       }}
+      onKeyDown={(event) =>
+        ["Enter"].includes(event.code) && onClick(provider.id)
+      }
     >
       <div className={styles.list_item_icon_wrapper}>
-        <ProviderIcon />
+        {provider.isRemovable ? <SmartcardIcon /> : <ProviderIcon />}
       </div>
       <div className={styles.list_item_name_wrapper}>
         <Typography

@@ -17,6 +17,11 @@ body {
   background-color: var(--pv-color-gray-2);
 }
 
+html,
+body {
+  overscroll-behavior: none;
+}
+
 #root {
   margin: 0 40px 0 340px;
   min-height: 100%;
@@ -30,5 +35,18 @@ a {
 
   &:hover {
     text-decoration: underline;
+  }
+}
+
+.required_text_field {
+  position: relative;
+  &:after {
+    content: "";
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNiIgaGVpZ2h0PSI2IiB2aWV3Qm94PSIwIDAgNiA2IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTAuNjExMTM3IDBDMC4yNzM4MzQgMCAwIDAuMjcxMDQgMCAwLjYwNTE0OUMwIDAuNzg0Mzc5IDAuMDc4NjM3NSAwLjk0NTY0NiAwLjIwMzk3OCAxLjA1NjIyQzAuMjA2NzczIDEuMDU5MDEgMC4yMDM1NzkgMS4wNjMgMC4yMDM5NzggMS4wNjU4TDQuOTQyOTggNS44MTY3OEw0Ljk0OTc3IDUuODE3NThDNS4wNTk1NCA1LjkyOTc1IDUuMjEyODMgNiA1LjM4Mjg4IDZDNS43MTY5OCA2IDUuOTg4MDIgNS43Mjg5NiA1Ljk4ODAyIDUuMzk1MjVDNS45ODc2MyA1LjM4MjQ4IDYgMS41OTY3IDYgMS41OTY3QzYgMC43MTQ5MjMgNS4yODUwOCAwIDQuNDAzMyAwSDAuNjExMTM3WiIgZmlsbD0iI0RFNDY0MSIvPgo8L3N2Zz4K);
+    right: 2px;
+    top: 28px;
   }
 }
