@@ -67,8 +67,17 @@ export const CertificatesList: React.FunctionComponent<
         </TableHeader>
         <TableBody>
           {certificates.map((certificate) => {
-            const { id, providerID, serialNumber, type, label, notAfter, raw } =
-              certificate;
+            const {
+              id,
+              providerID,
+              serialNumber,
+              type,
+              label,
+              notAfter,
+              raw,
+              index,
+            } = certificate;
+
             return (
               <TableRow
                 tabIndex={0}
@@ -130,7 +139,7 @@ export const CertificatesList: React.FunctionComponent<
                       tabIndex={0}
                       title={t("certificates.list.action.delete")}
                       onClick={() =>
-                        onDelete(id as string, providerID, label as string)
+                        onDelete(index, providerID, label as string)
                       }
                       size="small"
                       className={styles.action_icon_button}

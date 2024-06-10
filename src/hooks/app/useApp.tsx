@@ -203,6 +203,7 @@ export function useApp() {
   };
 
   return {
+    fortifyClient: fortifyClient.current,
     fetching,
     challenge,
     providers,

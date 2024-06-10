@@ -15,6 +15,7 @@ import styles from "./app.module.scss";
 
 export function App() {
   const {
+    fortifyClient,
     fetching,
     challenge,
     providers,
@@ -30,7 +31,14 @@ export function App() {
   const {
     open: handleCertificateDeleteDialogOpen,
     dialog: certificateDeleteDialog,
-  } = useCertificateDeleteDialog();
+  } = useCertificateDeleteDialog({
+    fortifyClient,
+    onSuccess: () => {
+      // TODO: we shold merge this PR first https://github.com/PeculiarVentures/fortify-tools/pull/149
+      // to have possibility to reload certificate list
+      // handleCertificatesDataReload(providerId);
+    },
+  });
 
   const {
     open: handleCertificateImportDialogOpen,
