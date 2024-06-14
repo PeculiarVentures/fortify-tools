@@ -97,19 +97,6 @@ export const CertificateCreateByCustom: React.FunctionComponent<
       onChange={(event) => setIsFormValid(event.currentTarget.checkValidity())}
     >
       <Card className={styles.card}>
-        <div className={styles.general_box}>
-          <Typography variant="s2" color="black">
-            {t("certificates.general.title")}
-          </Typography>
-          <div className={styles.general_fields}>
-            <TextField
-              label={t("certificates.general.friendly-name")}
-              disabled
-            />
-            <TextField label={t("certificates.general.description")} disabled />
-          </div>
-        </div>
-        <div className={styles.divider}></div>
         <div className={styles.subject_box}>
           <Typography variant="s2" color="black">
             {t("certificates.subject.title")}
