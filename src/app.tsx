@@ -6,8 +6,8 @@ import { CertificatesList } from "./components/certificates-list";
 import { CertificatesSidebar } from "./components/certificates-sidebar";
 import { CertificatesProvidersList } from "./components/certificates-providers-list";
 import { CertificatesTopbar } from "./components/certificates-topbar";
-import { CertificateDeleteDialog } from "./components/certificate-delete-dialog";
 import { CertificateViewerDialog } from "./components/certificate-viewer-dialog";
+import { useCertificateDeleteDialog } from "./dialogs/certificate-delete-dialog";
 import { useCertificateImportDialog } from "./dialogs/certificate-import-dialog";
 import { useCertificateCreateDialog } from "./dialogs/certificate-create-dialog";
 
@@ -21,17 +21,18 @@ export function App() {
     providers,
     currentProviderId,
     certificates,
-    currentCertificatDelete,
     currentCertificateViewerValue,
     handleCertificatesDataReload,
     handleProviderChange,
     handleCertificatesSearch,
-    handleCertificateDeleteDialogOpen,
-    handleCertificateDeleteDialogClose,
-    handleCertificateDelete,
     handleCertificateViewerOpen,
     handleCertificateViewerClose,
   } = useApp();
+
+  const {
+    open: handleCertificateDeleteDialogOpen,
+    dialog: certificateDeleteDialog,
+  } = useCertificateDeleteDialog();
 
   const {
     open: handleCertificateImportDialogOpen,
@@ -76,15 +77,6 @@ export function App() {
           onViewDetails={handleCertificateViewerOpen}
         />
       ) : null}
-      {currentCertificatDelete?.id ? (
-        <CertificateDeleteDialog
-          certificateId={currentCertificatDelete.id}
-          certificateName={currentCertificatDelete.name}
-          loading={currentCertificatDelete?.loading}
-          onDialogClose={handleCertificateDeleteDialogClose}
-          onDeleteClick={handleCertificateDelete}
-        />
-      ) : null}
 
       <FetchingStatusOwerlay fetching={fetching} challenge={challenge} />
       {currentCertificateViewerValue ? (
@@ -93,6 +85,7 @@ export function App() {
           onClose={handleCertificateViewerClose}
         />
       ) : null}
+      {certificateDeleteDialog()}
       {certificateImportDialog()}
       {certificateCreateDialog()}
     </>

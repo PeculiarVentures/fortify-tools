@@ -1,12 +1,9 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
 import {
   FortifyAPI,
   IProviderInfo,
   ICertificate,
 } from "@peculiar/fortify-client-core";
-
-import { useToast } from "@peculiar/react-components";
 
 import { AppFetchingStatus, AppFetchingType } from "./types";
 
@@ -26,19 +23,12 @@ export function useApp() {
     connectionDetect: "pending",
   });
 
-  const [currentCertificatDelete, setCurrentCetificateDelete] = React.useState<
-    undefined | { id: string; name: string; loading?: boolean }
-  >();
-
   const [currentCertificateViewerValue, setCurrentCertificateViewerValue] =
     React.useState<ICertificate | undefined>(undefined);
 
   /**
    *
    */
-
-  const { addToast } = useToast();
-  const { t } = useTranslation();
 
   const setFetchingValue = (
     name: keyof AppFetchingType,
@@ -222,34 +212,6 @@ export function useApp() {
     console.log(value);
   };
 
-  const handleCertificateDeleteDialogOpen = (id: string, name: string) => {
-    setCurrentCetificateDelete({
-      id,
-      name,
-    });
-  };
-
-  const handleCertificateDeleteDialogClose = () => {
-    setCurrentCetificateDelete(undefined);
-  };
-
-  const handleCertificateDelete = (id: string) => {
-    // TODO: add logic
-    // temporary behaviour
-    setCurrentCetificateDelete((prevState) =>
-      prevState?.id === id ? { ...prevState, loading: true } : undefined
-    );
-    setTimeout(function () {
-      setCurrentCetificateDelete(undefined);
-      addToast({
-        message: t("certificates.dialog.delete.failure-message"),
-        variant: "wrong",
-        disableIcon: true,
-        isClosable: true,
-      });
-    }, 1000);
-  };
-
   const handleCertificateViewerOpen = (certificate: ICertificate) => {
     setCurrentCertificateViewerValue(certificate);
   };
@@ -265,14 +227,10 @@ export function useApp() {
     providers,
     currentProviderId,
     certificates,
-    currentCertificatDelete,
     currentCertificateViewerValue,
     handleCertificatesDataReload,
     handleProviderChange,
     handleCertificatesSearch,
-    handleCertificateDeleteDialogOpen,
-    handleCertificateDeleteDialogClose,
-    handleCertificateDelete,
     handleCertificateViewerOpen,
     handleCertificateViewerClose,
   };
