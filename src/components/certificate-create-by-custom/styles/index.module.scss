@@ -19,18 +19,6 @@
     }
   }
 
-  .general_box {
-    display: flex;
-    flex-direction: column;
-    gap: var(--pv-size-base-2);
-
-    .general_fields {
-      display: flex;
-      flex-direction: column;
-      gap: var(--pv-size-base-2);
-    }
-  }
-
   .divider {
     height: 1px;
     background-color: var(--pv-color-gray-4);

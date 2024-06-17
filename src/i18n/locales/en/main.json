@@ -89,11 +89,6 @@
     "signature-algorithm": "Signature Algorithm",
     "hash-algorithm": "Hash Algorithm",
     "key-named-curve": "Named curve",
-    "general": {
-      "title": "General",
-      "friendly-name": "Friendly name",
-      "description": "Description"
-    },
     "subject": {
       "title": "Subject",
       "cname": {
