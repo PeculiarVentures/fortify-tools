@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   IProviderInfo,
   FortifyAPI,
@@ -29,6 +29,9 @@ export function useCertificateCreateDialog(props: {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const localCurrentProviderId = useRef(currentProviderId);
+  useEffect(() => {
+    localCurrentProviderId.current = currentProviderId;
+  }, [currentProviderId]);
 
   const dialogType = useRef<CertificateType>("x509");
 
