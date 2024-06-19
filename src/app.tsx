@@ -15,12 +15,14 @@ import styles from "./app.module.scss";
 
 export function App() {
   const {
+    fortifyClient,
     fetching,
     challenge,
     providers,
     currentProviderId,
     certificates,
     currentCertificateViewerValue,
+    handleCertificatesDataReload,
     handleProviderChange,
     handleCertificatesSearch,
     handleCertificateViewerOpen,
@@ -38,6 +40,10 @@ export function App() {
   } = useCertificateImportDialog({
     providers,
     currentProviderId,
+    fortifyClient,
+    onSuccess: (providerId) => {
+      handleCertificatesDataReload(providerId);
+    },
   });
 
   const {
