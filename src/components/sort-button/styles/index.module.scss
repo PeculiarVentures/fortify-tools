@@ -13,8 +13,8 @@
       transform: rotateZ(180deg);
     }
   }
-  &[data-active="true"],
-  &:hover {
+  &[data-active="true"]:not(:disabled),
+  &:hover:not(:disabled) {
     background-color: transparent !important;
 
     .sort_button_icon,

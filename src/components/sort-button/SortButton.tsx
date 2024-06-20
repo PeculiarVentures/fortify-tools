@@ -10,11 +10,19 @@ interface SortButtonProps extends PropsWithChildren {
   className?: ComponentProps<"button">["className"];
   active?: boolean;
   order?: "asc" | "desc";
+  disabled?: boolean;
   onClick: ButtonProps["onClick"];
 }
 
 export const SortButton: React.FunctionComponent<SortButtonProps> = (props) => {
-  const { children, className, active, order = "desc", onClick } = props;
+  const {
+    children,
+    className,
+    active,
+    disabled,
+    order = "desc",
+    onClick,
+  } = props;
 
   return (
     <Button
@@ -23,6 +31,7 @@ export const SortButton: React.FunctionComponent<SortButtonProps> = (props) => {
       className={clsx(styles.sort_button, className)}
       data-active={active}
       onClick={onClick}
+      disabled={disabled}
     >
       <Typography
         component={"span"}
