@@ -189,6 +189,24 @@ export function useApp() {
     start();
   }, []);
 
+  const handleCertificatesDataReload = async (providerId: string) => {
+    if (!fortifyClient.current) {
+      return;
+    }
+
+    setFetchingValue("certificates", "pending");
+
+    try {
+      setCertificates(
+        await fortifyClient.current.getCertificatesByProviderId(providerId)
+      );
+      setCurrentProviderId(providerId);
+      setFetchingValue("certificates", "resolved");
+    } catch (error) {
+      setFetchingValue("certificates", "rejected");
+    }
+  };
+
   const handleCertificatesSearch = (value: string) => {
     // TODO: add logic
     console.log(value);
@@ -210,6 +228,7 @@ export function useApp() {
     currentProviderId,
     certificates,
     currentCertificateViewerValue,
+    handleCertificatesDataReload,
     handleProviderChange,
     handleCertificatesSearch,
     handleCertificateViewerOpen,

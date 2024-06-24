@@ -1,16 +1,9 @@
 .list_table {
-  background-color: var(--pv-color-gray-2);
   table-layout: fixed;
 
   thead th,
   tbody {
     background-color: var(--pv-color-white);
-  }
-
-  th {
-    position: sticky;
-    top: var(--pv-top-header-height);
-    z-index: 99;
   }
 
   th:nth-child(1) {
