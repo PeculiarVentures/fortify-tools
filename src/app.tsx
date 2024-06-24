@@ -35,10 +35,8 @@ export function App() {
     dialog: certificateDeleteDialog,
   } = useCertificateDeleteDialog({
     fortifyClient,
-    onSuccess: () => {
-      // TODO: we shold merge this PR first https://github.com/PeculiarVentures/fortify-tools/pull/149
-      // to have possibility to reload certificate list
-      // handleCertificatesDataReload(providerId);
+    onSuccess: (providerId) => {
+      handleCertificatesDataReload(providerId);
     },
   });
 
