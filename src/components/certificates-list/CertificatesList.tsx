@@ -28,7 +28,11 @@ import styles from "./styles/index.module.scss";
 
 interface CertificatesListProps {
   certificates: CertificateProps[];
-  onDelete: (certificateId: string, providerId: string, label: string) => void;
+  onDelete: (params: {
+    certificateIndex: string;
+    providerId: string;
+    label: string;
+  }) => void;
   onViewDetails: (certificate: CertificateProps) => void;
 }
 
@@ -139,7 +143,11 @@ export const CertificatesList: React.FunctionComponent<
                       tabIndex={0}
                       title={t("certificates.list.action.delete")}
                       onClick={() =>
-                        onDelete(index, providerID, label as string)
+                        onDelete({
+                          certificateIndex: index,
+                          providerId: providerID,
+                          label: label as string,
+                        })
                       }
                       size="small"
                       className={styles.action_icon_button}

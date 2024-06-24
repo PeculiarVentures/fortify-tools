@@ -27,16 +27,8 @@ export function useCertificateDeleteDialog(
   const [isOpen, setIsOpen] = React.useState(false);
   const openParamsRef = React.useRef<UseCertificateDeleteDialogOpenParams>();
 
-  const handleOpen = (
-    certificateIndex: string,
-    providerId: string,
-    label: string
-  ) => {
-    openParamsRef.current = {
-      certificateIndex,
-      providerId,
-      label,
-    };
+  const handleOpen = (params: UseCertificateDeleteDialogOpenParams) => {
+    openParamsRef.current = params;
     setIsOpen(true);
   };
 
