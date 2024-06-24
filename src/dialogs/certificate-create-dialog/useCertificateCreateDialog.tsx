@@ -1,10 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import {
-  IProviderInfo,
-  FortifyAPI,
-  EHashAlgorithm,
-  ESignatureAlgorithm,
-} from "@peculiar/fortify-client-core";
+import { IProviderInfo, FortifyAPI } from "@peculiar/fortify-client-core";
 import { useToast } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
 import { useLockBodyScroll } from "react-use";
@@ -53,7 +48,7 @@ export function useCertificateCreateDialog(props: {
           {
             subjectName: subject,
             hashAlgorithm: algorithm.hash,
-            signatureAlgorithm: algorithm?.signature,
+            signatureAlgorithm: algorithm.signature,
           }
         );
       } else if (type === "csr") {
@@ -61,8 +56,8 @@ export function useCertificateCreateDialog(props: {
           localCurrentProviderId.current as string,
           {
             subjectName: subject,
-            hashAlgorithm: algorithm?.hash as EHashAlgorithm,
-            signatureAlgorithm: algorithm?.signature as ESignatureAlgorithm,
+            hashAlgorithm: algorithm.hash,
+            signatureAlgorithm: algorithm.signature,
           }
         );
       }
