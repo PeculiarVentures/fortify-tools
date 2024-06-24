@@ -7,9 +7,12 @@ import {
   DialogContent,
   DialogTitle,
 } from "@peculiar/react-components";
-import { PeculiarCertificateViewer } from "@peculiar/certificates-viewer-react";
+import {
+  PeculiarCertificateViewer,
+  PeculiarCsrViewer,
+} from "@peculiar/certificates-viewer-react";
 import { useTranslation } from "react-i18next";
-import { CertificateProps } from "../../types";
+import { CertificateProps, CertificateType } from "../../types";
 
 import styles from "./styles/index.module.scss";
 
@@ -23,16 +26,19 @@ export const CertificateViewerDialog: React.FunctionComponent<
   const { certificate, onClose } = props;
   const { t } = useTranslation();
 
+  const certBase64 = Convert.ToBase64(certificate?.raw);
+
   return (
     <Dialog open={true} onClose={onClose} className={styles.dialog}>
       <DialogTitle>
         {t("certificate-viewer-dialog.title", { name: certificate.label })}
       </DialogTitle>
       <DialogContent className={styles.dialog_content}>
-        <PeculiarCertificateViewer
-          certificate={Convert.ToBase64(certificate?.raw)}
-          download={true}
-        />
+        {(certificate?.type as CertificateType) === "csr" ? (
+          <PeculiarCsrViewer certificate={certBase64} download={true} />
+        ) : (
+          <PeculiarCertificateViewer certificate={certBase64} download={true} />
+        )}
       </DialogContent>
       <DialogActions>
         <Button variant="outlined" onClick={onClose}>
