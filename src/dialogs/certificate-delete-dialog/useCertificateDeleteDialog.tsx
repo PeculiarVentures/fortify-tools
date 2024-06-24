@@ -5,46 +5,57 @@ import { useLockBodyScroll } from "react-use";
 import { FortifyAPI } from "@peculiar/fortify-client-core";
 import { CertificateDeleteDialog } from "../../components/certificate-delete-dialog";
 
-export function useCertificateDeleteDialog(props: {
-  fortifyClient?: FortifyAPI | null;
+type UseCertificateDeleteDialogOpenParams = {
+  certificateIndex: string;
+  providerId: string;
+  label: string;
+};
+
+type UseCertificateDeleteDialogInitialParams = {
+  fortifyClient: FortifyAPI | null;
   onSuccess: (providerId: string) => void;
-}) {
+};
+
+export function useCertificateDeleteDialog(
+  props: UseCertificateDeleteDialogInitialParams
+) {
   const { fortifyClient, onSuccess } = props;
   const { addToast } = useToast();
   const { t } = useTranslation();
 
   const [isLoading, setIsLoading] = React.useState(false);
-  const [currentCertificatDelete, setCurrentCetificateDelete] = React.useState<
-    undefined | { certificateIndex: string; providerId: string; label: string }
-  >();
+  const [isOpen, setIsOpen] = React.useState(false);
+  const openParamsRef = React.useRef<UseCertificateDeleteDialogOpenParams>();
 
   const handleOpen = (
     certificateIndex: string,
     providerId: string,
     label: string
   ) => {
-    setCurrentCetificateDelete({
+    openParamsRef.current = {
       certificateIndex,
       providerId,
       label,
-    });
+    };
+    setIsOpen(true);
   };
 
   const handleClose = () => {
-    setCurrentCetificateDelete(undefined);
+    openParamsRef.current = undefined;
+    setIsOpen(false);
   };
 
   const handleCertificateDelete = async (index: string) => {
-    if (!fortifyClient || index !== currentCertificatDelete?.certificateIndex) {
+    if (!fortifyClient || index !== openParamsRef.current?.certificateIndex) {
       return;
     }
     setIsLoading(true);
     try {
       await fortifyClient.removeCertificateById(
-        currentCertificatDelete.providerId,
-        currentCertificatDelete.certificateIndex
+        openParamsRef.current.providerId,
+        openParamsRef.current.certificateIndex
       );
-      onSuccess(currentCertificatDelete.providerId);
+      onSuccess(openParamsRef.current.providerId);
       addToast({
         message: t("certificates.dialog.delete.success-message"),
         variant: "success",
@@ -64,17 +75,15 @@ export function useCertificateDeleteDialog(props: {
     handleClose();
   };
 
-  const isOpen = !!currentCertificatDelete?.certificateIndex;
-
   useLockBodyScroll(isOpen);
 
   return {
     open: handleOpen,
     dialog: () =>
-      isOpen ? (
+      isOpen && openParamsRef.current ? (
         <CertificateDeleteDialog
-          certificateId={currentCertificatDelete.certificateIndex}
-          certificateName={currentCertificatDelete.label}
+          certificateId={openParamsRef.current.certificateIndex}
+          certificateName={openParamsRef.current.label}
           loading={isLoading}
           onDialogClose={handleClose}
           onDeleteClick={handleCertificateDelete}
