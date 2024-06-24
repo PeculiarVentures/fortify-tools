@@ -52,8 +52,8 @@ export function useCertificateCreateDialog(props: {
           localCurrentProviderId.current as string,
           {
             subjectName: subject,
-            hashAlgorithm: algorithm?.hash as EHashAlgorithm,
-            signatureAlgorithm: algorithm?.signature as ESignatureAlgorithm,
+            hashAlgorithm: algorithm.hash,
+            signatureAlgorithm: algorithm?.signature,
           }
         );
       } else if (type === "csr") {
