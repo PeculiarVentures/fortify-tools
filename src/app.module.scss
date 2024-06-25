@@ -22,3 +22,11 @@
     background-color: var(--pv-color-gray-2);
   }
 }
+.certificate_list {
+  background-color: var(--pv-color-gray-2);
+  th {
+    position: sticky;
+    top: var(--pv-top-header-height);
+    z-index: 99;
+  }
+}

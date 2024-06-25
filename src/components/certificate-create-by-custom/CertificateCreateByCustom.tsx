@@ -22,7 +22,7 @@ import styles from "./styles/index.module.scss";
 
 export interface ICertificateCreateByCustomData {
   subject: CertificateSubjectProps;
-  algorithm?: CertificateAlgorithmProps;
+  algorithm: CertificateAlgorithmProps;
   extendedKeyUsages: ICertificateExtendedKeyUsages[];
   type: CertificateType;
 }
