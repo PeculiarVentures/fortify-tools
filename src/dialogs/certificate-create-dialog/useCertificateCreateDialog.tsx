@@ -1,5 +1,5 @@
-import React, { useRef } from "react";
-import { IProviderInfo } from "@peculiar/fortify-client-core";
+import React, { useEffect, useRef } from "react";
+import { IProviderInfo, FortifyAPI } from "@peculiar/fortify-client-core";
 import { useToast } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
 import { useLockBodyScroll } from "react-use";
@@ -13,8 +13,10 @@ import { CertificateType } from "../../types";
 export function useCertificateCreateDialog(props: {
   providers: IProviderInfo[];
   currentProviderId?: string;
+  fortifyClient?: FortifyAPI | null;
+  onSuccess: (providerId: string) => void;
 }) {
-  const { providers, currentProviderId } = props;
+  const { providers, currentProviderId, fortifyClient, onSuccess } = props;
   const { addToast } = useToast();
   const { t } = useTranslation();
 
@@ -22,30 +24,69 @@ export function useCertificateCreateDialog(props: {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const localCurrentProviderId = useRef(currentProviderId);
+  useEffect(() => {
+    localCurrentProviderId.current = currentProviderId;
+  }, [currentProviderId]);
 
   const dialogType = useRef<CertificateType>("x509");
 
-  const handleCertificateCreate = (data: CertificateCreateDataProps) => {
-    // Check provider
+  const handleCertificateCreate = async (data: CertificateCreateDataProps) => {
+    if (!fortifyClient) {
+      return;
+    }
     if (!localCurrentProviderId?.current) {
       localCurrentProviderId.current = currentProviderId;
     }
-    // TODO: add logic
-    console.log("Create", data);
-    console.log("localCurrentProviderId", localCurrentProviderId.current);
     const subject = certificateSubjectToString(data.subject);
-    console.log("subject => ", subject);
-    // temporary behaviour
+    const { type, algorithm } = data;
     setIsLoading(true);
-    setTimeout(function () {
-      setIsLoading(false);
+    try {
+      let newCert;
+      if (type === "x509") {
+        newCert = await fortifyClient.createX509(
+          localCurrentProviderId.current as string,
+          {
+            subjectName: subject,
+            hashAlgorithm: algorithm.hash,
+            signatureAlgorithm: algorithm.signature,
+          }
+        );
+      } else if (type === "csr") {
+        newCert = await fortifyClient.createPKCS10(
+          localCurrentProviderId.current as string,
+          {
+            subjectName: subject,
+            hashAlgorithm: algorithm.hash,
+            signatureAlgorithm: algorithm.signature,
+          }
+        );
+      }
+      if (newCert) {
+        onSuccess(localCurrentProviderId.current as string);
+        setIsOpen(false);
+        addToast({
+          message: t("certificates.dialog.create.success-message"),
+          variant: "success",
+          disableIcon: true,
+          isClosable: true,
+        });
+      } else {
+        addToast({
+          message: t("certificates.dialog.create.failure-message"),
+          variant: "wrong",
+          disableIcon: true,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
       addToast({
         message: t("certificates.dialog.create.failure-message"),
         variant: "wrong",
         disableIcon: true,
         isClosable: true,
       });
-    }, 1000);
+    }
+    setIsLoading(false);
   };
 
   useLockBodyScroll(isOpen);

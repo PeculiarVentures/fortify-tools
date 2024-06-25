@@ -1,0 +1,28 @@
+.sort_button {
+  display: flex;
+  height: auto !important;
+  > span {
+    gap: var(--pv-size-base);
+  }
+  .sort_button_icon {
+    color: var(--pv-color-gray-9);
+    transition:
+      transform 0.2s,
+      color 0.2s;
+    &.sort_button_icon_asc {
+      transform: rotateZ(180deg);
+    }
+  }
+  &[data-active="true"]:not(:disabled),
+  &:hover:not(:disabled) {
+    background-color: transparent !important;
+
+    .sort_button_icon,
+    .sort_button_label {
+      color: var(--pv-color-black);
+    }
+  }
+  &:focus-visible {
+    background-color: var(--pv-color-gray-4) !important;
+  }
+}
