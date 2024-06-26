@@ -38,3 +38,10 @@ export const Empty: Story = {
     certificates: [],
   },
 };
+
+export const EmptySearch: Story = {
+  args: {
+    certificates: [],
+    highlightedText: "test",
+  },
+};

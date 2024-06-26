@@ -1,5 +1,5 @@
 import React, { ComponentProps, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import clsx from "clsx";
 import {
   Button,
@@ -15,7 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "../table";
-import CertificatesIcon from "../../icons/certificates.svg?react";
+
 import { CertificateTypeLabel } from "../certificate-type-label";
 import { Date } from "../date";
 import { CertificateName } from "../certificate-name";
@@ -29,6 +29,8 @@ import { CertificateProps } from "../../types";
 
 import DeleteIcon from "../../icons/delete.svg?react";
 import DownloadIcon from "../../icons/download-20.svg?react";
+import CertificatesIcon from "../../icons/certificates.svg?react";
+import SearchIcon from "../../icons/search-120.svg?react";
 
 import styles from "./styles/index.module.scss";
 
@@ -68,6 +70,32 @@ export const CertificatesList: React.FunctionComponent<
   const { t } = useTranslation();
 
   const [currentRow, setCurrentRow] = useState<string>();
+
+  if (highlightedText && !certificates?.length && !loading) {
+    return (
+      <div className={clsx(styles.empty_list, styles.empty_search_list)}>
+        <div className={styles.empty_search_list_icon}>
+          <SearchIcon />
+        </div>
+        <Typography variant="b2" color="gray-9">
+          <Trans
+            i18nKey="certificates.list.empty-search-text"
+            values={{ text: highlightedText }}
+            components={[
+              <Typography
+                className={styles.empty_list_search_text}
+                variant="b2"
+                color="black"
+                component="span"
+              >
+                {0}
+              </Typography>,
+            ]}
+          />
+        </Typography>
+      </div>
+    );
+  }
 
   if (!certificates?.length && !loading) {
     return (
