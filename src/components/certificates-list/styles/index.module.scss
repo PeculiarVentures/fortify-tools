@@ -91,3 +91,40 @@
     }
   }
 }
+
+.skeleton_tr {
+  .skeleton_td {
+    border-bottom: none;
+    cursor: default;
+    &::after,
+    &::before {
+      display: none;
+    }
+  }
+  &:nth-child(odd) {
+    .skeleton_td:nth-child(1) .skeleton_td_item {
+      width: 46%;
+    }
+    .skeleton_td:nth-child(2) .skeleton_td_item {
+      width: 58%;
+    }
+  }
+  &:nth-child(even) {
+    .skeleton_td:nth-child(1) .skeleton_td_item {
+      width: 65%;
+    }
+    .skeleton_td:nth-child(2) .skeleton_td_item {
+      width: 46%;
+    }
+  }
+  .skeleton_td:nth-child(3) .skeleton_td_item {
+    width: 73%;
+  }
+  .skeleton_td:nth-child(4) {
+    text-align: right;
+    .skeleton_td_item {
+      width: 81%;
+      display: inline-block;
+    }
+  }
+}

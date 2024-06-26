@@ -32,3 +32,9 @@ export const Default: Story = {
     })),
   },
 };
+
+export const Empty: Story = {
+  args: {
+    certificates: [],
+  },
+};
