@@ -41,6 +41,7 @@ interface CertificatesListProps {
   onDelete: (certificateId: string, providerId: string, label: string) => void;
   onViewDetails: (certificate: CertificateProps) => void;
   className?: ComponentProps<"table">["className"];
+  highlightedText?: string;
 }
 
 export const CertificatesList: React.FunctionComponent<
@@ -51,6 +52,7 @@ export const CertificatesList: React.FunctionComponent<
     className,
     currentSortName,
     currentSortDir,
+    highlightedText,
     onSort,
     onViewDetails,
     onDelete,
@@ -133,7 +135,7 @@ export const CertificatesList: React.FunctionComponent<
                 </TableCell>
                 {/* // TODO: not sure about label as name */}
                 <TableCell>
-                  <CertificateName name={label} />
+                  <CertificateName highlight={highlightedText} name={label} />
                 </TableCell>
                 <TableCell>
                   <CertificateSerialNumber value={serialNumber} />
