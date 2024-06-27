@@ -37,7 +37,11 @@ interface CertificateImportDialogProps {
   onImportButtonClick: () => void;
   onDropError: (error?: unknown) => void;
   onDropRejected: (error: string) => void;
-  onDropAccepted: (fileContent: ArrayBuffer) => void;
+  onDropAccepted: (
+    fileContent: ArrayBuffer,
+    extension: string,
+    type: string
+  ) => void;
   onClearButtonClick: () => void;
 }
 
@@ -84,23 +88,20 @@ export const CertificateImportDialog: React.FunctionComponent<
         }
       });
     },
-    onDropAccepted: ([file]) => {
+    onDropAccepted: async ([file]) => {
       if (!file) {
         return false;
       }
-      const reader = new FileReader();
 
-      reader.readAsArrayBuffer(file);
+      const parts = file.name.split(".");
+      const ext = parts.length > 1 ? (parts.pop() as string) : "";
 
-      reader.onload = (event) => {
-        try {
-          onDropAccepted(event.target?.result as ArrayBuffer);
-        } catch (error) {
-          onDropError(error);
-        }
-      };
-
-      reader.onerror = onDropError;
+      try {
+        const buf = await file.arrayBuffer();
+        onDropAccepted(buf, ext, file.type);
+      } catch (error) {
+        onDropError(error);
+      }
     },
     onError: onDropError,
   });
