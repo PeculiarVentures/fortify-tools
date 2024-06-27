@@ -2,61 +2,80 @@ import React from "react";
 import { useToast } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
 import { useLockBodyScroll } from "react-use";
+import { FortifyAPI } from "@peculiar/fortify-client-core";
 import { CertificateDeleteDialog } from "../../components/certificate-delete-dialog";
 
-export function useCertificateDeleteDialog() {
+type UseCertificateDeleteDialogOpenParams = {
+  certificateIndex: string;
+  providerId: string;
+  label: string;
+};
+
+type UseCertificateDeleteDialogInitialParams = {
+  fortifyClient: FortifyAPI | null;
+  onSuccess: (providerId: string) => void;
+};
+
+export function useCertificateDeleteDialog(
+  props: UseCertificateDeleteDialogInitialParams
+) {
+  const { fortifyClient, onSuccess } = props;
   const { addToast } = useToast();
   const { t } = useTranslation();
 
   const [isLoading, setIsLoading] = React.useState(false);
-  const [currentCertificatDelete, setCurrentCetificateDelete] = React.useState<
-    undefined | { certificateId: string; providerId: string; label: string }
-  >();
+  const [isOpen, setIsOpen] = React.useState(false);
+  const openParamsRef = React.useRef<UseCertificateDeleteDialogOpenParams>();
 
-  const handleOpen = (
-    certificateId: string,
-    providerId: string,
-    label: string
-  ) => {
-    setCurrentCetificateDelete({
-      certificateId,
-      providerId,
-      label,
-    });
+  const handleOpen = (params: UseCertificateDeleteDialogOpenParams) => {
+    openParamsRef.current = params;
+    setIsOpen(true);
   };
 
   const handleClose = () => {
-    setCurrentCetificateDelete(undefined);
+    openParamsRef.current = undefined;
+    setIsOpen(false);
   };
 
-  const handleCertificateDelete = (id: string) => {
-    // TODO: add logic
-    console.log("Delete certificate: ", id, currentCertificatDelete);
-    // temporary behaviour
+  const handleCertificateDelete = async (index: string) => {
+    if (!fortifyClient || index !== openParamsRef.current?.certificateIndex) {
+      return;
+    }
     setIsLoading(true);
-    setTimeout(function () {
-      setIsLoading(false);
-      handleClose();
+    try {
+      await fortifyClient.removeCertificateById(
+        openParamsRef.current.providerId,
+        openParamsRef.current.certificateIndex
+      );
+      onSuccess(openParamsRef.current.providerId);
+      addToast({
+        message: t("certificates.dialog.delete.success-message"),
+        variant: "success",
+        disableIcon: true,
+        isClosable: true,
+      });
+    } catch (error) {
       addToast({
         message: t("certificates.dialog.delete.failure-message"),
         variant: "wrong",
         disableIcon: true,
         isClosable: true,
       });
-    }, 1000);
-  };
+    }
 
-  const isOpen = !!currentCertificatDelete?.certificateId;
+    setIsLoading(false);
+    handleClose();
+  };
 
   useLockBodyScroll(isOpen);
 
   return {
     open: handleOpen,
     dialog: () =>
-      isOpen ? (
+      fortifyClient && isOpen && openParamsRef.current ? (
         <CertificateDeleteDialog
-          certificateId={currentCertificatDelete.certificateId}
-          certificateName={currentCertificatDelete.label}
+          certificateId={openParamsRef.current.certificateIndex}
+          certificateName={openParamsRef.current.label}
           loading={isLoading}
           onDialogClose={handleClose}
           onDeleteClick={handleCertificateDelete}
