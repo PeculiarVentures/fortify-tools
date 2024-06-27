@@ -3,6 +3,7 @@ import React, { ComponentProps, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Button,
+  IconButton,
   Menu,
   TextField,
   useDebounceCallback,
@@ -12,11 +13,13 @@ import SearchIcon from "../../icons/search.svg?react";
 import PlusIcon from "../../icons/plus-20.svg?react";
 import CertificatCSRIcon from "../../icons/csr-30.svg?react";
 import CertificatSSCIcon from "../../icons/certificate-30.svg?react";
+import CrossIcon from "../../icons/cross-30.svg?react";
 
 import styles from "./styles/index.module.scss";
 
 interface CertificatesTopbarProps {
   className?: ComponentProps<"div">["className"];
+  searchValue?: string;
   onSearch: (value: string) => void;
   onImport: () => void;
   onCreate: (type: "csr" | "x509") => void;
@@ -24,33 +27,51 @@ interface CertificatesTopbarProps {
 export const CertificatesTopbar: React.FunctionComponent<
   CertificatesTopbarProps
 > = (props) => {
-  const { className, onSearch, onImport, onCreate } = props;
+  const { className, searchValue = "", onSearch, onImport, onCreate } = props;
 
   const { t } = useTranslation();
   const isFirst = useRef(true);
-  const [searchValue, setSearchValue] = React.useState("");
-  const setSearchValueDebounced = useDebounceCallback(setSearchValue, 300);
+  const [searchInputValue, setSearchInputValue] = React.useState(searchValue);
+  const [searchingValue, setSearchingValue] = React.useState(searchInputValue);
+  const setSearchingValueDebounced = useDebounceCallback(
+    setSearchingValue,
+    300
+  );
 
   useEffect(() => {
     if (isFirst?.current) {
       isFirst.current = false;
       return;
     }
-    onSearch(searchValue);
-  }, [searchValue]);
+    onSearch(searchingValue);
+  }, [searchingValue]);
 
   return (
     <div className={clsx(styles.topbar_root, className)}>
       <div className={styles.search_field}>
-        <SearchIcon />
         <TextField
+          value={searchInputValue}
           placeholder={t("topbar.search-placeholder")}
           type="search"
           size="large"
           onChange={(event) => {
-            setSearchValueDebounced(event.target.value);
+            setSearchInputValue(event.target.value);
+            setSearchingValueDebounced(event.target.value);
           }}
         />
+        <SearchIcon className={styles.search_icon} />
+        <IconButton
+          className={clsx(styles.clear_button, {
+            ["hidden"]: !searchInputValue,
+          })}
+          size="small"
+          onClick={() => {
+            setSearchingValue("");
+            setSearchInputValue("");
+          }}
+        >
+          <CrossIcon className={styles.cross_icon} />
+        </IconButton>
       </div>
       <div className={styles.topbar_divider}></div>
       <div>
