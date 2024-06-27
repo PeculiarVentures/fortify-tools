@@ -33,7 +33,12 @@ export function App() {
   const {
     open: handleCertificateDeleteDialogOpen,
     dialog: certificateDeleteDialog,
-  } = useCertificateDeleteDialog();
+  } = useCertificateDeleteDialog({
+    fortifyClient,
+    onSuccess: (providerId) => {
+      handleCertificatesDataReload(providerId);
+    },
+  });
 
   const {
     list: sortedCertificates,
