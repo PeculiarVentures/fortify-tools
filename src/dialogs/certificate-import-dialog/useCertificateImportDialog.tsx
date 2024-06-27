@@ -5,7 +5,6 @@ import { useToast } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
 import { useLockBodyScroll } from "react-use";
 import { CertificateImportDialog } from "../../components/certificate-import-dialog";
-import { certificateConvertRaw } from "../../utils/certificate";
 
 export function useCertificateImportDialog(props: {
   providers: IProviderInfo[];
@@ -49,14 +48,12 @@ export function useCertificateImportDialog(props: {
     extension: string,
     fileType: string
   ) => {
-    const buf = certificateConvertRaw(fileContent);
-
     try {
       if (extension === "csr" || fileType === "application/pkcs10") {
-        const certr = new Pkcs10CertificateRequest(buf);
+        const certr = new Pkcs10CertificateRequest(fileContent);
         setCertificatePem(certr.toString("pem"));
       } else {
-        const cert = new X509Certificate(buf);
+        const cert = new X509Certificate(fileContent);
         setCertificatePem(cert.toString("pem"));
       }
     } catch (error) {
@@ -66,6 +63,7 @@ export function useCertificateImportDialog(props: {
         disableIcon: true,
         isClosable: true,
       });
+      setCertificatePem("");
     }
 
     setIsTextAreaError(false);
@@ -77,11 +75,10 @@ export function useCertificateImportDialog(props: {
       return;
     }
 
-    const buf = certificateConvertRaw(certificatePem);
     let isInValid = false;
 
     try {
-      const cert = new X509Certificate(buf);
+      const cert = new X509Certificate(certificatePem);
       setCertificatePem(cert.toString("pem"));
       setIsTextAreaError(false);
       return;
@@ -90,7 +87,7 @@ export function useCertificateImportDialog(props: {
     }
 
     try {
-      const certr = new Pkcs10CertificateRequest(buf);
+      const certr = new Pkcs10CertificateRequest(certificatePem);
       setCertificatePem(certr.toString("pem"));
       setIsTextAreaError(false);
       return;
