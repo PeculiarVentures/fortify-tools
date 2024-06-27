@@ -32,3 +32,16 @@ export const Default: Story = {
     })),
   },
 };
+
+export const Empty: Story = {
+  args: {
+    certificates: [],
+  },
+};
+
+export const EmptySearch: Story = {
+  args: {
+    certificates: [],
+    highlightedText: "test",
+  },
+};

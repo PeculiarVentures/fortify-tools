@@ -31,3 +31,13 @@ export function formatBytes(bytes: number, decimals = 2) {
 
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
+
+export function escapeRegexCharacters(str: string) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+export function splitTextWithHighlight(text: string, highlight: string) {
+  const escapedHighlight = escapeRegexCharacters(highlight);
+  const highlightRegex = new RegExp(`(${escapedHighlight})`, "gi");
+  return text.split(highlightRegex);
+}
