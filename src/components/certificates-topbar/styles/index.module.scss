@@ -11,12 +11,32 @@
     position: relative;
     width: 400px;
     input {
-      padding-left: var(--pv-size-base-8);
+      padding: 0 var(--pv-size-base-9);
     }
-    svg {
+    input::-webkit-search-cancel-button {
+      display: none;
+    }
+    .search_icon {
       position: absolute;
-      left: 8px;
+      left: 10px;
       top: 5px;
+      color: var(--pv-color-gray-6);
+    }
+    .clear_button {
+      position: absolute;
+      right: 10px;
+      top: 5px;
+      color: var(--pv-color-gray-6);
+      &:hover {
+        background-color: transparent;
+      }
+      &[class~="hidden"] {
+        display: none;
+      }
+    }
+    &:focus-within .search_icon,
+    &:focus-within .clear_button {
+      color: var(--pv-color-secondary-tint-1);
     }
   }
 }
