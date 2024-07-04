@@ -53,6 +53,10 @@ export function App() {
   } = useCertificateImportDialog({
     providers,
     currentProviderId,
+    fortifyClient,
+    onSuccess: (providerId) => {
+      handleCertificatesDataReload(providerId);
+    },
   });
 
   const {
