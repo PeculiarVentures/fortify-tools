@@ -207,11 +207,6 @@ export function useApp() {
     }
   };
 
-  const handleCertificatesSearch = (value: string) => {
-    // TODO: add logic
-    console.log(value);
-  };
-
   const handleCertificateViewerOpen = (certificate: ICertificate) => {
     setCurrentCertificateViewerValue(certificate);
   };
@@ -230,7 +225,6 @@ export function useApp() {
     currentCertificateViewerValue,
     handleCertificatesDataReload,
     handleProviderChange,
-    handleCertificatesSearch,
     handleCertificateViewerOpen,
     handleCertificateViewerClose,
   };

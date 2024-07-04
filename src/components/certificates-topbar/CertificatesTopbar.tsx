@@ -39,6 +39,10 @@ export const CertificatesTopbar: React.FunctionComponent<
   );
 
   useEffect(() => {
+    setSearchInputValue(searchValue);
+  }, [searchValue]);
+
+  useEffect(() => {
     if (isFirst?.current) {
       isFirst.current = false;
       return;
