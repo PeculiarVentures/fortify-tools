@@ -92,6 +92,9 @@ export function App() {
           certificates={sortedCertificates}
           onDelete={handleCertificateDeleteDialogOpen}
           onViewDetails={handleCertificateViewerOpen}
+          loading={
+            !fetching.certificates || fetching.certificates === "pending"
+          }
         />
       ) : null}
 

@@ -76,6 +76,7 @@
   border: solid var(--pv-color-gray-4);
   border-width: 1px 1px 0 1px;
   background-color: var(--pv-color-white);
+  text-align: center;
 
   .empty_list_icon {
     width: 180px;
@@ -88,6 +89,59 @@
 
     svg {
       height: 100px;
+    }
+  }
+}
+
+.empty_search_list {
+  gap: var(--pv-size-base-4);
+
+  .empty_search_list_icon {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .empty_list_search_text {
+    word-break: break-all;
+  }
+}
+
+.skeleton_tr {
+  .skeleton_td {
+    border-bottom: none;
+    cursor: default;
+    &::after,
+    &::before {
+      display: none;
+    }
+  }
+  &:nth-child(odd) {
+    .skeleton_td:nth-child(1) .skeleton_td_item {
+      width: 46%;
+    }
+    .skeleton_td:nth-child(2) .skeleton_td_item {
+      width: 58%;
+    }
+  }
+  &:nth-child(even) {
+    .skeleton_td:nth-child(1) .skeleton_td_item {
+      width: 65%;
+    }
+    .skeleton_td:nth-child(2) .skeleton_td_item {
+      width: 46%;
+    }
+  }
+  .skeleton_td:nth-child(3) .skeleton_td_item {
+    width: 73%;
+  }
+  .skeleton_td:nth-child(4) {
+    text-align: right;
+    .skeleton_td_item {
+      width: 81%;
+      display: inline-block;
     }
   }
 }
