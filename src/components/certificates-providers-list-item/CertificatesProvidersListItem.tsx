@@ -44,7 +44,7 @@ export const CertificatesProvidersListItem: React.FunctionComponent<
         >
           {provider.name}
         </Typography>
-        {!provider.readOnly ? (
+        {provider.readOnly ? (
           <Typography variant="c1">
             {t("providers.list.item.read-only")}
           </Typography>
