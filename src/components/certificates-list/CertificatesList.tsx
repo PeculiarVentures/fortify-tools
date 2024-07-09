@@ -209,7 +209,9 @@ export const CertificatesList: React.FunctionComponent<
                       </Button>
                       <CopyIconButton
                         value={
-                          raw.byteLength ? certificateRawToPem(raw, type) : ""
+                          raw.byteLength
+                            ? () => certificateRawToPem(raw, type)
+                            : ""
                         }
                         className={styles.action_icon_button}
                       />
