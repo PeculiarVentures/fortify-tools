@@ -4,43 +4,91 @@ import { Pkcs10CertificateRequest, X509Certificate } from "@peculiar/x509";
 import { useToast } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
 import { useLockBodyScroll } from "react-use";
+import { FortifyAPI } from "@peculiar/fortify-client-core";
 import { CertificateImportDialog } from "../../components/certificate-import-dialog";
+import { CertificateType } from "../../types";
 
-export function useCertificateImportDialog(props: {
+type UseCertificateImportDialogInitialParams = {
   providers: IProviderInfo[];
   currentProviderId?: string;
-}) {
-  const { providers, currentProviderId } = props;
+  fortifyClient: FortifyAPI | null;
+  onSuccess: (providerId: string) => void;
+};
+
+export function useCertificateImportDialog(
+  props: UseCertificateImportDialogInitialParams
+) {
+  const { providers, currentProviderId, fortifyClient, onSuccess } = props;
   const { addToast } = useToast();
   const { t } = useTranslation();
 
   const [isOpen, setIsOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
+  const certificate = React.useRef<
+    Pkcs10CertificateRequest | X509Certificate | null
+  >(null);
+  const certificateType = React.useRef<CertificateType | undefined>(undefined);
+
   const [certificatePem, setCertificatePem] = React.useState("");
   const [isTextAreaError, setIsTextAreaError] = React.useState(false);
 
   const localCurrentProviderId = useRef(currentProviderId);
+  React.useEffect(() => {
+    localCurrentProviderId.current = currentProviderId;
+  }, [currentProviderId]);
 
-  const handleCertificateImport = () => {
-    // Check provider
+  const clearCertificate = () => {
+    setCertificatePem("");
+    certificate.current = null;
+    certificateType.current = undefined;
+  };
+
+  const handleClose = () => {
+    clearCertificate();
+    setIsOpen(false);
+  };
+
+  const handleCertificateImport = async () => {
+    if (!fortifyClient || !certificate.current) {
+      return;
+    }
     if (!localCurrentProviderId?.current) {
       localCurrentProviderId.current = currentProviderId;
     }
-    // TODO: add logic
-    console.log("Import", certificatePem);
-    console.log("localCurrentProviderId", localCurrentProviderId?.current);
-    // temporary behaviour
+
     setIsLoading(true);
-    setTimeout(function () {
-      setIsLoading(false);
+    try {
+      const provider = await fortifyClient.getProviderById(
+        localCurrentProviderId.current!
+      );
+
+      const cert = await provider.certStorage.importCert(
+        certificateType.current === "csr" ? "request" : "x509",
+        certificate.current.rawData,
+        certificate.current.signatureAlgorithm,
+        ["verify"]
+      );
+
+      await provider.certStorage.setItem(cert);
+
+      onSuccess(localCurrentProviderId.current as string);
+      handleClose();
+      addToast({
+        message: t("certificates.dialog.import.success-message"),
+        variant: "success",
+        disableIcon: true,
+        isClosable: true,
+      });
+    } catch (error) {
       addToast({
         message: t("certificates.dialog.import.failure-message"),
         variant: "wrong",
         disableIcon: true,
         isClosable: true,
       });
-    }, 1000);
+    }
+    setIsLoading(false);
   };
 
   const onDropAccepted = (
@@ -51,9 +99,13 @@ export function useCertificateImportDialog(props: {
     try {
       if (extension === "csr" || fileType === "application/pkcs10") {
         const certr = new Pkcs10CertificateRequest(fileContent);
+        certificateType.current = "csr";
+        certificate.current = certr;
         setCertificatePem(certr.toString("pem"));
       } else {
         const cert = new X509Certificate(fileContent);
+        certificateType.current = "x509";
+        certificate.current = cert;
         setCertificatePem(cert.toString("pem"));
       }
     } catch (error) {
@@ -63,7 +115,8 @@ export function useCertificateImportDialog(props: {
         disableIcon: true,
         isClosable: true,
       });
-      setCertificatePem("");
+
+      clearCertificate();
     }
 
     setIsTextAreaError(false);
@@ -79,6 +132,8 @@ export function useCertificateImportDialog(props: {
 
     try {
       const cert = new X509Certificate(certificatePem);
+      certificateType.current = "x509";
+      certificate.current = cert;
       setCertificatePem(cert.toString("pem"));
       setIsTextAreaError(false);
       return;
@@ -88,6 +143,8 @@ export function useCertificateImportDialog(props: {
 
     try {
       const certr = new Pkcs10CertificateRequest(certificatePem);
+      certificateType.current = "csr";
+      certificate.current = certr;
       setCertificatePem(certr.toString("pem"));
       setIsTextAreaError(false);
       return;
@@ -103,7 +160,7 @@ export function useCertificateImportDialog(props: {
   return {
     open: () => setIsOpen(true),
     dialog: () =>
-      isOpen ? (
+      fortifyClient && isOpen ? (
         <CertificateImportDialog
           certificate={certificatePem}
           isTextAreaError={isTextAreaError}
@@ -131,7 +188,7 @@ export function useCertificateImportDialog(props: {
               isClosable: true,
             });
           }}
-          onDialogClose={() => setIsOpen(false)}
+          onDialogClose={handleClose}
           onProviderSelect={(id) => {
             localCurrentProviderId.current = id;
           }}
@@ -139,8 +196,8 @@ export function useCertificateImportDialog(props: {
           currentProviderId={currentProviderId}
           onImportButtonClick={handleCertificateImport}
           onClearButtonClick={() => {
-            setCertificatePem("");
             setIsTextAreaError(false);
+            clearCertificate();
           }}
           loading={isLoading}
         />
