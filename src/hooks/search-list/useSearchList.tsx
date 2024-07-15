@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CertificateProps } from "../../types";
 
 export function useSearchList(certificates: CertificateProps[]) {
-  const searchParams = new URLSearchParams(window.location.search);
-
   const [searchedText, setSearchedText] = useState(
-    searchParams.get("search") || ""
+    new URLSearchParams(window.location.search).get("search") || ""
   );
 
   const handleSearch = (text: string) => {
@@ -34,13 +32,21 @@ export function useSearchList(certificates: CertificateProps[]) {
     };
   }, []);
 
+  const list = useMemo(
+    () =>
+      searchedText
+        ? certificates.filter(({ label }) =>
+            label
+              ?.toLocaleLowerCase()
+              .includes(searchedText.toLocaleLowerCase())
+          )
+        : certificates,
+    [searchedText, certificates]
+  );
+
   return {
     searchedText,
-    list: searchedText
-      ? certificates.filter(({ label }) =>
-          label?.toLocaleLowerCase().includes(searchedText.toLocaleLowerCase())
-        )
-      : certificates,
+    list,
     handleSearch,
   };
 }
