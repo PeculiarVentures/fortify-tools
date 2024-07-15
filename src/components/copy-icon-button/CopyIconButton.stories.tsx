@@ -14,3 +14,9 @@ export const Default: Story = {
     value: "Copied text",
   },
 };
+
+export const CallableValue: Story = {
+  args: {
+    value: () => "Copied text",
+  },
+};
