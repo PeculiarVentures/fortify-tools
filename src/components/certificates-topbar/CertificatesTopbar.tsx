@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import React, { ComponentProps, useEffect } from "react";
+import React, { ComponentProps } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Button,
@@ -29,33 +29,26 @@ export const CertificatesTopbar: React.FunctionComponent<
   const { className, searchValue = "", onSearch, onImport, onCreate } = props;
 
   const { t } = useTranslation();
-  const [searchInputValue, setSearchInputValue] = React.useState(searchValue);
-
-  useEffect(() => {
-    setSearchInputValue(searchValue);
-  }, [searchValue]);
 
   return (
     <div className={clsx(styles.topbar_root, className)}>
       <div className={styles.search_field}>
         <TextField
-          value={searchInputValue}
+          value={searchValue}
           placeholder={t("topbar.search-placeholder")}
           type="search"
           size="large"
           onChange={(event) => {
-            setSearchInputValue(event.target.value);
             onSearch(event.target.value);
           }}
         />
         <SearchIcon className={styles.search_icon} />
         <IconButton
           className={clsx(styles.clear_button, {
-            ["hidden"]: !searchInputValue,
+            ["hidden"]: !searchValue,
           })}
           size="small"
           onClick={() => {
-            setSearchInputValue("");
             onSearch("");
           }}
         >
