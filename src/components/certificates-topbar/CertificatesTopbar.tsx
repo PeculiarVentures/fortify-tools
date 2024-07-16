@@ -1,12 +1,11 @@
 import clsx from "clsx";
-import React, { ComponentProps, useEffect, useRef } from "react";
+import React, { ComponentProps, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Button,
   IconButton,
   Menu,
   TextField,
-  useDebounceCallback,
 } from "@peculiar/react-components";
 import ImportIcon from "../../icons/import.svg?react";
 import SearchIcon from "../../icons/search.svg?react";
@@ -30,25 +29,11 @@ export const CertificatesTopbar: React.FunctionComponent<
   const { className, searchValue = "", onSearch, onImport, onCreate } = props;
 
   const { t } = useTranslation();
-  const isFirst = useRef(true);
   const [searchInputValue, setSearchInputValue] = React.useState(searchValue);
-  const [searchingValue, setSearchingValue] = React.useState(searchInputValue);
-  const setSearchingValueDebounced = useDebounceCallback(
-    setSearchingValue,
-    300
-  );
 
   useEffect(() => {
     setSearchInputValue(searchValue);
   }, [searchValue]);
-
-  useEffect(() => {
-    if (isFirst?.current) {
-      isFirst.current = false;
-      return;
-    }
-    onSearch(searchingValue);
-  }, [searchingValue]);
 
   return (
     <div className={clsx(styles.topbar_root, className)}>
@@ -60,7 +45,7 @@ export const CertificatesTopbar: React.FunctionComponent<
           size="large"
           onChange={(event) => {
             setSearchInputValue(event.target.value);
-            setSearchingValueDebounced(event.target.value);
+            onSearch(event.target.value);
           }}
         />
         <SearchIcon className={styles.search_icon} />
@@ -70,8 +55,8 @@ export const CertificatesTopbar: React.FunctionComponent<
           })}
           size="small"
           onClick={() => {
-            setSearchingValue("");
             setSearchInputValue("");
+            onSearch("");
           }}
         >
           <CrossIcon className={styles.cross_icon} />
