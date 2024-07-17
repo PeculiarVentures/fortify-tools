@@ -2095,10 +2095,10 @@
   dependencies:
     tslib "^2.0.0"
 
-"@peculiar/react-components@^0.6.2":
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/@peculiar/react-components/-/react-components-0.6.2.tgz#6cd537060172fb8962373f68291e16933ae272d9"
-  integrity sha512-7L/4FZqgwa50Iy8HhCcWaWORw6IsrFkQt5Yjy4d2DllN9DpEe4p2cxweMs1GEYbNSPmpE+Uqe2U8paLBiKbc7A==
+"@peculiar/react-components@^0.6.3":
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/@peculiar/react-components/-/react-components-0.6.3.tgz#91be98dd22324e22207189457101ee4d2fb68045"
+  integrity sha512-e3hXCw+ZETsSk6Ka/TXnXknfqh/EY1eMlmzX/H/2Uhxp3TBWoMiPQ8Zxqs/sfz5wVMbe4AiZX+mT0dMdSbTb1A==
   dependencies:
     "@emotion/react" "^11.11.1"
     "@emotion/styled" "^11.11.0"
