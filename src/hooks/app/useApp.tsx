@@ -23,9 +23,6 @@ export function useApp() {
     connectionDetect: "pending",
   });
 
-  const [currentCertificateViewerValue, setCurrentCertificateViewerValue] =
-    React.useState<ICertificate | undefined>(undefined);
-
   /**
    *
    */
@@ -212,14 +209,6 @@ export function useApp() {
     console.log(value);
   };
 
-  const handleCertificateViewerOpen = (certificate: ICertificate) => {
-    setCurrentCertificateViewerValue(certificate);
-  };
-
-  const handleCertificateViewerClose = () => {
-    setCurrentCertificateViewerValue(undefined);
-  };
-
   return {
     fortifyClient: fortifyClient.current,
     fetching,
@@ -227,11 +216,8 @@ export function useApp() {
     providers,
     currentProviderId,
     certificates,
-    currentCertificateViewerValue,
     handleCertificatesDataReload,
     handleProviderChange,
     handleCertificatesSearch,
-    handleCertificateViewerOpen,
-    handleCertificateViewerClose,
   };
 }
