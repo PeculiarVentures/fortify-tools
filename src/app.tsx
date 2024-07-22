@@ -25,7 +25,6 @@ export function App() {
     certificates,
     handleCertificatesDataReload,
     handleProviderChange,
-    handleCertificatesSearch,
   } = useApp();
 
   const {
