@@ -204,11 +204,6 @@ export function useApp() {
     }
   };
 
-  const handleCertificatesSearch = (value: string) => {
-    // TODO: add logic
-    console.log(value);
-  };
-
   return {
     fortifyClient: fortifyClient.current,
     fetching,
@@ -218,6 +213,5 @@ export function useApp() {
     certificates,
     handleCertificatesDataReload,
     handleProviderChange,
-    handleCertificatesSearch,
   };
 }
