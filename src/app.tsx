@@ -96,22 +96,17 @@ export function App() {
         onImport={handleCertificateImportDialogOpen}
         onCreate={handleCertificateCreateDialogOpen}
       ></CertificatesTopbar>
-      {fetching.certificates ? (
-        <CertificatesList
-          currentSortName={currentSortName}
-          currentSortDir={currentSortDir}
-          onSort={handleSort}
-          className={styles.certificate_list}
-          certificates={sortedCertificates}
-          onDelete={handleCertificateDeleteDialogOpen}
-          onViewDetails={handleCertificateViewerDialogOpen}
-          loading={
-            !fetching.certificates || fetching.certificates === "pending"
-          }
-          highlightedText={searchedText}
-        />
-      ) : null}
-
+      <CertificatesList
+        currentSortName={currentSortName}
+        currentSortDir={currentSortDir}
+        onSort={handleSort}
+        className={styles.certificate_list}
+        certificates={sortedCertificates}
+        onDelete={handleCertificateDeleteDialogOpen}
+        onViewDetails={handleCertificateViewerDialogOpen}
+        loading={!fetching.certificates || fetching.certificates === "pending"}
+        highlightedText={searchedText}
+      />
       <FetchingStatusOwerlay fetching={fetching} challenge={challenge} />
       {certificateViewerDialog()}
       {certificateDeleteDialog()}
