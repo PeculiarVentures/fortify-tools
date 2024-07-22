@@ -9,6 +9,7 @@ import { CertificatesTopbar } from "./components/certificates-topbar";
 import { CertificateViewerDialog } from "./components/certificate-viewer-dialog";
 import { useCertificateDeleteDialog } from "./dialogs/certificate-delete-dialog";
 import { useSortList } from "./hooks/sort-list";
+import { useSearchList } from "./hooks/search-list";
 import { useCertificateImportDialog } from "./dialogs/certificate-import-dialog";
 import { useCertificateCreateDialog } from "./dialogs/certificate-create-dialog";
 
@@ -25,10 +26,15 @@ export function App() {
     currentCertificateViewerValue,
     handleCertificatesDataReload,
     handleProviderChange,
-    handleCertificatesSearch,
     handleCertificateViewerOpen,
     handleCertificateViewerClose,
   } = useApp();
+
+  const {
+    searchedText,
+    list: searchedCertificate,
+    handleSearch,
+  } = useSearchList(certificates);
 
   const {
     open: handleCertificateDeleteDialogOpen,
@@ -45,7 +51,7 @@ export function App() {
     name: currentSortName,
     derection: currentSortDir,
     handleSort,
-  } = useSortList(certificates, "notAfter");
+  } = useSortList(searchedCertificate, "notAfter");
 
   const {
     open: handleCertificateImportDialogOpen,
@@ -82,8 +88,9 @@ export function App() {
         />
       </CertificatesSidebar>
       <CertificatesTopbar
+        searchValue={searchedText}
         className={styles.top_bar}
-        onSearch={handleCertificatesSearch}
+        onSearch={handleSearch}
         onImport={handleCertificateImportDialogOpen}
         onCreate={handleCertificateCreateDialogOpen}
       ></CertificatesTopbar>
@@ -99,6 +106,7 @@ export function App() {
           loading={
             !fetching.certificates || fetching.certificates === "pending"
           }
+          highlightedText={searchedText}
         />
       ) : null}
 
