@@ -163,11 +163,13 @@ export const CertificatesList: React.FunctionComponent<
                 providerID,
                 serialNumber,
                 type,
-                label,
                 notAfter,
                 raw,
                 index,
               } = certificate;
+
+              const certificateName = getCertificateName(certificate);
+
               return (
                 <TableRow
                   tabIndex={0}
@@ -190,7 +192,7 @@ export const CertificatesList: React.FunctionComponent<
                   <TableCell>
                     <CertificateName
                       highlight={highlightedText}
-                      name={getCertificateName(certificate)}
+                      name={certificateName}
                     />
                   </TableCell>
                   <TableCell>
@@ -225,7 +227,7 @@ export const CertificatesList: React.FunctionComponent<
                         title={t("certificates.list.action.download")}
                         onClick={() =>
                           raw.byteLength &&
-                          downloadCertificate(label as string, raw, type)
+                          downloadCertificate(certificateName, raw, type)
                         }
                         size="small"
                         className={styles.action_icon_button}
@@ -239,7 +241,7 @@ export const CertificatesList: React.FunctionComponent<
                           onDelete({
                             certificateIndex: index,
                             providerId: providerID,
-                            label: label as string,
+                            label: certificateName,
                           })
                         }
                         size="small"
