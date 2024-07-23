@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { getCertificateName } from "../../utils/certificate";
 import { CertificateProps } from "../../types";
 
 export function useSearchList(certificates: CertificateProps[]) {
@@ -35,8 +36,8 @@ export function useSearchList(certificates: CertificateProps[]) {
   const list = useMemo(
     () =>
       searchedText
-        ? certificates.filter(({ label }) =>
-            label
+        ? certificates.filter((certificate) =>
+            getCertificateName(certificate)
               ?.toLocaleLowerCase()
               .includes(searchedText.toLocaleLowerCase())
           )
