@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@peculiar/certificates-viewer-react": "^4.3.0",
-    "@peculiar/fortify-webcomponents-react": "^4.0.4",
+    "@peculiar/fortify-webcomponents-react": "^4.0.6",
     "@peculiar/react-components": "^0.6.3",
     "@peculiar/x509": "^1.11.0",
     "clsx": "^2.1.1",

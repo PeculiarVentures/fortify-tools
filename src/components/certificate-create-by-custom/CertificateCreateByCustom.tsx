@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { ExtendedKeyUsageType } from "@peculiar/x509";
 import {
   CertificateAlgorithmProps,
   CertificateSubjectProps,
@@ -15,7 +16,6 @@ import { CertificateKeyPropertiesSelect } from "../certificate-key-properties-se
 import { Card } from "../card";
 import { KeyUsagesCheckboxGroup } from "../key-usages-checkbox-group";
 
-import { ICertificateExtendedKeyUsages } from "../../config/data";
 import { countries } from "../../config/data";
 
 import styles from "./styles/index.module.scss";
@@ -23,7 +23,7 @@ import styles from "./styles/index.module.scss";
 export interface ICertificateCreateByCustomData {
   subject: CertificateSubjectProps;
   algorithm: CertificateAlgorithmProps;
-  extendedKeyUsages: ICertificateExtendedKeyUsages[];
+  extendedKeyUsages: ExtendedKeyUsageType[];
   type: CertificateType;
 }
 
@@ -63,7 +63,7 @@ export const CertificateCreateByCustom: React.FunctionComponent<
       Object.fromEntries(formData);
 
     const extendedKeyUsages = keyUsage
-      ? (formData.getAll("keyUsage") as ICertificateExtendedKeyUsages[])
+      ? (formData.getAll("keyUsage") as ExtendedKeyUsageType[])
       : [];
 
     const hash = hashAlgorithm
@@ -153,8 +153,12 @@ export const CertificateCreateByCustom: React.FunctionComponent<
           </div>
         </div>
         <div className={styles.divider}></div>
-        <KeyUsagesCheckboxGroup />
-        <div className={styles.divider}></div>
+        {type === "x509" ? (
+          <>
+            <KeyUsagesCheckboxGroup />
+            <div className={styles.divider}></div>
+          </>
+        ) : null}
         <CertificateKeyPropertiesSelect
           className={styles.key_properties_select}
         />

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { IProviderInfo, FortifyAPI } from "@peculiar/fortify-client-core";
+import { ExtendedKeyUsageType } from "@peculiar/x509";
 import { useToast } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
 import { useLockBodyScroll } from "react-use";
@@ -30,7 +31,11 @@ export function useCertificateCreateDialog(props: {
 
   const dialogType = useRef<CertificateType>("x509");
 
-  const handleCertificateCreate = async (data: CertificateCreateDataProps) => {
+  const handleCertificateCreate = async (
+    data: CertificateCreateDataProps & {
+      extendedKeyUsages?: ExtendedKeyUsageType[];
+    }
+  ) => {
     if (!fortifyClient) {
       return;
     }
@@ -49,6 +54,11 @@ export function useCertificateCreateDialog(props: {
             subjectName: subject,
             hashAlgorithm: algorithm.hash,
             signatureAlgorithm: algorithm.signature,
+            extensions: data?.extendedKeyUsages?.length
+              ? {
+                  extendedKeyUsage: data.extendedKeyUsages,
+                }
+              : undefined,
           }
         );
       } else if (type === "csr") {
