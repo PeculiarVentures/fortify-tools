@@ -22,7 +22,10 @@ import { CertificateName } from "../certificate-name";
 import { CertificateSerialNumber } from "../certificate-serial-number";
 import { downloadCertificate } from "../../utils/download-certificate";
 import { CopyIconButton } from "../copy-icon-button";
-import { certificateRawToPem } from "../../utils/certificate";
+import {
+  certificateRawToPem,
+  getCertificateName,
+} from "../../utils/certificate";
 import { SortButton } from "../sort-button";
 
 import { CertificateProps } from "../../types";
@@ -160,11 +163,13 @@ export const CertificatesList: React.FunctionComponent<
                 providerID,
                 serialNumber,
                 type,
-                label,
                 notAfter,
                 raw,
                 index,
               } = certificate;
+
+              const certificateName = getCertificateName(certificate);
+
               return (
                 <TableRow
                   tabIndex={0}
@@ -184,9 +189,11 @@ export const CertificatesList: React.FunctionComponent<
                   <TableCell>
                     <CertificateTypeLabel type={type} />
                   </TableCell>
-                  {/* // TODO: not sure about label as name */}
                   <TableCell>
-                    <CertificateName highlight={highlightedText} name={label} />
+                    <CertificateName
+                      highlight={highlightedText}
+                      name={certificateName}
+                    />
                   </TableCell>
                   <TableCell>
                     <CertificateSerialNumber value={serialNumber} />
@@ -220,7 +227,7 @@ export const CertificatesList: React.FunctionComponent<
                         title={t("certificates.list.action.download")}
                         onClick={() =>
                           raw.byteLength &&
-                          downloadCertificate(label as string, raw, type)
+                          downloadCertificate(certificateName, raw, type)
                         }
                         size="small"
                         className={styles.action_icon_button}
@@ -234,7 +241,7 @@ export const CertificatesList: React.FunctionComponent<
                           onDelete({
                             certificateIndex: index,
                             providerId: providerID,
-                            label: label as string,
+                            label: certificateName,
                           })
                         }
                         size="small"
