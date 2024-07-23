@@ -6,7 +6,7 @@ import { CertificatesList } from "./components/certificates-list";
 import { CertificatesSidebar } from "./components/certificates-sidebar";
 import { CertificatesProvidersList } from "./components/certificates-providers-list";
 import { CertificatesTopbar } from "./components/certificates-topbar";
-import { CertificateViewerDialog } from "./components/certificate-viewer-dialog";
+import { useCertificateViewerDialog } from "./dialogs/certificate-viewer-dialog";
 import { useCertificateDeleteDialog } from "./dialogs/certificate-delete-dialog";
 import { useSortList } from "./hooks/sort-list";
 import { useSearchList } from "./hooks/search-list";
@@ -23,11 +23,8 @@ export function App() {
     providers,
     currentProviderId,
     certificates,
-    currentCertificateViewerValue,
     handleCertificatesDataReload,
     handleProviderChange,
-    handleCertificateViewerOpen,
-    handleCertificateViewerClose,
   } = useApp();
 
   const {
@@ -77,6 +74,11 @@ export function App() {
     },
   });
 
+  const {
+    open: handleCertificateViewerDialogOpen,
+    dialog: certificateViewerDialog,
+  } = useCertificateViewerDialog();
+
   return (
     <>
       <CertificatesSidebar className={styles.sidebar}>
@@ -94,29 +96,19 @@ export function App() {
         onImport={handleCertificateImportDialogOpen}
         onCreate={handleCertificateCreateDialogOpen}
       ></CertificatesTopbar>
-      {fetching.certificates ? (
-        <CertificatesList
-          currentSortName={currentSortName}
-          currentSortDir={currentSortDir}
-          onSort={handleSort}
-          className={styles.certificate_list}
-          certificates={sortedCertificates}
-          onDelete={handleCertificateDeleteDialogOpen}
-          onViewDetails={handleCertificateViewerOpen}
-          loading={
-            !fetching.certificates || fetching.certificates === "pending"
-          }
-          highlightedText={searchedText}
-        />
-      ) : null}
-
+      <CertificatesList
+        currentSortName={currentSortName}
+        currentSortDir={currentSortDir}
+        onSort={handleSort}
+        className={styles.certificate_list}
+        certificates={sortedCertificates}
+        onDelete={handleCertificateDeleteDialogOpen}
+        onViewDetails={handleCertificateViewerDialogOpen}
+        loading={!fetching.certificates || fetching.certificates === "pending"}
+        highlightedText={searchedText}
+      />
       <FetchingStatusOwerlay fetching={fetching} challenge={challenge} />
-      {currentCertificateViewerValue ? (
-        <CertificateViewerDialog
-          certificate={currentCertificateViewerValue}
-          onClose={handleCertificateViewerClose}
-        />
-      ) : null}
+      {certificateViewerDialog()}
       {certificateDeleteDialog()}
       {certificateImportDialog()}
       {certificateCreateDialog()}
