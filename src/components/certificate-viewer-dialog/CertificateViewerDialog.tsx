@@ -12,6 +12,7 @@ import {
   PeculiarCsrViewer,
 } from "@peculiar/certificates-viewer-react";
 import { useTranslation } from "react-i18next";
+import { getCertificateName } from "../../utils/certificate";
 import { CertificateProps, CertificateType } from "../../types";
 
 import styles from "./styles/index.module.scss";
@@ -31,7 +32,9 @@ export const CertificateViewerDialog: React.FunctionComponent<
   return (
     <Dialog open={true} onClose={onClose} className={styles.dialog}>
       <DialogTitle>
-        {t("certificate-viewer-dialog.title", { name: certificate.label })}
+        {t("certificate-viewer-dialog.title", {
+          name: getCertificateName(certificate),
+        })}
       </DialogTitle>
       <DialogContent className={styles.dialog_content}>
         {(certificate?.type as CertificateType) === "csr" ? (
