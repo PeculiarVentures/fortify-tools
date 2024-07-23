@@ -1,6 +1,10 @@
 import { Pkcs10CertificateRequest, X509Certificate } from "@peculiar/x509";
 
-import { CertificateSubjectProps, CertificateType } from "../types";
+import {
+  CertificateProps,
+  CertificateSubjectProps,
+  CertificateType,
+} from "../types";
 
 export function certificateRawToPem(raw: ArrayBuffer, type: CertificateType) {
   let pem;
@@ -32,4 +36,26 @@ export function certificateSubjectToString(
   }
 
   return parts.join(", ");
+}
+
+export function getCertificateName(certificate: CertificateProps) {
+  const { G, CN, SN, E } =
+    certificate.subject as unknown as CertificateSubjectProps;
+
+  // Return Common Name if present.
+  if (CN) {
+    return CN;
+  }
+
+  // Return Given Name + Surname if both present.
+  if (G && SN) {
+    return `${G} ${SN}`;
+  }
+
+  // Return Email if none of the above present
+  if (E) {
+    return E;
+  }
+
+  return certificate.subjectName;
 }

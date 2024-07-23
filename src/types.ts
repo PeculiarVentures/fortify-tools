@@ -15,6 +15,8 @@ export interface CertificateSubjectProps {
   L?: string;
   ST?: string;
   C?: string;
+  G?: string;
+  SN?: string;
 }
 
 export type CertificateAlgorithmProps = {

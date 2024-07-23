@@ -22,7 +22,10 @@ import { CertificateName } from "../certificate-name";
 import { CertificateSerialNumber } from "../certificate-serial-number";
 import { downloadCertificate } from "../../utils/download-certificate";
 import { CopyIconButton } from "../copy-icon-button";
-import { certificateRawToPem } from "../../utils/certificate";
+import {
+  certificateRawToPem,
+  getCertificateName,
+} from "../../utils/certificate";
 import { SortButton } from "../sort-button";
 
 import { CertificateProps } from "../../types";
@@ -184,9 +187,11 @@ export const CertificatesList: React.FunctionComponent<
                   <TableCell>
                     <CertificateTypeLabel type={type} />
                   </TableCell>
-                  {/* // TODO: not sure about label as name */}
                   <TableCell>
-                    <CertificateName highlight={highlightedText} name={label} />
+                    <CertificateName
+                      highlight={highlightedText}
+                      name={getCertificateName(certificate)}
+                    />
                   </TableCell>
                   <TableCell>
                     <CertificateSerialNumber value={serialNumber} />
