@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://fortifyapp.com/" rel="noopener" target="_blank"><img width="128" src="./public/images/logo.svg" alt="Fortify logo"></a></p>
+  <a href="https://fortifyapp.com/" rel="noopener" target="_blank"><img width="128" src="./public/assets/favicons/android-chrome-192x192.png" alt="Fortify logo"></a></p>
 </p>
 
 <h1 align="center">Fortify Tools</h1>
