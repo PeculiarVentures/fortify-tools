@@ -46,6 +46,7 @@ export function useCertificateImportDialog(
 
   const handleClose = () => {
     clearCertificate();
+    setIsTextAreaError(false);
     setIsOpen(false);
   };
 
