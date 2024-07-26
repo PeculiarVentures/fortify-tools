@@ -39,7 +39,7 @@ import styles from "./styles/index.module.scss";
 
 type TSortColumnName = keyof Pick<
   CertificateProps,
-  "label" | "serialNumber" | "notAfter"
+  "label" | "serialNumber" | "notAfter" | "type"
 >;
 type TSortColumnDir = "asc" | "desc";
 
@@ -138,7 +138,9 @@ export const CertificatesList: React.FunctionComponent<
       <Table className={clsx(styles.list_table, className)}>
         <TableHeader>
           <TableRow>
-            <TableHead>{t("certificates.list.header.type")}</TableHead>
+            <TableHead>
+              {renderSortTitle("type", "certificates.list.header.type")}
+            </TableHead>
             <TableHead>
               {renderSortTitle("label", "certificates.list.header.name")}
             </TableHead>
