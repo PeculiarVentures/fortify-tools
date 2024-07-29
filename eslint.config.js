@@ -1,30 +1,50 @@
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 import eslintConfigPrettier from "eslint-config-prettier";
+import stylisticJs from "@stylistic/eslint-plugin-js";
 
 export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
-  eslintConfigPrettier,
   {
     files: ["src/**/*.ts", "src/**/*.tsx"],
     ignores: ["src/**/*.d.ts"],
+    plugins: {
+      "@stylistic/js": stylisticJs,
+    },
     rules: {
-      "@typescript-eslint/semi": 1,
       "no-param-reassign": ["error", { props: false }],
-      "brace-style": ["error", "1tbs", { allowSingleLine: true }],
       "operator-assignment": ["error", "always"],
       "no-empty": 2,
       "no-multi-assign": 2,
-      "spaced-comment": ["warn", "always", { exceptions: ["*"] }],
       "no-var": 2,
-      "@typescript-eslint/keyword-spacing": 2,
+      "spaced-comment": ["warn", "always", { exceptions: ["*"] }],
       "no-fallthrough": 2,
-      "@typescript-eslint/no-unused-vars": 1,
-      quotes: ["error", "double"],
       "arrow-body-style": ["error", "as-needed"],
-      "eol-last": ["warn", "always"],
-      "no-multiple-empty-lines": ["error", { max: 1, maxBOF: 0, maxEOF: 0 }],
+
+      "@stylistic/js/eol-last": ["warn", "always"],
+      "@stylistic/js/no-multiple-empty-lines": [
+        "error",
+        { max: 1, maxBOF: 0, maxEOF: 0 },
+      ],
+      "@stylistic/js/keyword-spacing": 2,
+      "@stylistic/js/quotes": ["error", "double"],
+      "@stylistic/js/quote-props": ["error", "as-needed"],
+      "@stylistic/js/semi": 1,
+      "@stylistic/js/semi-style": ["error", "last"],
+      "@stylistic/js/brace-style": ["error", "1tbs", { allowSingleLine: true }],
+      "@stylistic/js/arrow-parens": ["error", "always"],
+      "@stylistic/js/object-curly-spacing": ["error", "always"],
+      "@stylistic/js/comma-style": ["error", "last"],
+
+      "@stylistic/js/jsx-quotes": ["error", "prefer-double"],
+
+      "@typescript-eslint/no-unused-vars": ["warn", { caughtErrors: "none" }],
+      "@typescript-eslint/no-unused-expressions": [
+        "error",
+        { allowShortCircuit: true, allowTernary: true },
+      ],
     },
-  }
+  },
+  eslintConfigPrettier
 );
