@@ -1,6 +1,9 @@
 {
   "name": "@peculiar/fortify-tools",
-  "version": "1.0.0",
+  "homepage": "https://tools.fortifyapp.com",
+  "version": "2.0.0",
+  "author": "PeculiarVentures Team",
+  "license": "MIT",
   "private": true,
   "type": "module",
   "devDependencies": {
@@ -23,6 +26,7 @@
     "autoprefixer": "^10.4.19",
     "eslint": "^9.7.0",
     "eslint-config-prettier": "^9.1.0",
+    "gh-pages": "^6.1.1",
     "jsdom": "^24.1.0",
     "postcss": "^8.4.39",
     "prettier": "^3.3.3",
@@ -64,6 +68,8 @@
     "storybook": "storybook dev -p 6006",
     "test:ci": "vitest run --root src/",
     "test:unit": "vitest --root src/",
-    "coverage": "vitest run --coverage --root src/"
+    "coverage": "vitest run --coverage --root src/",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d dist"
   }
 }
