@@ -2,6 +2,7 @@ import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 import eslintConfigPrettier from "eslint-config-prettier";
 import stylisticJs from "@stylistic/eslint-plugin-js";
+import importPlugin from "eslint-plugin-import-x";
 
 export default tseslint.config(
   eslint.configs.recommended,
@@ -11,6 +12,7 @@ export default tseslint.config(
     ignores: ["src/**/*.d.ts"],
     plugins: {
       "@stylistic/js": stylisticJs,
+      import: importPlugin,
     },
     rules: {
       "no-param-reassign": ["error", { props: false }],
@@ -43,6 +45,13 @@ export default tseslint.config(
       "@typescript-eslint/no-unused-expressions": [
         "error",
         { allowShortCircuit: true, allowTernary: true },
+      ],
+
+      "import/order": [
+        "error",
+        {
+          groups: ["builtin", "external", "internal"],
+        },
       ],
     },
   },

@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { CertificateAlgorithmInfo } from "./CertificateAlgorithmInfo";
 import {
   EHashAlgorithm,
   ESignatureAlgorithm,
 } from "@peculiar/fortify-client-core";
+import { CertificateAlgorithmInfo } from "./CertificateAlgorithmInfo";
 
 const meta: Meta<typeof CertificateAlgorithmInfo> = {
   title: "Components/CertificateAlgorithmInfo",
