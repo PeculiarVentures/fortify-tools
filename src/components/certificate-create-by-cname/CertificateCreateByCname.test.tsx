@@ -16,14 +16,15 @@ describe("<CertificateCreateByCname />", () => {
     expect(button).toBeInTheDocument();
     expect(button).toBeDisabled();
 
-    const CNFieldElement = getByRole("textbox", {
+    const cnFieldElement = getByRole("textbox", {
       name: "Common name",
     });
-    expect(CNFieldElement).toBeInTheDocument();
+    expect(cnFieldElement).toBeInTheDocument();
+    expect(cnFieldElement).toHaveAttribute("placeholder", "company.com");
 
-    const CNFieldValue = "company.com";
-    await userEvent.type(CNFieldElement, CNFieldValue);
-    expect(CNFieldElement).toHaveValue(CNFieldValue);
+    const cnFieldValue = "example.com";
+    await userEvent.type(cnFieldElement, cnFieldValue);
+    expect(cnFieldElement).toHaveValue(cnFieldValue);
 
     expect(button).toBeEnabled();
 
@@ -31,7 +32,7 @@ describe("<CertificateCreateByCname />", () => {
 
     expect(handleCreate).toBeCalledTimes(1);
     expect(handleCreate).toHaveReturnedWith({
-      subject: { CN: CNFieldValue },
+      subject: { CN: cnFieldValue },
       algorithm: { hash: "SHA-256", signature: "RSA-2048" },
       type: "x509",
     });
