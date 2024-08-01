@@ -27,14 +27,18 @@ describe("<CertificateCreateByEmail />", () => {
     expect(button).toBeInTheDocument();
     expect(button).toBeDisabled();
 
-    const EmailFieldElement = getByRole("textbox", {
+    const emailFieldElement = getByRole("textbox", {
       name: "Email address",
     });
-    expect(EmailFieldElement).toBeInTheDocument();
+    expect(emailFieldElement).toBeInTheDocument();
+    expect(emailFieldElement).toHaveAttribute(
+      "placeholder",
+      "company@example.com"
+    );
 
-    const EmailFieldValue = "info@company.com";
-    await userEvent.type(EmailFieldElement, EmailFieldValue);
-    expect(EmailFieldElement).toHaveValue(EmailFieldValue);
+    const emailFieldValue = "info@company.com";
+    await userEvent.type(emailFieldElement, emailFieldValue);
+    expect(emailFieldElement).toHaveValue(emailFieldValue);
 
     expect(button).toBeEnabled();
 
@@ -42,7 +46,7 @@ describe("<CertificateCreateByEmail />", () => {
 
     expect(handleCreate).toBeCalledTimes(1);
     expect(handleCreate).toHaveReturnedWith({
-      subject: { CN: EmailFieldValue, E: EmailFieldValue },
+      subject: { CN: emailFieldValue, E: emailFieldValue },
       algorithm: { hash: "SHA-256", signature: "RSA-2048" },
       type: "x509",
     });
@@ -56,13 +60,13 @@ describe("<CertificateCreateByEmail />", () => {
     const button = getByRole("button");
     expect(button).toBeDisabled();
 
-    const EmailFieldElement = getByRole("textbox", {
+    const emailFieldElement = getByRole("textbox", {
       name: "Email address",
     });
 
-    const EmailFieldValue = "company";
-    await userEvent.type(EmailFieldElement, EmailFieldValue);
-    expect(EmailFieldElement).toHaveValue(EmailFieldValue);
+    const emailFieldValue = "company";
+    await userEvent.type(emailFieldElement, emailFieldValue);
+    expect(emailFieldElement).toHaveValue(emailFieldValue);
 
     expect(getByText("Please enter valid email address")).toBeInTheDocument();
 
