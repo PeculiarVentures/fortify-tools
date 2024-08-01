@@ -2,7 +2,7 @@ import { describe, it, render, vi, expect, userEvent } from "@testing";
 import { CertificateCreateByCname } from "./CertificateCreateByCname";
 
 describe("<CertificateCreateByCname />", () => {
-  it("Should render & submited", async () => {
+  it("Should render & submit", async () => {
     const handleCreate = vi.fn((data) => data);
 
     const { getByRole } = render(
