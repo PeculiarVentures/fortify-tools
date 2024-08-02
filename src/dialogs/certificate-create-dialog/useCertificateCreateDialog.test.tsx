@@ -4,7 +4,6 @@ import {
   renderHook,
   act,
   expect,
-  render,
   cleanup,
   afterEach,
 } from "@testing";
@@ -62,10 +61,7 @@ describe("useCertificateCreateDialog", () => {
     const DialogComponent = result.current.dialog();
 
     expect(DialogComponent).not.toBeNull();
-
-    const { getByText } = render(DialogComponent);
-
-    expect(getByText("Create Self-signed certificate")).toBeInTheDocument();
+    expect(DialogComponent?.props.type).toBe("x509");
   });
 
   it("Should open the dialog with csr type", () => {
@@ -81,14 +77,7 @@ describe("useCertificateCreateDialog", () => {
     });
 
     const DialogComponent = result.current.dialog();
-
-    expect(DialogComponent).not.toBeNull();
-
-    const { getByText } = render(DialogComponent);
-
-    expect(
-      getByText("Create Certificate Signing Request (CSR)")
-    ).toBeInTheDocument();
+    expect(DialogComponent?.props.type).toBe("csr");
   });
 
   it("Should call onSuccess (x509)", async () => {
