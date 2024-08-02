@@ -1,5 +1,16 @@
-import { describe, it, render, vi, expect, userEvent } from "@testing";
+import {
+  describe,
+  it,
+  render,
+  vi,
+  expect,
+  userEvent,
+  afterEach,
+  cleanup,
+} from "@testing";
 import { CertificateCreateByCustom } from "./CertificateCreateByCustom";
+
+afterEach(cleanup);
 
 describe("<CertificateCreateByCustom />", () => {
   it("Should render & submit", async () => {
@@ -211,5 +222,13 @@ describe("<CertificateCreateByCustom />", () => {
       },
       type: "x509",
     });
+  });
+
+  it("Should render CSR type", async () => {
+    const { queryByText } = render(
+      <CertificateCreateByCustom type="csr" onCreateButtonClick={vi.fn()} />
+    );
+
+    expect(queryByText("Extended key usages")).not.toBeInTheDocument();
   });
 });
