@@ -47,7 +47,7 @@ describe("useCertificateCreateDialog", () => {
     expect(result.current.open).toBeInstanceOf(Function);
   });
 
-  it("Should open the dialog with x509 type", async () => {
+  it("Should open the dialog with x509 type", () => {
     const { result } = renderHook(() =>
       useCertificateCreateDialog({
         providers,
@@ -68,7 +68,7 @@ describe("useCertificateCreateDialog", () => {
     expect(getByText("Create Self-signed certificate")).toBeInTheDocument();
   });
 
-  it("Should open the dialog with csr type", async () => {
+  it("Should open the dialog with csr type", () => {
     const { result } = renderHook(() =>
       useCertificateCreateDialog({
         providers,
