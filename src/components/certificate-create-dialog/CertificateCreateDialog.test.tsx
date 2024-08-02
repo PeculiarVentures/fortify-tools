@@ -216,4 +216,19 @@ describe("<CertificateCreateDialog />", () => {
       type: "x509",
     });
   });
+
+  it("Should render loading", () => {
+    const { getByText } = render(
+      <CertificateCreateDialog
+        type="x509"
+        onDialogClose={vi.fn()}
+        onCreateButtonClick={vi.fn()}
+        onProviderSelect={vi.fn()}
+        providers={[]}
+        loading={true}
+      />
+    );
+
+    expect(getByText(/Creating certificate/)).toBeInTheDocument();
+  });
 });
