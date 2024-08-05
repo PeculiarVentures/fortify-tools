@@ -1,7 +1,5 @@
-import { render, vi, userEvent, cleanup, afterEach } from "@testing";
+import { render, vi, userEvent } from "@testing";
 import { CertificateTypeSelect } from "./CertificateTypeSelect";
-
-afterEach(cleanup);
 
 describe("<CertificateTypeSelect />", () => {
   it("Should render for x509 & handel change", async () => {

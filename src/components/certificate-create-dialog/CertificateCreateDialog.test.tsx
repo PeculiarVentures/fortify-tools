@@ -1,7 +1,5 @@
-import { render, vi, userEvent, afterEach, cleanup, screen } from "@testing";
+import { render, vi, userEvent, screen } from "@testing";
 import { CertificateCreateDialog } from "./CertificateCreateDialog";
-
-afterEach(cleanup);
 
 describe("<CertificateCreateDialog />", () => {
   const algorithm = { hash: "SHA-256", signature: "RSA-2048" };

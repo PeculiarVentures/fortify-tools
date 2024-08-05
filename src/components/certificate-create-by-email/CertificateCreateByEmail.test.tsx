@@ -1,7 +1,5 @@
-import { render, vi, userEvent, afterEach, cleanup } from "@testing";
+import { render, vi, userEvent } from "@testing";
 import { CertificateCreateByEmail } from "./CertificateCreateByEmail";
-
-afterEach(cleanup);
 
 describe("<CertificateCreateByEmail />", () => {
   it("Should render & submit", async () => {

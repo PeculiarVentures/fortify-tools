@@ -1,10 +1,8 @@
-import { renderHook, act, cleanup, afterEach } from "@testing";
+import { renderHook, act } from "@testing";
 import { vi } from "vitest";
 import { useCertificateCreateDialog } from "./useCertificateCreateDialog";
 
 import type { IProviderInfo, FortifyAPI } from "@peculiar/fortify-client-core";
-
-afterEach(cleanup);
 
 vi.mock("@peculiar/react-components", async () => {
   const actual = await vi.importActual("@peculiar/react-components");

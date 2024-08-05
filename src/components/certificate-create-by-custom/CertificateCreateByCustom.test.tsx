@@ -1,7 +1,5 @@
-import { render, vi, userEvent, afterEach, cleanup } from "@testing";
+import { render, vi, userEvent } from "@testing";
 import { CertificateCreateByCustom } from "./CertificateCreateByCustom";
-
-afterEach(cleanup);
 
 describe("<CertificateCreateByCustom />", () => {
   it("Should render & submit", async () => {
