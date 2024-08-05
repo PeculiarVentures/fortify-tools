@@ -101,7 +101,11 @@ describe("useCertificateCreateDialog", () => {
     });
 
     expect(handleSuccess).toHaveBeenCalledWith("1");
-    expect(mockFortifyClient.createX509).toHaveBeenCalled();
+    expect(mockFortifyClient.createX509).toHaveBeenCalledWith("1", {
+      hashAlgorithm: "SHA-256",
+      signatureAlgorithm: "RSASSA-PKCS1-v1_5",
+      subjectName: "commonName=example.com",
+    });
   });
 
   it("Should call onSuccess (csr)", async () => {
@@ -135,6 +139,10 @@ describe("useCertificateCreateDialog", () => {
     });
 
     expect(handleSuccess).toHaveBeenCalledWith("1");
-    expect(mockFortifyClient.createPKCS10).toHaveBeenCalled();
+    expect(mockFortifyClient.createPKCS10).toHaveBeenCalledWith("1", {
+      hashAlgorithm: "SHA-256",
+      signatureAlgorithm: "RSASSA-PKCS1-v1_5",
+      subjectName: "commonName=example.com",
+    });
   });
 });
