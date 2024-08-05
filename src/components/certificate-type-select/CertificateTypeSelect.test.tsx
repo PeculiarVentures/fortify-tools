@@ -1,13 +1,4 @@
-import {
-  describe,
-  it,
-  render,
-  vi,
-  expect,
-  userEvent,
-  cleanup,
-  afterEach,
-} from "@testing";
+import { render, vi, userEvent, cleanup, afterEach } from "@testing";
 import { CertificateTypeSelect } from "./CertificateTypeSelect";
 
 afterEach(cleanup);

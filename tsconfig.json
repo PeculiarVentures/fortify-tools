@@ -19,7 +19,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "types": ["vitest-dom/extend-expect"],
+    "types": ["vitest-dom/extend-expect", "vitest/globals"],
     "baseUrl": "./",
     "paths": {
       "@testing": ["utils/testing/index.ts"]

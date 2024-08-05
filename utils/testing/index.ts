@@ -1,4 +1,4 @@
-export { describe, it, expect, vi, afterEach } from "vitest";
+export { vi, afterEach } from "vitest";
 export {
   render,
   screen,

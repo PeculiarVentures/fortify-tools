@@ -10,5 +10,6 @@ export default defineConfig({
       provider: "v8",
       exclude: ["**/*.stories.*/**"],
     },
+    globals: true,
   },
 });

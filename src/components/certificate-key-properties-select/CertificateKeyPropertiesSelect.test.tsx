@@ -1,4 +1,4 @@
-import { describe, it, render, expect, userEvent } from "@testing";
+import { render, userEvent } from "@testing";
 import { CertificateKeyPropertiesSelect } from "./CertificateKeyPropertiesSelect";
 
 describe("<CertificateKeyPropertiesSelect />", () => {

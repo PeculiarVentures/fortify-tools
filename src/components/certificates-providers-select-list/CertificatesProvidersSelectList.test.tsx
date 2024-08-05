@@ -1,4 +1,4 @@
-import { describe, it, render, vi, expect, userEvent } from "@testing";
+import { render, vi, userEvent } from "@testing";
 import { CertificatesProvidersSelectList } from "./CertificatesProvidersSelectList";
 
 describe("<CertificatesProvidersSelectList />", () => {
