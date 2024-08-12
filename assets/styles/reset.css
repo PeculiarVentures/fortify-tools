@@ -1,0 +1,41 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+*:after,
+*:before {
+  box-sizing: border-box;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+table {
+  border-spacing: 0 !important;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  min-width: 320px;
+}
+
+body {
+  color: var(--pv-color-black);
+  background-color: #ffffff;
+}
