@@ -44,4 +44,27 @@ describe("<CertificatesProvidersList />", () => {
     expect(handleSelect).toBeCalledTimes(1);
     expect(handleSelect).toHaveReturnedWith(providers[0].id);
   });
+
+  it("Should render loading", async () => {
+    const { container } = render(
+      <CertificatesProvidersList
+        providers={[]}
+        onSelect={vi.fn()}
+        loading={true}
+      />
+    );
+
+    const skeleton = container.querySelector("[class*='loading_skeleton']");
+
+    expect(skeleton).toBeInTheDocument();
+    expect(skeleton?.children).toHaveLength(4);
+  });
+
+  it("Should render empty", async () => {
+    const { getByText } = render(
+      <CertificatesProvidersList providers={[]} onSelect={vi.fn()} />
+    );
+
+    expect(getByText(/No providers connected/)).toBeInTheDocument();
+  });
 });
