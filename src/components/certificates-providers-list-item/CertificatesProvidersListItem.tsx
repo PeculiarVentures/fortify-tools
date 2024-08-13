@@ -33,7 +33,11 @@ export const CertificatesProvidersListItem: React.FunctionComponent<
       }
     >
       <div className={styles.list_item_icon_wrapper}>
-        {provider.isRemovable ? <SmartcardIcon /> : <ProviderIcon />}
+        {provider.isRemovable ? (
+          <SmartcardIcon data-testid="smardcart_icon" />
+        ) : (
+          <ProviderIcon />
+        )}
       </div>
       <div className={styles.list_item_name_wrapper}>
         <Typography
