@@ -1,4 +1,4 @@
-import { describe, it, expect, render } from "@testing";
+import { render } from "@testing";
 
 import { Table } from "./Table";
 
