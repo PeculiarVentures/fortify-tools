@@ -15,13 +15,13 @@ describe("<ConnectionNotDetected />", () => {
     ).toBeInTheDocument();
     expect(
       getByText(
-        /t seems Fortify application is turned off on your desktop. Please launch it to continue/
+        /It seems Fortify application is turned off on your desktop. Please launch it to continue/
       )
     ).toBeInTheDocument();
 
-    const contactLink = getByRole("link");
-    expect(contactLink).toBeInTheDocument();
-    expect(contactLink).toHaveTextContent(/I don’t have one/);
-    expect(contactLink).toHaveAttribute("href", APP_FORTIFY_DOWLOAD_APP_URL);
+    const buttonLink = getByRole("link");
+    expect(buttonLink).toBeInTheDocument();
+    expect(buttonLink).toHaveTextContent(/I don’t have one/);
+    expect(buttonLink).toHaveAttribute("href", APP_FORTIFY_DOWLOAD_APP_URL);
   });
 });
