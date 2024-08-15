@@ -2,7 +2,7 @@ import { render } from "@testing";
 import { ApproveConnection } from "./ApproveConnection";
 
 describe("<ApproveConnection />", () => {
-  it("Should render", async () => {
+  it("Should render", () => {
     const challenge = "12345";
 
     const { getByText, container } = render(
