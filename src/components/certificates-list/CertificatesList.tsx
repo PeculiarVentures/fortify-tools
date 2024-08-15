@@ -267,7 +267,7 @@ function CertificatesListLoading() {
   return [...Array(12).keys()].map((index) => (
     <TableRow className={styles.skeleton_tr} key={`skel-row-${index}`}>
       {[...Array(4).keys()].map((index) => (
-        <TableCell className={styles.skeleton_td}>
+        <TableCell className={styles.skeleton_td} key={`skel-col-${index}`}>
           <Skeleton
             key={`skel-td-${index}`}
             className={styles.skeleton_td_item}
