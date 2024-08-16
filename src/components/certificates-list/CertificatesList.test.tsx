@@ -46,6 +46,10 @@ describe("<CertificatesList />", () => {
     );
 
     expect(getAllByRole("row")).toHaveLength(13);
+
+    getAllByRole("columnheader").forEach((elem) => {
+      expect(elem.children[0]).toBeDisabled();
+    });
   });
 
   it("Should render empty search state", () => {
@@ -77,6 +81,28 @@ describe("<CertificatesList />", () => {
 
     expect(getAllByRole("row")).toHaveLength(3);
     expect(getAllByRole("cell")).toHaveLength(8);
+  });
+
+  it("Should render & handle sort", async () => {
+    const handleSort = vi.fn((data) => data);
+    const { getByText } = render(
+      <CertificatesList
+        {...defaultProps}
+        certificates={certificates}
+        onSort={handleSort}
+        currentSortDir="asc"
+        currentSortName="type"
+      />
+    );
+
+    const sortButton = getByText(/Type/);
+
+    expect(sortButton).toBeInTheDocument();
+
+    await userEvent.click(sortButton);
+
+    expect(handleSort).toBeCalledTimes(1);
+    expect(handleSort).toHaveBeenCalledWith("type", "desc");
   });
 
   it("Should render & handle delete", async () => {
