@@ -22,7 +22,7 @@ export const CertificateTypeLabel: React.FunctionComponent<
       {type === "x509" ? (
         <>
           <span className={styles.icon_wrapper}>
-            <CertificateIcon />
+            <CertificateIcon data-testid="icon_type_x509" />
           </span>
           <Typography variant="s2" color="black">
             {t("certificates.list.cell.certificate")}
