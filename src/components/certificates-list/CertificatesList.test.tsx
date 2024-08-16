@@ -2,6 +2,10 @@ import { ComponentProps } from "react";
 import { render, userEvent } from "@testing";
 import { CertificatesList } from "./CertificatesList";
 import { CertificateProps } from "../../types";
+import { downloadCertificate } from "../../utils/download-certificate";
+import * as certificateUtils from "../../utils/certificate";
+
+vi.mock("../../utils/download-certificate");
 
 describe("<CertificatesList />", () => {
   const certificates = [
@@ -13,7 +17,8 @@ describe("<CertificatesList />", () => {
         commonName: "Test 1",
       },
       subjectName: "Test 1",
-      raw: new ArrayBuffer(0),
+      raw: new ArrayBuffer(1),
+      type: "x509",
     },
     {
       id: "2",
@@ -110,12 +115,51 @@ describe("<CertificatesList />", () => {
     const buttonViewDetails = getByText(/View details/).closest(
       "button"
     ) as HTMLButtonElement;
-    console.log(buttonViewDetails);
+
     expect(buttonViewDetails).toBeInTheDocument();
 
     await userEvent.click(buttonViewDetails);
 
     expect(handleViewDetails).toBeCalledTimes(1);
     expect(handleViewDetails).toHaveBeenCalledWith(certificates[0]);
+  });
+
+  it("Should render & handle download", async () => {
+    const { getByLabelText } = render(
+      <CertificatesList {...defaultProps} certificates={[certificates[0]]} />
+    );
+
+    const buttonDownload = getByLabelText(/Download certificate/);
+    expect(buttonDownload).toBeInTheDocument();
+
+    await userEvent.click(buttonDownload);
+
+    expect(downloadCertificate).toBeCalledTimes(1);
+    expect(downloadCertificate).toHaveBeenCalledWith(
+      certificates[0].subjectName,
+      certificates[0].raw,
+      certificates[0].type
+    );
+  });
+
+  it("Should render & handle copy", async () => {
+    vi.spyOn(certificateUtils, "certificateRawToPem").mockImplementation(
+      vi.fn()
+    );
+
+    const { getByLabelText } = render(
+      <CertificatesList {...defaultProps} certificates={[certificates[0]]} />
+    );
+
+    const buttonCopy = getByLabelText(/Copy certificate/);
+    expect(buttonCopy).toBeInTheDocument();
+
+    await userEvent.click(buttonCopy);
+
+    expect(certificateUtils.certificateRawToPem).toBeCalledTimes(1);
+    expect(certificateUtils.certificateRawToPem).toHaveBeenCalledWith(
+      certificates[0].raw,
+      certificates[0].type
+    );
   });
 });

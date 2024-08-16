@@ -21,6 +21,7 @@
       },
       "action": {
         "view-details": "View details",
+        "copy": "Copy certificate",
         "delete": "Delete certificate",
         "download": "Download certificate"
       },
