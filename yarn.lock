@@ -2055,10 +2055,10 @@
   resolved "https://registry.yarnpkg.com/@peculiar/color/-/color-0.1.3.tgz#8da4730b3249780aa4270cf56f90ed1b1ad5ca6d"
   integrity sha512-ndvAb80Ej1kz4chPngOoSJcbaqZTJRacAs/M7k57raqVkUx/dlMwYflHGgQGVtkfAMAVkjE9TWVMqbjjtxbnhg==
 
-"@peculiar/fortify-client-core@^4.0.6":
-  version "4.0.6"
-  resolved "https://registry.yarnpkg.com/@peculiar/fortify-client-core/-/fortify-client-core-4.0.6.tgz#14048652defe9c949e2bc46a265f69583888bf5b"
-  integrity sha512-yq8tGLc9R5/R2ideNBufnJZ1yBB1gjxkUFu56MHqpPmhAk6RVD25BIxuFv9vq02ZCS5akwhvQJs9OV6QDWLBGA==
+"@peculiar/fortify-client-core@^4.0.7":
+  version "4.0.7"
+  resolved "https://registry.yarnpkg.com/@peculiar/fortify-client-core/-/fortify-client-core-4.0.7.tgz#7ac0e01d055d7258f92a1f6e93e5b3a5f222661e"
+  integrity sha512-lkp8X7Ps7uct0ht/ibAEr25deF1xVBiC1SuQL1GKcZBQS4Ity66Q5W0z1O/fdytLWQ+FagqCDvdOXYAdL1KCxQ==
   dependencies:
     "@peculiar/asn1-schema" "^2.3.8"
     "@peculiar/asn1-x509" "^2.3.8"
@@ -2070,21 +2070,21 @@
     pvtsutils "^1.3.5"
     tslib "^2.4.0"
 
-"@peculiar/fortify-webcomponents-react@^4.0.6":
-  version "4.0.6"
-  resolved "https://registry.yarnpkg.com/@peculiar/fortify-webcomponents-react/-/fortify-webcomponents-react-4.0.6.tgz#cc207b9716e030ca0f7333d72aeca800d097f9af"
-  integrity sha512-pco2gplF704CJZyOdZpURpW3qp4WRqvWxgg9vLPuzaP++HtZydsO4n9GXW0VE0Yd+puPtC1Ss5GpsebTcAFaMQ==
+"@peculiar/fortify-webcomponents-react@^4.0.7":
+  version "4.0.7"
+  resolved "https://registry.yarnpkg.com/@peculiar/fortify-webcomponents-react/-/fortify-webcomponents-react-4.0.7.tgz#fa88795cc56b89ab4d4ff5c3df79fd0a3ba2d10c"
+  integrity sha512-TO16VG7WridGgzRmCbnFW/AGb3s/gcIxffC9dn+dm0qqgpZ+uLfY/mXYas0d4sV/+C4t/i23mbISOYKUwlnCVQ==
   dependencies:
-    "@peculiar/fortify-webcomponents" "^4.0.6"
+    "@peculiar/fortify-webcomponents" "^4.0.7"
     tslib "^2.4.0"
 
-"@peculiar/fortify-webcomponents@^4.0.6":
-  version "4.0.6"
-  resolved "https://registry.yarnpkg.com/@peculiar/fortify-webcomponents/-/fortify-webcomponents-4.0.6.tgz#9c896d33b9e895e849d929134baeccfc78b80c31"
-  integrity sha512-hgloV/tQGeF6pmKqprw8/VziSkvAgYiUVd60NHl15cjbF1mYiWLlPvJbh1sxuH+nM2K3sgJYjmpJKSpxmCi4tw==
+"@peculiar/fortify-webcomponents@^4.0.7":
+  version "4.0.7"
+  resolved "https://registry.yarnpkg.com/@peculiar/fortify-webcomponents/-/fortify-webcomponents-4.0.7.tgz#05285e6fc26acf73aac206e532f205d325e777aa"
+  integrity sha512-3PKD29GjhxExpHy13z42g3XCHjASSOy7W+hbvArapalb5r2nBChBZ9VwXbZh5+ZFEukVBOwuVGxtXXXArQ42mg==
   dependencies:
     "@peculiar/certificates-viewer" "^4.2.0"
-    "@peculiar/fortify-client-core" "^4.0.6"
+    "@peculiar/fortify-client-core" "^4.0.7"
     "@stencil/core" "^4.3.0"
     pvtsutils "^1.3.5"
 
