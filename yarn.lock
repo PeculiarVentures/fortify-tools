@@ -2113,10 +2113,10 @@
     react-popper "^2.3.0"
     react-transition-group "^4.4.5"
 
-"@peculiar/x509@^1.11.0":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@peculiar/x509/-/x509-1.11.0.tgz#a60d2576c6496ef9839c0de148e4c75c905a127d"
-  integrity sha512-8rdxE//tsWLb2Yo2TYO2P8gieStbrHK/huFMV5PPfwX8I5HmtOus+Ox6nTKrPA9o+WOPaa5xKenee+QdmHBd5g==
+"@peculiar/x509@^1.12.1":
+  version "1.12.1"
+  resolved "https://registry.yarnpkg.com/@peculiar/x509/-/x509-1.12.1.tgz#f879a918862f1c058524dca1ddbf259fc6aa6694"
+  integrity sha512-2T9t2viNP9m20mky50igPTpn2ByhHl5NlT6wW4Tp4BejQaQ5XDNZgfsabYwYysLXhChABlgtTCpp2gM3JBZRKA==
   dependencies:
     "@peculiar/asn1-cms" "^2.3.8"
     "@peculiar/asn1-csr" "^2.3.8"

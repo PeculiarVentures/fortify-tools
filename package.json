@@ -44,7 +44,7 @@
     "@peculiar/certificates-viewer-react": "^4.3.0",
     "@peculiar/fortify-webcomponents-react": "^4.0.6",
     "@peculiar/react-components": "^0.6.3",
-    "@peculiar/x509": "^1.11.0",
+    "@peculiar/x509": "^1.12.1",
     "clsx": "^2.1.1",
     "i18next": "^23.14.0",
     "lodash": "^4.17.21",
