@@ -169,7 +169,7 @@
   "topbar": {
     "search-placeholder": "Search",
     "import-certificate": "Import certificate",
-    "create-certificate": "Create",
+    "create-certificate": "New",
     "create-certificate-scr": "Certificate signing request (CSR)",
     "create-certificate-ssc": "Self-signed certificate"
   },

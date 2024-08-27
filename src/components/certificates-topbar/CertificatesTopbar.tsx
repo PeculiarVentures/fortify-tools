@@ -7,7 +7,7 @@ import {
   Menu,
   TextField,
 } from "@peculiar/react-components";
-import ImportIcon from "../../icons/import.svg?react";
+import ImportIcon from "../../icons/import-30.svg?react";
 import SearchIcon from "../../icons/search.svg?react";
 import PlusIcon from "../../icons/plus-20.svg?react";
 import CertificatCSRIcon from "../../icons/csr-30.svg?react";
@@ -57,16 +57,6 @@ export const CertificatesTopbar: React.FunctionComponent<
       </div>
       <div className={styles.topbar_divider}></div>
       <div>
-        <Button
-          variant="outlined"
-          size="large"
-          startIcon={<ImportIcon />}
-          onClick={onImport}
-        >
-          {t("topbar.import-certificate")}
-        </Button>
-      </div>
-      <div>
         <Menu
           popoverProps={{
             className: styles.creation_menu,
@@ -85,6 +75,11 @@ export const CertificatesTopbar: React.FunctionComponent<
                 <CertificatSSCIcon className={styles.creation_menu_icon} />
               ),
               onClick: () => onCreate("x509"),
+            },
+            {
+              label: t("topbar.import-certificate"),
+              startIcon: <ImportIcon className={styles.creation_menu_icon} />,
+              onClick: onImport,
             },
           ]}
         >
