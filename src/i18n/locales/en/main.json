@@ -171,7 +171,8 @@
     "import-certificate": "Import certificate",
     "create-certificate": "New",
     "create-certificate-scr": "Certificate signing request (CSR)",
-    "create-certificate-ssc": "Self-signed certificate"
+    "create-certificate-ssc": "Self-signed certificate",
+    "reload-certificates": "Update certificates"
   },
   "certificate-viewer-dialog": {
     "title": "“{{name}}” details"
