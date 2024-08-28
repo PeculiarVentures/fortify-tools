@@ -169,9 +169,10 @@
   "topbar": {
     "search-placeholder": "Search",
     "import-certificate": "Import certificate",
-    "create-certificate": "Create",
-    "create-certificate-scr": "Certificate signing request (CSR)",
-    "create-certificate-ssc": "Self-signed certificate"
+    "create-certificate": "New",
+    "create-certificate-scr": "Create certificate signing request (CSR)",
+    "create-certificate-ssc": "Create self-signed certificate",
+    "reload-certificates": "Refresh list"
   },
   "certificate-viewer-dialog": {
     "title": "“{{name}}” details"
