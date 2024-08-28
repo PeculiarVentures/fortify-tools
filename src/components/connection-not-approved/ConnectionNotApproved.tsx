@@ -35,7 +35,7 @@ export const ConnectionNotApproved: React.FunctionComponent = () => {
             window.location.reload();
           }}
         >
-          {t("connection.error.connection-not-approved.button")}
+          {t("button.try-again")}
         </Button>
       </div>
     </div>

@@ -29,6 +29,15 @@ export const ConnectionNotDetected: React.FunctionComponent = () => {
         >
           {t("connection.error.connection-not-detect.button")}
         </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            window.location.reload();
+          }}
+        >
+          {t("button.try-again")}
+        </Button>
       </div>
     </div>
   );
