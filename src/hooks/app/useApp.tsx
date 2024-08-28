@@ -13,6 +13,8 @@ export function useApp() {
    */
   const fortifyClient = React.useRef<FortifyAPI | null>(null);
 
+  const [connectionNum, setConnectionNum] = React.useState(1);
+
   const [providers, setProviders] = React.useState<IProviderInfo[]>([]);
   const [currentProviderId, setCurrentProviderId] = React.useState<
     string | undefined
@@ -131,8 +133,6 @@ export function useApp() {
     try {
       await fortifyClient.current.connect();
     } catch (error) {
-      // console.error(error);
-
       if (error && error instanceof Error) {
         if (
           error.message.indexOf("update your client to the latest version") !==
@@ -184,7 +184,7 @@ export function useApp() {
     });
 
     start();
-  }, []);
+  }, [connectionNum]);
 
   const handleCertificatesDataReload = async (providerId: string) => {
     if (!fortifyClient.current) {
@@ -204,6 +204,10 @@ export function useApp() {
     }
   };
 
+  const handleRetryConection = () => {
+    setConnectionNum((con) => con + 1);
+  };
+
   return {
     fortifyClient: fortifyClient.current,
     fetching,
@@ -213,5 +217,6 @@ export function useApp() {
     certificates,
     handleCertificatesDataReload,
     handleProviderChange,
+    handleRetryConection,
   };
 }

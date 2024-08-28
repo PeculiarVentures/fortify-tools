@@ -13,11 +13,13 @@ import styles from "./styles/index.module.scss";
 export interface FetchingStatusOwerlayProps {
   fetching: AppFetchingType;
   challenge: string | null;
+  onReload: () => void;
 }
 export const FetchingStatusOwerlay: React.FunctionComponent<
   FetchingStatusOwerlayProps
 > = (props) => {
-  const { fetching, challenge } = props;
+  const { fetching, challenge, onReload } = props;
+
   const { t } = useTranslation();
 
   function dialogAttrs() {
@@ -42,7 +44,7 @@ export const FetchingStatusOwerlay: React.FunctionComponent<
     if (fetching.connectionDetect === "rejected") {
       return {
         isShow: true,
-        element: <ConnectionNotDetected />,
+        element: <ConnectionNotDetected onReload={onReload} />,
       };
     }
 
