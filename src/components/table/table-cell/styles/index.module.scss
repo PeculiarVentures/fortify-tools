@@ -1,0 +1,14 @@
+.table_cell {
+  position: relative;
+  font-size: var(--pv-text-b2-size);
+  padding: var(--pv-size-base-3);
+  border-bottom: 1px solid var(--pv-color-gray-4);
+  &:first-child {
+    padding-left: var(--pv-size-base-6);
+    border-left: 1px solid var(--pv-color-gray-4);
+  }
+  &:last-child {
+    padding-right: var(--pv-size-base-6);
+    border-right: 1px solid var(--pv-color-gray-4);
+  }
+}

@@ -1,0 +1,47 @@
+.table_row {
+  tbody & {
+    td {
+      &:before,
+      &:after {
+        opacity: 0;
+        transition: opacity ease 0.3s;
+      }
+    }
+  }
+  tbody &:focus {
+    outline: none;
+  }
+  tbody &[class~="current"],
+  tbody &:hover {
+    td {
+      position: relative;
+      &:before,
+      &:after {
+        content: "";
+        position: absolute;
+        height: 10px;
+        left: 0;
+        right: 0;
+        opacity: 1;
+      }
+      &:before {
+        height: 5px;
+        top: -5px;
+        background-image: linear-gradient(
+          to top,
+          var(--pv-color-gray-3),
+          transparent
+        );
+      }
+      &:after {
+        height: 7px;
+        bottom: -7px;
+        background-image: linear-gradient(
+          to bottom,
+          var(--pv-color-gray-6),
+          transparent
+        );
+      }
+    }
+  }
+}

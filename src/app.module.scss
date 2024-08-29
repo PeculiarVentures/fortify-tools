@@ -1,0 +1,32 @@
+.sidebar {
+  width: 300px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+}
+.top_bar {
+  height: var(--pv-top-header-height);
+  background-color: var(--pv-color-gray-2);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.certificate_list_corners_backdrop {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background-color: var(--pv-color-gray-2);
+  top: var(--pv-top-header-height);
+  z-index: 98;
+}
+.certificate_list {
+  background-color: var(--pv-color-gray-2);
+  th {
+    position: sticky;
+    top: var(--pv-top-header-height);
+    z-index: 99;
+  }
+}

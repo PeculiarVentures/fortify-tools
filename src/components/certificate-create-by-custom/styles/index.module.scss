@@ -1,0 +1,51 @@
+.form_box {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pv-size-base-6);
+
+  .card {
+    gap: var(--pv-size-base-6);
+  }
+
+  .subject_box {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pv-size-base-2);
+
+    .subject_fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--pv-size-base-2) var(--pv-size-base-6);
+    }
+  }
+
+  .divider {
+    height: 1px;
+    background-color: var(--pv-color-gray-4);
+    position: relative;
+    &:after,
+    &:before {
+      content: "";
+      height: 1px;
+      width: var(--pv-size-base-6);
+      background-color: var(--pv-color-gray-4);
+      position: absolute;
+      top: 0;
+    }
+    &:after {
+      left: 100%;
+    }
+    &:before {
+      right: 100%;
+    }
+  }
+
+  .key_properties_select {
+    margin-bottom: var(--pv-size-base-2);
+  }
+
+  .button_group {
+    display: flex;
+    justify-content: end;
+  }
+}

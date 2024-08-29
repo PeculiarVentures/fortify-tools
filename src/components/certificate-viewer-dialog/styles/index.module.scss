@@ -1,0 +1,6 @@
+.dialog {
+  max-width: 870px !important;
+  .dialog_content > div:nth-child(2) {
+    padding: 0;
+  }
+}

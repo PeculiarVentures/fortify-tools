@@ -1,0 +1,29 @@
+.dialog {
+  max-width: 500px !important;
+
+  .dialog_content {
+    border-bottom: none;
+  }
+
+  .dialog_title {
+    padding-left: var(--pv-size-base-6);
+    padding-right: var(--pv-size-base-6);
+  }
+
+  .dialog_content_loading {
+    height: 175px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--pv-size-base-6);
+    margin-top: var(--pv-size-base-3);
+  }
+
+  .dialog_message {
+    padding: var(--pv-size-base-3) var(--pv-size-base-2) 0 var(--pv-size-base-2);
+  }
+  .dialog_footer {
+    padding: var(--pv-size-base-6);
+  }
+}

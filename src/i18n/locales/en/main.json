@@ -1,0 +1,193 @@
+{
+  "providers": {
+    "list": {
+      "label": "Provider",
+      "item": {
+        "read-only": "Read only"
+      },
+      "empty-text": "No providers connected"
+    }
+  },
+  "certificates": {
+    "list": {
+      "header": {
+        "type": "Type",
+        "name": "Name",
+        "serial-number": "Serial number",
+        "expires": "Expires"
+      },
+      "cell": {
+        "certificate": "Certificate"
+      },
+      "action": {
+        "view-details": "View details",
+        "delete": "Delete certificate",
+        "download": "Download certificate"
+      },
+      "empty-text": "There are no certificates yet.",
+      "empty-search-text": "There are no results for <0>{{text}}</0>"
+    },
+    "dialog": {
+      "create": {
+        "title": {
+          "x509": "Create Self-signed certificate",
+          "csr": "Create Certificate Signing Request (CSR)"
+        },
+        "select-type": {
+          "x509": "What do you need certificate for?",
+          "csr": "What do you need CSR for?"
+        },
+        "loading-text": "Creating certificate...",
+        "success-message": "Certificate created.",
+        "failure-message": "Can't create certificate"
+      },
+      "delete": {
+        "title": "Delete certificate",
+        "message": "Are you sure you want to delete “{{name}}”?",
+        "loading-message": "Deleting certificate...",
+        "button": {
+          "cancel": "Cancel",
+          "delete": "Delete"
+        },
+        "success-message": "Certificate deleted.",
+        "failure-message": "Failed to delete certificate because of error. Please try again."
+      },
+      "import": {
+        "title": "Import certificate",
+        "drop-zone": {
+          "title": "Drag and drop certificate file here or <0>click to upload</0>",
+          "description": "Supports PEM and DER formats."
+        },
+        "file": {
+          "error": {
+            "too-large": "File is larger than {{size}}.",
+            "invalid-type": "Wrong file format. Use PEM or DER formats."
+          }
+        },
+        "certificate": {
+          "error": {
+            "invalid-data": "Certificate is invalid. Please check your data and try again."
+          }
+        },
+        "divider-label": "Or paste certificate in Base64 format below",
+        "loading-text": "Importing certificate...",
+        "success-message": "Certificate imported.",
+        "failure-message": "Failed to import certificate because of error. Please try again."
+      }
+    },
+    "key-usage-extension": {
+      "emailProtection": "S/MIME",
+      "codeSigning": "Code signing",
+      "documentSigning": "Document signing",
+      "clientAuth": "TLS Client Authentication",
+      "serverAuth": "TLS Server Authentication"
+    },
+    "custom-csr-option": "Custom CSR",
+    "custom-certificate-option": "Custom certificate",
+    "select-type-placeholder": "Select type",
+    "extended-key-usages": "Extended key usages",
+    "key-properties": "Key properties",
+    "signature-algorithm": "Signature Algorithm",
+    "hash-algorithm": "Hash Algorithm",
+    "key-named-curve": "Named curve",
+    "subject": {
+      "title": "Subject",
+      "cname": {
+        "label": "Common name",
+        "placeholder": "company.com",
+        "placeholder-2": "example.com"
+      },
+      "email-address": {
+        "label": "Email address",
+        "placeholder": "company@example.com",
+        "error": {
+          "type": "Please enter valid email address"
+        }
+      },
+      "organization-name": {
+        "label": "Organization",
+        "placeholder": "Company name"
+      },
+      "organization-unit-name": {
+        "label": "Organization unit"
+      },
+      "locality-name": {
+        "label": "Locality",
+        "placeholder": "Town, city, village, etc."
+      },
+      "state-or-province-name": {
+        "label": "State",
+        "placeholder": "Province, region, county or state"
+      },
+      "country-name": {
+        "label": "Country",
+        "placeholder": "Select country"
+      }
+    },
+    "button-create": {
+      "text": {
+        "x509": "Create certificate",
+        "csr": "Create CSR"
+      },
+      "title": "Please fill required fields"
+    }
+  },
+  "connection": {
+    "approve": {
+      "message": "Fortify authorization",
+      "description": "Compare this code to the one shown by your operating system for Fortify."
+    },
+    "error": {
+      "update-client": {
+        "message": "Update your local Fortify application",
+        "description": "Your current version is outdated. Please go to your local Fortify application settings and check for updates."
+      },
+      "connection-not-supported": {
+        "message": "Connection not supported"
+      },
+      "connection-not-detect": {
+        "message": "Launch your local Fortify application",
+        "description": "It seems Fortify application is turned off on your desktop. Please launch it to continue.",
+        "button": "I don’t have one"
+      },
+      "connection-not-approved": {
+        "message": "You did not approve <0>{{name}}</0> use of Fortify",
+        "description": "If you want to try again click button below.",
+        "button": "Try again"
+      },
+      "unresolved-status": {
+        "message": "Oops! Something went wrong.",
+        "description": "Sorry, please try again later."
+      }
+    }
+  },
+  "sidebar": {
+    "logo-alt": "Fortify logo",
+    "copyrigth": "Fortify by Peculiar Ventures ©",
+    "contact-support": "Contact support"
+  },
+  "topbar": {
+    "search-placeholder": "Search",
+    "import-certificate": "Import certificate",
+    "create-certificate": "New",
+    "create-certificate-scr": "Create certificate signing request (CSR)",
+    "create-certificate-ssc": "Create self-signed certificate",
+    "reload-certificates": "Refresh list"
+  },
+  "certificate-viewer-dialog": {
+    "title": "“{{name}}” details"
+  },
+  "button": {
+    "cancel": "Cancel",
+    "clear": "Clear",
+    "import-certificate": "Import certificate"
+  },
+  "app-error": {
+    "message": "Oops! Something went wrong.",
+    "description": "Sorry, an error has occurred. Please try again.",
+    "button": {
+      "try-again": "Try again",
+      "home-page": "Home page"
+    }
+  }
+}
