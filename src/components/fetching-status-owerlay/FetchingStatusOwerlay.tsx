@@ -51,7 +51,7 @@ export const FetchingStatusOwerlay: React.FunctionComponent<
     if (fetching.connectionApprove === "rejected") {
       return {
         isShow: true,
-        element: <ConnectionNotApproved />,
+        element: <ConnectionNotApproved onReload={onReload} />,
       };
     }
 
