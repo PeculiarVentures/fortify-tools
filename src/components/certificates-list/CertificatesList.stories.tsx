@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { faker } from "@faker-js/faker";
 import { CertificatesList } from "./CertificatesList";
+import { faker } from "@faker-js/faker";
 
 const meta: Meta<typeof CertificatesList> = {
   title: "Components/CertificatesList",

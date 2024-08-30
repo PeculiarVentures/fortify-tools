@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, TextField } from "@peculiar/react-components";
+import { CertificateAlgorithmInfo } from "../certificate-algorithm-info";
+import { Card } from "../card";
 import {
   EHashAlgorithm,
   ESignatureAlgorithm,
 } from "@peculiar/fortify-client-core";
-import { CertificateAlgorithmInfo } from "../certificate-algorithm-info";
-import { Card } from "../card";
 import { CertificateAlgorithmProps, CertificateType } from "../../types";
 
 import styles from "./styles/index.module.scss";

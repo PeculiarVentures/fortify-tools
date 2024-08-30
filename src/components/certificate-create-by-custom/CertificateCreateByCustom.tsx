@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ExtendedKeyUsageType } from "@peculiar/x509";
 import {
+  CertificateAlgorithmProps,
+  CertificateSubjectProps,
+  CertificateType,
+} from "../../types";
+import {
   Autocomplete,
   Button,
   TextField,
@@ -10,11 +15,6 @@ import {
 import { CertificateKeyPropertiesSelect } from "../certificate-key-properties-select";
 import { Card } from "../card";
 import { KeyUsagesCheckboxGroup } from "../key-usages-checkbox-group";
-import {
-  CertificateAlgorithmProps,
-  CertificateSubjectProps,
-  CertificateType,
-} from "../../types";
 
 import { countries } from "../../config/data";
 

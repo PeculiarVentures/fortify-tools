@@ -5,9 +5,9 @@ import {
   EHashAlgorithm,
   ESignatureAlgorithm,
 } from "@peculiar/fortify-client-core";
+import { CertificateAlgorithmProps, CertificateType } from "../../types";
 import { CertificateAlgorithmInfo } from "../certificate-algorithm-info";
 import { Card } from "../card";
-import { CertificateAlgorithmProps, CertificateType } from "../../types";
 
 import styles from "./styles/index.module.scss";
 

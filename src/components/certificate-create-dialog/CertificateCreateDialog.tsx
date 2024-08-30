@@ -3,16 +3,16 @@ import { useTranslation } from "react-i18next";
 import { IProviderInfo } from "@peculiar/fortify-client-core";
 import clsx from "clsx";
 import {
+  CertificateTypeSelect,
+  ICertificateTypeSelectValue,
+} from "../certificate-type-select";
+import {
   Dialog,
   ArrowRightIcon,
   IconButton,
   Typography,
   CircularProgress,
 } from "@peculiar/react-components";
-import {
-  CertificateTypeSelect,
-  ICertificateTypeSelectValue,
-} from "../certificate-type-select";
 import { Card } from "../card";
 import {
   CertificateCreateByEmail,
