@@ -3,10 +3,6 @@ import { useTranslation } from "react-i18next";
 import { IProviderInfo } from "@peculiar/fortify-client-core";
 import clsx from "clsx";
 import {
-  CertificateTypeSelect,
-  ICertificateTypeSelectValue,
-} from "../certificate-type-select";
-import {
   Dialog,
   ArrowRightIcon,
   IconButton,
@@ -27,6 +23,10 @@ import {
   ICertificateCreateByCustomData,
 } from "../certificate-create-by-custom";
 import { CertificatesProvidersSelectList } from "../certificates-providers-select-list";
+import {
+  CertificateTypeSelect,
+  ICertificateTypeSelectValue,
+} from "../certificate-type-select";
 import { CertificateType } from "../../types";
 
 import styles from "./styles/index.module.scss";

@@ -1,8 +1,8 @@
 import { Typography } from "@peculiar/react-components";
 import React, { ComponentProps } from "react";
 import { useTranslation } from "react-i18next";
-import styles from "./styles/index.module.scss";
 import clsx from "clsx";
+import styles from "./styles/index.module.scss";
 
 interface DateProps {
   date?: Date;
