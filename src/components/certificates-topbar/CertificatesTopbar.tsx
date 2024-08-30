@@ -7,7 +7,8 @@ import {
   Menu,
   TextField,
 } from "@peculiar/react-components";
-import ImportIcon from "../../icons/import.svg?react";
+import ReloadIcon from "../../icons/reload-20.svg?react";
+import ImportIcon from "../../icons/import-30.svg?react";
 import SearchIcon from "../../icons/search.svg?react";
 import PlusIcon from "../../icons/plus-20.svg?react";
 import CertificatCSRIcon from "../../icons/csr-30.svg?react";
@@ -22,11 +23,19 @@ interface CertificatesTopbarProps {
   onSearch: (value: string) => void;
   onImport: () => void;
   onCreate: (type: "csr" | "x509") => void;
+  onReload: () => void;
 }
 export const CertificatesTopbar: React.FunctionComponent<
   CertificatesTopbarProps
 > = (props) => {
-  const { className, searchValue = "", onSearch, onImport, onCreate } = props;
+  const {
+    className,
+    searchValue = "",
+    onSearch,
+    onImport,
+    onCreate,
+    onReload,
+  } = props;
 
   const { t } = useTranslation();
 
@@ -56,15 +65,21 @@ export const CertificatesTopbar: React.FunctionComponent<
         </IconButton>
       </div>
       <div className={styles.topbar_divider}></div>
-      <div>
-        <Button
-          variant="outlined"
-          size="large"
-          startIcon={<ImportIcon />}
-          onClick={onImport}
+      <div className={styles.icon_button_group}>
+        <IconButton
+          size="small"
+          onClick={onReload}
+          title={t("topbar.reload-certificates")}
+          tooltipProps={{
+            color: "white",
+            offset: 2,
+            placement: "bottom-end",
+            arrow: true,
+            size: "large",
+          }}
         >
-          {t("topbar.import-certificate")}
-        </Button>
+          <ReloadIcon className={styles.icon_button} />
+        </IconButton>
       </div>
       <div>
         <Menu
@@ -85,6 +100,11 @@ export const CertificatesTopbar: React.FunctionComponent<
                 <CertificatSSCIcon className={styles.creation_menu_icon} />
               ),
               onClick: () => onCreate("x509"),
+            },
+            {
+              label: t("topbar.import-certificate"),
+              startIcon: <ImportIcon className={styles.creation_menu_icon} />,
+              onClick: onImport,
             },
           ]}
         >

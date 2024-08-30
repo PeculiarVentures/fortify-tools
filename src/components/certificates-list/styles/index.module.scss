@@ -65,7 +65,7 @@
 
 .empty_list {
   position: relative;
-  z-index: 100;
+  z-index: 99;
   background-color: var(--pv-color-white);
   display: flex;
   gap: var(--pv-size-base-6);

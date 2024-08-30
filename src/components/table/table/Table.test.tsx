@@ -1,5 +1,4 @@
 import { render } from "@testing";
-
 import { Table } from "./Table";
 
 describe("<Table />", () => {

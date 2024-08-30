@@ -95,6 +95,9 @@ export function App() {
         onSearch={handleSearch}
         onImport={handleCertificateImportDialogOpen}
         onCreate={handleCertificateCreateDialogOpen}
+        onReload={() =>
+          currentProviderId && handleCertificatesDataReload(currentProviderId)
+        }
       ></CertificatesTopbar>
       <CertificatesList
         currentSortName={currentSortName}
@@ -112,6 +115,7 @@ export function App() {
       {certificateDeleteDialog()}
       {certificateImportDialog()}
       {certificateCreateDialog()}
+      <div className={styles.certificate_list_corners_backdrop}></div>
     </>
   );
 }

@@ -1,7 +1,9 @@
 .topbar_root {
   padding-top: var(--pv-size-base-6);
+  padding-bottom: var(--pv-size-base-4);
   display: flex;
-  gap: var(--pv-size-base-2);
+  gap: var(--pv-size-base-5);
+  align-items: center;
 
   .topbar_divider {
     flex-grow: 1;
@@ -44,6 +46,13 @@
   margin: 0 !important;
 
   .creation_menu_icon {
+    color: var(--pv-color-gray-10);
+  }
+}
+.icon_button_group {
+  display: flex;
+  gap: var(--pv-size-base-2);
+  .icon_button {
     color: var(--pv-color-gray-10);
   }
 }
