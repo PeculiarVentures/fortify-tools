@@ -28,6 +28,7 @@ import {
 } from "../certificate-create-by-custom";
 import { CertificatesProvidersSelectList } from "../certificates-providers-select-list";
 import { CertificateType } from "../../types";
+import { certificateKeyUsageExtensions } from "../../config/data";
 
 import styles from "./styles/index.module.scss";
 
@@ -67,24 +68,55 @@ export const CertificateCreateDialog: React.FunctionComponent<
 
   const renderContent = () => {
     if (currentTypeSelect) {
-      if (
-        ["emailProtection", "codeSigning", "documentSigning"].includes(
-          currentTypeSelect.value
-        )
-      ) {
+      if (currentTypeSelect.value === "codeSigning") {
         return (
           <CertificateCreateByEmail
             type={type}
             onCreateButtonClick={onCreateButtonClick}
+            extendedKeyUsages={[certificateKeyUsageExtensions.codeSigning]}
           />
         );
       }
 
-      if (["clientAuth", "serverAuth"].includes(currentTypeSelect.value)) {
+      if (currentTypeSelect.value === "emailProtection") {
+        return (
+          <CertificateCreateByEmail
+            type={type}
+            onCreateButtonClick={onCreateButtonClick}
+            extendedKeyUsages={[
+              certificateKeyUsageExtensions.emailProtection,
+              certificateKeyUsageExtensions.clientAuth,
+            ]}
+          />
+        );
+      }
+
+      if (currentTypeSelect.value === "documentSigning") {
+        return (
+          <CertificateCreateByEmail
+            type={type}
+            onCreateButtonClick={onCreateButtonClick}
+            extendedKeyUsages={[certificateKeyUsageExtensions.documentSigning]}
+          />
+        );
+      }
+
+      if (currentTypeSelect.value === "clientAuth") {
         return (
           <CertificateCreateByCname
             type={type}
             onCreateButtonClick={onCreateButtonClick}
+            extendedKeyUsages={[certificateKeyUsageExtensions.clientAuth]}
+          />
+        );
+      }
+
+      if (currentTypeSelect.value === "serverAuth") {
+        return (
+          <CertificateCreateByCname
+            type={type}
+            onCreateButtonClick={onCreateButtonClick}
+            extendedKeyUsages={[certificateKeyUsageExtensions.serverAuth]}
           />
         );
       }
