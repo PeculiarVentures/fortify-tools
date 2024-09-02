@@ -25,6 +25,7 @@ export function App() {
     certificates,
     handleCertificatesDataReload,
     handleProviderChange,
+    handleRetryConection,
   } = useApp();
 
   const {
@@ -110,7 +111,11 @@ export function App() {
         loading={!fetching.certificates || fetching.certificates === "pending"}
         highlightedText={searchedText}
       />
-      <FetchingStatusOwerlay fetching={fetching} challenge={challenge} />
+      <FetchingStatusOwerlay
+        fetching={fetching}
+        challenge={challenge}
+        onReload={handleRetryConection}
+      />
       {certificateViewerDialog()}
       {certificateDeleteDialog()}
       {certificateImportDialog()}
