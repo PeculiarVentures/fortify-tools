@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { ExtendedKeyUsageType } from "@peculiar/x509";
 import { Button, TextField } from "@peculiar/react-components";
 import { CertificateAlgorithmInfo } from "../certificate-algorithm-info";
 import { Card } from "../card";
@@ -17,18 +18,20 @@ export interface ICertificateCreateByEmailData {
     CN: string;
   };
   algorithm: CertificateAlgorithmProps;
+  extendedKeyUsages?: ExtendedKeyUsageType[];
   type: CertificateType;
 }
 
 interface CertificateCreateByEmailProps {
   type: CertificateType;
+  extendedKeyUsages?: ExtendedKeyUsageType[];
   onCreateButtonClick: (data: ICertificateCreateByEmailData) => void;
 }
 
 export const CertificateCreateByEmail: React.FunctionComponent<
   CertificateCreateByEmailProps
 > = (props) => {
-  const { type = "x509", onCreateButtonClick } = props;
+  const { type = "x509", extendedKeyUsages, onCreateButtonClick } = props;
 
   const { t } = useTranslation();
 
@@ -66,6 +69,7 @@ export const CertificateCreateByEmail: React.FunctionComponent<
         E: emailAddress,
       },
       algorithm,
+      extendedKeyUsages,
       type,
     });
   };

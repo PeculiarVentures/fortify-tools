@@ -5,7 +5,14 @@ import FortifyIcon from "../../icons/fortify.svg?react";
 
 import styles from "./styles/index.module.scss";
 
-export const ConnectionNotApproved: React.FunctionComponent = () => {
+interface ConnectionNotApprovedProps {
+  onReload: () => void;
+}
+
+export const ConnectionNotApproved: React.FunctionComponent<
+  ConnectionNotApprovedProps
+> = (props) => {
+  const { onReload } = props;
   const { t } = useTranslation();
 
   return (
@@ -28,14 +35,8 @@ export const ConnectionNotApproved: React.FunctionComponent = () => {
         {t("connection.error.connection-not-approved.description")}
       </Typography>
       <div className={styles.buttons_wrapper}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            window.location.reload();
-          }}
-        >
-          {t("connection.error.connection-not-approved.button")}
+        <Button variant="contained" color="primary" onClick={onReload}>
+          {t("button.try-again")}
         </Button>
       </div>
     </div>
