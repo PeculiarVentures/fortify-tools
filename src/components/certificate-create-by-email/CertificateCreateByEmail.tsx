@@ -42,7 +42,7 @@ export const CertificateCreateByEmail: React.FunctionComponent<
 
   const algorithm: CertificateAlgorithmProps = {
     hash: EHashAlgorithm.SHA_256,
-    signature: ESignatureAlgorithm.RSA2048,
+    signature: ESignatureAlgorithm.ECp256,
   };
 
   const validateEmailAddress = (

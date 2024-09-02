@@ -31,7 +31,7 @@ export const CertificateKeyPropertiesSelect: React.FunctionComponent<
         <Autocomplete
           className={styles.certificate_key_prop_select}
           name="signatureAlgorithm"
-          defaultValue={signatureAlgorithm[0]}
+          defaultValue={signatureAlgorithm[2]}
           disableSearch={true}
           options={signatureAlgorithm}
           label={t("certificates.signature-algorithm")}
