@@ -6,6 +6,21 @@
         "read-only": "Read only"
       },
       "empty-text": "No providers connected"
+    },
+    "dialog": {
+      "info": {
+        "title": "{{name}} information",
+        "list": {
+          "token-name": "Token name:",
+          "token-category": {
+            "label": "Token category",
+            "value": {
+              "hardware": "Hardware",
+              "software": "Software"
+            }
+          }
+        }
+      }
     }
   },
   "certificates": {
