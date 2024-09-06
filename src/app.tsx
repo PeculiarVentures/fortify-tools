@@ -12,6 +12,7 @@ import { useSortList } from "./hooks/sort-list";
 import { useSearchList } from "./hooks/search-list";
 import { useCertificateImportDialog } from "./dialogs/certificate-import-dialog";
 import { useCertificateCreateDialog } from "./dialogs/certificate-create-dialog";
+import { useProviderInfoDialog } from "./dialogs/provider-info-dialog";
 
 import styles from "./app.module.scss";
 
@@ -82,6 +83,9 @@ export function App() {
     dialog: certificateViewerDialog,
   } = useCertificateViewerDialog();
 
+  const { open: handleProviderInfoDialogOpen, dialog: providerInfoDialog } =
+    useProviderInfoDialog();
+
   return (
     <>
       <CertificatesSidebar className={styles.sidebar}>
@@ -100,6 +104,9 @@ export function App() {
         onCreate={handleCertificateCreateDialogOpen}
         onReload={() =>
           currentProviderId && handleCertificatesDataReload(currentProviderId)
+        }
+        onInfo={() =>
+          currentProvider && handleProviderInfoDialogOpen(currentProvider)
         }
       ></CertificatesTopbar>
       <CertificatesList
@@ -122,6 +129,7 @@ export function App() {
       {certificateDeleteDialog()}
       {certificateImportDialog()}
       {certificateCreateDialog()}
+      {providerInfoDialog()}
       <div className={styles.certificate_list_corners_backdrop}></div>
     </>
   );
