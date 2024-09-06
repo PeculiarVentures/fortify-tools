@@ -7,6 +7,7 @@ import {
   Menu,
   TextField,
 } from "@peculiar/react-components";
+import InfoIcon from "../../icons/info-20.svg?react";
 import ReloadIcon from "../../icons/reload-20.svg?react";
 import ImportIcon from "../../icons/import-30.svg?react";
 import SearchIcon from "../../icons/search.svg?react";
@@ -24,6 +25,7 @@ interface CertificatesTopbarProps {
   onImport: () => void;
   onCreate: (type: "csr" | "x509") => void;
   onReload: () => void;
+  onInfo: () => void;
 }
 export const CertificatesTopbar: React.FunctionComponent<
   CertificatesTopbarProps
@@ -35,6 +37,7 @@ export const CertificatesTopbar: React.FunctionComponent<
     onImport,
     onCreate,
     onReload,
+    onInfo,
   } = props;
 
   const { t } = useTranslation();
@@ -79,6 +82,20 @@ export const CertificatesTopbar: React.FunctionComponent<
           }}
         >
           <ReloadIcon className={styles.icon_button} />
+        </IconButton>
+        <IconButton
+          size="small"
+          onClick={onInfo}
+          title={t("topbar.token-information")}
+          tooltipProps={{
+            color: "white",
+            offset: 2,
+            placement: "bottom-end",
+            arrow: true,
+            size: "large",
+          }}
+        >
+          <InfoIcon className={styles.icon_button} />
         </IconButton>
       </div>
       <div>

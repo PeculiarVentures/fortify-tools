@@ -186,7 +186,8 @@
     "create-certificate": "New",
     "create-certificate-scr": "Create certificate signing request (CSR)",
     "create-certificate-ssc": "Create self-signed certificate",
-    "reload-certificates": "Refresh list"
+    "reload-certificates": "Refresh list",
+    "token-information": "Token information"
   },
   "certificate-viewer-dialog": {
     "title": "“{{name}}” details"
