@@ -14,8 +14,8 @@ export function useApp() {
   const fortifyClient = React.useRef<FortifyAPI | null>(null);
 
   const [providers, setProviders] = React.useState<IProviderInfo[]>([]);
-  const [currentProviderId, setCurrentProviderId] = React.useState<
-    string | undefined
+  const [currentProvider, setCurrentProvider] = React.useState<
+    IProviderInfo | undefined
   >(undefined);
   const [certificates, setCertificates] = React.useState<ICertificate[]>([]);
   const [challenge, setChallenge] = React.useState<string | null>(null);
@@ -100,7 +100,7 @@ export function useApp() {
           providersLocal[0].id
         )
       );
-      setCurrentProviderId(providersLocal[0].id);
+      setCurrentProvider(providersLocal[0]);
       setFetchingValue("certificates", "resolved");
     } catch (error) {
       setFetchingValue("certificates", "rejected");
@@ -153,7 +153,7 @@ export function useApp() {
   };
 
   const handleProviderChange = async (id: string) => {
-    if (currentProviderId === id || fetching.certificates === "pending") {
+    if (currentProvider?.id === id || fetching.certificates === "pending") {
       return;
     }
 
@@ -163,7 +163,7 @@ export function useApp() {
       setCertificates(
         await fortifyClient.current!.getCertificatesByProviderId(id)
       );
-      setCurrentProviderId(id);
+      setCurrentProvider(providers.find((provider) => provider.id === id));
       setFetchingValue("certificates", "resolved");
     } catch (error) {
       setFetchingValue("certificates", "rejected");
@@ -195,7 +195,9 @@ export function useApp() {
       setCertificates(
         await fortifyClient.current.getCertificatesByProviderId(providerId)
       );
-      setCurrentProviderId(providerId);
+      setCurrentProvider(
+        providers.find((provider) => provider.id === providerId)
+      );
       setFetchingValue("certificates", "resolved");
     } catch (error) {
       setFetchingValue("certificates", "rejected");
@@ -211,7 +213,7 @@ export function useApp() {
     fetching,
     challenge,
     providers,
-    currentProviderId,
+    currentProvider,
     certificates,
     handleCertificatesDataReload,
     handleProviderChange,

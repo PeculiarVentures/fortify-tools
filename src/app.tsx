@@ -21,12 +21,14 @@ export function App() {
     fetching,
     challenge,
     providers,
-    currentProviderId,
+    currentProvider,
     certificates,
     handleCertificatesDataReload,
     handleProviderChange,
     handleRetryConection,
   } = useApp();
+
+  const currentProviderId = currentProvider?.id;
 
   const {
     searchedText,
