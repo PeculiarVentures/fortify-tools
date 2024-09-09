@@ -17,6 +17,8 @@ export function useApp() {
   const [currentProvider, setCurrentProvider] = React.useState<
     IProviderInfo | undefined
   >(undefined);
+  const [isCurrentProviderLogedin, setIsCurrentProviderLogedin] =
+    React.useState(true);
   const [certificates, setCertificates] = React.useState<ICertificate[]>([]);
   const [challenge, setChallenge] = React.useState<string | null>(null);
   const [fetching, setFetching] = React.useState<AppFetchingType>({
@@ -153,11 +155,22 @@ export function useApp() {
   };
 
   const handleProviderChange = async (id: string) => {
+    if (!fortifyClient.current) {
+      return;
+    }
     if (currentProvider?.id === id || fetching.certificates === "pending") {
       return;
     }
 
     setFetchingValue("certificates", "pending");
+
+    try {
+      const localProvider = await fortifyClient.current.getProviderById(id);
+      const isLoggedIn = await localProvider.isLoggedIn();
+      setIsCurrentProviderLogedin(isLoggedIn);
+    } catch (error) {
+      setIsCurrentProviderLogedin(false);
+    }
 
     try {
       setCertificates(
@@ -208,6 +221,33 @@ export function useApp() {
     window.location.reload();
   };
 
+  const handleProviderLoginLogout = async (isLogedin: boolean) => {
+    if (!fortifyClient.current || !currentProvider) {
+      return;
+    }
+
+    try {
+      const localProvider = await fortifyClient.current.getProviderById(
+        currentProvider.id
+      );
+      if (isLogedin) {
+        await localProvider.logout();
+        const isLoggedIn = await localProvider.isLoggedIn();
+        if (!isLoggedIn) {
+          setIsCurrentProviderLogedin(false);
+        }
+      } else {
+        await localProvider.login();
+        const isLoggedIn = await localProvider.isLoggedIn();
+        if (isLoggedIn) {
+          setIsCurrentProviderLogedin(true);
+        }
+      }
+    } catch (error) {
+      setIsCurrentProviderLogedin(false);
+    }
+  };
+
   return {
     fortifyClient: fortifyClient.current,
     fetching,
@@ -215,8 +255,10 @@ export function useApp() {
     providers,
     currentProvider,
     certificates,
+    isCurrentProviderLogedin,
     handleCertificatesDataReload,
     handleProviderChange,
     handleRetryConection,
+    handleProviderLoginLogout,
   };
 }

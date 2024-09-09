@@ -8,6 +8,8 @@ import {
   TextField,
 } from "@peculiar/react-components";
 import InfoIcon from "../../icons/info-20.svg?react";
+import LoginIcon from "../../icons/login-20.svg?react";
+import LogoutIcon from "../../icons/logout-20.svg?react";
 import ReloadIcon from "../../icons/reload-20.svg?react";
 import ImportIcon from "../../icons/import-30.svg?react";
 import SearchIcon from "../../icons/search.svg?react";
@@ -21,11 +23,13 @@ import styles from "./styles/index.module.scss";
 interface CertificatesTopbarProps {
   className?: ComponentProps<"div">["className"];
   searchValue?: string;
+  isLogedIn: boolean;
   onSearch: (value: string) => void;
   onImport: () => void;
   onCreate: (type: "csr" | "x509") => void;
   onReload: () => void;
   onInfo: () => void;
+  onLoginLogout: (isLogedin: boolean) => void;
 }
 export const CertificatesTopbar: React.FunctionComponent<
   CertificatesTopbarProps
@@ -33,11 +37,13 @@ export const CertificatesTopbar: React.FunctionComponent<
   const {
     className,
     searchValue = "",
+    isLogedIn,
     onSearch,
     onImport,
     onCreate,
     onReload,
     onInfo,
+    onLoginLogout,
   } = props;
 
   const { t } = useTranslation();
@@ -96,6 +102,24 @@ export const CertificatesTopbar: React.FunctionComponent<
           }}
         >
           <InfoIcon className={styles.icon_button} />
+        </IconButton>
+        <IconButton
+          size="small"
+          onClick={() => onLoginLogout(isLogedIn)}
+          title={t(`topbar.token-${isLogedIn ? "logout" : "login"}`)}
+          tooltipProps={{
+            color: "white",
+            offset: 2,
+            placement: "bottom-end",
+            arrow: true,
+            size: "large",
+          }}
+        >
+          {isLogedIn ? (
+            <LogoutIcon className={styles.icon_button_wrong} />
+          ) : (
+            <LoginIcon className={styles.icon_button} />
+          )}
         </IconButton>
       </div>
       <div>

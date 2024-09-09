@@ -24,9 +24,11 @@ export function App() {
     providers,
     currentProvider,
     certificates,
+    isCurrentProviderLogedin,
     handleCertificatesDataReload,
     handleProviderChange,
     handleRetryConection,
+    handleProviderLoginLogout,
   } = useApp();
 
   const currentProviderId = currentProvider?.id;
@@ -108,6 +110,8 @@ export function App() {
         onInfo={() =>
           currentProvider && handleProviderInfoDialogOpen(currentProvider)
         }
+        isLogedIn={isCurrentProviderLogedin}
+        onLoginLogout={handleProviderLoginLogout}
       ></CertificatesTopbar>
       <CertificatesList
         currentSortName={currentSortName}

@@ -187,7 +187,9 @@
     "create-certificate-scr": "Create certificate signing request (CSR)",
     "create-certificate-ssc": "Create self-signed certificate",
     "reload-certificates": "Refresh list",
-    "token-information": "Token information"
+    "token-information": "Token information",
+    "token-login": "Sign in",
+    "token-logout": "Sign out"
   },
   "certificate-viewer-dialog": {
     "title": "“{{name}}” details"
