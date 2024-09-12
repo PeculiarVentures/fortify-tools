@@ -71,7 +71,7 @@ describe("useCertificateCreateDialog", () => {
   });
 
   it("Should call onSuccess (x509)", async () => {
-    const handleSuccess = vi.fn();
+    const onSuccessMock = vi.fn();
     const mockFortifyClient: Partial<FortifyAPI> = {
       createX509: vi.fn().mockResolvedValue({}),
     };
@@ -79,7 +79,7 @@ describe("useCertificateCreateDialog", () => {
     const { result } = renderHook(() =>
       useCertificateCreateDialog({
         providers,
-        onSuccess: handleSuccess,
+        onSuccess: onSuccessMock,
         fortifyClient: mockFortifyClient as FortifyAPI,
         currentProviderId: "1",
       })
@@ -100,7 +100,7 @@ describe("useCertificateCreateDialog", () => {
         }));
     });
 
-    expect(handleSuccess).toHaveBeenCalledWith("1");
+    expect(onSuccessMock).toHaveBeenCalledWith("1");
     expect(mockFortifyClient.createX509).toHaveBeenCalledWith("1", {
       hashAlgorithm: "SHA-256",
       signatureAlgorithm: "RSASSA-PKCS1-v1_5",
@@ -109,7 +109,7 @@ describe("useCertificateCreateDialog", () => {
   });
 
   it("Should call onSuccess (csr)", async () => {
-    const handleSuccess = vi.fn();
+    const onSuccessMock = vi.fn();
     const mockFortifyClient: Partial<FortifyAPI> = {
       createPKCS10: vi.fn().mockResolvedValue({}),
     };
@@ -117,7 +117,7 @@ describe("useCertificateCreateDialog", () => {
     const { result } = renderHook(() =>
       useCertificateCreateDialog({
         providers,
-        onSuccess: handleSuccess,
+        onSuccess: onSuccessMock,
         fortifyClient: mockFortifyClient as FortifyAPI,
         currentProviderId: "1",
       })
@@ -138,7 +138,7 @@ describe("useCertificateCreateDialog", () => {
         }));
     });
 
-    expect(handleSuccess).toHaveBeenCalledWith("1");
+    expect(onSuccessMock).toHaveBeenCalledWith("1");
     expect(mockFortifyClient.createPKCS10).toHaveBeenCalledWith("1", {
       hashAlgorithm: "SHA-256",
       signatureAlgorithm: "RSASSA-PKCS1-v1_5",
