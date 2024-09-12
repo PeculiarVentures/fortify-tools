@@ -1,7 +1,7 @@
 name: Main CI
 on: [workflow_dispatch, push]
 jobs:
-  tests_checks_build:
+  tests_checks_build_deploy:
     runs-on: ubuntu-latest
     name: Tests, checks, build
     steps:
@@ -10,7 +10,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'yarn'
+          cache: "yarn"
         name: Setup node
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -20,3 +20,9 @@ jobs:
         run: yarn test:ci
       - name: Run build
         run: yarn build
+      - name: Deploy to gh-pages
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist

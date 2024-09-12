@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { ExtendedKeyUsageType } from "@peculiar/x509";
 import { Button, TextField } from "@peculiar/react-components";
 import { CertificateAlgorithmInfo } from "../certificate-algorithm-info";
 import { Card } from "../card";
@@ -16,25 +17,27 @@ export interface ICertificateCreateByCnameData {
     CN: string;
   };
   algorithm: CertificateAlgorithmProps;
+  extendedKeyUsages?: ExtendedKeyUsageType[];
   type: CertificateType;
 }
 
 interface CertificateCreateByCnameProps {
   type: CertificateType;
+  extendedKeyUsages?: ExtendedKeyUsageType[];
   onCreateButtonClick: (data: ICertificateCreateByCnameData) => void;
 }
 
 export const CertificateCreateByCname: React.FunctionComponent<
   CertificateCreateByCnameProps
 > = (props) => {
-  const { type = "x509", onCreateButtonClick } = props;
+  const { type = "x509", extendedKeyUsages, onCreateButtonClick } = props;
 
   const { t } = useTranslation();
   const [isFormValid, setIsFormValid] = useState(false);
 
   const algorithm: CertificateAlgorithmProps = {
     hash: EHashAlgorithm.SHA_256,
-    signature: ESignatureAlgorithm.RSA2048,
+    signature: ESignatureAlgorithm.ECp256,
   };
 
   const handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
@@ -46,6 +49,7 @@ export const CertificateCreateByCname: React.FunctionComponent<
         CN: formData.get("CN") as string,
       },
       algorithm,
+      extendedKeyUsages,
       type,
     });
   };

@@ -131,8 +131,6 @@ export function useApp() {
     try {
       await fortifyClient.current.connect();
     } catch (error) {
-      // console.error(error);
-
       if (error && error instanceof Error) {
         if (
           error.message.indexOf("update your client to the latest version") !==
@@ -204,6 +202,10 @@ export function useApp() {
     }
   };
 
+  const handleRetryConection = () => {
+    window.location.reload();
+  };
+
   return {
     fortifyClient: fortifyClient.current,
     fetching,
@@ -213,5 +215,6 @@ export function useApp() {
     certificates,
     handleCertificatesDataReload,
     handleProviderChange,
+    handleRetryConection,
   };
 }

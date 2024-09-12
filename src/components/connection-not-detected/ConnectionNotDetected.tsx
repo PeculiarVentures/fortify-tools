@@ -6,7 +6,14 @@ import LaunchAppIcon from "../../icons/launch-app.svg?react";
 
 import styles from "./styles/index.module.scss";
 
-export const ConnectionNotDetected: React.FunctionComponent = () => {
+interface ConnectionNotDetectedProps {
+  onReload: () => void;
+}
+
+export const ConnectionNotDetected: React.FunctionComponent<
+  ConnectionNotDetectedProps
+> = (props) => {
+  const { onReload } = props;
   const { t } = useTranslation();
 
   return (
@@ -28,6 +35,9 @@ export const ConnectionNotDetected: React.FunctionComponent = () => {
           target="_blank"
         >
           {t("connection.error.connection-not-detect.button")}
+        </Button>
+        <Button variant="contained" color="primary" onClick={onReload}>
+          {t("button.try-again")}
         </Button>
       </div>
     </div>

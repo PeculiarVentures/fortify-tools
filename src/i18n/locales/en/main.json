@@ -152,8 +152,7 @@
       },
       "connection-not-approved": {
         "message": "You did not approve <0>{{name}}</0> use of Fortify",
-        "description": "If you want to try again click button below.",
-        "button": "Try again"
+        "description": "If you want to try again click button below."
       },
       "unresolved-status": {
         "message": "Oops! Something went wrong.",
@@ -180,7 +179,8 @@
   "button": {
     "cancel": "Cancel",
     "clear": "Clear",
-    "import-certificate": "Import certificate"
+    "import-certificate": "Import certificate",
+    "try-again": "Try again"
   },
   "app-error": {
     "message": "Oops! Something went wrong.",

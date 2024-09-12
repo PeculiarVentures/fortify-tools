@@ -1,7 +1,7 @@
 {
   "name": "@peculiar/fortify-tools",
   "homepage": "https://tools.fortifyapp.com",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "author": "PeculiarVentures Team",
   "license": "MIT",
   "private": true,
@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "@peculiar/certificates-viewer-react": "^4.3.0",
-    "@peculiar/fortify-webcomponents-react": "^4.0.7",
+    "@peculiar/fortify-webcomponents-react": "^4.0.8",
     "@peculiar/react-components": "^0.6.4",
     "@peculiar/x509": "^1.12.1",
     "clsx": "^2.1.1",
