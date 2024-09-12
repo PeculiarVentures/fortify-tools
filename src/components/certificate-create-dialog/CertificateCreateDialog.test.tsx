@@ -5,67 +5,56 @@ describe("<CertificateCreateDialog />", () => {
   const algorithm = { hash: "SHA-256", signature: "RSA-2048" };
 
   async function selectType(selectedIndex: number) {
-    const { getAllByRole } = screen;
-    const combobox = getAllByRole("combobox")[1];
-    expect(combobox).toBeInTheDocument();
+    const combobox = screen.getAllByRole("combobox")[1];
     expect(combobox).toHaveTextContent("Select type");
 
     await userEvent.click(combobox);
 
-    const comboboxPopup = getAllByRole("presentation")[1];
-    expect(comboboxPopup).toBeInTheDocument();
+    expect(screen.getAllByRole("presentation")[1]).toBeInTheDocument();
 
-    const comboboxItems = getAllByRole("option");
+    const comboboxItems = screen.getAllByRole("option");
     expect(comboboxItems).toHaveLength(6);
 
     await userEvent.click(comboboxItems[selectedIndex]);
 
-    expect(getAllByRole("presentation")).toHaveLength(1);
+    expect(screen.getAllByRole("presentation")).toHaveLength(1);
   }
 
   async function clickCreateButton() {
-    const { getByRole } = screen;
-    const button = getByRole("button", { name: "Create certificate" });
-    expect(button).toBeInTheDocument();
+    const button = screen.getByRole("button", { name: "Create certificate" });
     expect(button).toBeEnabled();
-
     await userEvent.click(button);
   }
 
   async function fillField(name: string, fieldValue: string) {
-    const { getByRole } = screen;
-    const cnFieldElement = getByRole("textbox", {
-      name,
-    });
-    expect(cnFieldElement).toBeInTheDocument();
-
-    await userEvent.type(cnFieldElement, fieldValue);
-    expect(cnFieldElement).toHaveValue(fieldValue);
+    await userEvent.type(
+      screen.getByRole("textbox", {
+        name,
+      }),
+      fieldValue
+    );
   }
 
   it("Should handle close button", async () => {
-    const handleClose = vi.fn();
+    const onCloseButtonClickMock = vi.fn();
 
-    const { getByRole } = render(
+    render(
       <CertificateCreateDialog
         type="x509"
-        onDialogClose={handleClose}
+        onDialogClose={onCloseButtonClickMock}
         onCreateButtonClick={vi.fn()}
         onProviderSelect={vi.fn()}
         providers={[]}
       />
     );
 
-    const button = getByRole("button");
-    expect(button).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button"));
 
-    await userEvent.click(button);
-
-    expect(handleClose).toBeCalledTimes(1);
+    expect(onCloseButtonClickMock).toBeCalledTimes(1);
   });
 
   it("Should handle provider select", async () => {
-    const handleProviderSelect = vi.fn((data) => data);
+    const onProviderSelectMock = vi.fn((data) => data);
 
     const providers = [
       {
@@ -78,45 +67,48 @@ describe("<CertificateCreateDialog />", () => {
       },
     ];
 
-    const { getAllByRole } = render(
+    render(
       <CertificateCreateDialog
         type="x509"
         onDialogClose={vi.fn()}
         onCreateButtonClick={vi.fn()}
-        onProviderSelect={handleProviderSelect}
+        onProviderSelect={onProviderSelectMock}
         providers={providers}
         currentProviderId={providers[0].id}
       />
     );
 
-    const combobox = getAllByRole("combobox")[0];
-    expect(combobox).toBeInTheDocument();
+    const combobox = screen.getAllByRole("combobox")[0];
     expect(combobox).toHaveTextContent(providers[0].name);
 
     await userEvent.click(combobox);
 
-    const comboboxPopup = getAllByRole("presentation")[1];
-    expect(comboboxPopup).toBeInTheDocument();
+    expect(screen.getAllByRole("presentation")[1]).toBeInTheDocument();
 
-    const comboboxItems = getAllByRole("option");
+    const comboboxItems = screen.getAllByRole("option");
     expect(comboboxItems).toHaveLength(2);
 
     await userEvent.click(comboboxItems[1]);
 
-    expect(getAllByRole("presentation")).toHaveLength(1);
+    expect(screen.getAllByRole("presentation")).toHaveLength(1);
 
-    expect(handleProviderSelect).toBeCalledTimes(1);
-    expect(handleProviderSelect).toHaveReturnedWith(providers[1].id);
+    expect(onProviderSelectMock).toBeCalledTimes(1);
+    expect(onProviderSelectMock).toHaveReturnedWith(providers[1].id);
   });
 
   it("Should select type with 'Common name' & submit", async () => {
-    const handleCreate = vi.fn((data) => data);
+    const createDataResult = {
+      subject: { CN: "example.com" },
+      algorithm,
+      type: "x509",
+    };
+    const onCreateButtonClickMock = vi.fn((data) => data);
 
     render(
       <CertificateCreateDialog
         type="x509"
         onDialogClose={vi.fn()}
-        onCreateButtonClick={handleCreate}
+        onCreateButtonClick={onCreateButtonClickMock}
         onProviderSelect={vi.fn()}
         providers={[]}
       />
@@ -124,27 +116,28 @@ describe("<CertificateCreateDialog />", () => {
 
     await selectType(4);
 
-    const cnFieldValue = "example.com";
-    await fillField("Common name", cnFieldValue);
+    await fillField("Common name", createDataResult.subject.CN);
 
     await clickCreateButton();
 
-    expect(handleCreate).toBeCalledTimes(1);
-    expect(handleCreate).toHaveReturnedWith({
-      subject: { CN: cnFieldValue },
-      algorithm,
-      type: "x509",
-    });
+    expect(onCreateButtonClickMock).toBeCalledTimes(1);
+    expect(onCreateButtonClickMock).toHaveReturnedWith(createDataResult);
   });
 
   it("Should select type with 'Email' & submit", async () => {
-    const handleCreate = vi.fn((data) => data);
+    const emailValue = "info@company.com";
+    const createDataResult = {
+      subject: { CN: emailValue, E: emailValue },
+      algorithm,
+      type: "x509",
+    };
+    const onCreateButtonClickMock = vi.fn((data) => data);
 
     render(
       <CertificateCreateDialog
         type="x509"
         onDialogClose={vi.fn()}
-        onCreateButtonClick={handleCreate}
+        onCreateButtonClick={onCreateButtonClickMock}
         onProviderSelect={vi.fn()}
         providers={[]}
       />
@@ -152,47 +145,19 @@ describe("<CertificateCreateDialog />", () => {
 
     await selectType(0);
 
-    const emailFieldValue = "info@company.com";
-    await fillField("Email address", emailFieldValue);
+    await fillField("Email address", createDataResult.subject.E);
 
     await clickCreateButton();
 
-    expect(handleCreate).toBeCalledTimes(1);
-    expect(handleCreate).toHaveReturnedWith({
-      subject: { CN: emailFieldValue, E: emailFieldValue },
-      algorithm,
-      type: "x509",
-    });
+    expect(onCreateButtonClickMock).toBeCalledTimes(1);
+    expect(onCreateButtonClickMock).toHaveReturnedWith(createDataResult);
   });
 
   it("Should select type with 'Custom' & submit", async () => {
-    const handleCreate = vi.fn((data) => data);
-
-    render(
-      <CertificateCreateDialog
-        type="x509"
-        onDialogClose={vi.fn()}
-        onCreateButtonClick={handleCreate}
-        onProviderSelect={vi.fn()}
-        providers={[]}
-      />
-    );
-
-    await selectType(5);
-
-    const cnFieldValue = "example.com";
-    await fillField("Common name", cnFieldValue);
-
-    const emailFieldValue = "info@company.com";
-    await fillField("Email address", emailFieldValue);
-
-    await clickCreateButton();
-
-    expect(handleCreate).toBeCalledTimes(1);
-    expect(handleCreate).toHaveReturnedWith({
+    const createDataResult = {
       subject: {
-        CN: cnFieldValue,
-        E: emailFieldValue,
+        CN: "example.com",
+        E: "info@company.com",
         O: "",
         OU: "",
         L: "",
@@ -202,11 +167,33 @@ describe("<CertificateCreateDialog />", () => {
       algorithm,
       extendedKeyUsages: [],
       type: "x509",
-    });
+    };
+    const onCreateButtonClickMock = vi.fn((data) => data);
+
+    render(
+      <CertificateCreateDialog
+        type="x509"
+        onDialogClose={vi.fn()}
+        onCreateButtonClick={onCreateButtonClickMock}
+        onProviderSelect={vi.fn()}
+        providers={[]}
+      />
+    );
+
+    await selectType(5);
+
+    await fillField("Common name", createDataResult.subject.CN);
+
+    await fillField("Email address", createDataResult.subject.E);
+
+    await clickCreateButton();
+
+    expect(onCreateButtonClickMock).toBeCalledTimes(1);
+    expect(onCreateButtonClickMock).toHaveReturnedWith(createDataResult);
   });
 
   it("Should render loading", () => {
-    const { getByText } = render(
+    render(
       <CertificateCreateDialog
         type="x509"
         onDialogClose={vi.fn()}
@@ -217,6 +204,6 @@ describe("<CertificateCreateDialog />", () => {
       />
     );
 
-    expect(getByText(/Creating certificate/)).toBeInTheDocument();
+    expect(screen.getByText(/Creating certificate/)).toBeInTheDocument();
   });
 });

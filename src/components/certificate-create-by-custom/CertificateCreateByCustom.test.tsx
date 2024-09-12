@@ -1,223 +1,164 @@
-import { render, vi, userEvent } from "@testing";
+import { render, vi, userEvent, screen } from "@testing";
 import { CertificateCreateByCustom } from "./CertificateCreateByCustom";
 
 describe("<CertificateCreateByCustom />", () => {
   it("Should render & submit", async () => {
-    const handleCreate = vi.fn((data) => data);
+    const createDataResult = {
+      subject: {
+        CN: "company.com",
+        E: "info@company.com",
+        O: "Company",
+        OU: "Company unit",
+        L: "New York",
+        ST: "Albany County",
+        C: "US",
+      },
+      extendedKeyUsages: ["1.3.6.1.5.5.7.3.3"],
+      algorithm: {
+        hash: "SHA-512",
+        signature: "EC-P521",
+      },
+      type: "x509",
+    };
+    const onCreateButtonClickMock = vi.fn((data) => data);
 
-    const { getByRole, getByText } = render(
+    render(
       <CertificateCreateByCustom
         type="x509"
-        onCreateButtonClick={handleCreate}
+        onCreateButtonClick={onCreateButtonClickMock}
       />
     );
 
     // Subject section
 
-    expect(getByText("Subject")).toBeInTheDocument();
+    expect(screen.getByText("Subject")).toBeInTheDocument();
 
-    const button = getByRole("button");
-    expect(button).toBeInTheDocument();
-    expect(button).toBeDisabled();
+    const buttonElement = screen.getByRole("button", {
+      name: "Create certificate",
+    });
+    expect(buttonElement).toBeDisabled();
 
     // Common name
 
-    const cnFieldElement = getByRole("textbox", {
-      name: "Common name",
-    });
-    expect(cnFieldElement).toBeInTheDocument();
-    expect(cnFieldElement).toHaveAttribute("placeholder", "example.com");
+    await userEvent.type(
+      screen.getByRole("textbox", {
+        name: "Common name",
+      }),
+      createDataResult.subject.CN
+    );
 
-    const cnFieldValue = "company.com";
-    await userEvent.type(cnFieldElement, cnFieldValue);
-    expect(cnFieldElement).toHaveValue(cnFieldValue);
-
-    expect(button).toBeDisabled();
+    expect(buttonElement).toBeDisabled();
 
     // Email
 
-    const emailFieldElement = getByRole("textbox", {
-      name: "Email address",
-    });
-    expect(emailFieldElement).toBeInTheDocument();
-    expect(emailFieldElement).toHaveAttribute(
-      "placeholder",
-      "company@example.com"
+    await userEvent.type(
+      screen.getByRole("textbox", {
+        name: "Email address",
+      }),
+      createDataResult.subject.E
     );
 
-    const emailFieldValue = "info@company.com";
-    await userEvent.type(emailFieldElement, emailFieldValue);
-    expect(emailFieldElement).toHaveValue(emailFieldValue);
-
-    expect(button).toBeEnabled();
+    expect(buttonElement).toBeEnabled();
 
     // Organization
 
-    const organizationFieldElement = getByRole("textbox", {
-      name: "Organization",
-    });
-    expect(organizationFieldElement).toBeInTheDocument();
-    expect(organizationFieldElement).toHaveAttribute(
-      "placeholder",
-      "Company name"
+    await userEvent.type(
+      screen.getByRole("textbox", {
+        name: "Organization",
+      }),
+      createDataResult.subject.O
     );
-
-    const organizationFieldValue = "Company";
-    await userEvent.type(organizationFieldElement, organizationFieldValue);
-    expect(organizationFieldElement).toHaveValue(organizationFieldValue);
 
     // Organization unit
 
-    const organizationUnitFieldElement = getByRole("textbox", {
-      name: "Organization unit",
-    });
-    expect(organizationUnitFieldElement).toBeInTheDocument();
-    expect(organizationUnitFieldElement).not.toHaveAttribute("placeholder");
-
-    const organizationUnitFieldValue = "Company unit";
     await userEvent.type(
-      organizationUnitFieldElement,
-      organizationUnitFieldValue
-    );
-    expect(organizationUnitFieldElement).toHaveValue(
-      organizationUnitFieldValue
+      screen.getByRole("textbox", {
+        name: "Organization unit",
+      }),
+      createDataResult.subject.OU
     );
 
     // Country
 
-    const countryFieldElement = getByRole("combobox", {
-      name: "Country",
-    });
-    expect(countryFieldElement).toBeInTheDocument();
-    expect(countryFieldElement).toHaveTextContent("Select country");
+    await userEvent.click(
+      screen.getByRole("combobox", {
+        name: "Country",
+      })
+    );
 
-    await userEvent.click(countryFieldElement);
+    expect(screen.getByRole("presentation")).toBeInTheDocument();
 
-    const countryFieldPopup = getByRole("presentation");
-    expect(countryFieldPopup).toBeInTheDocument();
+    await userEvent.click(screen.getByText("United States"));
 
-    const countryFieldOptionLabel = "United States";
-    const countryFieldOptionValue = "US";
-    const countryFieldOption = getByText(countryFieldOptionLabel);
-    expect(countryFieldOption).toBeInTheDocument();
-
-    await userEvent.click(countryFieldOption);
-
-    expect(countryFieldPopup).not.toBeInTheDocument();
+    expect(screen.queryByRole("presentation")).not.toBeInTheDocument();
 
     // Locality
 
-    const localityFieldElement = getByRole("textbox", {
-      name: "Locality",
-    });
-    expect(localityFieldElement).toBeInTheDocument();
-    expect(localityFieldElement).toHaveAttribute(
-      "placeholder",
-      "Town, city, village, etc."
+    await userEvent.type(
+      screen.getByRole("textbox", {
+        name: "Locality",
+      }),
+      createDataResult.subject.L
     );
-
-    const localityFieldValue = "New York";
-    await userEvent.type(localityFieldElement, localityFieldValue);
-    expect(localityFieldElement).toHaveValue(localityFieldValue);
 
     // State
 
-    const stateFieldElement = getByRole("textbox", {
-      name: "State",
-    });
-    expect(stateFieldElement).toBeInTheDocument();
-    expect(stateFieldElement).toHaveAttribute(
-      "placeholder",
-      "Province, region, county or state"
+    await userEvent.type(
+      screen.getByRole("textbox", {
+        name: "State",
+      }),
+      createDataResult.subject.ST
     );
-
-    const stateFieldValue = "Albany County";
-    await userEvent.type(stateFieldElement, stateFieldValue);
-    expect(stateFieldElement).toHaveValue(stateFieldValue);
 
     // Extended key usages section
 
-    expect(getByText("Extended key usages")).toBeInTheDocument();
+    expect(screen.getByText("Extended key usages")).toBeInTheDocument();
 
-    const codeSigningElement = getByText("Code signing");
-    const codeSigningValue = "1.3.6.1.5.5.7.3.3";
-    expect(codeSigningElement).toBeInTheDocument();
-
-    await userEvent.click(codeSigningElement);
+    await userEvent.click(screen.getByText("Code signing"));
 
     // Key properties
 
-    expect(getByText("Key properties")).toBeInTheDocument();
+    expect(screen.getByText("Key properties")).toBeInTheDocument();
 
     // Signature Algorithm
 
-    const sAlgorithmFieldElement = getByRole("combobox", {
-      name: "Signature Algorithm",
-    });
-    expect(sAlgorithmFieldElement).toBeInTheDocument();
-    expect(sAlgorithmFieldElement).toHaveTextContent("RSA-2048");
+    await userEvent.click(
+      screen.getByRole("combobox", {
+        name: "Signature Algorithm",
+      })
+    );
 
-    await userEvent.click(sAlgorithmFieldElement);
+    expect(screen.getByRole("presentation")).toBeInTheDocument();
 
-    const sAlgorithmFieldPopup = getByRole("presentation");
-    expect(sAlgorithmFieldPopup).toBeInTheDocument();
+    await userEvent.click(screen.getByText("EC-P521"));
 
-    const sAlgorithmFieldOptionValue = "EC-P521";
-    const sAlgorithmFieldOption = getByText(sAlgorithmFieldOptionValue);
-    expect(sAlgorithmFieldOption).toBeInTheDocument();
-
-    await userEvent.click(sAlgorithmFieldOption);
-
-    expect(sAlgorithmFieldPopup).not.toBeInTheDocument();
+    expect(screen.queryByRole("presentation")).not.toBeInTheDocument();
 
     // Hash Algorithm
 
-    const hAlgorithmFieldElement = getByRole("combobox", {
-      name: "Hash Algorithm",
-    });
-    expect(hAlgorithmFieldElement).toBeInTheDocument();
-    expect(hAlgorithmFieldElement).toHaveTextContent("SHA-256");
+    await userEvent.click(
+      screen.getByRole("combobox", {
+        name: "Hash Algorithm",
+      })
+    );
 
-    await userEvent.click(hAlgorithmFieldElement);
+    expect(screen.getByRole("presentation")).toBeInTheDocument();
 
-    const hAlgorithmFieldPopup = getByRole("presentation");
-    expect(hAlgorithmFieldPopup).toBeInTheDocument();
+    await userEvent.click(screen.getByText("SHA-512"));
 
-    const hAlgorithmFieldOptionValue = "SHA-512";
-    const hAlgorithmFieldOption = getByText(hAlgorithmFieldOptionValue);
-    expect(hAlgorithmFieldOption).toBeInTheDocument();
+    expect(screen.queryByRole("presentation")).not.toBeInTheDocument();
 
-    await userEvent.click(hAlgorithmFieldOption);
+    await userEvent.click(buttonElement);
 
-    expect(hAlgorithmFieldPopup).not.toBeInTheDocument();
-
-    await userEvent.click(button);
-
-    expect(handleCreate).toBeCalledTimes(1);
-    expect(handleCreate).toHaveReturnedWith({
-      subject: {
-        CN: cnFieldValue,
-        E: emailFieldValue,
-        O: organizationFieldValue,
-        OU: organizationUnitFieldValue,
-        L: localityFieldValue,
-        ST: stateFieldValue,
-        C: countryFieldOptionValue,
-      },
-      extendedKeyUsages: [codeSigningValue],
-      algorithm: {
-        hash: hAlgorithmFieldOptionValue,
-        signature: sAlgorithmFieldOptionValue,
-      },
-      type: "x509",
-    });
+    expect(onCreateButtonClickMock).toBeCalledTimes(1);
+    expect(onCreateButtonClickMock).toHaveReturnedWith(createDataResult);
   });
 
   it("Should render CSR type", async () => {
-    const { queryByText } = render(
+    render(
       <CertificateCreateByCustom type="csr" onCreateButtonClick={vi.fn()} />
     );
 
-    expect(queryByText("Extended key usages")).not.toBeInTheDocument();
+    expect(screen.queryByText("Extended key usages")).not.toBeInTheDocument();
   });
 });

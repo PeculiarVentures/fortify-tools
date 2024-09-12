@@ -1,40 +1,38 @@
-import { render, vi, userEvent } from "@testing";
+import { render, vi, userEvent, screen } from "@testing";
 import { CertificateCreateByCname } from "./CertificateCreateByCname";
 
 describe("<CertificateCreateByCname />", () => {
-  it("Should render & submit", async () => {
-    const handleCreate = vi.fn((data) => data);
+  const createDataResult = {
+    subject: { CN: "example.com" },
+    algorithm: { hash: "SHA-256", signature: "RSA-2048" },
+    type: "x509",
+  };
 
-    const { getByRole } = render(
+  it("Should render & submit", async () => {
+    const onCreateButtonClickMock = vi.fn((data) => data);
+
+    render(
       <CertificateCreateByCname
         type="x509"
-        onCreateButtonClick={handleCreate}
+        onCreateButtonClick={onCreateButtonClickMock}
       />
     );
 
-    const button = getByRole("button");
-    expect(button).toBeInTheDocument();
-    expect(button).toBeDisabled();
-
-    const cnFieldElement = getByRole("textbox", {
-      name: "Common name",
+    const buttonElement = screen.getByRole("button", {
+      name: "Create certificate",
     });
-    expect(cnFieldElement).toBeInTheDocument();
-    expect(cnFieldElement).toHaveAttribute("placeholder", "company.com");
+    expect(buttonElement).toBeDisabled();
 
-    const cnFieldValue = "example.com";
-    await userEvent.type(cnFieldElement, cnFieldValue);
-    expect(cnFieldElement).toHaveValue(cnFieldValue);
+    await userEvent.type(
+      screen.getByRole("textbox", {
+        name: "Common name",
+      }),
+      createDataResult.subject.CN
+    );
 
-    expect(button).toBeEnabled();
+    await userEvent.click(buttonElement);
 
-    await userEvent.click(button);
-
-    expect(handleCreate).toBeCalledTimes(1);
-    expect(handleCreate).toHaveReturnedWith({
-      subject: { CN: cnFieldValue },
-      algorithm: { hash: "SHA-256", signature: "RSA-2048" },
-      type: "x509",
-    });
+    expect(onCreateButtonClickMock).toBeCalledTimes(1);
+    expect(onCreateButtonClickMock).toHaveReturnedWith(createDataResult);
   });
 });

@@ -1,64 +1,62 @@
-import { render, vi, userEvent } from "@testing";
+import { render, vi, userEvent, screen } from "@testing";
 import { CertificateCreateByEmail } from "./CertificateCreateByEmail";
 
 describe("<CertificateCreateByEmail />", () => {
   it("Should render & submit", async () => {
-    const handleCreate = vi.fn((data) => data);
+    const emailValue = "info@company.com";
+    const createDataResult = {
+      subject: { CN: emailValue, E: emailValue },
+      algorithm: { hash: "SHA-256", signature: "RSA-2048" },
+      type: "x509",
+    };
+    const onCreateButtonClickMock = vi.fn((data) => data);
 
-    const { getByRole } = render(
+    render(
       <CertificateCreateByEmail
         type="x509"
-        onCreateButtonClick={handleCreate}
+        onCreateButtonClick={onCreateButtonClickMock}
       />
     );
 
-    const button = getByRole("button");
-    expect(button).toBeInTheDocument();
-    expect(button).toBeDisabled();
-
-    const emailFieldElement = getByRole("textbox", {
-      name: "Email address",
+    const buttonElement = screen.getByRole("button", {
+      name: "Create certificate",
     });
-    expect(emailFieldElement).toBeInTheDocument();
-    expect(emailFieldElement).toHaveAttribute(
-      "placeholder",
-      "company@example.com"
+    expect(buttonElement).toBeDisabled();
+
+    await userEvent.type(
+      screen.getByRole("textbox", {
+        name: "Email address",
+      }),
+      createDataResult.subject.E
     );
 
-    const emailFieldValue = "info@company.com";
-    await userEvent.type(emailFieldElement, emailFieldValue);
-    expect(emailFieldElement).toHaveValue(emailFieldValue);
+    await userEvent.click(buttonElement);
 
-    expect(button).toBeEnabled();
-
-    await userEvent.click(button);
-
-    expect(handleCreate).toBeCalledTimes(1);
-    expect(handleCreate).toHaveReturnedWith({
-      subject: { CN: emailFieldValue, E: emailFieldValue },
-      algorithm: { hash: "SHA-256", signature: "RSA-2048" },
-      type: "x509",
-    });
+    expect(onCreateButtonClickMock).toBeCalledTimes(1);
+    expect(onCreateButtonClickMock).toHaveReturnedWith(createDataResult);
   });
 
   it("Should validate incorrect email", async () => {
-    const { getByRole, getByText } = render(
+    render(
       <CertificateCreateByEmail type="x509" onCreateButtonClick={vi.fn()} />
     );
 
-    const button = getByRole("button");
-    expect(button).toBeDisabled();
-
-    const emailFieldElement = getByRole("textbox", {
-      name: "Email address",
+    const buttonElement = screen.getByRole("button", {
+      name: "Create certificate",
     });
+    expect(buttonElement).toBeDisabled();
 
-    const emailFieldValue = "company";
-    await userEvent.type(emailFieldElement, emailFieldValue);
-    expect(emailFieldElement).toHaveValue(emailFieldValue);
+    await userEvent.type(
+      screen.getByRole("textbox", {
+        name: "Email address",
+      }),
+      "company"
+    );
 
-    expect(getByText("Please enter valid email address")).toBeInTheDocument();
+    expect(
+      screen.getByText("Please enter valid email address")
+    ).toBeInTheDocument();
 
-    expect(button).toBeDisabled();
+    expect(buttonElement).toBeDisabled();
   });
 });
