@@ -6,7 +6,7 @@ describe("<CertificateCreateByEmail />", () => {
     const emailValue = "info@company.com";
     const createDataResult = {
       subject: { CN: emailValue, E: emailValue },
-      algorithm: { hash: "SHA-256", signature: "RSA-2048" },
+      algorithm: { hash: "SHA-256", signature: "EC-P256" },
       type: "x509",
     };
     const onCreateButtonClickMock = vi.fn((data) => data);

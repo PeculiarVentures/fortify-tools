@@ -2,7 +2,7 @@ import { render, vi, userEvent, screen } from "@testing";
 import { CertificateCreateDialog } from "./CertificateCreateDialog";
 
 describe("<CertificateCreateDialog />", () => {
-  const algorithm = { hash: "SHA-256", signature: "RSA-2048" };
+  const algorithm = { hash: "SHA-256", signature: "EC-P256" };
 
   async function selectType(selectedIndex: number) {
     const combobox = screen.getAllByRole("combobox")[1];
@@ -100,6 +100,7 @@ describe("<CertificateCreateDialog />", () => {
     const createDataResult = {
       subject: { CN: "example.com" },
       algorithm,
+      extendedKeyUsages: ["1.3.6.1.5.5.7.3.1"],
       type: "x509",
     };
     const onCreateButtonClickMock = vi.fn((data) => data);
@@ -129,6 +130,7 @@ describe("<CertificateCreateDialog />", () => {
     const createDataResult = {
       subject: { CN: emailValue, E: emailValue },
       algorithm,
+      extendedKeyUsages: ["1.3.6.1.5.5.7.3.4", "1.3.6.1.5.5.7.3.2"],
       type: "x509",
     };
     const onCreateButtonClickMock = vi.fn((data) => data);

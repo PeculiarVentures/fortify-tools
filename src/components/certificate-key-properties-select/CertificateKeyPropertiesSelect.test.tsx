@@ -21,7 +21,7 @@ describe("<CertificateKeyPropertiesSelect />", () => {
     const comboboxes = getAllByRole("combobox");
     expect(comboboxes).toHaveLength(2);
 
-    expect(comboboxes[0]).toHaveTextContent(signatureAlgorithm[0]);
+    expect(comboboxes[0]).toHaveTextContent(signatureAlgorithm[2]);
 
     await userEvent.click(comboboxes[0]);
 

@@ -4,7 +4,7 @@ import { CertificateCreateByCname } from "./CertificateCreateByCname";
 describe("<CertificateCreateByCname />", () => {
   const createDataResult = {
     subject: { CN: "example.com" },
-    algorithm: { hash: "SHA-256", signature: "RSA-2048" },
+    algorithm: { hash: "SHA-256", signature: "EC-P256" },
     type: "x509",
   };
 
