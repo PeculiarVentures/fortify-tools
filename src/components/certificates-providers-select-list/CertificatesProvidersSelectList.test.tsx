@@ -1,9 +1,9 @@
-import { render, vi, userEvent } from "@testing";
+import { render, vi, userEvent, screen } from "@testing";
 import { CertificatesProvidersSelectList } from "./CertificatesProvidersSelectList";
 
 describe("<CertificatesProvidersSelectList />", () => {
   it("Should render & handel select", async () => {
-    const handleSelect = vi.fn((data) => data);
+    const onSelectMock = vi.fn((data) => data);
 
     const providers = [
       {
@@ -16,38 +16,38 @@ describe("<CertificatesProvidersSelectList />", () => {
       },
     ];
 
-    const { getByRole, getAllByRole, queryByRole } = render(
+    render(
       <CertificatesProvidersSelectList
         providers={providers}
-        onSelect={handleSelect}
+        onSelect={onSelectMock}
         className="test_combobox"
         popoverClassName="test_combobox_popup"
         currentProviderId={providers[0].id}
       />
     );
 
-    const combobox = getByRole("combobox");
+    const combobox = screen.getByRole("combobox");
     expect(combobox).toBeInTheDocument();
     expect(combobox).toHaveTextContent(providers[0].name);
     expect(combobox.parentElement).toHaveClass("test_combobox");
 
     await userEvent.click(combobox);
 
-    const comboboxPopup = getByRole("presentation");
+    const comboboxPopup = screen.getByRole("presentation");
     expect(comboboxPopup).toBeInTheDocument();
 
     expect(
       comboboxPopup.querySelector(".test_combobox_popup")
     ).toBeInTheDocument();
 
-    const comboboxItems = getAllByRole("option");
+    const comboboxItems = screen.getAllByRole("option");
     expect(comboboxItems).toHaveLength(2);
 
     await userEvent.click(comboboxItems[1]);
 
-    expect(queryByRole("presentation")).not.toBeInTheDocument();
+    expect(screen.queryByRole("presentation")).not.toBeInTheDocument();
 
-    expect(handleSelect).toBeCalledTimes(1);
-    expect(handleSelect).toHaveReturnedWith(providers[1].id);
+    expect(onSelectMock).toBeCalledTimes(1);
+    expect(onSelectMock).toHaveReturnedWith(providers[1].id);
   });
 });

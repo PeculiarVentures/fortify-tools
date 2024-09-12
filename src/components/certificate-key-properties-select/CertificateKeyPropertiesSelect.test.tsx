@@ -1,4 +1,4 @@
-import { render, userEvent } from "@testing";
+import { render, userEvent, screen } from "@testing";
 import { CertificateKeyPropertiesSelect } from "./CertificateKeyPropertiesSelect";
 
 describe("<CertificateKeyPropertiesSelect />", () => {
@@ -12,23 +12,23 @@ describe("<CertificateKeyPropertiesSelect />", () => {
     ];
     const hashAlgorithm = ["SHA-256", "SHA-384", "SHA-512"];
 
-    const { container, getAllByRole, queryByRole, getByRole } = render(
+    const { container } = render(
       <CertificateKeyPropertiesSelect className="test_class" />
     );
 
     expect(container.children[0]).toHaveClass("test_class");
 
-    const comboboxes = getAllByRole("combobox");
+    const comboboxes = screen.getAllByRole("combobox");
     expect(comboboxes).toHaveLength(2);
 
     expect(comboboxes[0]).toHaveTextContent(signatureAlgorithm[2]);
 
     await userEvent.click(comboboxes[0]);
 
-    const combobox0Popup = getByRole("presentation");
+    const combobox0Popup = screen.getByRole("presentation");
     expect(combobox0Popup).toBeInTheDocument();
 
-    const combobox0Items = getAllByRole("option");
+    const combobox0Items = screen.getAllByRole("option");
     expect(combobox0Items).toHaveLength(signatureAlgorithm.length);
 
     combobox0Items.forEach((item, index) => {
@@ -37,16 +37,16 @@ describe("<CertificateKeyPropertiesSelect />", () => {
 
     await userEvent.click(combobox0Items[0]);
 
-    expect(queryByRole("presentation")).not.toBeInTheDocument();
+    expect(screen.queryByRole("presentation")).not.toBeInTheDocument();
 
     expect(comboboxes[1]).toHaveTextContent(hashAlgorithm[0]);
 
     await userEvent.click(comboboxes[1]);
 
-    const combobox1Popup = getByRole("presentation");
+    const combobox1Popup = screen.getByRole("presentation");
     expect(combobox1Popup).toBeInTheDocument();
 
-    const combobox1Items = getAllByRole("option");
+    const combobox1Items = screen.getAllByRole("option");
     expect(combobox1Items).toHaveLength(hashAlgorithm.length);
 
     combobox1Items.forEach((item, index) => {
@@ -55,6 +55,6 @@ describe("<CertificateKeyPropertiesSelect />", () => {
 
     await userEvent.click(combobox1Items[0]);
 
-    expect(queryByRole("presentation")).not.toBeInTheDocument();
+    expect(screen.queryByRole("presentation")).not.toBeInTheDocument();
   });
 });

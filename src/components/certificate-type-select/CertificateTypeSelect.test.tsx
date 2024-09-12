@@ -1,4 +1,4 @@
-import { render, vi, userEvent } from "@testing";
+import { render, vi, userEvent, screen } from "@testing";
 import { CertificateTypeSelect } from "./CertificateTypeSelect";
 
 describe("<CertificateTypeSelect />", () => {
@@ -11,28 +11,26 @@ describe("<CertificateTypeSelect />", () => {
   ];
 
   it("Should render for x509 & handel change", async () => {
-    const handleChange = vi.fn();
+    const onChangeMock = vi.fn();
     const itemsX509 = [...items, "Custom certificate"];
 
-    const { getByRole, getAllByRole, queryByRole } = render(
+    render(
       <CertificateTypeSelect
-        onChange={handleChange}
+        onChange={onChangeMock}
         className="test_combobox"
         type="x509"
       />
     );
 
-    const combobox = getByRole("combobox");
-    expect(combobox).toBeInTheDocument();
+    const combobox = screen.getByRole("combobox");
     expect(combobox).toHaveTextContent(/Select type/);
     expect(combobox.parentElement).toHaveClass("test_combobox");
 
     await userEvent.click(combobox);
 
-    const comboboxPopup = getByRole("presentation");
-    expect(comboboxPopup).toBeInTheDocument();
+    expect(screen.getByRole("presentation")).toBeInTheDocument();
 
-    const comboboxItems = getAllByRole("option");
+    const comboboxItems = screen.getAllByRole("option");
     expect(comboboxItems).toHaveLength(itemsX509.length);
 
     comboboxItems.forEach((item, index) => {
@@ -41,28 +39,24 @@ describe("<CertificateTypeSelect />", () => {
 
     await userEvent.click(comboboxItems[0]);
 
-    expect(queryByRole("presentation")).not.toBeInTheDocument();
+    expect(screen.queryByRole("presentation")).not.toBeInTheDocument();
 
-    expect(handleChange).toBeCalledTimes(1);
+    expect(onChangeMock).toBeCalledTimes(1);
   });
 
   it("Should render for CSR & handel change", async () => {
-    const handleChange = vi.fn();
+    const onChangeMock = vi.fn();
     const itemsCSR = [...items, "Custom CSR"];
 
-    const { getByRole, getAllByRole, queryByRole } = render(
-      <CertificateTypeSelect onChange={handleChange} type="csr" />
-    );
+    render(<CertificateTypeSelect onChange={onChangeMock} type="csr" />);
 
-    const combobox = getByRole("combobox");
-    expect(combobox).toBeInTheDocument();
+    const combobox = screen.getByRole("combobox");
 
     await userEvent.click(combobox);
 
-    const comboboxPopup = getByRole("presentation");
-    expect(comboboxPopup).toBeInTheDocument();
+    expect(screen.getByRole("presentation")).toBeInTheDocument();
 
-    const comboboxItems = getAllByRole("option");
+    const comboboxItems = screen.getAllByRole("option");
 
     expect(comboboxItems).toHaveLength(itemsCSR.length);
 
@@ -72,8 +66,8 @@ describe("<CertificateTypeSelect />", () => {
 
     await userEvent.click(comboboxItems[0]);
 
-    expect(queryByRole("presentation")).not.toBeInTheDocument();
+    expect(screen.queryByRole("presentation")).not.toBeInTheDocument();
 
-    expect(handleChange).toBeCalledTimes(1);
+    expect(onChangeMock).toBeCalledTimes(1);
   });
 });

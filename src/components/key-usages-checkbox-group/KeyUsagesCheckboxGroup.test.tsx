@@ -1,10 +1,10 @@
-import { render } from "@testing";
+import { render, screen } from "@testing";
 import { certificateKeyUsageExtensions } from "src/config/data";
 import { KeyUsagesCheckboxGroup } from "./KeyUsagesCheckboxGroup";
 
 describe("<KeyUsagesCheckboxGroup />", () => {
   it("Should render", async () => {
-    const { container, getAllByRole } = render(
+    const { container } = render(
       <KeyUsagesCheckboxGroup className="test_class" />
     );
 
@@ -12,7 +12,7 @@ describe("<KeyUsagesCheckboxGroup />", () => {
 
     expect(container.children[0]).toHaveClass("test_class");
 
-    const checkboxes = getAllByRole("checkbox");
+    const checkboxes = screen.getAllByRole("checkbox");
     expect(checkboxes).toHaveLength(keyUsageExtensions.length);
 
     keyUsageExtensions.forEach((value, index) => {
