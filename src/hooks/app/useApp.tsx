@@ -18,7 +18,7 @@ export function useApp() {
     IProviderInfo | undefined
   >(undefined);
   const [isCurrentProviderLogedin, setIsCurrentProviderLogedin] =
-    React.useState(true);
+    React.useState(false);
   const [certificates, setCertificates] = React.useState<ICertificate[]>([]);
   const [challenge, setChallenge] = React.useState<string | null>(null);
   const [fetching, setFetching] = React.useState<AppFetchingType>({
@@ -96,13 +96,25 @@ export function useApp() {
 
     setFetchingValue("certificates", "pending");
 
+    const curProvider = providersLocal.find(
+      ({ id }) => currentProvider?.id === id
+    );
+    const curProviderId = curProvider?.id || providersLocal[0].id;
+
+    try {
+      const localProvider =
+        await fortifyClient.current.getProviderById(curProviderId);
+      const isLoggedIn = await localProvider.isLoggedIn();
+      setIsCurrentProviderLogedin(isLoggedIn);
+    } catch (error) {
+      setIsCurrentProviderLogedin(false);
+    }
+
     try {
       setCertificates(
-        await fortifyClient.current.getCertificatesByProviderId(
-          providersLocal[0].id
-        )
+        await fortifyClient.current.getCertificatesByProviderId(curProviderId)
       );
-      setCurrentProvider(providersLocal[0]);
+      setCurrentProvider(curProvider || providersLocal[0]);
       setFetchingValue("certificates", "resolved");
     } catch (error) {
       setFetchingValue("certificates", "rejected");
@@ -235,12 +247,14 @@ export function useApp() {
         const isLoggedIn = await localProvider.isLoggedIn();
         if (!isLoggedIn) {
           setIsCurrentProviderLogedin(false);
+          handleCertificatesDataReload(currentProvider.id);
         }
       } else {
         await localProvider.login();
         const isLoggedIn = await localProvider.isLoggedIn();
         if (isLoggedIn) {
           setIsCurrentProviderLogedin(true);
+          handleCertificatesDataReload(currentProvider.id);
         }
       }
     } catch (error) {
