@@ -6,6 +6,7 @@ import {
   IconButton,
   Menu,
   TextField,
+  Tooltip,
 } from "@peculiar/react-components";
 import InfoIcon from "../../icons/info-20.svg?react";
 import LoginIcon from "../../icons/login-20.svg?react";
@@ -23,6 +24,7 @@ import styles from "./styles/index.module.scss";
 interface CertificatesTopbarProps {
   className?: ComponentProps<"div">["className"];
   searchValue?: string;
+  providerId?: string;
   isLogedIn: boolean;
   onSearch: (value: string) => void;
   onImport: () => void;
@@ -37,6 +39,7 @@ export const CertificatesTopbar: React.FunctionComponent<
   const {
     className,
     searchValue = "",
+    providerId,
     isLogedIn,
     onSearch,
     onImport,
@@ -59,6 +62,7 @@ export const CertificatesTopbar: React.FunctionComponent<
           onChange={(event) => {
             onSearch(event.target.value);
           }}
+          disabled={!providerId}
         />
         <SearchIcon className={styles.search_icon} />
         <IconButton
@@ -86,8 +90,10 @@ export const CertificatesTopbar: React.FunctionComponent<
             arrow: true,
             size: "large",
           }}
+          className={styles.icon_button}
+          disabled={!providerId}
         >
-          <ReloadIcon className={styles.icon_button} />
+          <ReloadIcon />
         </IconButton>
         <IconButton
           size="small"
@@ -100,8 +106,10 @@ export const CertificatesTopbar: React.FunctionComponent<
             arrow: true,
             size: "large",
           }}
+          className={styles.icon_button}
+          disabled={!providerId}
         >
-          <InfoIcon className={styles.icon_button} />
+          <InfoIcon />
         </IconButton>
         <IconButton
           size="small"
@@ -114,50 +122,73 @@ export const CertificatesTopbar: React.FunctionComponent<
             arrow: true,
             size: "large",
           }}
+          className={isLogedIn ? styles.icon_button_wrong : styles.icon_button}
+          disabled={!providerId}
         >
-          {isLogedIn ? (
-            <LogoutIcon className={styles.icon_button_wrong} />
-          ) : (
-            <LoginIcon className={styles.icon_button} />
-          )}
+          {isLogedIn ? <LogoutIcon /> : <LoginIcon />}
         </IconButton>
       </div>
       <div>
-        <Menu
-          popoverProps={{
-            className: styles.creation_menu,
-          }}
-          options={[
-            {
-              label: t("topbar.create-certificate-scr"),
-              startIcon: (
-                <CertificatCSRIcon className={styles.creation_menu_icon} />
-              ),
-              onClick: () => onCreate("csr"),
-            },
-            {
-              label: t("topbar.create-certificate-ssc"),
-              startIcon: (
-                <CertificatSSCIcon className={styles.creation_menu_icon} />
-              ),
-              onClick: () => onCreate("x509"),
-            },
-            {
-              label: t("topbar.import-certificate"),
-              startIcon: <ImportIcon className={styles.creation_menu_icon} />,
-              onClick: onImport,
-            },
-          ]}
-        >
-          <Button
-            color="primary"
-            variant="contained"
+        {!providerId || !isLogedIn ? (
+          <Tooltip
+            color="white"
             size="large"
-            startIcon={<PlusIcon />}
+            arrow={true}
+            placement="bottom-end"
+            offset={10}
+            title={
+              !isLogedIn
+                ? t("topbar.create-certificate-disabled-tooltip")
+                : undefined
+            }
           >
-            {t("topbar.create-certificate")}
-          </Button>
-        </Menu>
+            <Button
+              color="primary"
+              variant="contained"
+              size="large"
+              startIcon={<PlusIcon />}
+              disabled={true}
+            >
+              {t("topbar.create-certificate")}
+            </Button>
+          </Tooltip>
+        ) : (
+          <Menu
+            popoverProps={{
+              className: styles.creation_menu,
+            }}
+            options={[
+              {
+                label: t("topbar.create-certificate-scr"),
+                startIcon: (
+                  <CertificatCSRIcon className={styles.creation_menu_icon} />
+                ),
+                onClick: () => onCreate("csr"),
+              },
+              {
+                label: t("topbar.create-certificate-ssc"),
+                startIcon: (
+                  <CertificatSSCIcon className={styles.creation_menu_icon} />
+                ),
+                onClick: () => onCreate("x509"),
+              },
+              {
+                label: t("topbar.import-certificate"),
+                startIcon: <ImportIcon className={styles.creation_menu_icon} />,
+                onClick: onImport,
+              },
+            ]}
+          >
+            <Button
+              color="primary"
+              variant="contained"
+              size="large"
+              startIcon={<PlusIcon />}
+            >
+              {t("topbar.create-certificate")}
+            </Button>
+          </Menu>
+        )}
       </div>
     </div>
   );

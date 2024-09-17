@@ -100,6 +100,7 @@ export function App() {
       </CertificatesSidebar>
       <CertificatesTopbar
         searchValue={searchedText}
+        providerId={currentProviderId}
         className={styles.top_bar}
         onSearch={handleSearch}
         onImport={handleCertificateImportDialogOpen}
