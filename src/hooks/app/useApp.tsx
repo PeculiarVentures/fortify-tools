@@ -72,6 +72,23 @@ export function useApp() {
     return true;
   };
 
+  const tryGetProviders = async () => {
+    if (!fortifyClient.current) {
+      return;
+    }
+
+    setFetchingValue("providers", "pending");
+
+    try {
+      const providersLocal = await fortifyClient.current.getProviders();
+      setProviders(providersLocal);
+      setFetchingValue("providers", "resolved");
+    } catch (error) {
+      setProviders([]);
+      setFetchingValue("providers", "rejected");
+    }
+  };
+
   const tryGetData = async () => {
     if (!fortifyClient.current) {
       return;
@@ -80,8 +97,8 @@ export function useApp() {
     let providersLocal: IProviderInfo[] = [];
 
     setFetchingValue("providers", "pending");
-    setProviders([]);
-    setCertificates([]);
+    // setProviders([]);
+    // setCertificates([]);
 
     try {
       providersLocal = await fortifyClient.current.getProviders();
@@ -94,27 +111,25 @@ export function useApp() {
       return;
     }
 
-    setFetchingValue("certificates", "pending");
-
-    const curProvider = providersLocal.find(
-      ({ id }) => currentProvider?.id === id
-    );
-    const curProviderId = curProvider?.id || providersLocal[0].id;
-
     try {
-      const localProvider =
-        await fortifyClient.current.getProviderById(curProviderId);
+      const localProvider = await fortifyClient.current.getProviderById(
+        providersLocal[0].id
+      );
       const isLoggedIn = await localProvider.isLoggedIn();
       setIsCurrentProviderLogedin(isLoggedIn);
     } catch (error) {
       setIsCurrentProviderLogedin(false);
     }
 
+    setFetchingValue("certificates", "pending");
+
     try {
       setCertificates(
-        await fortifyClient.current.getCertificatesByProviderId(curProviderId)
+        await fortifyClient.current.getCertificatesByProviderId(
+          providersLocal[0].id
+        )
       );
-      setCurrentProvider(curProvider || providersLocal[0]);
+      // setCurrentProvider(providersLocal[0]);
       setFetchingValue("certificates", "resolved");
     } catch (error) {
       setFetchingValue("certificates", "rejected");
@@ -199,8 +214,8 @@ export function useApp() {
     fortifyClient.current = new FortifyAPI({
       onDebug: () => {},
       onClose: handleClose,
-      onProvidersAdded: tryGetData,
-      onProvidersRemoved: tryGetData,
+      onProvidersAdded: tryGetProviders,
+      onProvidersRemoved: tryGetProviders,
       // filters: {
       //   onlyWithPrivateKey: true,
       // },
@@ -208,6 +223,24 @@ export function useApp() {
 
     start();
   }, []);
+
+  React.useEffect(() => {
+    if (providers.length) {
+      if (!currentProvider) {
+        setCurrentProvider(providers[0]);
+        return;
+      }
+      const curProvider = providers.find(({ id }) => currentProvider.id === id);
+      if (!curProvider) {
+        setCurrentProvider(providers[0]);
+        handleProviderChange(providers[0].id);
+      }
+    } else {
+      setCurrentProvider(undefined);
+      setIsCurrentProviderLogedin(false);
+      setCertificates([]);
+    }
+  }, [providers]);
 
   const handleCertificatesDataReload = async (providerId: string) => {
     if (!fortifyClient.current) {
