@@ -100,7 +100,7 @@ export function App() {
       </CertificatesSidebar>
       <CertificatesTopbar
         searchValue={searchedText}
-        providerId={currentProviderId}
+        isDisabled={!currentProviderId}
         className={styles.top_bar}
         onSearch={handleSearch}
         onImport={handleCertificateImportDialogOpen}
@@ -111,7 +111,7 @@ export function App() {
         onInfo={() =>
           currentProvider && handleProviderInfoDialogOpen(currentProvider)
         }
-        isLogedIn={isCurrentProviderLogedin}
+        isLoggedIn={isCurrentProviderLogedin}
         onLoginLogout={handleProviderLoginLogout}
       ></CertificatesTopbar>
       <CertificatesList

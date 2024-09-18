@@ -24,14 +24,14 @@ import styles from "./styles/index.module.scss";
 interface CertificatesTopbarProps {
   className?: ComponentProps<"div">["className"];
   searchValue?: string;
-  providerId?: string;
-  isLogedIn: boolean;
+  isDisabled: boolean;
+  isLoggedIn: boolean;
   onSearch: (value: string) => void;
   onImport: () => void;
   onCreate: (type: "csr" | "x509") => void;
   onReload: () => void;
   onInfo: () => void;
-  onLoginLogout: (isLogedin: boolean) => void;
+  onLoginLogout: (isLoggedin: boolean) => void;
 }
 export const CertificatesTopbar: React.FunctionComponent<
   CertificatesTopbarProps
@@ -39,8 +39,8 @@ export const CertificatesTopbar: React.FunctionComponent<
   const {
     className,
     searchValue = "",
-    providerId,
-    isLogedIn,
+    isDisabled = true,
+    isLoggedIn,
     onSearch,
     onImport,
     onCreate,
@@ -62,7 +62,7 @@ export const CertificatesTopbar: React.FunctionComponent<
           onChange={(event) => {
             onSearch(event.target.value);
           }}
-          disabled={!providerId}
+          disabled={isDisabled}
         />
         <SearchIcon className={styles.search_icon} />
         <IconButton
@@ -73,6 +73,7 @@ export const CertificatesTopbar: React.FunctionComponent<
           onClick={() => {
             onSearch("");
           }}
+          data-testid="clear-search-button"
         >
           <CrossIcon className={styles.cross_icon} />
         </IconButton>
@@ -91,7 +92,7 @@ export const CertificatesTopbar: React.FunctionComponent<
             size: "large",
           }}
           className={styles.icon_button}
-          disabled={!providerId}
+          disabled={isDisabled}
         >
           <ReloadIcon />
         </IconButton>
@@ -107,14 +108,14 @@ export const CertificatesTopbar: React.FunctionComponent<
             size: "large",
           }}
           className={styles.icon_button}
-          disabled={!providerId}
+          disabled={isDisabled}
         >
           <InfoIcon />
         </IconButton>
         <IconButton
           size="small"
-          onClick={() => onLoginLogout(isLogedIn)}
-          title={t(`topbar.token-${isLogedIn ? "logout" : "login"}`)}
+          onClick={() => onLoginLogout(isLoggedIn)}
+          title={t(`topbar.token-${isLoggedIn ? "logout" : "login"}`)}
           tooltipProps={{
             color: "white",
             offset: 2,
@@ -122,14 +123,14 @@ export const CertificatesTopbar: React.FunctionComponent<
             arrow: true,
             size: "large",
           }}
-          className={isLogedIn ? styles.icon_button_wrong : styles.icon_button}
-          disabled={!providerId}
+          className={isLoggedIn ? styles.icon_button_wrong : styles.icon_button}
+          disabled={isDisabled}
         >
-          {isLogedIn ? <LogoutIcon /> : <LoginIcon />}
+          {isLoggedIn ? <LogoutIcon /> : <LoginIcon />}
         </IconButton>
       </div>
       <div>
-        {!providerId || !isLogedIn ? (
+        {isDisabled || !isLoggedIn ? (
           <Tooltip
             color="white"
             size="large"
@@ -137,7 +138,7 @@ export const CertificatesTopbar: React.FunctionComponent<
             placement="bottom-end"
             offset={10}
             title={
-              !isLogedIn
+              !isLoggedIn
                 ? t("topbar.create-certificate-disabled-tooltip")
                 : undefined
             }
