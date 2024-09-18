@@ -18,8 +18,15 @@
               "hardware": "Hardware",
               "software": "Software"
             }
-          }
-        }
+          },
+          "serial-number": "Serial number",
+          "free-space": "Free space (minimum estimated)",
+          "hardware-version": "Hardware version",
+          "firmware-version": "Firmware version",
+          "model": "Model",
+          "algorithms": "Algorithms"
+        },
+        "empty-value": "Information is unavailable"
       }
     }
   },
