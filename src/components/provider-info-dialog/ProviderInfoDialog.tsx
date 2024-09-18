@@ -35,6 +35,12 @@ export const ProviderInfoDialog: React.FunctionComponent<
       ),
     },
     {
+      label: t("providers.dialog.info.list.extractable.label"),
+      value: t(
+        `providers.dialog.info.list.extractable.value.${data.isRemovable ? "yes" : "no"}`
+      ),
+    },
+    {
       label: t("providers.dialog.info.list.serial-number"),
       value: data.token?.serialNumber,
     },

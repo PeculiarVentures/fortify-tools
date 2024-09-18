@@ -24,7 +24,14 @@
           "hardware-version": "Hardware version",
           "firmware-version": "Firmware version",
           "model": "Model",
-          "algorithms": "Algorithms"
+          "algorithms": "Algorithms",
+          "extractable": {
+            "label": "Extractable",
+            "value": {
+              "yes": "Yes",
+              "no": "No"
+            }
+          }
         },
         "empty-value": "Information is unavailable"
       }

@@ -14,6 +14,7 @@ export const Default: Story = {
   args: {
     data: {
       isHardware: true,
+      isRemovable: true,
       token: {
         label: "MacOS Crypto",
         serialNumber: "1",
