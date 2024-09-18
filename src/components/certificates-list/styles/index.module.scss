@@ -55,6 +55,13 @@
   min-height: calc(100vh - var(--pv-top-header-height));
   background-color: var(--pv-color-white);
 }
+.table_wrapper_loading {
+  height: calc(100vh - var(--pv-top-header-height));
+  overflow: hidden;
+  thead th {
+    top: 0 !important;
+  }
+}
 
 .table_wrapper {
   position: relative;

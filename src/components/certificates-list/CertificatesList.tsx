@@ -134,7 +134,11 @@ export const CertificatesList: React.FunctionComponent<
   );
 
   return (
-    <div className={styles.table_wrapper}>
+    <div
+      className={clsx(styles.table_wrapper, {
+        [styles.table_wrapper_loading]: loading,
+      })}
+    >
       <Table className={clsx(styles.list_table, className)}>
         <TableHeader>
           <TableRow>
@@ -267,12 +271,8 @@ function CertificatesListLoading() {
   return [...Array(12).keys()].map((index) => (
     <TableRow className={styles.skeleton_tr} key={`skel-row-${index}`}>
       {[...Array(4).keys()].map((index) => (
-        <TableCell className={styles.skeleton_td}>
-          <Skeleton
-            key={`skel-td-${index}`}
-            className={styles.skeleton_td_item}
-            height={31}
-          />
+        <TableCell className={styles.skeleton_td} key={`skel-td-${index}`}>
+          <Skeleton className={styles.skeleton_td_item} height={31} />
         </TableCell>
       ))}
     </TableRow>
