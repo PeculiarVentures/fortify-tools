@@ -130,11 +130,16 @@ export function App() {
         challenge={challenge}
         onReload={handleRetryConection}
       />
-      {certificateViewerDialog()}
-      {certificateDeleteDialog()}
-      {certificateImportDialog()}
-      {certificateCreateDialog()}
-      {providerInfoDialog()}
+      {providers.length ? (
+        <>
+          {certificateViewerDialog()}
+          {certificateDeleteDialog()}
+          {certificateImportDialog()}
+          {certificateCreateDialog()}
+          {providerInfoDialog()}
+        </>
+      ) : undefined}
+
       <div className={styles.certificate_list_corners_backdrop}></div>
     </>
   );
