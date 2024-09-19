@@ -99,7 +99,7 @@ export const CertificatesTopbar: React.FunctionComponent<
         <IconButton
           size="small"
           onClick={onInfo}
-          title={t("topbar.token-information")}
+          title={t("topbar.provider-information")}
           tooltipProps={{
             color: "white",
             offset: 2,
@@ -115,7 +115,7 @@ export const CertificatesTopbar: React.FunctionComponent<
         <IconButton
           size="small"
           onClick={() => onLoginLogout(isLoggedIn)}
-          title={t(`topbar.token-${isLoggedIn ? "logout" : "login"}`)}
+          title={t(`topbar.provider-${isLoggedIn ? "logout" : "login"}`)}
           tooltipProps={{
             color: "white",
             offset: 2,

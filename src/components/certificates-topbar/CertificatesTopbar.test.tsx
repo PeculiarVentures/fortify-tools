@@ -25,7 +25,7 @@ describe("<CertificatesTopbar />", () => {
     expect(screen.getByRole("searchbox")).toBeDisabled();
     expect(screen.getByRole("button", { name: /Refresh list/ })).toBeDisabled();
     expect(
-      screen.getByRole("button", { name: /Token information/ })
+      screen.getByRole("button", { name: /Provider information/ })
     ).toBeDisabled();
     expect(screen.getByRole("button", { name: /Sign in/ })).toBeDisabled();
     expect(screen.getByRole("button", { name: /New/ })).toBeDisabled();
@@ -61,7 +61,7 @@ describe("<CertificatesTopbar />", () => {
     render(<CertificatesTopbar {...defaultProps} onInfo={onInfoMock} />);
 
     await userEvent.click(
-      screen.getByRole("button", { name: /Token information/ })
+      screen.getByRole("button", { name: /Provider information/ })
     );
 
     expect(onInfoMock).toBeCalledTimes(1);
