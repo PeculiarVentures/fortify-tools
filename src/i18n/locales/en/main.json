@@ -46,7 +46,8 @@
         "expires": "Expires"
       },
       "cell": {
-        "certificate": "Certificate"
+        "certificate": "Certificate",
+        "with-privat-key": "(with private key)"
       },
       "action": {
         "view-details": "View details",
