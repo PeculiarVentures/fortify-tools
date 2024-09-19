@@ -206,7 +206,8 @@
     "reload-certificates": "Refresh list",
     "provider-information": "Provider information",
     "provider-login": "Sign in",
-    "provider-logout": "Sign out"
+    "provider-logout": "Sign out",
+    "provider-doesnt-support-signing-in": "This provider doesn’t support signing in."
   },
   "certificate-viewer-dialog": {
     "title": "“{{name}}” details"

@@ -4,6 +4,8 @@ import {
   IProviderInfo,
   ICertificate,
 } from "@peculiar/fortify-client-core";
+import { useTranslation } from "react-i18next";
+import { useToast } from "@peculiar/react-components";
 
 import { AppFetchingStatus, AppFetchingType } from "./types";
 
@@ -28,6 +30,9 @@ export function useApp() {
   /**
    *
    */
+
+  const { addToast } = useToast();
+  const { t } = useTranslation();
 
   const setFetchingValue = (
     name: keyof AppFetchingType,
@@ -233,6 +238,14 @@ export function useApp() {
         if (!isLoggedIn) {
           setIsCurrentProviderLogedin(false);
           handleCertificatesDataReload(currentProvider.id);
+        } else {
+          addToast({
+            message: t("topbar.provider-doesnt-support-signing-in"),
+            variant: "attention",
+            disableIcon: true,
+            isClosable: true,
+            id: "provider-doesnt-support-signing-in",
+          });
         }
       } else {
         await localProvider.login();
