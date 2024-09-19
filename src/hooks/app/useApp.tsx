@@ -89,53 +89,6 @@ export function useApp() {
     }
   };
 
-  const tryGetData = async () => {
-    if (!fortifyClient.current) {
-      return;
-    }
-
-    let providersLocal: IProviderInfo[] = [];
-
-    setFetchingValue("providers", "pending");
-    // setProviders([]);
-    // setCertificates([]);
-
-    try {
-      providersLocal = await fortifyClient.current.getProviders();
-
-      setProviders(providersLocal);
-      setFetchingValue("providers", "resolved");
-    } catch (error) {
-      setFetchingValue("providers", "rejected");
-
-      return;
-    }
-
-    try {
-      const localProvider = await fortifyClient.current.getProviderById(
-        providersLocal[0].id
-      );
-      const isLoggedIn = await localProvider.isLoggedIn();
-      setIsCurrentProviderLogedin(isLoggedIn);
-    } catch (error) {
-      setIsCurrentProviderLogedin(false);
-    }
-
-    setFetchingValue("certificates", "pending");
-
-    try {
-      setCertificates(
-        await fortifyClient.current.getCertificatesByProviderId(
-          providersLocal[0].id
-        )
-      );
-      // setCurrentProvider(providersLocal[0]);
-      setFetchingValue("certificates", "resolved");
-    } catch (error) {
-      setFetchingValue("certificates", "rejected");
-    }
-  };
-
   const start = async () => {
     if (!fortifyClient.current) {
       return;
@@ -178,7 +131,7 @@ export function useApp() {
       return;
     }
 
-    await tryGetData();
+    await tryGetProviders();
   };
 
   const handleProviderChange = async (id: string) => {
@@ -228,6 +181,7 @@ export function useApp() {
     if (providers.length) {
       if (!currentProvider) {
         setCurrentProvider(providers[0]);
+        handleProviderChange(providers[0].id);
         return;
       }
       const curProvider = providers.find(({ id }) => currentProvider.id === id);
@@ -253,12 +207,10 @@ export function useApp() {
       setCertificates(
         await fortifyClient.current.getCertificatesByProviderId(providerId)
       );
-      setCurrentProvider(
-        providers.find((provider) => provider.id === providerId)
-      );
       setFetchingValue("certificates", "resolved");
     } catch (error) {
       setFetchingValue("certificates", "rejected");
+      setCertificates([]);
     }
   };
 
