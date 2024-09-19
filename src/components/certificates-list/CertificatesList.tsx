@@ -174,6 +174,7 @@ export const CertificatesList: React.FunctionComponent<
                 notAfter,
                 raw,
                 index,
+                privateKeyId,
               } = certificate;
 
               const certificateName = getCertificateName(certificate);
@@ -195,7 +196,10 @@ export const CertificatesList: React.FunctionComponent<
                   })}
                 >
                   <TableCell>
-                    <CertificateTypeLabel type={type} />
+                    <CertificateTypeLabel
+                      type={type}
+                      withPrivatKey={Boolean(privateKeyId)}
+                    />
                   </TableCell>
                   <TableCell>
                     <CertificateName
