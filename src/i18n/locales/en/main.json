@@ -51,7 +51,8 @@
       "action": {
         "view-details": "View details",
         "delete": "Delete certificate",
-        "download": "Download certificate"
+        "download": "Download certificate",
+        "copy": "Copy certificate"
       },
       "empty-text": "There are no certificates yet.",
       "empty-search-text": "There are no results for <0>{{text}}</0>"

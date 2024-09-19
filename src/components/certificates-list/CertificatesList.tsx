@@ -227,6 +227,7 @@ export const CertificatesList: React.FunctionComponent<
                         {t("certificates.list.action.view-details")}
                       </Button>
                       <CopyIconButton
+                        title={t("certificates.list.action.copy")}
                         value={
                           raw.byteLength
                             ? () => certificateRawToPem(raw, type)
