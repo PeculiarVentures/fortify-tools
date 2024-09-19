@@ -57,6 +57,7 @@ interface CertificatesListProps {
   className?: ComponentProps<"table">["className"];
   highlightedText?: string;
   loading?: boolean;
+  isLoggedIn: boolean;
 }
 
 export const CertificatesList: React.FunctionComponent<
@@ -69,6 +70,7 @@ export const CertificatesList: React.FunctionComponent<
     currentSortDir,
     highlightedText,
     loading,
+    isLoggedIn,
     onSort,
     onViewDetails,
     onDelete,
@@ -252,6 +254,7 @@ export const CertificatesList: React.FunctionComponent<
                         }
                         size="small"
                         className={styles.action_icon_button}
+                        disabled={!isLoggedIn}
                       >
                         <DeleteIcon />
                       </IconButton>

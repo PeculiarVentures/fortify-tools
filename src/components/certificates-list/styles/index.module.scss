@@ -37,7 +37,7 @@
         margin-right: var(--pv-size-base-2);
       }
 
-      .action_icon_button {
+      .action_icon_button:not(:disabled) {
         color: var(--pv-color-gray-10);
       }
     }

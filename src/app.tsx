@@ -143,6 +143,7 @@ export function App() {
         onViewDetails={handleCertificateViewerDialogOpen}
         loading={!fetching.certificates || fetching.certificates === "pending"}
         highlightedText={searchedText}
+        isLoggedIn={isCurrentProviderLogedin}
       />
       <FetchingStatusOwerlay
         fetching={fetching}
