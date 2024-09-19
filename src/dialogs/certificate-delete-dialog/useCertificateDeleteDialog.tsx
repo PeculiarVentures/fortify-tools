@@ -71,6 +71,7 @@ export function useCertificateDeleteDialog(
 
   return {
     open: handleOpen,
+    close: handleClose,
     dialog: () =>
       fortifyClient && isOpen && openParamsRef.current ? (
         <CertificateDeleteDialog

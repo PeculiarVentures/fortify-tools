@@ -21,6 +21,7 @@ export function useProviderInfoDialog() {
 
   return {
     open: handleOpen,
+    close: handleClose,
     dialog: () =>
       isOpen && providerRef.current ? (
         <ProviderInfoDialog

@@ -1,5 +1,6 @@
 import "./global.scss";
 import "./i18n";
+import { useUpdateEffect } from "react-use";
 import { useApp } from "./hooks/app";
 import { FetchingStatusOwerlay } from "./components/fetching-status-owerlay";
 import { CertificatesList } from "./components/certificates-list";
@@ -41,6 +42,7 @@ export function App() {
 
   const {
     open: handleCertificateDeleteDialogOpen,
+    close: handleCertificateDeleteDialogClose,
     dialog: certificateDeleteDialog,
   } = useCertificateDeleteDialog({
     fortifyClient,
@@ -82,11 +84,28 @@ export function App() {
 
   const {
     open: handleCertificateViewerDialogOpen,
+    close: handleCertificateViewerDialogClose,
     dialog: certificateViewerDialog,
   } = useCertificateViewerDialog();
 
-  const { open: handleProviderInfoDialogOpen, dialog: providerInfoDialog } =
-    useProviderInfoDialog();
+  const {
+    open: handleProviderInfoDialogOpen,
+    close: handleProviderInfoDialogClose,
+    dialog: providerInfoDialog,
+  } = useProviderInfoDialog();
+
+  // Closes the dialogs belonging to the extracted token
+  useUpdateEffect(() => {
+    if (providers?.length && currentProviderId === undefined) {
+      return;
+    }
+    const curProvider = providers.find(({ id }) => currentProviderId === id);
+    if (!curProvider) {
+      handleProviderInfoDialogClose();
+      handleCertificateViewerDialogClose();
+      handleCertificateDeleteDialogClose();
+    }
+  }, [providers, currentProviderId]);
 
   return (
     <>
