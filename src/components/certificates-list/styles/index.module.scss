@@ -46,6 +46,20 @@
       width: fit-content;
       overflow: visible;
       padding-right: var(--pv-size-base-5);
+      &:before {
+        content: "";
+        width: 50px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: -50px;
+        background: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 1) 80%,
+          rgba(255, 255, 255, 1) 100%
+        );
+      }
     }
   }
 }
