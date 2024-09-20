@@ -7,7 +7,7 @@ describe("<CertificatesTopbar />", () => {
     isDisabled: false,
     isReadOnly: false,
     onReload: vi.fn(),
-    onLoginLogout: vi.fn(),
+    onLoginLogout: vi.fn((data) => data),
     onCreate: vi.fn(),
     onImport: vi.fn(),
     onSearch: vi.fn(),
@@ -57,35 +57,30 @@ describe("<CertificatesTopbar />", () => {
   });
 
   it("Should handle onReload", async () => {
-    const onReloadMock = vi.fn();
-    render(<CertificatesTopbar {...defaultProps} onReload={onReloadMock} />);
+    render(<CertificatesTopbar {...defaultProps} />);
 
     await userEvent.click(screen.getByRole("button", { name: /Refresh list/ }));
 
-    expect(onReloadMock).toBeCalledTimes(1);
+    expect(defaultProps.onReload).toBeCalledTimes(1);
   });
 
   it("Should handle onInfo", async () => {
-    const onInfoMock = vi.fn();
-    render(<CertificatesTopbar {...defaultProps} onInfo={onInfoMock} />);
+    render(<CertificatesTopbar {...defaultProps} />);
 
     await userEvent.click(
       screen.getByRole("button", { name: /Provider information/ })
     );
 
-    expect(onInfoMock).toBeCalledTimes(1);
+    expect(defaultProps.onInfo).toBeCalledTimes(1);
   });
 
   it("Should handle onLoginLogout", async () => {
-    const onLoginLogoutMock = vi.fn((data) => data);
-    render(
-      <CertificatesTopbar {...defaultProps} onLoginLogout={onLoginLogoutMock} />
-    );
+    render(<CertificatesTopbar {...defaultProps} />);
 
     await userEvent.click(screen.getByRole("button", { name: /Sign out/ }));
 
-    expect(onLoginLogoutMock).toBeCalledTimes(1);
-    expect(onLoginLogoutMock).toHaveReturnedWith(true);
+    expect(defaultProps.onLoginLogout).toBeCalledTimes(1);
+    expect(defaultProps.onLoginLogout).toHaveReturnedWith(true);
   });
 
   it("Should handle create CSR", async () => {
@@ -133,8 +128,7 @@ describe("<CertificatesTopbar />", () => {
   });
 
   it("Should handle import", async () => {
-    const onImportMock = vi.fn();
-    render(<CertificatesTopbar {...defaultProps} onImport={onImportMock} />);
+    render(<CertificatesTopbar {...defaultProps} />);
 
     const newButton = screen.getByRole("button", { name: "New" });
 
@@ -150,7 +144,7 @@ describe("<CertificatesTopbar />", () => {
 
     expect(screen.queryByRole("presentation")).not.toBeInTheDocument();
 
-    expect(onImportMock).toBeCalledTimes(1);
+    expect(defaultProps.onImport).toBeCalledTimes(1);
   });
 
   it("Should handle search", async () => {
