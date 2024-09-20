@@ -5,6 +5,7 @@ describe("<CertificatesTopbar />", () => {
   const defaultProps = {
     isLoggedIn: true,
     isDisabled: false,
+    isReadOnly: false,
     onReload: vi.fn(),
     onLoginLogout: vi.fn(),
     onCreate: vi.fn(),
@@ -45,6 +46,14 @@ describe("<CertificatesTopbar />", () => {
       screen.getByRole("button", { name: /Sign out/ })
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /New/ })).toBeEnabled();
+  });
+
+  it("Should render as read only", async () => {
+    render(<CertificatesTopbar {...defaultProps} isReadOnly={true} />);
+
+    expect(
+      screen.queryByRole("button", { name: /New/ })
+    ).not.toBeInTheDocument();
   });
 
   it("Should handle onReload", async () => {

@@ -58,6 +58,7 @@ interface CertificatesListProps {
   highlightedText?: string;
   loading?: boolean;
   isLoggedIn: boolean;
+  isReadOnly: boolean;
 }
 
 export const CertificatesList: React.FunctionComponent<
@@ -71,6 +72,7 @@ export const CertificatesList: React.FunctionComponent<
     highlightedText,
     loading,
     isLoggedIn,
+    isReadOnly = false,
     onSort,
     onViewDetails,
     onDelete,
@@ -247,22 +249,24 @@ export const CertificatesList: React.FunctionComponent<
                       >
                         <DownloadIcon />
                       </IconButton>
-                      <IconButton
-                        tabIndex={0}
-                        title={t("certificates.list.action.delete")}
-                        onClick={() =>
-                          onDelete({
-                            certificateIndex: index,
-                            providerId: providerID,
-                            label: certificateName,
-                          })
-                        }
-                        size="small"
-                        className={styles.action_icon_button}
-                        disabled={!isLoggedIn}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
+                      {!isReadOnly ? (
+                        <IconButton
+                          tabIndex={0}
+                          title={t("certificates.list.action.delete")}
+                          onClick={() =>
+                            onDelete({
+                              certificateIndex: index,
+                              providerId: providerID,
+                              label: certificateName,
+                            })
+                          }
+                          size="small"
+                          className={styles.action_icon_button}
+                          disabled={!isLoggedIn}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      ) : null}
                     </div>
                   </TableCell>
                 </TableRow>

@@ -33,6 +33,7 @@ export function App() {
   } = useApp();
 
   const currentProviderId = currentProvider?.id;
+  const isCurrentProviderReadOnly = Boolean(currentProvider?.readOnly);
 
   const {
     searchedText,
@@ -120,6 +121,7 @@ export function App() {
       <CertificatesTopbar
         searchValue={searchedText}
         isDisabled={!currentProviderId}
+        isReadOnly={isCurrentProviderReadOnly}
         className={styles.top_bar}
         onSearch={handleSearch}
         onImport={handleCertificateImportDialogOpen}
@@ -144,6 +146,7 @@ export function App() {
         loading={!fetching.certificates || fetching.certificates === "pending"}
         highlightedText={searchedText}
         isLoggedIn={isCurrentProviderLogedin}
+        isReadOnly={isCurrentProviderReadOnly}
       />
       <FetchingStatusOwerlay
         fetching={fetching}
