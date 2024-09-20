@@ -13,6 +13,7 @@ type Story = StoryObj<typeof ProviderInfoDialog>;
 export const Default: Story = {
   args: {
     data: {
+      name: "MacOS Crypto",
       isHardware: true,
       isRemovable: true,
       token: {

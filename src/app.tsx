@@ -161,7 +161,7 @@ export function App() {
           {certificateCreateDialog()}
           {providerInfoDialog()}
         </>
-      ) : undefined}
+      ) : null}
 
       <div className={styles.certificate_list_corners_backdrop}></div>
     </>
