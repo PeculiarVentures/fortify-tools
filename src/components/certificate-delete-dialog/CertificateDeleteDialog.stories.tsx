@@ -4,6 +4,7 @@ import { CertificateDeleteDialog } from "./CertificateDeleteDialog";
 const meta: Meta<typeof CertificateDeleteDialog> = {
   title: "Components/CertificateDeleteDialog",
   component: CertificateDeleteDialog,
+  tags: ["!autodocs"],
 };
 
 export default meta;
@@ -13,13 +14,5 @@ export const Default: Story = {
   args: {
     certificateName: "Certificate Name",
     certificateId: "12345",
-  },
-};
-
-export const Loading: Story = {
-  args: {
-    certificateName: "Certificate Name",
-    certificateId: "12345",
-    loading: true,
   },
 };
