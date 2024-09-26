@@ -41,7 +41,7 @@
     "vitest-dom": "^0.1.1"
   },
   "dependencies": {
-    "@peculiar/certificates-viewer-react": "^4.3.0",
+    "@peculiar/certificates-viewer-react": "^4.3.1",
     "@peculiar/fortify-webcomponents-react": "^4.0.8",
     "@peculiar/react-components": "^0.6.4",
     "@peculiar/x509": "^1.12.1",
