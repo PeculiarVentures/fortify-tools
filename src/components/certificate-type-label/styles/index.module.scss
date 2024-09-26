@@ -14,10 +14,7 @@
       height: var(--pv-size-base-6);
     }
   }
-  .text_wrapper {
-    h6,
-    p {
-      display: inline;
-    }
+  .label_part {
+    display: inline;
   }
 }

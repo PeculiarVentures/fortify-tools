@@ -26,12 +26,20 @@ export const CertificateTypeLabel: React.FunctionComponent<
           <span className={styles.icon_wrapper}>
             {withPrivatKey ? <CertificateWithKeyIcon /> : <CertificateIcon />}
           </span>
-          <span className={styles.text_wrapper}>
-            <Typography variant="s2" color="black">
+          <span>
+            <Typography
+              variant="s2"
+              color="black"
+              className={styles.label_part}
+            >
               {t("certificates.list.cell.certificate")}
             </Typography>
             {withPrivatKey ? (
-              <Typography variant="b2" color="black">
+              <Typography
+                variant="b2"
+                color="black"
+                className={styles.label_part}
+              >
                 {" "}
                 {t("certificates.list.cell.with-privat-key")}
               </Typography>
