@@ -53,6 +53,72 @@ export const CertificatesTopbar: React.FunctionComponent<
 
   const { t } = useTranslation();
 
+  const renderCreateButton = () =>
+    !isReadOnly ? (
+      <div>
+        {isDisabled || !isLoggedIn ? (
+          <Tooltip
+            color="white"
+            size="large"
+            arrow={true}
+            placement="bottom-end"
+            offset={10}
+            title={
+              !isLoggedIn
+                ? t("topbar.create-certificate-disabled-tooltip")
+                : undefined
+            }
+          >
+            <Button
+              color="primary"
+              variant="contained"
+              size="large"
+              startIcon={<PlusIcon />}
+              disabled={true}
+            >
+              {t("topbar.create-certificate")}
+            </Button>
+          </Tooltip>
+        ) : (
+          <Menu
+            popoverProps={{
+              className: styles.creation_menu,
+            }}
+            options={[
+              {
+                label: t("topbar.create-certificate-scr"),
+                startIcon: (
+                  <CertificatCSRIcon className={styles.creation_menu_icon} />
+                ),
+                onClick: () => onCreate("csr"),
+              },
+              {
+                label: t("topbar.create-certificate-ssc"),
+                startIcon: (
+                  <CertificatSSCIcon className={styles.creation_menu_icon} />
+                ),
+                onClick: () => onCreate("x509"),
+              },
+              {
+                label: t("topbar.import-certificate"),
+                startIcon: <ImportIcon className={styles.creation_menu_icon} />,
+                onClick: onImport,
+              },
+            ]}
+          >
+            <Button
+              color="primary"
+              variant="contained"
+              size="large"
+              startIcon={<PlusIcon />}
+            >
+              {t("topbar.create-certificate")}
+            </Button>
+          </Menu>
+        )}
+      </div>
+    ) : null;
+
   return (
     <div className={clsx(styles.topbar_root, className)}>
       <div className={styles.search_field}>
@@ -131,72 +197,7 @@ export const CertificatesTopbar: React.FunctionComponent<
           {isLoggedIn ? <LogoutIcon /> : <LoginIcon />}
         </IconButton>
       </div>
-      {!isReadOnly ? (
-        <div>
-          {isDisabled || !isLoggedIn ? (
-            <Tooltip
-              color="white"
-              size="large"
-              arrow={true}
-              placement="bottom-end"
-              offset={10}
-              title={
-                !isLoggedIn
-                  ? t("topbar.create-certificate-disabled-tooltip")
-                  : undefined
-              }
-            >
-              <Button
-                color="primary"
-                variant="contained"
-                size="large"
-                startIcon={<PlusIcon />}
-                disabled={true}
-              >
-                {t("topbar.create-certificate")}
-              </Button>
-            </Tooltip>
-          ) : (
-            <Menu
-              popoverProps={{
-                className: styles.creation_menu,
-              }}
-              options={[
-                {
-                  label: t("topbar.create-certificate-scr"),
-                  startIcon: (
-                    <CertificatCSRIcon className={styles.creation_menu_icon} />
-                  ),
-                  onClick: () => onCreate("csr"),
-                },
-                {
-                  label: t("topbar.create-certificate-ssc"),
-                  startIcon: (
-                    <CertificatSSCIcon className={styles.creation_menu_icon} />
-                  ),
-                  onClick: () => onCreate("x509"),
-                },
-                {
-                  label: t("topbar.import-certificate"),
-                  startIcon: (
-                    <ImportIcon className={styles.creation_menu_icon} />
-                  ),
-                  onClick: onImport,
-                },
-              ]}
-            >
-              <Button
-                color="primary"
-                variant="contained"
-                size="large"
-                startIcon={<PlusIcon />}
-              >
-                {t("topbar.create-certificate")}
-              </Button>
-            </Menu>
-          )}
-        </div>
-      ) : null}
+      {renderCreateButton()}
     </div>
   );
 };
