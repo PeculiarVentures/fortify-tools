@@ -46,13 +46,13 @@
     "@peculiar/react-components": "^0.6.4",
     "@peculiar/x509": "^1.12.1",
     "clsx": "^2.1.1",
-    "i18next": "^23.14.0",
+    "i18next": "^23.15.1",
     "lodash": "^4.17.21",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "react-dropzone": "^14.2.3",
     "react-error-boundary": "^4.0.13",
-    "react-i18next": "^15.0.1",
+    "react-i18next": "^15.0.2",
     "react-use": "^17.5.1"
   },
   "resolutions": {
