@@ -24,7 +24,11 @@ describe("<CertificatesTopbar />", () => {
     );
 
     expect(screen.getByRole("searchbox")).toBeDisabled();
-    expect(screen.getByRole("button", { name: /Refresh list/ })).toBeDisabled();
+    expect(
+      screen.getByRole("button", {
+        name: /Reset session and refresh certificate list/,
+      })
+    ).toBeDisabled();
     expect(
       screen.getByRole("button", { name: /Provider information/ })
     ).toBeDisabled();
@@ -59,7 +63,11 @@ describe("<CertificatesTopbar />", () => {
   it("Should handle onReload", async () => {
     render(<CertificatesTopbar {...defaultProps} />);
 
-    await userEvent.click(screen.getByRole("button", { name: /Refresh list/ }));
+    await userEvent.click(
+      screen.getByRole("button", {
+        name: /Reset session and refresh certificate list/,
+      })
+    );
 
     expect(defaultProps.onReload).toBeCalledTimes(1);
   });
