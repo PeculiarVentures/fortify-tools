@@ -203,7 +203,7 @@
     "create-certificate-disabled-tooltip": "Please sign in to the provider to add new certificates.",
     "create-certificate-scr": "Create certificate signing request (CSR)",
     "create-certificate-ssc": "Create self-signed certificate",
-    "reload-certificates": "Refresh list",
+    "reload-certificates": "Reset session and refresh certificate list",
     "provider-information": "Provider information",
     "provider-login": "Sign in",
     "provider-logout": "Sign out",

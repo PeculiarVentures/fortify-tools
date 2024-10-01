@@ -223,6 +223,22 @@ export function useApp() {
     window.location.reload();
   };
 
+  const handleProviderResetAndRefreshList = async () => {
+    if (!fortifyClient.current || !currentProvider) {
+      return;
+    }
+
+    try {
+      const localProvider = await fortifyClient.current.getProviderById(
+        currentProvider.id
+      );
+      await localProvider.reset();
+    } catch (error) {
+      //
+    }
+    handleCertificatesDataReload(currentProvider.id);
+  };
+
   const handleProviderLoginLogout = async (isLogedin: boolean) => {
     if (!fortifyClient.current || !currentProvider) {
       return;
@@ -272,5 +288,6 @@ export function useApp() {
     handleProviderChange,
     handleRetryConection,
     handleProviderLoginLogout,
+    handleProviderResetAndRefreshList,
   };
 }

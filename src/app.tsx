@@ -30,6 +30,7 @@ export function App() {
     handleProviderChange,
     handleRetryConection,
     handleProviderLoginLogout,
+    handleProviderResetAndRefreshList,
   } = useApp();
 
   const currentProviderId = currentProvider?.id;
@@ -126,9 +127,7 @@ export function App() {
         onSearch={handleSearch}
         onImport={handleCertificateImportDialogOpen}
         onCreate={handleCertificateCreateDialogOpen}
-        onReload={() =>
-          currentProviderId && handleCertificatesDataReload(currentProviderId)
-        }
+        onReload={handleProviderResetAndRefreshList}
         onInfo={() =>
           currentProvider && handleProviderInfoDialogOpen(currentProvider)
         }
