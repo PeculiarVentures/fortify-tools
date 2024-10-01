@@ -69,7 +69,7 @@
             "invalid-data": "Certificate is invalid. Please check your data and try again."
           }
         },
-        "divider-label": "Or paste certificate in Base64 format below",
+        "divider-label": "Or paste certificate in PEM format below",
         "loading-text": "Importing certificate...",
         "success-message": "Certificate imported.",
         "failure-message": "Failed to import certificate because of error. Please try again."
