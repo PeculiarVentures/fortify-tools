@@ -1245,10 +1245,10 @@
     react-popper "^2.3.0"
     react-transition-group "^4.4.5"
 
-"@peculiar/x509@^1.12.2":
-  version "1.12.2"
-  resolved "https://registry.yarnpkg.com/@peculiar/x509/-/x509-1.12.2.tgz#d12d86b756b73119853b61686390f4518cedff9a"
-  integrity sha512-a99Y4Kg40c8QJrPz9cl2L2Ocmn8nVGp9vrHa725h56hRIaGPSr1IzSgx9wTolHve+D5t1kFe5M7aEJJUuRnj8A==
+"@peculiar/x509@^1.12.3":
+  version "1.12.3"
+  resolved "https://registry.yarnpkg.com/@peculiar/x509/-/x509-1.12.3.tgz#af3db2c637a861d9bd6ca29c4bd659048d8d42b1"
+  integrity sha512-+Mzq+W7cNEKfkNZzyLl6A6ffqc3r21HGZUezgfKxpZrkORfOqgRXnS80Zu0IV6a9Ue9QBJeKD7kN0iWfc3bhRQ==
   dependencies:
     "@peculiar/asn1-cms" "^2.3.13"
     "@peculiar/asn1-csr" "^2.3.13"
