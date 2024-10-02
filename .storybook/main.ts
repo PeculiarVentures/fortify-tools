@@ -7,7 +7,6 @@ const config: StorybookConfig = {
     "@storybook/addon-links",
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
-    "@storybook/addon-actions",
   ],
 
   framework: {
@@ -18,7 +17,7 @@ const config: StorybookConfig = {
   docs: {},
 
   typescript: {
-    reactDocgen: "react-docgen-typescript"
-  }
+    reactDocgen: "react-docgen-typescript",
+  },
 };
 export default config;
