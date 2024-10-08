@@ -22,7 +22,8 @@
     "types": ["vitest-dom/extend-expect", "vitest/globals"],
     "baseUrl": "./",
     "paths": {
-      "@testing": ["utils/testing/index.ts"]
+      "@testing": ["utils/testing/index.ts"],
+      "@testing/data": ["utils/testing/data/index.ts"]
     }
   },
   "include": ["src"]
