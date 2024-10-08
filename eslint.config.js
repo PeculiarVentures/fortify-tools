@@ -10,7 +10,7 @@ export default tseslint.config(
     files: ["src/**/*.ts", "src/**/*.tsx"],
     ignores: ["src/**/*.d.ts"],
     rules: {
-      "@typescript-eslint/semi": 1,
+      "@/semi": 1,
       "no-param-reassign": ["error", { props: false }],
       "brace-style": ["error", "1tbs", { allowSingleLine: true }],
       "operator-assignment": ["error", "always"],
@@ -18,13 +18,17 @@ export default tseslint.config(
       "no-multi-assign": 2,
       "spaced-comment": ["warn", "always", { exceptions: ["*"] }],
       "no-var": 2,
-      "@typescript-eslint/keyword-spacing": 2,
+      "@/keyword-spacing": 2,
       "no-fallthrough": 2,
-      "@typescript-eslint/no-unused-vars": 1,
+      "@typescript-eslint/no-unused-vars": ["warn", { caughtErrors: "none" }],
       quotes: ["error", "double"],
       "arrow-body-style": ["error", "as-needed"],
       "eol-last": ["warn", "always"],
       "no-multiple-empty-lines": ["error", { max: 1, maxBOF: 0, maxEOF: 0 }],
+      "@typescript-eslint/no-unused-expressions": [
+        "error",
+        { allowShortCircuit: true, allowTernary: true },
+      ],
     },
   }
 );
