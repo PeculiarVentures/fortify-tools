@@ -21,6 +21,7 @@ export function useCertificateViewerDialog() {
 
   return {
     open: handleOpen,
+    close: handleClose,
     dialog: () =>
       isOpen && certificateRef.current ? (
         <CertificateViewerDialog

@@ -57,6 +57,8 @@ interface CertificatesListProps {
   className?: ComponentProps<"table">["className"];
   highlightedText?: string;
   loading?: boolean;
+  isLoggedIn: boolean;
+  isReadOnly: boolean;
 }
 
 export const CertificatesList: React.FunctionComponent<
@@ -69,6 +71,8 @@ export const CertificatesList: React.FunctionComponent<
     currentSortDir,
     highlightedText,
     loading,
+    isLoggedIn,
+    isReadOnly = false,
     onSort,
     onViewDetails,
     onDelete,
@@ -134,7 +138,11 @@ export const CertificatesList: React.FunctionComponent<
   );
 
   return (
-    <div className={styles.table_wrapper}>
+    <div
+      className={clsx(styles.table_wrapper, {
+        [styles.table_wrapper_loading]: loading,
+      })}
+    >
       <Table className={clsx(styles.list_table, className)}>
         <TableHeader>
           <TableRow>
@@ -168,6 +176,7 @@ export const CertificatesList: React.FunctionComponent<
                 notAfter,
                 raw,
                 index,
+                privateKeyId,
               } = certificate;
 
               const certificateName = getCertificateName(certificate);
@@ -189,7 +198,10 @@ export const CertificatesList: React.FunctionComponent<
                   })}
                 >
                   <TableCell>
-                    <CertificateTypeLabel type={type} />
+                    <CertificateTypeLabel
+                      type={type}
+                      withPrivatKey={Boolean(privateKeyId)}
+                    />
                   </TableCell>
                   <TableCell>
                     <CertificateName
@@ -217,6 +229,7 @@ export const CertificatesList: React.FunctionComponent<
                         {t("certificates.list.action.view-details")}
                       </Button>
                       <CopyIconButton
+                        title={t("certificates.list.action.copy")}
                         value={
                           raw.byteLength
                             ? () => certificateRawToPem(raw, type)
@@ -236,21 +249,24 @@ export const CertificatesList: React.FunctionComponent<
                       >
                         <DownloadIcon />
                       </IconButton>
-                      <IconButton
-                        tabIndex={0}
-                        title={t("certificates.list.action.delete")}
-                        onClick={() =>
-                          onDelete({
-                            certificateIndex: index,
-                            providerId: providerID,
-                            label: certificateName,
-                          })
-                        }
-                        size="small"
-                        className={styles.action_icon_button}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
+                      {!isReadOnly ? (
+                        <IconButton
+                          tabIndex={0}
+                          title={t("certificates.list.action.delete")}
+                          onClick={() =>
+                            onDelete({
+                              certificateIndex: index,
+                              providerId: providerID,
+                              label: certificateName,
+                            })
+                          }
+                          size="small"
+                          className={styles.action_icon_button}
+                          disabled={!isLoggedIn}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      ) : null}
                     </div>
                   </TableCell>
                 </TableRow>
@@ -267,12 +283,8 @@ function CertificatesListLoading() {
   return [...Array(12).keys()].map((index) => (
     <TableRow className={styles.skeleton_tr} key={`skel-row-${index}`}>
       {[...Array(4).keys()].map((index) => (
-        <TableCell className={styles.skeleton_td}>
-          <Skeleton
-            key={`skel-td-${index}`}
-            className={styles.skeleton_td_item}
-            height={31}
-          />
+        <TableCell className={styles.skeleton_td} key={`skel-td-${index}`}>
+          <Skeleton className={styles.skeleton_td_item} height={31} />
         </TableCell>
       ))}
     </TableRow>

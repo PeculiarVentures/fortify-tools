@@ -4,6 +4,8 @@ import {
   IProviderInfo,
   ICertificate,
 } from "@peculiar/fortify-client-core";
+import { useTranslation } from "react-i18next";
+import { useToast } from "@peculiar/react-components";
 
 import { AppFetchingStatus, AppFetchingType } from "./types";
 
@@ -14,9 +16,11 @@ export function useApp() {
   const fortifyClient = React.useRef<FortifyAPI | null>(null);
 
   const [providers, setProviders] = React.useState<IProviderInfo[]>([]);
-  const [currentProviderId, setCurrentProviderId] = React.useState<
-    string | undefined
+  const [currentProvider, setCurrentProvider] = React.useState<
+    IProviderInfo | undefined
   >(undefined);
+  const [isCurrentProviderLogedin, setIsCurrentProviderLogedin] =
+    React.useState(false);
   const [certificates, setCertificates] = React.useState<ICertificate[]>([]);
   const [challenge, setChallenge] = React.useState<string | null>(null);
   const [fetching, setFetching] = React.useState<AppFetchingType>({
@@ -26,6 +30,9 @@ export function useApp() {
   /**
    *
    */
+
+  const { addToast } = useToast();
+  const { t } = useTranslation();
 
   const setFetchingValue = (
     name: keyof AppFetchingType,
@@ -70,40 +77,20 @@ export function useApp() {
     return true;
   };
 
-  const tryGetData = async () => {
+  const tryGetProviders = async () => {
     if (!fortifyClient.current) {
       return;
     }
 
-    let providersLocal: IProviderInfo[] = [];
-
     setFetchingValue("providers", "pending");
-    setProviders([]);
-    setCertificates([]);
 
     try {
-      providersLocal = await fortifyClient.current.getProviders();
-
+      const providersLocal = await fortifyClient.current.getProviders();
       setProviders(providersLocal);
       setFetchingValue("providers", "resolved");
     } catch (error) {
+      setProviders([]);
       setFetchingValue("providers", "rejected");
-
-      return;
-    }
-
-    setFetchingValue("certificates", "pending");
-
-    try {
-      setCertificates(
-        await fortifyClient.current.getCertificatesByProviderId(
-          providersLocal[0].id
-        )
-      );
-      setCurrentProviderId(providersLocal[0].id);
-      setFetchingValue("certificates", "resolved");
-    } catch (error) {
-      setFetchingValue("certificates", "rejected");
     }
   };
 
@@ -149,21 +136,32 @@ export function useApp() {
       return;
     }
 
-    await tryGetData();
+    await tryGetProviders();
   };
 
   const handleProviderChange = async (id: string) => {
-    if (currentProviderId === id || fetching.certificates === "pending") {
+    if (!fortifyClient.current) {
+      return;
+    }
+    if (currentProvider?.id === id || fetching.certificates === "pending") {
       return;
     }
 
     setFetchingValue("certificates", "pending");
 
     try {
+      const localProvider = await fortifyClient.current.getProviderById(id);
+      const isLoggedIn = await localProvider.isLoggedIn();
+      setIsCurrentProviderLogedin(isLoggedIn);
+    } catch (error) {
+      setIsCurrentProviderLogedin(false);
+    }
+
+    try {
       setCertificates(
         await fortifyClient.current!.getCertificatesByProviderId(id)
       );
-      setCurrentProviderId(id);
+      setCurrentProvider(providers.find((provider) => provider.id === id));
       setFetchingValue("certificates", "resolved");
     } catch (error) {
       setFetchingValue("certificates", "rejected");
@@ -174,8 +172,8 @@ export function useApp() {
     fortifyClient.current = new FortifyAPI({
       onDebug: () => {},
       onClose: handleClose,
-      onProvidersAdded: tryGetData,
-      onProvidersRemoved: tryGetData,
+      onProvidersAdded: tryGetProviders,
+      onProvidersRemoved: tryGetProviders,
       // filters: {
       //   onlyWithPrivateKey: true,
       // },
@@ -183,6 +181,25 @@ export function useApp() {
 
     start();
   }, []);
+
+  React.useEffect(() => {
+    if (providers.length) {
+      if (!currentProvider) {
+        setCurrentProvider(providers[0]);
+        handleProviderChange(providers[0].id);
+        return;
+      }
+      const curProvider = providers.find(({ id }) => currentProvider.id === id);
+      if (!curProvider) {
+        setCurrentProvider(providers[0]);
+        handleProviderChange(providers[0].id);
+      }
+    } else {
+      setCurrentProvider(undefined);
+      setIsCurrentProviderLogedin(false);
+      setCertificates([]);
+    }
+  }, [providers]);
 
   const handleCertificatesDataReload = async (providerId: string) => {
     if (!fortifyClient.current) {
@@ -195,10 +212,10 @@ export function useApp() {
       setCertificates(
         await fortifyClient.current.getCertificatesByProviderId(providerId)
       );
-      setCurrentProviderId(providerId);
       setFetchingValue("certificates", "resolved");
     } catch (error) {
       setFetchingValue("certificates", "rejected");
+      setCertificates([]);
     }
   };
 
@@ -206,15 +223,71 @@ export function useApp() {
     window.location.reload();
   };
 
+  const handleProviderResetAndRefreshList = async () => {
+    if (!fortifyClient.current || !currentProvider) {
+      return;
+    }
+
+    try {
+      const localProvider = await fortifyClient.current.getProviderById(
+        currentProvider.id
+      );
+      await localProvider.reset();
+    } catch (error) {
+      //
+    }
+    handleCertificatesDataReload(currentProvider.id);
+  };
+
+  const handleProviderLoginLogout = async (isLogedin: boolean) => {
+    if (!fortifyClient.current || !currentProvider) {
+      return;
+    }
+
+    try {
+      const localProvider = await fortifyClient.current.getProviderById(
+        currentProvider.id
+      );
+      if (isLogedin) {
+        await localProvider.logout();
+        const isLoggedIn = await localProvider.isLoggedIn();
+        if (!isLoggedIn) {
+          setIsCurrentProviderLogedin(false);
+          handleCertificatesDataReload(currentProvider.id);
+        } else {
+          addToast({
+            message: t("topbar.provider-doesnt-support-signing-in"),
+            variant: "attention",
+            disableIcon: true,
+            isClosable: true,
+            id: "provider-doesnt-support-signing-in",
+          });
+        }
+      } else {
+        await localProvider.login();
+        const isLoggedIn = await localProvider.isLoggedIn();
+        if (isLoggedIn) {
+          setIsCurrentProviderLogedin(true);
+          handleCertificatesDataReload(currentProvider.id);
+        }
+      }
+    } catch (error) {
+      setIsCurrentProviderLogedin(false);
+    }
+  };
+
   return {
     fortifyClient: fortifyClient.current,
     fetching,
     challenge,
     providers,
-    currentProviderId,
+    currentProvider,
     certificates,
+    isCurrentProviderLogedin,
     handleCertificatesDataReload,
     handleProviderChange,
     handleRetryConection,
+    handleProviderLoginLogout,
+    handleProviderResetAndRefreshList,
   };
 }
