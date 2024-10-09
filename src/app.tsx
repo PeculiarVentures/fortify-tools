@@ -78,7 +78,10 @@ export function App() {
   const {
     open: handleCertificateViewerDialogOpen,
     dialog: certificateViewerDialog,
-  } = useCertificateViewerDialog();
+  } = useCertificateViewerDialog({
+    currentProviderId,
+    fortifyClient,
+  });
 
   return (
     <>
