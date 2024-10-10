@@ -48,7 +48,7 @@ export function getCertificateName(certificate: CertificateProps) {
       Array.isArray(value) ? value[0] : value, // Take the first element if value is an array
     ])
   );
-  const { G, CN, SN, E } = subject as unknown as CertificateSubjectProps;
+  const { G, CN, SN, E } = subject;
 
   // Return Common Name if present.
   if (CN) {
