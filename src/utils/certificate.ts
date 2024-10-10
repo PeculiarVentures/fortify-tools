@@ -46,12 +46,10 @@ export function getCertificateSubject(subjectString: string) {
   const name = new Name(subjectString).toJSON();
   const obj = {} as CertificateSubjectProps;
   if (name.length) {
-    for (const element of name) {
-      for (const key in element) {
-        obj[key as keyof CertificateSubjectProps] = Array.isArray(element[key])
-          ? element[key][0]
-          : element[key];
-      }
+    for (const key in name[0]) {
+      obj[key as keyof CertificateSubjectProps] = Array.isArray(name[0][key])
+        ? name[0][key][0]
+        : name[0][key];
     }
   }
   return obj;
