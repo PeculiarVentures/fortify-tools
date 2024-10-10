@@ -39,8 +39,16 @@ export function certificateSubjectToString(
 }
 
 export function getCertificateName(certificate: CertificateProps) {
-  const { G, CN, SN, E } =
-    certificate.subject as unknown as CertificateSubjectProps;
+  if (!certificate.subject) {
+    return certificate.subjectName;
+  }
+  const subject = Object.fromEntries(
+    Object.entries(certificate.subject).map(([key, value]) => [
+      key,
+      Array.isArray(value) ? value[0] : value, // Take the first element if value is an array
+    ])
+  );
+  const { G, CN, SN, E } = subject as unknown as CertificateSubjectProps;
 
   // Return Common Name if present.
   if (CN) {
