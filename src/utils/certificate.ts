@@ -43,16 +43,19 @@ export function certificateSubjectToString(
 }
 
 export function getCertificateSubject(subjectString: string) {
-  const name = new Name(subjectString).toJSON();
-  const obj = {} as CertificateSubjectProps;
-  if (name.length) {
-    for (const key in name[0]) {
-      obj[key as keyof CertificateSubjectProps] = Array.isArray(name[0][key])
-        ? name[0][key][0]
-        : name[0][key];
-    }
-  }
-  return obj;
+  const jsonName = new Name(subjectString).toJSON();
+
+  return jsonName.reduce<Record<string, string[]>>((result, currentValue) => {
+    Object.keys(currentValue).forEach((keyName) => {
+      if (!result[keyName]) {
+        result[keyName] = currentValue[keyName];
+      } else {
+        result[keyName].push(...currentValue[keyName]);
+      }
+    });
+
+    return result;
+  }, {});
 }
 
 export function getCertificateName(certificate: CertificateProps) {
