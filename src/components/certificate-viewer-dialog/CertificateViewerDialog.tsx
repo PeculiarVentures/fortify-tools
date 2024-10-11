@@ -85,7 +85,7 @@ export const CertificateViewerDialog: React.FunctionComponent<
       </DialogContent>
       <DialogActions>
         <Button variant="outlined" onClick={onClose}>
-          {t("button.cancel")}
+          {t("button.close")}
         </Button>
       </DialogActions>
     </Dialog>
