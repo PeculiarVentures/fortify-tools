@@ -42,27 +42,22 @@ export function getCertificateName(certificate: CertificateProps) {
   if (!certificate.subject) {
     return certificate.subjectName;
   }
-  const subject = Object.fromEntries(
-    Object.entries(certificate.subject).map(([key, value]) => [
-      key,
-      Array.isArray(value) ? value[0] : value, // Take the first element if value is an array
-    ])
-  );
-  const { G, CN, SN, E } = subject;
+
+  const { G, CN, SN, E } = certificate.subject;
 
   // Return Common Name if present.
   if (CN) {
-    return CN;
+    return CN[0];
   }
 
   // Return Given Name + Surname if both present.
   if (G && SN) {
-    return `${G} ${SN}`;
+    return `${G[0]} ${SN[0]}`;
   }
 
   // Return Email if none of the above present
   if (E) {
-    return E;
+    return E[0];
   }
 
   return certificate.subjectName;
