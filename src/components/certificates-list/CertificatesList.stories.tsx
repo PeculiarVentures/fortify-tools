@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { CertificatesList } from "./CertificatesList";
 import { faker } from "@faker-js/faker";
+import { CertificateProps } from "../../types";
 
 const meta: Meta<typeof CertificatesList> = {
   title: "Components/CertificatesList",
@@ -27,9 +28,9 @@ export const Default: Story = {
       label: faker.internet.domainName(),
       privateKeyId: "",
       subject: {
-        commonName: "",
+        CN: faker.internet.domainName(),
       },
-    })),
+    })) as unknown as CertificateProps[],
   },
 };
 
