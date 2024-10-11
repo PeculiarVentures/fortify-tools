@@ -39,22 +39,25 @@ export function certificateSubjectToString(
 }
 
 export function getCertificateName(certificate: CertificateProps) {
-  const { G, CN, SN, E } =
-    certificate.subject as unknown as CertificateSubjectProps;
+  if (!certificate.subject) {
+    return certificate.subjectName;
+  }
+
+  const { G, CN, SN, E } = certificate.subject;
 
   // Return Common Name if present.
   if (CN) {
-    return CN;
+    return CN[0];
   }
 
   // Return Given Name + Surname if both present.
   if (G && SN) {
-    return `${G} ${SN}`;
+    return `${G[0]} ${SN[0]}`;
   }
 
   // Return Email if none of the above present
   if (E) {
-    return E;
+    return E[0];
   }
 
   return certificate.subjectName;
