@@ -77,7 +77,7 @@ export function useApp() {
     return true;
   };
 
-  const tryGetProviders = async () => {
+  const tryGetData = async () => {
     if (!fortifyClient.current) {
       return;
     }
@@ -88,9 +88,35 @@ export function useApp() {
       const providersLocal = await fortifyClient.current.getProviders();
       setProviders(providersLocal);
       setFetchingValue("providers", "resolved");
+
+      if (!providersLocal.length) {
+        setCurrentProvider(undefined);
+        setIsCurrentProviderLogedin(false);
+        setCertificates([]);
+        return;
+      }
+
+      const defaultProvider = providersLocal[0];
+
+      if (!currentProvider) {
+        setCurrentProvider(defaultProvider);
+        handleProviderChange(defaultProvider.id);
+        return;
+      }
+      const curProvider = providersLocal.find(
+        ({ id }) => currentProvider.id === id
+      );
+      if (!curProvider) {
+        setCurrentProvider(defaultProvider);
+        handleProviderChange(defaultProvider.id);
+      }
     } catch (error) {
       setProviders([]);
       setFetchingValue("providers", "rejected");
+
+      setCurrentProvider(undefined);
+      setIsCurrentProviderLogedin(false);
+      setCertificates([]);
     }
   };
 
@@ -136,7 +162,7 @@ export function useApp() {
       return;
     }
 
-    await tryGetProviders();
+    await tryGetData();
   };
 
   const handleProviderChange = async (id: string) => {
@@ -159,12 +185,15 @@ export function useApp() {
 
     try {
       setCertificates(
-        await fortifyClient.current!.getCertificatesByProviderId(id)
+        await fortifyClient.current.getCertificatesByProviderId(id)
       );
-      setCurrentProvider(providers.find((provider) => provider.id === id));
+      if (providers?.length) {
+        setCurrentProvider(providers.find((provider) => provider.id === id));
+      }
       setFetchingValue("certificates", "resolved");
     } catch (error) {
       setFetchingValue("certificates", "rejected");
+      setCertificates([]);
     }
   };
 
@@ -172,8 +201,8 @@ export function useApp() {
     fortifyClient.current = new FortifyAPI({
       onDebug: () => {},
       onClose: handleClose,
-      onProvidersAdded: tryGetProviders,
-      onProvidersRemoved: tryGetProviders,
+      onProvidersAdded: tryGetData,
+      onProvidersRemoved: tryGetData,
       // filters: {
       //   onlyWithPrivateKey: true,
       // },
@@ -181,25 +210,6 @@ export function useApp() {
 
     start();
   }, []);
-
-  React.useEffect(() => {
-    if (providers.length) {
-      if (!currentProvider) {
-        setCurrentProvider(providers[0]);
-        handleProviderChange(providers[0].id);
-        return;
-      }
-      const curProvider = providers.find(({ id }) => currentProvider.id === id);
-      if (!curProvider) {
-        setCurrentProvider(providers[0]);
-        handleProviderChange(providers[0].id);
-      }
-    } else {
-      setCurrentProvider(undefined);
-      setIsCurrentProviderLogedin(false);
-      setCertificates([]);
-    }
-  }, [providers]);
 
   const handleCertificatesDataReload = async (providerId: string) => {
     if (!fortifyClient.current) {

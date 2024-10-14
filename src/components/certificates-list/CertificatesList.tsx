@@ -53,7 +53,10 @@ interface CertificatesListProps {
     providerId: string;
     label: string;
   }) => void;
-  onViewDetails: (certificate: CertificateProps) => void;
+  onViewDetails: (params: {
+    certificate: CertificateProps;
+    providerId: string;
+  }) => void;
   className?: ComponentProps<"table">["className"];
   highlightedText?: string;
   loading?: boolean;
@@ -185,12 +188,14 @@ export const CertificatesList: React.FunctionComponent<
                 <TableRow
                   tabIndex={0}
                   key={id}
-                  onClick={() => onViewDetails(certificate)}
+                  onClick={() =>
+                    onViewDetails({ certificate, providerId: providerID })
+                  }
                   onFocus={() => setCurrentRow(id)}
                   onBlur={() => setCurrentRow(undefined)}
                   onKeyDown={(event) =>
                     ["Space", "Enter"].includes(event.code) &&
-                    onViewDetails(certificate)
+                    onViewDetails({ certificate, providerId: providerID })
                   }
                   onMouseOver={() => currentRow && setCurrentRow(undefined)}
                   className={clsx({
@@ -224,7 +229,9 @@ export const CertificatesList: React.FunctionComponent<
                         className={styles.view_details_button}
                         variant="outlined"
                         size="small"
-                        onClick={() => onViewDetails(certificate)}
+                        onClick={() =>
+                          onViewDetails({ certificate, providerId: providerID })
+                        }
                       >
                         {t("certificates.list.action.view-details")}
                       </Button>

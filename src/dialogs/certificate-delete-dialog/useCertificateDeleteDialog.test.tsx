@@ -2,6 +2,7 @@ import { renderHook, act } from "@testing";
 import { vi } from "vitest";
 import { useCertificateDeleteDialog } from "./useCertificateDeleteDialog";
 
+import type { IProviderInfo } from "@peculiar/fortify-client-core";
 import type { FortifyAPI } from "@peculiar/fortify-client-core";
 
 vi.mock("@peculiar/react-components", async () => {
@@ -15,9 +16,16 @@ vi.mock("@peculiar/react-components", async () => {
 });
 
 describe("useCertificateDeleteDialog", () => {
+  const providers = [
+    {
+      id: "1",
+      name: "Provider 1",
+    },
+  ] as IProviderInfo[];
+
   it("Should initialize and call onSuccess", async () => {
     const certificateIndex = "1";
-    const providerId = "2";
+    const providerId = providers[0].id;
 
     const mockFortifyClient: Partial<FortifyAPI> = {
       removeCertificateById: vi.fn().mockResolvedValue({}),
@@ -26,6 +34,7 @@ describe("useCertificateDeleteDialog", () => {
 
     const { result } = renderHook(() =>
       useCertificateDeleteDialog({
+        providers: providers,
         onSuccess: onSuccessMock,
         fortifyClient: mockFortifyClient as FortifyAPI,
       })
@@ -33,7 +42,6 @@ describe("useCertificateDeleteDialog", () => {
 
     expect(result.current.dialog).toBeInstanceOf(Function);
     expect(result.current.open).toBeInstanceOf(Function);
-    expect(result.current.close).toBeInstanceOf(Function);
 
     act(() => {
       result.current.open({

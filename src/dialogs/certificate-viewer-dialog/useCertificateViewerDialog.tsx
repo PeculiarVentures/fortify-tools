@@ -1,31 +1,51 @@
 import React from "react";
+import { IProviderInfo } from "@peculiar/fortify-client-core";
 import { useLockBodyScroll } from "react-use";
 import { CertificateViewerDialog } from "../../components/certificate-viewer-dialog";
 import { CertificateProps } from "../../types";
 
-export function useCertificateViewerDialog() {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const certificateRef = React.useRef<CertificateProps>();
+type UseCertificateViewerDialogOpenParams = {
+  providerId: string;
+  certificate: CertificateProps;
+};
 
-  const handleOpen = (certificaate: CertificateProps) => {
-    certificateRef.current = certificaate;
+type UseCertificateViewerInitialParams = {
+  providers: IProviderInfo[];
+};
+
+export function useCertificateViewerDialog(
+  props: UseCertificateViewerInitialParams
+) {
+  const { providers } = props;
+  const [isOpen, setIsOpen] = React.useState(false);
+  const openParamsRef = React.useRef<UseCertificateViewerDialogOpenParams>();
+
+  const handleOpen = (params: UseCertificateViewerDialogOpenParams) => {
+    openParamsRef.current = params;
     setIsOpen(true);
   };
 
   const handleClose = () => {
-    certificateRef.current = undefined;
+    openParamsRef.current = undefined;
     setIsOpen(false);
   };
 
   useLockBodyScroll(isOpen);
 
+  const currentProvider = providers.find(
+    ({ id }) => openParamsRef.current?.providerId === id
+  );
+
+  if (isOpen && !currentProvider) {
+    handleClose();
+  }
+
   return {
     open: handleOpen,
-    close: handleClose,
     dialog: () =>
-      isOpen && certificateRef.current ? (
+      isOpen && openParamsRef.current ? (
         <CertificateViewerDialog
-          certificate={certificateRef.current}
+          certificate={openParamsRef.current.certificate}
           onClose={handleClose}
         />
       ) : null,
