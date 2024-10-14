@@ -2,19 +2,19 @@
   display: flex;
   gap: var(--pv-size-base-2);
   align-items: center;
-  .icon_wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    color: var(--pv-color-gray-9);
+}
+.icon_wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: var(--pv-color-gray-9);
 
+  width: var(--pv-size-base-6);
+  svg {
     width: var(--pv-size-base-6);
-    svg {
-      width: var(--pv-size-base-6);
-      height: var(--pv-size-base-6);
-    }
+    height: var(--pv-size-base-6);
   }
-  .label_part {
-    display: inline;
-  }
+}
+.label_part {
+  display: inline;
 }
