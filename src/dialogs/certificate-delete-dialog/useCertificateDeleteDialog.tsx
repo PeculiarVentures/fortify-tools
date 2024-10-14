@@ -40,7 +40,6 @@ export function useCertificateDeleteDialog(
   };
 
   const handleCertificateDelete = async (index: string) => {
-    console.log(5555);
     if (!fortifyClient || index !== openParamsRef.current?.certificateIndex) {
       return;
     }
@@ -52,10 +51,6 @@ export function useCertificateDeleteDialog(
         openParamsRef.current.certificateIndex
       );
 
-      console.log(
-        "openParamsRef.current.providerId => ",
-        openParamsRef.current.providerId
-      );
       onSuccess(openParamsRef.current.providerId);
       addToast({
         message: t("certificates.dialog.delete.success-message"),
