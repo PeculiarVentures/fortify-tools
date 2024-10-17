@@ -15,6 +15,9 @@ export default defineConfig({
     globals: true,
   },
   css: {
+    modules: {
+      generateScopedName: "pv_[hash:base64:7]",
+    },
     preprocessorOptions: {
       scss: {
         api: "modern-compiler",
