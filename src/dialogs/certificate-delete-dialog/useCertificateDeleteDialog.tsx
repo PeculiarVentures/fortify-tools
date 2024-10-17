@@ -1,4 +1,5 @@
 import React from "react";
+import { IProviderInfo } from "@peculiar/fortify-client-core";
 import { useToast } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
 import { useLockBodyScroll } from "react-use";
@@ -12,6 +13,7 @@ type UseCertificateDeleteDialogOpenParams = {
 };
 
 type UseCertificateDeleteDialogInitialParams = {
+  providers: IProviderInfo[];
   fortifyClient: FortifyAPI | null;
   onSuccess: (providerId: string) => void;
 };
@@ -19,7 +21,7 @@ type UseCertificateDeleteDialogInitialParams = {
 export function useCertificateDeleteDialog(
   props: UseCertificateDeleteDialogInitialParams
 ) {
-  const { fortifyClient, onSuccess } = props;
+  const { providers, fortifyClient, onSuccess } = props;
   const { addToast } = useToast();
   const { t } = useTranslation();
 
@@ -42,11 +44,13 @@ export function useCertificateDeleteDialog(
       return;
     }
     setIsLoading(true);
+
     try {
       await fortifyClient.removeCertificateById(
         openParamsRef.current.providerId,
         openParamsRef.current.certificateIndex
       );
+
       onSuccess(openParamsRef.current.providerId);
       addToast({
         message: t("certificates.dialog.delete.success-message"),
@@ -68,6 +72,14 @@ export function useCertificateDeleteDialog(
   };
 
   useLockBodyScroll(isOpen);
+
+  const currentProvider = providers.find(
+    ({ id }) => openParamsRef.current?.providerId === id
+  );
+
+  if (isOpen && !currentProvider) {
+    handleClose();
+  }
 
   return {
     open: handleOpen,

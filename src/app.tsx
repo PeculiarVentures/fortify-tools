@@ -12,6 +12,7 @@ import { useSortList } from "./hooks/sort-list";
 import { useSearchList } from "./hooks/search-list";
 import { useCertificateImportDialog } from "./dialogs/certificate-import-dialog";
 import { useCertificateCreateDialog } from "./dialogs/certificate-create-dialog";
+import { useProviderInfoDialog } from "./dialogs/provider-info-dialog";
 
 import styles from "./app.module.scss";
 
@@ -21,12 +22,18 @@ export function App() {
     fetching,
     challenge,
     providers,
-    currentProviderId,
+    currentProvider,
     certificates,
+    isCurrentProviderLogedin,
     handleCertificatesDataReload,
     handleProviderChange,
     handleRetryConection,
+    handleProviderLoginLogout,
+    handleProviderResetAndRefreshList,
   } = useApp();
+
+  const currentProviderId = currentProvider?.id;
+  const isCurrentProviderReadOnly = Boolean(currentProvider?.readOnly);
 
   const {
     searchedText,
@@ -38,6 +45,7 @@ export function App() {
     open: handleCertificateDeleteDialogOpen,
     dialog: certificateDeleteDialog,
   } = useCertificateDeleteDialog({
+    providers,
     fortifyClient,
     onSuccess: (providerId) => {
       handleCertificatesDataReload(providerId);
@@ -78,7 +86,12 @@ export function App() {
   const {
     open: handleCertificateViewerDialogOpen,
     dialog: certificateViewerDialog,
-  } = useCertificateViewerDialog();
+  } = useCertificateViewerDialog({
+    providers,
+  });
+
+  const { open: handleProviderInfoDialogOpen, dialog: providerInfoDialog } =
+    useProviderInfoDialog({ providers });
 
   return (
     <>
@@ -92,13 +105,20 @@ export function App() {
       </CertificatesSidebar>
       <CertificatesTopbar
         searchValue={searchedText}
+        isDisabled={!currentProviderId}
+        isReadOnly={
+          isCurrentProviderReadOnly || fetching.certificates === "rejected"
+        }
         className={styles.top_bar}
         onSearch={handleSearch}
         onImport={handleCertificateImportDialogOpen}
         onCreate={handleCertificateCreateDialogOpen}
-        onReload={() =>
-          currentProviderId && handleCertificatesDataReload(currentProviderId)
+        onReload={handleProviderResetAndRefreshList}
+        onInfo={() =>
+          currentProvider && handleProviderInfoDialogOpen(currentProvider)
         }
+        isLoggedIn={isCurrentProviderLogedin}
+        onLoginLogout={handleProviderLoginLogout}
       ></CertificatesTopbar>
       <CertificatesList
         currentSortName={currentSortName}
@@ -110,16 +130,24 @@ export function App() {
         onViewDetails={handleCertificateViewerDialogOpen}
         loading={!fetching.certificates || fetching.certificates === "pending"}
         highlightedText={searchedText}
+        isLoggedIn={isCurrentProviderLogedin}
+        isReadOnly={isCurrentProviderReadOnly}
       />
       <FetchingStatusOwerlay
         fetching={fetching}
         challenge={challenge}
         onReload={handleRetryConection}
       />
-      {certificateViewerDialog()}
-      {certificateDeleteDialog()}
-      {certificateImportDialog()}
-      {certificateCreateDialog()}
+      {providers.length ? (
+        <>
+          {certificateViewerDialog()}
+          {certificateDeleteDialog()}
+          {certificateImportDialog()}
+          {certificateCreateDialog()}
+          {providerInfoDialog()}
+        </>
+      ) : null}
+
       <div className={styles.certificate_list_corners_backdrop}></div>
     </>
   );
