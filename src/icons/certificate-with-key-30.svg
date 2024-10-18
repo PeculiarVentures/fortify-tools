@@ -1,6 +1,8 @@
 <svg width="30" height="31" viewBox="0 0 30 31" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle cx="15" cy="12.5" r="7" stroke="currentColor" stroke-width="2"/>
+<path d="M17 5.78988C16.3663 5.60128 15.695 5.5 15 5.5C11.134 5.5 8 8.63401 8 12.5C8 16.366 11.134 19.5 15 19.5C17.7924 19.5 20.2029 17.8649 21.3264 15.5C21.4787 15.1793 21.6074 14.8452 21.7101 14.5" stroke="currentColor" stroke-width="2"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M12.3538 22.1454C10.4218 21.6166 8.7231 20.5228 7.44652 19.0527L4 22.4993H8V26.4993L12.3538 22.1454Z" fill="currentColor"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M17.6484 22.1454L22.0023 26.4993V22.4993H26.0023L22.5558 19.0527C21.2792 20.5228 19.5805 21.6166 17.6484 22.1454Z" fill="currentColor"/>
 <circle cx="15" cy="12.5" r="3" stroke="currentColor" stroke-width="2"/>
+<rect x="20" y="4.5" width="4" height="4" rx="2" stroke="currentColor" stroke-width="2"/>
+<path d="M22 8.5V11.5H24" stroke="currentColor" stroke-width="2"/>
 </svg>

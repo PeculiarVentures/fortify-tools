@@ -4,7 +4,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import svgr from "vite-plugin-svgr";
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [svgr(), react(), tsconfigPaths()],
   server: {
     port: 3000,
@@ -14,10 +14,16 @@ export default defineConfig({
     outDir: "./dist",
   },
   css: {
+    modules: {
+      generateScopedName:
+        command === "build"
+          ? "pv_[hash:base64:7]"
+          : "pv_[local]_[hash:base64:7]",
+    },
     preprocessorOptions: {
       scss: {
         api: "modern-compiler",
       },
     },
   },
-});
+}));
