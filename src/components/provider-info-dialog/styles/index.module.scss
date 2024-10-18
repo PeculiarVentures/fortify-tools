@@ -1,0 +1,22 @@
+.dialog {
+  max-width: 870px !important;
+
+  .dialog_title {
+    padding-left: var(--pv-size-base-6);
+    padding-right: var(--pv-size-base-6);
+  }
+
+  .dialog_content {
+    max-height: 525px;
+    .dialog_content_list {
+      padding: var(--pv-size-base) var(--pv-size-base-2) 0 var(--pv-size-base-2);
+      display: grid;
+      grid-template-columns: 35% auto;
+      gap: var(--pv-size-base-4) var(--pv-size-base-8);
+    }
+  }
+
+  .dialog_footer {
+    padding: var(--pv-size-base-6);
+  }
+}
