@@ -6,6 +6,35 @@
         "read-only": "Read only"
       },
       "empty-text": "No providers connected"
+    },
+    "dialog": {
+      "info": {
+        "title": "{{name}} information",
+        "list": {
+          "token-name": "Token name:",
+          "token-category": {
+            "label": "Token category",
+            "value": {
+              "hardware": "Hardware",
+              "software": "Software"
+            }
+          },
+          "serial-number": "Serial number",
+          "free-space": "Free space (minimum estimated)",
+          "hardware-version": "Hardware version",
+          "firmware-version": "Firmware version",
+          "model": "Model",
+          "algorithms": "Algorithms",
+          "extractable": {
+            "label": "Extractable",
+            "value": {
+              "yes": "Yes",
+              "no": "No"
+            }
+          }
+        },
+        "empty-value": "Information is unavailable"
+      }
     }
   },
   "certificates": {
@@ -17,12 +46,14 @@
         "expires": "Expires"
       },
       "cell": {
-        "certificate": "Certificate"
+        "certificate": "Certificate",
+        "with-privat-key": "(with private key)"
       },
       "action": {
         "view-details": "View details",
         "delete": "Delete certificate",
-        "download": "Download certificate"
+        "download": "Download certificate",
+        "copy": "Copy certificate"
       },
       "empty-text": "There are no certificates yet.",
       "empty-search-text": "There are no results for <0>{{text}}</0>"
@@ -169,9 +200,14 @@
     "search-placeholder": "Search",
     "import-certificate": "Import certificate",
     "create-certificate": "New",
+    "create-certificate-disabled-tooltip": "Please sign in to the provider to add new certificates.",
     "create-certificate-scr": "Create certificate signing request (CSR)",
     "create-certificate-ssc": "Create self-signed certificate",
-    "reload-certificates": "Refresh list"
+    "reload-certificates": "Reset session and refresh certificate list",
+    "provider-information": "Provider information",
+    "provider-login": "Sign in",
+    "provider-logout": "Sign out",
+    "provider-doesnt-support-signing-in": "This provider doesn’t support signing in."
   },
   "certificate-viewer-dialog": {
     "title": "“{{name}}” details"
