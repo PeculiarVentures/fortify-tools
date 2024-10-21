@@ -216,7 +216,8 @@
     "cancel": "Cancel",
     "clear": "Clear",
     "import-certificate": "Import certificate",
-    "try-again": "Try again"
+    "try-again": "Try again",
+    "close": "Close"
   },
   "app-error": {
     "message": "Oops! Something went wrong.",

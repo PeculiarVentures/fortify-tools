@@ -23,7 +23,7 @@ describe("<CertificateViewerDialog />", () => {
 
     render(
       <CertificateViewerDialog
-        certificate={certificate}
+        certificates={[certificate]}
         onClose={onCloseMock}
       />
     );
@@ -31,7 +31,7 @@ describe("<CertificateViewerDialog />", () => {
     expect(screen.getByText(`“${certificate.label}” details`));
     expect(screen.getByText(/x509 certificate viewer component/));
 
-    await userEvent.click(screen.getByRole("button", { name: /Cancel/ }));
+    await userEvent.click(screen.getByRole("button", { name: /Close/ }));
 
     expect(onCloseMock).toBeCalledTimes(1);
   });
@@ -39,9 +39,9 @@ describe("<CertificateViewerDialog />", () => {
   it("Should render as CSR", async () => {
     render(
       <CertificateViewerDialog
-        certificate={
-          { ...certificate, type: "csr" } as unknown as CertificateProps
-        }
+        certificates={[
+          { ...certificate, type: "csr" } as unknown as CertificateProps,
+        ]}
         onClose={vi.fn()}
       />
     );

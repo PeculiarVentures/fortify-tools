@@ -16,6 +16,8 @@ describe("useCertificateViewerDialog", () => {
     const { result } = renderHook(() =>
       useCertificateViewerDialog({
         providers,
+        fortifyClient: null,
+        currentProviderId: providers[0].id,
       })
     );
 
@@ -37,6 +39,6 @@ describe("useCertificateViewerDialog", () => {
     const DialogComponent = result.current.dialog();
 
     expect(DialogComponent).not.toBeNull();
-    expect(DialogComponent?.props.certificate).toBe(certificate);
+    expect(DialogComponent?.props.certificates).toStrictEqual([certificate]);
   });
 });
