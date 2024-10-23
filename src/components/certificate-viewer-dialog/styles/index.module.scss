@@ -4,3 +4,29 @@
     padding: 0;
   }
 }
+
+.dialog_title_text {
+  padding: var(--pv-size-base-3) var(--pv-size-base-4);
+}
+
+.dialog_title_tabs_wraper {
+  border-top: 1px solid var(--pv-color-gray-4);
+  max-width: 870px;
+  overflow: auto;
+  .dialog_title_tabs {
+    padding: 0 var(--pv-size-base-4);
+  }
+}
+
+.dialog_title {
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog_tab_content {
+  display: none;
+}
+.dialog_tab_content_current {
+  display: block;
+}
