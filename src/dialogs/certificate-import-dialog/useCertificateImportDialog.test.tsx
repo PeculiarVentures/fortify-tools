@@ -1,6 +1,5 @@
 import { renderHook, act } from "@testing";
 import { certificateCSRPem, certificateX509Pem } from "@testing/data";
-import { vi } from "vitest";
 import { useCertificateImportDialog } from "./useCertificateImportDialog";
 
 import type { IProviderInfo, FortifyAPI } from "@peculiar/fortify-client-core";
