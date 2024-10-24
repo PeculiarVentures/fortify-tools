@@ -1,4 +1,4 @@
-import { render, vi, userEvent, fireEvent, act, screen } from "@testing";
+import { render, userEvent, fireEvent, act, screen } from "@testing";
 import { ComponentProps } from "react";
 import { APP_CERTIFICATE_MAX_SIZE_BYTES } from "src/config";
 import { CertificateImportDialog } from "./CertificateImportDialog";
