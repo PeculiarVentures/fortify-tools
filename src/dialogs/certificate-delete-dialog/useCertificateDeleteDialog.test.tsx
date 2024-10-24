@@ -1,5 +1,4 @@
 import { renderHook, act } from "@testing";
-import { vi } from "vitest";
 import { useCertificateDeleteDialog } from "./useCertificateDeleteDialog";
 
 import type { IProviderInfo } from "@peculiar/fortify-client-core";

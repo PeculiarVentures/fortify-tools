@@ -1,5 +1,5 @@
 import { ComponentProps } from "react";
-import { render, userEvent, vi, screen } from "@testing";
+import { render, userEvent, screen } from "@testing";
 import type { IProviderInfo } from "@peculiar/fortify-client-core";
 import { ProviderInfoDialog } from "./ProviderInfoDialog";
 

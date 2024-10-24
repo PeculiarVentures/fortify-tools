@@ -1,4 +1,4 @@
-export { vi, afterEach } from "vitest";
+export { afterEach } from "vitest";
 export {
   render,
   screen,

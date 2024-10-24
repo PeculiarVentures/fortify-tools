@@ -1,4 +1,4 @@
-import { render, userEvent, vi, screen } from "@testing";
+import { render, userEvent, screen } from "@testing";
 import { CertificatesTopbar } from "./CertificatesTopbar";
 
 describe("<CertificatesTopbar />", () => {
