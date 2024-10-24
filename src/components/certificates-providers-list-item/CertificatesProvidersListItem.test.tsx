@@ -1,5 +1,4 @@
 import { render, userEvent, fireEvent, screen } from "@testing";
-import { vi } from "vitest";
 import { CertificatesProvidersListItem } from "./CertificatesProvidersListItem";
 
 vi.mock("../../icons/smartcard.svg?react", () => ({

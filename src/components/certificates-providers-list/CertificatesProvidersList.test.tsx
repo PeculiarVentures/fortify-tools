@@ -1,5 +1,4 @@
 import { render, userEvent, screen } from "@testing";
-import { vi } from "vitest";
 import { CertificatesProvidersList } from "./CertificatesProvidersList";
 
 vi.mock("@peculiar/react-components", async () => {

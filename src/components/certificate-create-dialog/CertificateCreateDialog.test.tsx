@@ -1,4 +1,4 @@
-import { render, vi, userEvent, screen } from "@testing";
+import { render, userEvent, screen } from "@testing";
 import { CertificateCreateDialog } from "./CertificateCreateDialog";
 
 describe("<CertificateCreateDialog />", () => {
