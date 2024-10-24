@@ -25,7 +25,7 @@ describe("<CertificateImportDialog />", () => {
       .closest("div") as Element;
   }
 
-  it("Should handle close button", async () => {
+  it("Should handle back button", async () => {
     render(<CertificateImportDialog {...defaultProps} />);
 
     await userEvent.click(screen.getAllByRole("button")[0]);
