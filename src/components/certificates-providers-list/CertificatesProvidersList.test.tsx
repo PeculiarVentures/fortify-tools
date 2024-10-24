@@ -57,8 +57,7 @@ describe("<CertificatesProvidersList />", () => {
 
   it("shows render as loading", () => {
     render(<CertificatesProvidersList providers={[]} loading={true} />);
-    const skeletons = screen.getAllByRole("presentation");
-    expect(skeletons.length).toBe(4);
+    expect(screen.getAllByRole("presentation")).toHaveLength(4);
   });
 
   it("shows render as empty", () => {
