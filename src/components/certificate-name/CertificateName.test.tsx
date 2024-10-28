@@ -23,4 +23,9 @@ describe("<CertificateName />", () => {
 
     expect(screen.getByText(/Test certificate/)).toHaveClass("test_class_name");
   });
+
+  it("Shouldn't render if no name", () => {
+    const { container } = render(<CertificateName />);
+    expect(container.firstChild).toBeNull();
+  });
 });

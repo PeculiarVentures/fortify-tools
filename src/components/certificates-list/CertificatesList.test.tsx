@@ -1,5 +1,5 @@
 import { ComponentProps } from "react";
-import { render, userEvent, screen } from "@testing";
+import { render, userEvent, fireEvent, screen } from "@testing";
 import { CertificatesList } from "./CertificatesList";
 import { CertificateProps } from "../../types";
 import { downloadCertificate } from "../../utils/download-certificate";
@@ -196,6 +196,32 @@ describe("<CertificatesList />", () => {
     });
   });
 
+  it("Should handle onViewDetails when Enter or Space is pressed on a row", () => {
+    const onViewDetailsMock = vi.fn();
+    const resultMock = {
+      providerId: certificates[0].providerID,
+      certificate: certificates[0],
+    };
+    render(
+      <CertificatesList
+        {...defaultProps}
+        certificates={[certificates[0]]}
+        onViewDetails={onViewDetailsMock}
+      />
+    );
+
+    const row = screen.getByText(/Test 1/);
+    row.focus();
+
+    fireEvent.keyDown(row, { code: "Enter" });
+    expect(onViewDetailsMock).toHaveBeenCalledWith(resultMock);
+
+    onViewDetailsMock.mockClear();
+
+    fireEvent.keyDown(row, { code: "Space" });
+    expect(onViewDetailsMock).toHaveBeenCalledWith(resultMock);
+  });
+
   it("Should handle onViewDetails when View details button is clicked", async () => {
     const onViewDetailsMock = vi.fn((data) => data);
     render(
@@ -250,5 +276,20 @@ describe("<CertificatesList />", () => {
       certificates[0].raw,
       certificates[0].type
     );
+  });
+
+  it("Should clear currentRow state onMouseOver", async () => {
+    render(
+      <CertificatesList {...defaultProps} certificates={[certificates[0]]} />
+    );
+
+    const row = screen.getByText(/Test 1/);
+
+    fireEvent.focus(row);
+
+    expect(row.closest("tr")).toHaveClass("current");
+
+    fireEvent.mouseOver(row);
+    expect(row.closest("tr")).not.toHaveClass("current");
   });
 });

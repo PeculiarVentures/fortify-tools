@@ -21,4 +21,9 @@ describe("<CertificateSerialNumber />", () => {
 
     expect(screen.getByText(/1234/)).toHaveClass("test_class_name");
   });
+
+  it("Shouldn't render if no value", () => {
+    const { container } = render(<CertificateSerialNumber />);
+    expect(container.firstChild).toBeNull();
+  });
 });

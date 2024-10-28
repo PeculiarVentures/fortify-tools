@@ -15,4 +15,9 @@ describe("<Date />", () => {
 
     expect(screen.getByText(/Jan 1, 2024/)).toHaveClass("test_class_name");
   });
+
+  it("Shouldn't render if no date", () => {
+    const { container } = render(<Date />);
+    expect(container.firstChild).toBeNull();
+  });
 });
