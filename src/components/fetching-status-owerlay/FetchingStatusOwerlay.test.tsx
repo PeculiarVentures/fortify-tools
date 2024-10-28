@@ -87,4 +87,68 @@ describe("<FetchingStatusOwerlay />", () => {
 
     expect(screen.getByText(/Fortify authorization/)).toBeInTheDocument();
   });
+
+  it("Shouldn't render if certificates fetching state is present", () => {
+    render(
+      <FetchingStatusOwerlay
+        {...defaultProps}
+        fetching={{
+          certificates: "resolved",
+        }}
+      />
+    );
+
+    expect(screen.queryByRole("presentation")).not.toBeInTheDocument();
+  });
+
+  it("Shouldn't render if connectionDetect is pending", () => {
+    render(
+      <FetchingStatusOwerlay
+        {...defaultProps}
+        fetching={{
+          connectionDetect: "pending",
+        }}
+      />
+    );
+
+    expect(screen.queryByRole("presentation")).not.toBeInTheDocument();
+  });
+
+  it("Shouldn't render if connectionSupport is pending", () => {
+    render(
+      <FetchingStatusOwerlay
+        {...defaultProps}
+        fetching={{
+          connectionSupport: "pending",
+        }}
+      />
+    );
+    expect(screen.queryByRole("presentation")).not.toBeInTheDocument();
+  });
+
+  it("Shouldn't render if connectionApprove is pending", () => {
+    render(
+      <FetchingStatusOwerlay
+        {...defaultProps}
+        fetching={{
+          connectionApprove: "pending",
+        }}
+      />
+    );
+
+    expect(screen.queryByRole("presentation")).not.toBeInTheDocument();
+  });
+
+  it("Shouldn't render if providers fetching state is pending", () => {
+    render(
+      <FetchingStatusOwerlay
+        {...defaultProps}
+        fetching={{
+          providers: "pending",
+        }}
+      />
+    );
+
+    expect(screen.queryByRole("presentation")).not.toBeInTheDocument();
+  });
 });

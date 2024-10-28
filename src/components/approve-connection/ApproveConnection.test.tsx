@@ -16,7 +16,7 @@ describe("<ApproveConnection />", () => {
     expect(screen.getByText(/Fortify authorization/)).toBeInTheDocument();
 
     challenge.split("").forEach((char) => {
-      expect(screen.getByText(char)).toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: char })).toBeInTheDocument();
     });
 
     expect(
@@ -24,5 +24,13 @@ describe("<ApproveConnection />", () => {
         /Compare this code to the one shown by your operating system for Fortify/
       )
     ).toBeInTheDocument();
+
+    screen.debug();
+  });
+
+  it("Shouldn't render challenge", () => {
+    render(<ApproveConnection challenge={""} />);
+
+    expect(screen.queryByRole("heading", { name: "" })).not.toBeInTheDocument();
   });
 });
