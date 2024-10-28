@@ -3,7 +3,7 @@ import { CertificatesSidebar } from "./CertificatesSidebar";
 import { APP_CONTACT_SUPPORT_URL } from "../../config";
 
 describe("<CertificatesSidebar />", () => {
-  it("Should render", async () => {
+  it("Should render", () => {
     render(<CertificatesSidebar />);
 
     expect(screen.getByAltText("Fortify logo")).toHaveAttribute(

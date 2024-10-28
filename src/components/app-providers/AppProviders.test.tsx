@@ -15,7 +15,7 @@ vi.mock("@peculiar/react-components", async () => {
 });
 
 describe("<AppProviders />", () => {
-  it("Should render children", async () => {
+  it("Should render children", () => {
     render(
       <AppProviders>
         <div>Child Element</div>

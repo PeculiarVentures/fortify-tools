@@ -30,7 +30,7 @@ describe("<CertificatesProvidersListItem />", () => {
     expect(onClickMock).toHaveReturnedWith(provider.id);
   });
 
-  it("Should render & handle onClick when Enter is pressed", async () => {
+  it("Should render & handle onClick when Enter is pressed", () => {
     const onClickMock = vi.fn((data) => data);
     render(
       <CertificatesProvidersListItem {...defaultProps} onClick={onClickMock} />
@@ -41,7 +41,7 @@ describe("<CertificatesProvidersListItem />", () => {
     expect(onClickMock).toHaveReturnedWith(provider.id);
   });
 
-  it("Should render as selected", async () => {
+  it("Should render as selected", () => {
     render(
       <CertificatesProvidersListItem {...defaultProps} isSelected={true} />
     );
@@ -51,7 +51,7 @@ describe("<CertificatesProvidersListItem />", () => {
     );
   });
 
-  it("Should render as removable", async () => {
+  it("Should render as removable", () => {
     render(
       <CertificatesProvidersListItem
         {...defaultProps}
@@ -62,7 +62,7 @@ describe("<CertificatesProvidersListItem />", () => {
     expect(screen.getByTestId(/smartcard_icon/)).toBeInTheDocument();
   });
 
-  it("Should render as readonly", async () => {
+  it("Should render as readonly", () => {
     render(
       <CertificatesProvidersListItem
         {...defaultProps}

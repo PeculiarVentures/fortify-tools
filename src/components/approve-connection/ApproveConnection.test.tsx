@@ -24,8 +24,6 @@ describe("<ApproveConnection />", () => {
         /Compare this code to the one shown by your operating system for Fortify/
       )
     ).toBeInTheDocument();
-
-    screen.debug();
   });
 
   it("Shouldn't render challenge", () => {
