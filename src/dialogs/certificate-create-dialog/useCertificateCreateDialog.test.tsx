@@ -18,7 +18,7 @@ vi.mock("@peculiar/react-components", async () => {
 describe("useCertificateCreateDialog", () => {
   const algorithm = { hash: "SHA-256", signature: "RSASSA-PKCS1-v1_5" };
 
-  const defaultCreateProps = {
+  const defaultOpenProps = {
     subject: { commonName: "example.com" },
     type: "x509",
     algorithm,
@@ -114,7 +114,7 @@ describe("useCertificateCreateDialog", () => {
     await act(async () => {
       DialogComponent &&
         (await DialogComponent.props.onCreateButtonClick({
-          ...defaultCreateProps,
+          ...defaultOpenProps,
           extendedKeyUsages: ["serverAuth", "clientAuth"],
         }));
     });
@@ -152,7 +152,7 @@ describe("useCertificateCreateDialog", () => {
 
       DialogComponent &&
         (await DialogComponent.props.onCreateButtonClick({
-          ...defaultCreateProps,
+          ...defaultOpenProps,
           type: "csr",
         }));
     });
@@ -189,7 +189,7 @@ describe("useCertificateCreateDialog", () => {
       const DialogComponent = result.current.dialog();
 
       DialogComponent &&
-        (await DialogComponent.props.onCreateButtonClick(defaultCreateProps));
+        (await DialogComponent.props.onCreateButtonClick(defaultOpenProps));
     });
 
     expect(onSuccessMock).not.toHaveBeenCalled();
@@ -226,7 +226,7 @@ describe("useCertificateCreateDialog", () => {
 
       DialogComponent &&
         (await DialogComponent.props.onCreateButtonClick({
-          ...defaultCreateProps,
+          ...defaultOpenProps,
           type: typeMock,
         }));
     });
@@ -258,7 +258,7 @@ describe("useCertificateCreateDialog", () => {
     const DialogComponent = result.current.dialog();
     await act(async () => {
       DialogComponent &&
-        (await DialogComponent.props.onCreateButtonClick(defaultCreateProps));
+        (await DialogComponent.props.onCreateButtonClick(defaultOpenProps));
     });
 
     expect(onSuccessMock).not.toHaveBeenCalled();
