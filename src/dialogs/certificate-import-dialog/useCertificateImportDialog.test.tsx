@@ -98,25 +98,34 @@ describe("useCertificateImportDialog", () => {
       const DialogComponent = result.current.dialog();
       if (DialogComponent) {
         DialogComponent.props.onTextAreaBlur();
+        DialogComponent?.props.onProviderSelect("2");
         await DialogComponent.props.onImportButtonClick();
       }
     });
 
-    expect(fortifyClientMock.getProviderById).toHaveBeenCalledWith(
-      defaultProps.currentProviderId
-    );
+    expect(fortifyClientMock.getProviderById).toHaveBeenCalledWith("2");
     expect(certStorageMock.importCert).toHaveBeenCalled();
     expect(certStorageMock.setItem).toHaveBeenCalled();
-    expect(onSuccessMock).toHaveBeenCalledWith(defaultProps.currentProviderId);
+    expect(onSuccessMock).toHaveBeenCalledWith("2");
   }
 
-  it("Should initialize", () => {
+  it("Should initialize, open & close the dialog", () => {
     const { result } = renderHook(() =>
       useCertificateImportDialog(defaultProps)
     );
 
     expect(result.current.dialog).toBeInstanceOf(Function);
     expect(result.current.open).toBeInstanceOf(Function);
+
+    act(() => {
+      result.current.open();
+    });
+
+    act(() => {
+      result.current.dialog()?.props.onDialogClose();
+    });
+
+    expect(result.current.dialog()).toBeNull();
   });
 
   it("Should past certificate & call onSuccess (x509)", () =>
@@ -139,6 +148,16 @@ describe("useCertificateImportDialog", () => {
     act(() => {
       result.current.open();
     });
+
+    act(() => {
+      result.current.dialog()?.props.onTextAreaChange("");
+    });
+
+    act(() => {
+      result.current.dialog()?.props.onTextAreaBlur();
+    });
+
+    expect(result.current.dialog()?.props.isTextAreaError).toBeTruthy();
 
     act(() => {
       result.current.dialog()?.props.onTextAreaChange("certificate");
@@ -173,6 +192,37 @@ describe("useCertificateImportDialog", () => {
     );
   });
 
+  it("Should clear the certificate textarea and reset error on clear button click", async () => {
+    const { result } = renderHook(() =>
+      useCertificateImportDialog(defaultProps)
+    );
+
+    act(() => {
+      result.current.open();
+    });
+
+    act(() => {
+      result.current.dialog()?.props.onTextAreaChange("certificate");
+    });
+
+    act(() => {
+      result.current.dialog()?.props.onTextAreaBlur();
+    });
+
+    expect(result.current.dialog()?.props.isTextAreaError).toBeTruthy();
+
+    await act(async () => {
+      const DialogComponent = result.current.dialog();
+      if (DialogComponent) {
+        DialogComponent.props.onTextAreaBlur();
+        await DialogComponent.props.onClearButtonClick();
+      }
+    });
+
+    expect(result.current.dialog()?.props.isTextAreaError).toBeFalsy();
+    expect(result.current.dialog()?.props.certificate).toBe("");
+  });
+
   it("Should handle the error when uploading an invalid certificate", async () => {
     const byteArray = new TextEncoder().encode("certificate");
     const { result } = renderHook(() =>
@@ -195,6 +245,70 @@ describe("useCertificateImportDialog", () => {
       expect.objectContaining({
         message:
           "Certificate is invalid. Please check your data and try again.",
+        variant: "wrong",
+      })
+    );
+  });
+
+  it("Should handle the error when onDropError is triggered", () => {
+    const { result } = renderHook(() =>
+      useCertificateImportDialog(defaultProps)
+    );
+
+    act(() => {
+      result.current.open();
+    });
+
+    act(() => {
+      result.current.dialog()?.props.onDropError("Error");
+    });
+
+    expect(addToastMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message:
+          "Certificate is invalid. Please check your data and try again.",
+        variant: "wrong",
+      })
+    );
+  });
+
+  it("Should handle the error when certificate is invalid", async () => {
+    const importCertMock = vi.fn().mockImplementation(() => {
+      throw new Error("Error");
+    });
+    const { result } = renderHook(() =>
+      useCertificateImportDialog({
+        ...defaultProps,
+        fortifyClient: {
+          getProviderById: vi.fn().mockResolvedValue({
+            certStorage: {
+              importCert: importCertMock,
+              setItem: vi.fn(),
+            },
+          }),
+        } as unknown as FortifyAPI,
+      })
+    );
+    act(() => {
+      result.current.open();
+    });
+
+    act(() => {
+      result.current.dialog()?.props.onTextAreaChange(certificateX509Pem);
+    });
+
+    await act(async () => {
+      const DialogComponent = result.current.dialog();
+      if (DialogComponent) {
+        DialogComponent.props.onTextAreaBlur();
+        await DialogComponent.props.onImportButtonClick();
+      }
+    });
+
+    expect(addToastMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message:
+          "Failed to import certificate because of error. Please try again.",
         variant: "wrong",
       })
     );

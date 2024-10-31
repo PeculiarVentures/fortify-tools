@@ -159,6 +159,35 @@ describe("<CertificateImportDialog />", () => {
     );
   });
 
+  it("Should handle onDropError correctly", async () => {
+    const onDropErrorMock = vi.fn();
+    render(
+      <CertificateImportDialog
+        {...defaultProps}
+        onDropError={onDropErrorMock}
+      />
+    );
+
+    const dropzone = getDropZone();
+
+    await act(async () => {
+      fireEvent.drop(dropzone, {
+        dataTransfer: {
+          files: [
+            {
+              name: "file.cer",
+              type: "application/pkix-cert",
+              arrayBuffer: null,
+            },
+          ],
+          types: ["Files"],
+        },
+      });
+    });
+
+    expect(onDropErrorMock).toBeCalledTimes(1);
+  });
+
   it("Should handle file type rejection correctly", async () => {
     const onDropRejectedMock = vi.fn();
     render(
