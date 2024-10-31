@@ -67,7 +67,10 @@ export function useCertificateImportDialog(
       const cert = await provider.certStorage.importCert(
         certificateType.current === "csr" ? "request" : "x509",
         certificate.current.rawData,
-        certificate.current.signatureAlgorithm,
+        {
+          ...certificate.current.publicKey.algorithm,
+          ...certificate.current.signatureAlgorithm,
+        },
         ["verify"]
       );
 
