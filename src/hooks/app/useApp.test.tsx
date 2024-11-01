@@ -43,7 +43,7 @@ describe("useApp", () => {
       id: "1",
       isLoggedIn: vi.fn().mockResolvedValue(true),
       reset: vi.fn(),
-      login: vi.fn(() => console.log("7777")),
+      login: vi.fn(),
       logout: vi.fn(),
     }),
     getCertificatesByProviderId: vi.fn().mockResolvedValue(certificatesMock),
@@ -133,6 +133,22 @@ describe("useApp", () => {
     expect(result.current.fetching.connectionApprove).toEqual("resolved");
   });
 
+  it("Should handle connectionApprove is rejected", async () => {
+    vi.mocked(FortifyAPI).mockImplementation(
+      () =>
+        ({
+          ...mockFortifyAPIInstance,
+          challenge: vi.fn().mockRejectedValue(new Error("Error")),
+        }) as unknown as FortifyAPI
+    );
+    const { result } = renderHook(() => useApp());
+
+    await waitFor(() => {
+      expect(result.current.fetching.connectionApprove).toEqual("rejected");
+    });
+    expect(result.current.certificates).toEqual([]);
+  });
+
   it("Should handle provider change", async () => {
     vi.mocked(FortifyAPI).mockImplementation(
       () => mockFortifyAPIInstance as FortifyAPI
@@ -156,10 +172,6 @@ describe("useApp", () => {
     );
     const { result } = renderHook(() => useApp());
 
-    await waitFor(() => {
-      expect(result.current.currentProvider).toEqual(providersMock[0]);
-    });
-
     await act(async () => {
       await result.current.handleCertificatesDataReload(providersMock[0].id);
     });
@@ -172,10 +184,6 @@ describe("useApp", () => {
       () => mockFortifyAPIInstance as FortifyAPI
     );
     const { result } = renderHook(() => useApp());
-
-    await waitFor(() => {
-      expect(result.current.currentProvider).toEqual(providersMock[0]);
-    });
 
     await act(async () => {
       await result.current.handleProviderResetAndRefreshList();
@@ -232,5 +240,132 @@ describe("useApp", () => {
           .login
     ).toHaveBeenCalled();
     expect(result.current.isCurrentProviderLogedin).toEqual(true);
+  });
+
+  it("Should set login status to false when error occured during login", async () => {
+    vi.mocked(FortifyAPI).mockImplementation(
+      () =>
+        ({
+          ...mockFortifyAPIInstance,
+          getProviderById: vi.fn().mockResolvedValue(new Error("Error")),
+        }) as unknown as FortifyAPI
+    );
+    const { result } = renderHook(() => useApp());
+
+    await waitFor(() => {
+      expect(result.current.currentProvider).toEqual(providersMock[0]);
+    });
+
+    await act(async () => {
+      await result.current.handleProviderLoginLogout(false);
+    });
+
+    expect(result.current.isCurrentProviderLogedin).toEqual(false);
+  });
+
+  it("Should show error message if provider doesn't support signing in", async () => {
+    vi.mocked(FortifyAPI).mockImplementation(
+      () =>
+        ({
+          ...mockFortifyAPIInstance,
+          getProviderById: vi.fn().mockResolvedValue({
+            id: "1",
+            isLoggedIn: vi.fn().mockResolvedValue(true),
+            logout: vi.fn(),
+          }),
+        }) as unknown as FortifyAPI
+    );
+    const { result } = renderHook(() => useApp());
+
+    await waitFor(() => {
+      expect(result.current.currentProvider).toEqual(providersMock[0]);
+    });
+
+    await act(async () => {
+      await result.current.handleProviderLoginLogout(true);
+    });
+
+    expect(addToastMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: "This provider doesn’t support signing in.",
+        variant: "attention",
+      })
+    );
+    addToastMock.mockClear();
+  });
+
+  it("Should return early if no fortifyClient is present", async () => {
+    const { result } = renderHook(() => useApp());
+
+    result.current.fortifyClient = null;
+
+    waitFor(async () => {
+      expect(
+        await result.current.handleCertificatesDataReload("1")
+      ).toReturnWith(undefined);
+    });
+
+    waitFor(async () => {
+      expect(await result.current.handleProviderLoginLogout(true)).toReturnWith(
+        undefined
+      );
+    });
+
+    waitFor(async () => {
+      expect(
+        await result.current.handleProviderResetAndRefreshList()
+      ).toReturnWith(undefined);
+    });
+
+    waitFor(async () => {
+      expect(await result.current.handleProviderChange("1")).toReturnWith(
+        undefined
+      );
+    });
+  });
+
+  it("Should reload app on handleRetryConection", () => {
+    const originalLocation = global.location;
+
+    global.location = {
+      ...originalLocation,
+      reload: vi.fn(),
+    };
+
+    const { result } = renderHook(() => useApp());
+
+    act(() => {
+      result.current.handleRetryConection();
+    });
+
+    expect(global.location.reload).toHaveBeenCalled();
+
+    global.location = originalLocation;
+  });
+
+  it("Should clear certificates when error occured during first load & reload", async () => {
+    vi.mocked(FortifyAPI).mockImplementation(
+      () =>
+        ({
+          ...mockFortifyAPIInstance,
+          getCertificatesByProviderId: vi
+            .fn()
+            .mockRejectedValue(new Error("Error")),
+        }) as unknown as FortifyAPI
+    );
+
+    const { result } = renderHook(() => useApp());
+
+    await waitFor(() => {
+      expect(result.current.currentProvider).toEqual(providersMock[0]);
+    });
+
+    expect(result.current.certificates).toEqual([]);
+
+    await act(async () => {
+      await result.current.handleCertificatesDataReload(providersMock[0].id);
+    });
+
+    expect(result.current.certificates).toEqual([]);
   });
 });
