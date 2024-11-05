@@ -95,9 +95,7 @@ describe("<CertificatesTopbar />", () => {
     const onCreateMock = vi.fn((data) => data);
     render(<CertificatesTopbar {...defaultProps} onCreate={onCreateMock} />);
 
-    const newButton = screen.getByRole("button", { name: "New" });
-
-    await userEvent.click(newButton);
+    await userEvent.click(screen.getByRole("button", { name: "New" }));
 
     expect(screen.getByRole("presentation")).toBeInTheDocument();
 
@@ -117,9 +115,7 @@ describe("<CertificatesTopbar />", () => {
     const onCreateMock = vi.fn((data) => data);
     render(<CertificatesTopbar {...defaultProps} onCreate={onCreateMock} />);
 
-    const newButton = screen.getByRole("button", { name: "New" });
-
-    await userEvent.click(newButton);
+    await userEvent.click(screen.getByRole("button", { name: "New" }));
 
     expect(screen.getByRole("presentation")).toBeInTheDocument();
 
@@ -138,9 +134,7 @@ describe("<CertificatesTopbar />", () => {
   it("Should handle import", async () => {
     render(<CertificatesTopbar {...defaultProps} />);
 
-    const newButton = screen.getByRole("button", { name: "New" });
-
-    await userEvent.click(newButton);
+    await userEvent.click(screen.getByRole("button", { name: "New" }));
 
     expect(screen.getByRole("presentation")).toBeInTheDocument();
 

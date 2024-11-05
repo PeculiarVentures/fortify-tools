@@ -5,6 +5,10 @@ import { FortifyAPI } from "@peculiar/fortify-client-core";
 import { App } from "./app";
 
 vi.mock("@peculiar/fortify-client-core");
+vi.mock("@peculiar/certificates-viewer-react", () => ({
+  PeculiarCertificateViewer: () => "x509 certificate viewer component",
+  PeculiarCsrViewer: () => "CSR certificate viewer component",
+}));
 
 describe("<App />", () => {
   const providersMock = [
@@ -96,6 +100,135 @@ describe("<App />", () => {
     });
   });
 
+  it("Should open delete certificate dialog", async () => {
+    vi.mocked(FortifyAPI).mockImplementation(
+      () => mockFortifyAPIInstance as FortifyAPI
+    );
+
+    render(<App />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Certificate test 1/)).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getAllByLabelText(/Delete certificate/)[0]);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Delete certificate/)).toBeInTheDocument();
+    });
+    expect(
+      screen.getByText(/Are you sure you want to delete “Certificate test 2”/)
+    ).toBeInTheDocument();
+  });
+
+  it("Should open view certificate details dialog", async () => {
+    vi.mocked(FortifyAPI).mockImplementation(
+      () => mockFortifyAPIInstance as FortifyAPI
+    );
+
+    render(<App />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Certificate test 1/)).toBeInTheDocument();
+    });
+
+    await userEvent.click(
+      screen.getAllByRole("button", { name: /View details/ })[0]
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(/“Certificate test 2” details/)
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("Should open import certificate dialog", async () => {
+    vi.mocked(FortifyAPI).mockImplementation(
+      () => mockFortifyAPIInstance as FortifyAPI
+    );
+
+    render(<App />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Certificate test 1/)).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByRole("button", { name: "New" }));
+
+    expect(screen.getByRole("presentation")).toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole("menuitem", {
+        name: /Import certificate/,
+      })
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("heading", { name: /Import certificate/ })
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("Should open create certificate (x509) dialog", async () => {
+    vi.mocked(FortifyAPI).mockImplementation(
+      () => mockFortifyAPIInstance as FortifyAPI
+    );
+
+    render(<App />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Certificate test 1/)).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByRole("button", { name: "New" }));
+
+    expect(screen.getByRole("presentation")).toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole("menuitem", {
+        name: /Create self-signed certificate/,
+      })
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("heading", { name: /Create Self-signed certificate/ })
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("Should open create certificate (CSR) dialog", async () => {
+    vi.mocked(FortifyAPI).mockImplementation(
+      () => mockFortifyAPIInstance as FortifyAPI
+    );
+
+    render(<App />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Certificate test 1/)).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByRole("button", { name: "New" }));
+
+    expect(screen.getByRole("presentation")).toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole("menuitem", {
+        name: /Create certificate signing request \(CSR\)/,
+      })
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("heading", {
+          name: /Create Certificate Signing Request \(CSR\)/,
+        })
+      ).toBeInTheDocument();
+    });
+  });
+
   it("Should handle search & clear search", async () => {
     vi.mocked(FortifyAPI).mockImplementation(
       () => mockFortifyAPIInstance as FortifyAPI
@@ -118,5 +251,31 @@ describe("<App />", () => {
     await waitFor(() => {
       expect(screen.queryByText("test 1")).not.toBeInTheDocument();
     });
+  });
+
+  it("Should handle sorting", async () => {
+    vi.mocked(FortifyAPI).mockImplementation(
+      () => mockFortifyAPIInstance as FortifyAPI
+    );
+
+    render(<App />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Certificate test 1/)).toBeInTheDocument();
+    });
+
+    let cells = screen.getAllByRole("cell");
+    expect(cells[1]).toHaveTextContent(/Certificate test 2/);
+    expect(cells[5]).toHaveTextContent(/Certificate test 1/);
+
+    await userEvent.click(screen.getByText(/Name/));
+    expect(global.location.search).toMatch(/sort=label&order=asc/);
+
+    cells = screen.getAllByRole("cell");
+    expect(cells[1]).toHaveTextContent(/Certificate test 1/);
+    expect(cells[5]).toHaveTextContent(/Certificate test 2/);
+
+    await userEvent.click(screen.getByText(/Name/));
+    expect(global.location.search).toMatch(/sort=label&order=desc/);
   });
 });
