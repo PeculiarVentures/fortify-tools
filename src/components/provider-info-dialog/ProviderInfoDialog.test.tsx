@@ -1,5 +1,5 @@
 import { ComponentProps } from "react";
-import { render, userEvent, vi, screen } from "@testing";
+import { render, userEvent, screen } from "@testing";
 import type { IProviderInfo } from "@peculiar/fortify-client-core";
 import { ProviderInfoDialog } from "./ProviderInfoDialog";
 
@@ -102,7 +102,7 @@ describe("<ProviderInfoDialog />", () => {
     ).toHaveTextContent(/Yes/);
   });
 
-  it("Should render as free space is unavailable", () => {
+  it("Should render with unavailable values", () => {
     const props: ComponentProps<typeof ProviderInfoDialog> = {
       ...defaultProps,
       data: {
@@ -110,13 +110,21 @@ describe("<ProviderInfoDialog />", () => {
         token: {
           ...defaultProps.data.token,
           freePrivateMemory: 18446744073709552000,
+          hardwareVersion: null,
+          firmwareVersion: null,
         },
-      } as IProviderInfo,
+      } as unknown as IProviderInfo,
     };
     render(<ProviderInfoDialog {...props} />);
 
     expect(screen.getByText(/Free space/).nextElementSibling).toHaveTextContent(
       /Information is unavailable/
     );
+    expect(
+      screen.getByText(/Hardware version/).nextElementSibling
+    ).toHaveTextContent(/Information is unavailable/);
+    expect(
+      screen.getByText(/Firmware version/).nextElementSibling
+    ).toHaveTextContent(/Information is unavailable/);
   });
 });

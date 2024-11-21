@@ -1,4 +1,4 @@
-import { render, userEvent, vi, screen } from "@testing";
+import { render, userEvent, screen } from "@testing";
 import { CertificatesTopbar } from "./CertificatesTopbar";
 
 describe("<CertificatesTopbar />", () => {
@@ -14,7 +14,7 @@ describe("<CertificatesTopbar />", () => {
     onInfo: vi.fn(),
   };
 
-  it("Should render as disabled", async () => {
+  it("Should render as disabled", () => {
     render(
       <CertificatesTopbar
         {...defaultProps}
@@ -36,14 +36,14 @@ describe("<CertificatesTopbar />", () => {
     expect(screen.getByRole("button", { name: /New/ })).toBeDisabled();
   });
 
-  it("Should render as not logged in", async () => {
+  it("Should render as not logged in", () => {
     render(<CertificatesTopbar {...defaultProps} isLoggedIn={false} />);
 
     expect(screen.getByRole("button", { name: /Sign in/ })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /New/ })).toBeDisabled();
   });
 
-  it("Should render as logged in", async () => {
+  it("Should render as logged in", () => {
     render(<CertificatesTopbar {...defaultProps} isLoggedIn={true} />);
 
     expect(
@@ -52,7 +52,7 @@ describe("<CertificatesTopbar />", () => {
     expect(screen.getByRole("button", { name: /New/ })).toBeEnabled();
   });
 
-  it("Should render as read only", async () => {
+  it("Should render as read only", () => {
     render(<CertificatesTopbar {...defaultProps} isReadOnly={true} />);
 
     expect(
@@ -95,9 +95,7 @@ describe("<CertificatesTopbar />", () => {
     const onCreateMock = vi.fn((data) => data);
     render(<CertificatesTopbar {...defaultProps} onCreate={onCreateMock} />);
 
-    const newButton = screen.getByRole("button", { name: "New" });
-
-    await userEvent.click(newButton);
+    await userEvent.click(screen.getByRole("button", { name: "New" }));
 
     expect(screen.getByRole("presentation")).toBeInTheDocument();
 
@@ -117,9 +115,7 @@ describe("<CertificatesTopbar />", () => {
     const onCreateMock = vi.fn((data) => data);
     render(<CertificatesTopbar {...defaultProps} onCreate={onCreateMock} />);
 
-    const newButton = screen.getByRole("button", { name: "New" });
-
-    await userEvent.click(newButton);
+    await userEvent.click(screen.getByRole("button", { name: "New" }));
 
     expect(screen.getByRole("presentation")).toBeInTheDocument();
 
@@ -138,9 +134,7 @@ describe("<CertificatesTopbar />", () => {
   it("Should handle import", async () => {
     render(<CertificatesTopbar {...defaultProps} />);
 
-    const newButton = screen.getByRole("button", { name: "New" });
-
-    await userEvent.click(newButton);
+    await userEvent.click(screen.getByRole("button", { name: "New" }));
 
     expect(screen.getByRole("presentation")).toBeInTheDocument();
 

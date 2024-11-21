@@ -10,7 +10,13 @@ export default defineConfig({
     setupFiles: "./setup-test.ts",
     coverage: {
       provider: "v8",
-      exclude: ["**/*.stories.*/**"],
+      exclude: [
+        "**/*.stories.*/**",
+        "**/*.test.tsx",
+        "**/index.{ts,tsx}",
+        "**/types.ts",
+        "**/*.d.ts",
+      ],
     },
     globals: true,
   },

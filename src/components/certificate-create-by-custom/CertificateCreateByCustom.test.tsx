@@ -1,4 +1,4 @@
-import { render, vi, userEvent, screen } from "@testing";
+import { render, userEvent, screen } from "@testing";
 import { CertificateCreateByCustom } from "./CertificateCreateByCustom";
 
 describe("<CertificateCreateByCustom />", () => {
@@ -154,7 +154,7 @@ describe("<CertificateCreateByCustom />", () => {
     expect(onCreateButtonClickMock).toHaveReturnedWith(createDataResult);
   });
 
-  it("Should render CSR type", async () => {
+  it("Should render CSR type", () => {
     render(
       <CertificateCreateByCustom type="csr" onCreateButtonClick={vi.fn()} />
     );
