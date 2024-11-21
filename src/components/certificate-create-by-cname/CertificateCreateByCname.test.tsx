@@ -1,4 +1,4 @@
-import { render, vi, userEvent, screen } from "@testing";
+import { render, userEvent, screen } from "@testing";
 import { CertificateCreateByCname } from "./CertificateCreateByCname";
 
 describe("<CertificateCreateByCname />", () => {

@@ -1,4 +1,4 @@
-import { render, vi, userEvent, screen } from "@testing";
+import { render, userEvent, screen } from "@testing";
 import { CertificateCreateDialog } from "./CertificateCreateDialog";
 
 describe("<CertificateCreateDialog />", () => {
@@ -33,6 +33,71 @@ describe("<CertificateCreateDialog />", () => {
       }),
       fieldValue
     );
+  }
+
+  async function testWithCName(
+    typeIndex: number,
+    extendedKeyUsages: string[] = []
+  ) {
+    const createDataResult = {
+      subject: { CN: "example.com" },
+      algorithm,
+      extendedKeyUsages,
+      type: "x509",
+    };
+    const onCreateButtonClickMock = vi.fn((data) => data);
+
+    render(
+      <CertificateCreateDialog
+        type="x509"
+        onDialogClose={vi.fn()}
+        onCreateButtonClick={onCreateButtonClickMock}
+        onProviderSelect={vi.fn()}
+        providers={[]}
+      />
+    );
+
+    await selectType(typeIndex);
+
+    await fillField("Common name", createDataResult.subject.CN);
+
+    await clickCreateButton();
+
+    expect(onCreateButtonClickMock).toBeCalledTimes(1);
+    expect(onCreateButtonClickMock).toHaveReturnedWith(createDataResult);
+  }
+
+  async function testWithEmail(
+    typeIndex: number,
+    extendedKeyUsages: string[] = []
+  ) {
+    const emailValue = "info@company.com";
+    const createDataResult = {
+      subject: { CN: emailValue, E: emailValue },
+      algorithm,
+      extendedKeyUsages,
+      type: "x509",
+    };
+    const onCreateButtonClickMock = vi.fn((data) => data);
+
+    render(
+      <CertificateCreateDialog
+        type="x509"
+        onDialogClose={vi.fn()}
+        onCreateButtonClick={onCreateButtonClickMock}
+        onProviderSelect={vi.fn()}
+        providers={[]}
+      />
+    );
+
+    await selectType(typeIndex);
+
+    await fillField("Email address", createDataResult.subject.E);
+
+    await clickCreateButton();
+
+    expect(onCreateButtonClickMock).toBeCalledTimes(1);
+    expect(onCreateButtonClickMock).toHaveReturnedWith(createDataResult);
   }
 
   it("Should handle close button", async () => {
@@ -96,66 +161,26 @@ describe("<CertificateCreateDialog />", () => {
     expect(onProviderSelectMock).toHaveReturnedWith(providers[1].id);
   });
 
-  it("Should select type with 'Common name' & submit", async () => {
-    const createDataResult = {
-      subject: { CN: "example.com" },
-      algorithm,
-      extendedKeyUsages: ["1.3.6.1.5.5.7.3.1"],
-      type: "x509",
-    };
-    const onCreateButtonClickMock = vi.fn((data) => data);
-
-    render(
-      <CertificateCreateDialog
-        type="x509"
-        onDialogClose={vi.fn()}
-        onCreateButtonClick={onCreateButtonClickMock}
-        onProviderSelect={vi.fn()}
-        providers={[]}
-      />
-    );
-
-    await selectType(4);
-
-    await fillField("Common name", createDataResult.subject.CN);
-
-    await clickCreateButton();
-
-    expect(onCreateButtonClickMock).toBeCalledTimes(1);
-    expect(onCreateButtonClickMock).toHaveReturnedWith(createDataResult);
+  it("Should select type 'TLS Client Authentication' & submit", async () => {
+    await testWithCName(3, ["1.3.6.1.5.5.7.3.2"]);
   });
 
-  it("Should select type with 'Email' & submit", async () => {
-    const emailValue = "info@company.com";
-    const createDataResult = {
-      subject: { CN: emailValue, E: emailValue },
-      algorithm,
-      extendedKeyUsages: ["1.3.6.1.5.5.7.3.4", "1.3.6.1.5.5.7.3.2"],
-      type: "x509",
-    };
-    const onCreateButtonClickMock = vi.fn((data) => data);
-
-    render(
-      <CertificateCreateDialog
-        type="x509"
-        onDialogClose={vi.fn()}
-        onCreateButtonClick={onCreateButtonClickMock}
-        onProviderSelect={vi.fn()}
-        providers={[]}
-      />
-    );
-
-    await selectType(0);
-
-    await fillField("Email address", createDataResult.subject.E);
-
-    await clickCreateButton();
-
-    expect(onCreateButtonClickMock).toBeCalledTimes(1);
-    expect(onCreateButtonClickMock).toHaveReturnedWith(createDataResult);
+  it("Should select type 'TLS Server Authentication' & submit", async () => {
+    await testWithCName(4, ["1.3.6.1.5.5.7.3.1"]);
   });
 
-  it("Should select type with 'Custom' & submit", async () => {
+  it("Should select type 'S/MIME' & submit", async () => {
+    await testWithEmail(0, ["1.3.6.1.5.5.7.3.4", "1.3.6.1.5.5.7.3.2"]);
+  });
+
+  it("Should select type 'Code signing' & submit", async () => {
+    await testWithEmail(1, ["1.3.6.1.5.5.7.3.3"]);
+  });
+  it("Should select type 'Document signing' & submit", async () => {
+    await testWithEmail(2, ["1.3.6.1.5.5.7.3.36"]);
+  });
+
+  it("Should select type 'Custom' & submit", async () => {
     const createDataResult = {
       subject: {
         CN: "example.com",

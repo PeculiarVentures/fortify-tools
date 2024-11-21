@@ -36,7 +36,7 @@ describe("<CertificateViewerDialog />", () => {
     expect(onCloseMock).toBeCalledTimes(1);
   });
 
-  it("Should render as CSR", async () => {
+  it("Should render as CSR", () => {
     render(
       <CertificateViewerDialog
         certificates={[

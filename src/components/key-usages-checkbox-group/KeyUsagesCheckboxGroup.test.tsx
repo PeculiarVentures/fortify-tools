@@ -3,7 +3,7 @@ import { certificateKeyUsageExtensions } from "src/config/data";
 import { KeyUsagesCheckboxGroup } from "./KeyUsagesCheckboxGroup";
 
 describe("<KeyUsagesCheckboxGroup />", () => {
-  it("Should render", async () => {
+  it("Should render", () => {
     const { container } = render(
       <KeyUsagesCheckboxGroup className="test_class" />
     );
