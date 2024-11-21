@@ -44,7 +44,7 @@ describe("useCertificateViewerDialog", () => {
     providerId: providers[0].id,
   };
 
-  it("Should initialize", () => {
+  it("Should initialize, open & close dialog", () => {
     const { result } = renderHook(() =>
       useCertificateViewerDialog(defaultProps)
     );
@@ -60,9 +60,12 @@ describe("useCertificateViewerDialog", () => {
 
     expect(DialogComponent).not.toBeNull();
     expect(DialogComponent?.props.certificates).toStrictEqual([certificate]);
+
+    DialogComponent?.props.onClose();
+    expect(result.current.dialog()).toBeNull();
   });
 
-  it("should close the dialog when the current provider is not found", () => {
+  it("Should close the dialog when the current provider is not found", () => {
     const { result } = renderHook(() =>
       useCertificateViewerDialog(defaultProps)
     );
@@ -78,7 +81,7 @@ describe("useCertificateViewerDialog", () => {
     expect(DialogComponent).toBeNull();
   });
 
-  it("should make a chain of certificates", async () => {
+  it("Should make a chain of certificates", async () => {
     const mockFortifyClient: Partial<FortifyAPI> = {
       getProviderById: vi.fn().mockResolvedValue({
         certStorage: {
