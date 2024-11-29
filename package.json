@@ -22,7 +22,7 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
-    "@vitest/coverage-v8": "^2.1.2",
+    "@vitest/coverage-v8": "^2.1.6",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.15.0",
     "eslint-config-prettier": "^9.1.0",
@@ -37,7 +37,7 @@
     "vite": "5.4.11",
     "vite-plugin-svgr": "^4.3.0",
     "vite-tsconfig-paths": "^5.1.3",
-    "vitest": "^2.1.2",
+    "vitest": "^2.1.6",
     "vitest-dom": "^0.1.1"
   },
   "dependencies": {
