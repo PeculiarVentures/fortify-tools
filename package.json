@@ -27,7 +27,7 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^9.15.0",
     "eslint-config-prettier": "^9.1.0",
-    "gh-pages": "^6.1.1",
+    "gh-pages": "^6.2.0",
     "jsdom": "^25.0.1",
     "postcss": "^8.4.41",
     "prettier": "^3.3.3",
