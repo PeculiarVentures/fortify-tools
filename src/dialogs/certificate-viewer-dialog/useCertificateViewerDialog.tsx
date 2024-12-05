@@ -46,13 +46,20 @@ export function useCertificateViewerDialog(
         if (chain.length > 1) {
           currentCertificates = chain.map((chainItem) => {
             const cert = new X509Certificate(chainItem.value);
+
             return {
-              ...cert,
               raw: cert.rawData,
               subjectName: cert.subject,
               subject: getCertificateSubject(cert.subject),
               type: "x509",
-            } as unknown as CertificateProps;
+              index: cert.serialNumber,
+              issuerName: cert.issuer,
+              notBefore: cert.notBefore,
+              notAfter: cert.notAfter,
+              serialNumber: cert.serialNumber,
+              publicKey: cert.publicKey as unknown as CryptoKey,
+              providerID: localProvider.id,
+            };
           });
         }
       }
