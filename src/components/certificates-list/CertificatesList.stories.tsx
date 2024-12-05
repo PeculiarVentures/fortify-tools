@@ -28,7 +28,7 @@ export const Default: Story = {
       label: faker.internet.domainName(),
       privateKeyId: "",
       subject: {
-        CN: faker.internet.domainName(),
+        CN: [faker.internet.domainName()],
       },
     })) as unknown as CertificateProps[],
   },
