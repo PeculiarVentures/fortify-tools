@@ -1,4 +1,8 @@
-import { Pkcs10CertificateRequest, X509Certificate } from "@peculiar/x509";
+import {
+  Pkcs10CertificateRequest,
+  X509Certificate,
+  Name,
+} from "@peculiar/x509";
 
 import {
   CertificateProps,
@@ -36,6 +40,22 @@ export function certificateSubjectToString(
   }
 
   return parts.join(", ");
+}
+
+export function getCertificateSubject(subjectString: string) {
+  const jsonName = new Name(subjectString).toJSON();
+
+  return jsonName.reduce<Record<string, string[]>>((result, currentValue) => {
+    Object.keys(currentValue).forEach((keyName) => {
+      if (!result[keyName]) {
+        result[keyName] = currentValue[keyName];
+      } else {
+        result[keyName].push(...currentValue[keyName]);
+      }
+    });
+
+    return result;
+  }, {});
 }
 
 export function getCertificateName(certificate: CertificateProps) {
