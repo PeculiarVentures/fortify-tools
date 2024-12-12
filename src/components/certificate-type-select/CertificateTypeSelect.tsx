@@ -1,5 +1,5 @@
 import React, { ComponentProps } from "react";
-import { Autocomplete, useControllableState } from "@peculiar/react-components";
+import { Select, useControllableState } from "@peculiar/react-components";
 import { useTranslation } from "react-i18next";
 import {
   ICertificateExtendedKeyUsages,
@@ -47,7 +47,7 @@ export const CertificateTypeSelect: React.FunctionComponent<
   ];
 
   return (
-    <Autocomplete
+    <Select
       value={currentValue}
       disableSearch={true}
       className={className}
