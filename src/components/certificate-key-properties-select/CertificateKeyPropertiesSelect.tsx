@@ -5,7 +5,7 @@ import {
   EHashAlgorithm,
   ESignatureAlgorithm,
 } from "@peculiar/fortify-client-core";
-import { Autocomplete, Typography } from "@peculiar/react-components";
+import { Select, Typography } from "@peculiar/react-components";
 
 import styles from "./styles/index.module.scss";
 
@@ -28,7 +28,7 @@ export const CertificateKeyPropertiesSelect: React.FunctionComponent<
         {t("certificates.key-properties")}
       </Typography>
       <div className={styles.certificate_key_prop_selects}>
-        <Autocomplete
+        <Select
           className={styles.certificate_key_prop_select}
           name="signatureAlgorithm"
           defaultValue={signatureAlgorithm[2]}
@@ -36,7 +36,7 @@ export const CertificateKeyPropertiesSelect: React.FunctionComponent<
           options={signatureAlgorithm}
           label={t("certificates.signature-algorithm")}
         />
-        <Autocomplete
+        <Select
           className={styles.certificate_key_prop_select}
           defaultValue={hashAlgorithm[0]}
           name="hashAlgorithm"

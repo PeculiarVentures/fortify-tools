@@ -1,7 +1,7 @@
 import React, { ComponentProps } from "react";
 import { useTranslation } from "react-i18next";
 import { IProviderInfo } from "@peculiar/fortify-client-core";
-import { Autocomplete } from "@peculiar/react-components";
+import { Select } from "@peculiar/react-components";
 
 interface CertificatesProvidersSelectListProps {
   className?: ComponentProps<"div">["className"];
@@ -27,7 +27,7 @@ export const CertificatesProvidersSelectList: React.FunctionComponent<
   )[0];
 
   return (
-    <Autocomplete
+    <Select
       className={className}
       disableSearch={true}
       defaultValue={currProvider}
