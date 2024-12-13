@@ -249,7 +249,7 @@ describe("<CertificateImportDialog />", () => {
     expect(onDropRejectedMock).toBeCalledWith("File is larger than 5 Mb.");
   });
 
-  it("Should handle too many files rejection correctly", async () => {
+  it("Should handle multiple files rejection correctly", async () => {
     const onDropRejectedMock = vi.fn();
     render(
       <CertificateImportDialog

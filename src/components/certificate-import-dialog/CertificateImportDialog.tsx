@@ -76,7 +76,7 @@ export const CertificateImportDialog: React.FunctionComponent<
         file.errors.forEach((err) => {
           let msg;
           if (err.code === "too-many-files") {
-            msg = t("certificates.dialog.import.file.error.to-many-files");
+            msg = t("certificates.dialog.import.file.error.too-many-files");
           } else if (err.code === "file-too-large") {
             msg = t("certificates.dialog.import.file.error.too-large", {
               size: formatBytes(APP_CERTIFICATE_MAX_SIZE_BYTES),
