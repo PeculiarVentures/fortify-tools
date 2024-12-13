@@ -248,4 +248,37 @@ describe("<CertificateImportDialog />", () => {
     expect(onDropRejectedMock).toBeCalledTimes(1);
     expect(onDropRejectedMock).toBeCalledWith("File is larger than 5 Mb.");
   });
+
+  it("Should handle too many files rejection correctly", async () => {
+    const onDropRejectedMock = vi.fn();
+    render(
+      <CertificateImportDialog
+        {...defaultProps}
+        onDropRejected={onDropRejectedMock}
+      />
+    );
+
+    const dropzone = getDropZone();
+
+    await act(async () => {
+      fireEvent.drop(dropzone, {
+        dataTransfer: {
+          files: [
+            {
+              name: "file1.cer",
+              type: "application/pkix-cert",
+            },
+            {
+              name: "file2.cer",
+              type: "application/pkix-cert",
+            },
+          ],
+          types: ["Files"],
+        },
+      });
+    });
+
+    expect(onDropRejectedMock).toBeCalledTimes(1);
+    expect(onDropRejectedMock).toBeCalledWith("You can select only one file.");
+  });
 });
