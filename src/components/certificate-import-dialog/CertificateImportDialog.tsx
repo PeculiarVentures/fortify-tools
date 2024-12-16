@@ -72,25 +72,34 @@ export const CertificateImportDialog: React.FunctionComponent<
       multiple: false,
       accept: APP_CERTIFICATE_ALLOWED_MIMES,
       maxSize: APP_CERTIFICATE_MAX_SIZE_BYTES,
-      onDropRejected: ([file]) => {
-        file.errors.forEach((err) => {
-          let msg;
-          if (err.code === "too-many-files") {
-            msg = t("certificates.dialog.import.file.error.too-many-files");
-          } else if (err.code === "file-too-large") {
-            msg = t("certificates.dialog.import.file.error.too-large", {
-              size: formatBytes(APP_CERTIFICATE_MAX_SIZE_BYTES),
-            });
-          } else if (err.code === "file-invalid-type") {
-            msg = t("certificates.dialog.import.file.error.invalid-type");
-          }
+      onDrop: async (acceptedFiles, fileRejections) => {
+        const files = [...acceptedFiles, ...fileRejections];
+        if (files.length > 1) {
+          onDropRejected(
+            t("certificates.dialog.import.file.error.too-many-files")
+          );
+          return;
+        }
 
-          if (msg) {
-            onDropRejected(msg);
+        const msgs: string[] = [];
+        fileRejections[0]?.errors.forEach((err) => {
+          if (err.code === "file-too-large") {
+            msgs.push(
+              t("certificates.dialog.import.file.error.too-large", {
+                size: formatBytes(APP_CERTIFICATE_MAX_SIZE_BYTES),
+              })
+            );
+          } else if (err.code === "file-invalid-type") {
+            msgs.push(t("certificates.dialog.import.file.error.invalid-type"));
           }
         });
-      },
-      onDropAccepted: async ([file]) => {
+        if (msgs.length) {
+          msgs.forEach((msg) => onDropRejected(msg));
+          return;
+        }
+
+        const file = acceptedFiles[0];
+
         if (!file) {
           return false;
         }
