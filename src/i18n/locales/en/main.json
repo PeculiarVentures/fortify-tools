@@ -91,6 +91,7 @@
         },
         "file": {
           "error": {
+            "too-many-files": "You can select only one file.",
             "too-large": "File is larger than {{size}}.",
             "invalid-type": "Wrong file format. Use PEM or DER formats."
           }

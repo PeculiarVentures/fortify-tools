@@ -191,6 +191,7 @@ export function useCertificateImportDialog(
               disableIcon: true,
               isClosable: true,
             });
+            clearCertificate();
           }}
           onDialogClose={handleClose}
           onProviderSelect={(id) => {
