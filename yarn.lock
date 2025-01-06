@@ -826,7 +826,7 @@
     asn1js "^3.0.5"
     tslib "^2.6.2"
 
-"@peculiar/asn1-schema@^2.3.13", "@peculiar/asn1-schema@^2.3.8":
+"@peculiar/asn1-schema@^2.3.13":
   version "2.3.13"
   resolved "https://registry.npmjs.org/@peculiar/asn1-schema/-/asn1-schema-2.3.13.tgz"
   integrity sha512-3Xq3a01WkHRZL8X04Zsfg//mGaA21xlL4tlVn4v2xGT0JStiztATRkMwa5b+f/HXmY2smsiLXYK46Gwgzvfg3g==
@@ -895,7 +895,7 @@
     asn1js "^3.0.5"
     tslib "^2.6.2"
 
-"@peculiar/asn1-x509-qualified@^2.3.13", "@peculiar/asn1-x509-qualified@^2.3.8":
+"@peculiar/asn1-x509-qualified@^2.3.13":
   version "2.3.13"
   resolved "https://registry.npmjs.org/@peculiar/asn1-x509-qualified/-/asn1-x509-qualified-2.3.13.tgz"
   integrity sha512-Ee/L145F2DJu4lZKxojnjd6gCZn9Ze2aF5X//xJbR0z0dEHUyxOk2JL0cHkfuRsHFXp1OBCch0QHqzr2ovCCfA==
@@ -905,7 +905,7 @@
     asn1js "^3.0.5"
     tslib "^2.6.2"
 
-"@peculiar/asn1-x509@^2.3.13", "@peculiar/asn1-x509@^2.3.8":
+"@peculiar/asn1-x509@^2.3.13":
   version "2.3.13"
   resolved "https://registry.npmjs.org/@peculiar/asn1-x509/-/asn1-x509-2.3.13.tgz"
   integrity sha512-PfeLQl2skXmxX2/AFFCVaWU8U6FKW1Db43mgBhShCOFS1bVxqtvusq1hVjfuEcuSQGedrLdCSvTgabluwN/M9A==
@@ -924,7 +924,7 @@
     "@peculiar/certificates-viewer" "^4.3.1"
     tslib "^2.4.1"
 
-"@peculiar/certificates-viewer@^4.2.0", "@peculiar/certificates-viewer@^4.3.1":
+"@peculiar/certificates-viewer@^4.3.1":
   version "4.3.1"
   resolved "https://registry.npmjs.org/@peculiar/certificates-viewer/-/certificates-viewer-4.3.1.tgz"
   integrity sha512-wL4h7N2KJDaol8vv8UZUUZh8CCyJaBS9hqBU1c5RFVeMHrgg5P1Pf/Bg7S4HqwLzXF5FDIcgz7CFskTZsfeiew==
@@ -957,38 +957,19 @@
   resolved "https://registry.yarnpkg.com/@peculiar/color/-/color-0.1.5.tgz#ca90086f79da5a8c1c3e4e219ea627b65e4d3357"
   integrity sha512-nDg5qS9TU8ZTGLuWNZ1iTziAaK2hZytkjuUjIiJRfHWx65u5iyejjNeXkoe0/emAjPnX29FSI59WcwHMPZVsEw==
 
-"@peculiar/fortify-client-core@^4.0.9":
-  version "4.0.9"
-  resolved "https://registry.yarnpkg.com/@peculiar/fortify-client-core/-/fortify-client-core-4.0.9.tgz#6aeecb75132962235af0dc09768d666deb17dd8f"
-  integrity sha512-yZCMKEQHT6xScYeHaoRFaRZCZAeThuxxX6aZfGd2TIaTV/8vH0tQp1smnCisSqE34bFkN5DvUPMvm4hLg2TvjA==
+"@peculiar/fortify-client-core@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@peculiar/fortify-client-core/-/fortify-client-core-4.1.0.tgz#fa7d9d361affd48049838065ed01f27e46d746f2"
+  integrity sha512-a1vu08JFQC+DnV2R4mda+cpKYjTPxSwpbMW483Ay9bjdTism7KlI39V3y5FzQ7jAJpXwifIZhF1g7l55c2oSKg==
   dependencies:
-    "@peculiar/asn1-schema" "^2.3.8"
-    "@peculiar/asn1-x509" "^2.3.8"
-    "@peculiar/asn1-x509-qualified" "^2.3.8"
-    "@peculiar/x509" "^1.9.7"
-    "@webcrypto-local/client" "^1.7.7"
+    "@peculiar/asn1-schema" "^2.3.13"
+    "@peculiar/asn1-x509" "^2.3.13"
+    "@peculiar/asn1-x509-qualified" "^2.3.13"
+    "@peculiar/x509" "^1.12.3"
+    "@webcrypto-local/client" "^1.10.7"
     ismobilejs "^1.1.1"
-    protobufjs "^6.11.4"
-    pvtsutils "^1.3.5"
+    pvtsutils "^1.3.6"
     tslib "^2.4.0"
-
-"@peculiar/fortify-webcomponents-react@^4.0.9":
-  version "4.0.9"
-  resolved "https://registry.yarnpkg.com/@peculiar/fortify-webcomponents-react/-/fortify-webcomponents-react-4.0.9.tgz#ae96522d541effff4f542122615d16de65d6a38d"
-  integrity sha512-RNfVbxOa0nfYJuTZpdVwTNn6zBjHXwK7lbiNmrfkrfft1hS2T3v0WWfE7Xvbv3W9SUcAbGYG6Yy1yTztZmOwtg==
-  dependencies:
-    "@peculiar/fortify-webcomponents" "^4.0.9"
-    tslib "^2.4.0"
-
-"@peculiar/fortify-webcomponents@^4.0.9":
-  version "4.0.9"
-  resolved "https://registry.yarnpkg.com/@peculiar/fortify-webcomponents/-/fortify-webcomponents-4.0.9.tgz#68c5a70c6f6d6daa780b0740f6973af6b5b3685b"
-  integrity sha512-jxmBFY9hoU5XlBfxy5jrx+hcHSxxuuUI8N03TuRBvnB+oSV6w02QHKb30i/eK3YCprwh1RnwjY1oQwf2I1Lr1w==
-  dependencies:
-    "@peculiar/certificates-viewer" "^4.2.0"
-    "@peculiar/fortify-client-core" "^4.0.9"
-    "@stencil/core" "^4.3.0"
-    pvtsutils "^1.3.5"
 
 "@peculiar/json-schema@^1.1.12":
   version "1.1.12"
@@ -1015,7 +996,7 @@
     react-popper "^2.3.0"
     react-transition-group "^4.4.5"
 
-"@peculiar/x509@^1.12.3", "@peculiar/x509@^1.9.7":
+"@peculiar/x509@^1.12.3":
   version "1.12.3"
   resolved "https://registry.npmjs.org/@peculiar/x509/-/x509-1.12.3.tgz"
   integrity sha512-+Mzq+W7cNEKfkNZzyLl6A6ffqc3r21HGZUezgfKxpZrkORfOqgRXnS80Zu0IV6a9Ue9QBJeKD7kN0iWfc3bhRQ==
@@ -1199,7 +1180,7 @@
   resolved "https://registry.yarnpkg.com/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.28.1.tgz#4dff5c4259ebe6c5b4a8f2c5bc3829b7a8447ff0"
   integrity sha512-ZvK2jBafvttJjoIdKm/Q/Bh7IJ1Ose9IBOwpOXcOvW3ikGTQGmKDgxTC6oCAzW6PynbkKP8+um1du81XJHZ0JA==
 
-"@stencil/core@^4.13.0", "@stencil/core@^4.3.0":
+"@stencil/core@^4.13.0":
   version "4.21.0"
   resolved "https://registry.npmjs.org/@stencil/core/-/core-4.21.0.tgz"
   integrity sha512-v50lnVbzS8mpMSnEVxR+G75XpvxHKtkJaQrNPE8+/fF6Ppr5z4bcdcBhcP8LPfEW+4BZcic6VifMXRwTopc+kw==
@@ -1647,11 +1628,6 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.17.13.tgz#786e2d67cfd95e32862143abe7463a7f90c300eb"
   integrity sha512-lfx+dftrEZcdBPczf9d0Qv0x+j/rfNCMuC6OcfXmO8gkfeNAY88PgKUbvG56whcN23gc27yenwF6oJZXGFpYxg==
 
-"@types/long@^4.0.1":
-  version "4.0.2"
-  resolved "https://registry.npmjs.org/@types/long/-/long-4.0.2.tgz"
-  integrity sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==
-
 "@types/long@^5.0.0":
   version "5.0.0"
   resolved "https://registry.npmjs.org/@types/long/-/long-5.0.0.tgz"
@@ -1914,38 +1890,38 @@
     loupe "^3.1.2"
     tinyrainbow "^1.2.0"
 
-"@webcrypto-local/client@1.7.7", "@webcrypto-local/client@^1.7.7":
-  version "1.7.7"
-  resolved "https://registry.yarnpkg.com/@webcrypto-local/client/-/client-1.7.7.tgz#7c1f7c23cb43d555f70e4771847557c1baea8214"
-  integrity sha512-661nW3+sXAXdYG5ylJVxH1Lg3nwmntYPmeVE2WYzFVT1V8DSVMDCV2P3tEEeDcs/aIgohOpNlM6iIedkFP6OVA==
+"@webcrypto-local/client@^1.10.7":
+  version "1.10.7"
+  resolved "https://registry.yarnpkg.com/@webcrypto-local/client/-/client-1.10.7.tgz#3c5aa7768fdf32d1ffac40b3dad7361623e64340"
+  integrity sha512-NS22KNPNs9pVUrdiKQf+o01X4dCOF0AccudMF6g7MYeYeMdniyY6+L36GNo1hqJC1PVD0e1UDBhqO9dQppkOxg==
   dependencies:
     "2key-ratchet" "^1.0.18"
-    "@webcrypto-local/core" "^1.7.7"
-    "@webcrypto-local/proto" "^1.7.7"
+    "@webcrypto-local/core" "^1.10.6"
+    "@webcrypto-local/proto" "^1.10.6"
     idb "^2"
-    pvtsutils "^1.3.2"
-    tslib "^2.4.0"
-    webcrypto-core "^1.7.7"
-    ws "^8.13.0"
+    pvtsutils "^1.3.5"
+    tslib "^2.7.0"
+    webcrypto-core "^1.8.1"
+    ws "^8.17.0"
 
-"@webcrypto-local/core@^1.7.7", "@webcrypto-local/core@^1.9.0":
-  version "1.9.0"
-  resolved "https://registry.npmjs.org/@webcrypto-local/core/-/core-1.9.0.tgz"
-  integrity sha512-3l/odi/5zuYgQuTY5OrzvMM4pudWvS+hFnYK/F4J3+eJWN3DcoRlXrWn/JPXWaU/PQaL1YRg4g8jq+nTpHPmLQ==
+"@webcrypto-local/core@^1.10.6":
+  version "1.10.6"
+  resolved "https://registry.yarnpkg.com/@webcrypto-local/core/-/core-1.10.6.tgz#bd2885bce00d688626d9532972c99c303a039eaf"
+  integrity sha512-9Tg/hkRTU6x393xBwkZCxapTjbWRrKVZNsFk61VXzXBNQFcFpTHRvkeK9pjTELqEWrCswVxOYa3eDguMA4+ldQ==
   dependencies:
     "2key-ratchet" "^1.0.18"
     pvtsutils "^1.3.5"
-    tslib "^2.6.3"
+    tslib "^2.7.0"
 
-"@webcrypto-local/proto@^1.7.7":
-  version "1.9.0"
-  resolved "https://registry.npmjs.org/@webcrypto-local/proto/-/proto-1.9.0.tgz"
-  integrity sha512-208N4P7SPkPaQXJKPEpUmUnvNDvoBDgzQR3+vsfm0UpqAwBNCz5hflTwfznxaYP2Op6P3fIWTs3SQmRjen9X8A==
+"@webcrypto-local/proto@^1.10.6":
+  version "1.10.6"
+  resolved "https://registry.yarnpkg.com/@webcrypto-local/proto/-/proto-1.10.6.tgz#fbcaf572be26dc7741711c1e01ebec4b044f5ad0"
+  integrity sha512-QEFKZCt8/5eP8THKahk6thqup+y8732ttY8K1WmqitR1mQZWa1exO8GEQNovohP0QdrcSxmHv/nK0KaTovC9vA==
   dependencies:
-    "@webcrypto-local/core" "^1.9.0"
-    pvtsutils "^1.3.2"
-    tslib "^2.4.0"
-    tsprotobuf "^1.0.18"
+    "@webcrypto-local/core" "^1.10.6"
+    pvtsutils "^1.3.5"
+    tslib "^2.7.0"
+    tsprotobuf "^1.0.19"
 
 "@xobotyi/scrollbar-width@^1.9.5":
   version "1.9.5"
@@ -2031,7 +2007,7 @@ array-union@^2.1.0:
   resolved "https://registry.yarnpkg.com/array-union/-/array-union-2.1.0.tgz#b798420adbeb1de828d84acd8a2e23d3efe85e8d"
   integrity sha512-HGyxoOTYUyCM6stUe6EJgnd4EoewAI7zMdfqO+kGjnlZmBDz/cR5pf8r/cR4Wq60sL/p0IkcjUEEPwS3GFrIyw==
 
-asn1js@^3.0.1, asn1js@^3.0.5:
+asn1js@^3.0.5:
   version "3.0.5"
   resolved "https://registry.npmjs.org/asn1js/-/asn1js-3.0.5.tgz"
   integrity sha512-FVnvrKJwpt9LP2lAMl8qZswRNm3T4q9CON+bxldk2iwk3FFpuwhx2FfinyitizWHsVYyaY+y5JzDR0rCMV5yTQ==
@@ -3221,7 +3197,7 @@ isexe@^2.0.0:
 
 ismobilejs@^1.1.1:
   version "1.1.1"
-  resolved "https://registry.npmjs.org/ismobilejs/-/ismobilejs-1.1.1.tgz"
+  resolved "https://registry.yarnpkg.com/ismobilejs/-/ismobilejs-1.1.1.tgz#c56ca0ae8e52b24ca0f22ba5ef3215a2ddbbaa0e"
   integrity sha512-VaFW53yt8QO61k2WJui0dHf4SlL8lxBofUuUmwBo0ljPk0Drz2TiuDW4jo3wDcv41qy/SxrJ+VAzJ/qYqsmzRw==
 
 istanbul-lib-coverage@^3.0.0, istanbul-lib-coverage@^3.2.2:
@@ -3405,11 +3381,6 @@ long@*, long@^5.0.0:
   version "5.2.3"
   resolved "https://registry.npmjs.org/long/-/long-5.2.3.tgz"
   integrity sha512-lcHwpNoggQTObv5apGNCTdJrO69eHOZMi4BNC+rTLER8iHAqGrUVeLh/irVIM7zTw2bOXA8T6uNPeujwOLg/2Q==
-
-long@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.npmjs.org/long/-/long-4.0.0.tgz"
-  integrity sha512-XsP+KhQif4bjX1kbuSiySJFNAehNxgLb6hPRGJ9QsUr8ajHkuXGdrHmFUTUUXhDwVX2R5bY4JNZEwbUiMhV+MA==
 
 loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.4.0:
   version "1.4.0"
@@ -3824,25 +3795,6 @@ prop-types@^15.6.2, prop-types@^15.8.1:
     object-assign "^4.1.1"
     react-is "^16.13.1"
 
-protobufjs@^6.11.4:
-  version "6.11.4"
-  resolved "https://registry.npmjs.org/protobufjs/-/protobufjs-6.11.4.tgz"
-  integrity sha512-5kQWPaJHi1WoCpjTGszzQ32PG2F4+wRY6BmAT4Vfw56Q2FZ4YZzK20xUYQH4YkfehY1e6QSICrJquM6xXZNcrw==
-  dependencies:
-    "@protobufjs/aspromise" "^1.1.2"
-    "@protobufjs/base64" "^1.1.2"
-    "@protobufjs/codegen" "^2.0.4"
-    "@protobufjs/eventemitter" "^1.1.0"
-    "@protobufjs/fetch" "^1.1.0"
-    "@protobufjs/float" "^1.0.2"
-    "@protobufjs/inquire" "^1.1.0"
-    "@protobufjs/path" "^1.1.2"
-    "@protobufjs/pool" "^1.1.0"
-    "@protobufjs/utf8" "^1.1.0"
-    "@types/long" "^4.0.1"
-    "@types/node" ">=13.7.0"
-    long "^4.0.0"
-
 protobufjs@^7.2.4:
   version "7.4.0"
   resolved "https://registry.npmjs.org/protobufjs/-/protobufjs-7.4.0.tgz"
@@ -3866,7 +3818,7 @@ punycode@^2.1.0, punycode@^2.3.1:
   resolved "https://registry.npmjs.org/punycode/-/punycode-2.3.1.tgz"
   integrity sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==
 
-pvtsutils@1.3.6, pvtsutils@^1.0.10, pvtsutils@^1.3.2, pvtsutils@^1.3.5:
+pvtsutils@1.3.6, pvtsutils@^1.0.10, pvtsutils@^1.3.2, pvtsutils@^1.3.5, pvtsutils@^1.3.6:
   version "1.3.6"
   resolved "https://registry.yarnpkg.com/pvtsutils/-/pvtsutils-1.3.6.tgz#ec46e34db7422b9e4fdc5490578c1883657d6001"
   integrity sha512-PLgQXQ6H2FWCaeRak8vvk1GW462lMxB5s3Jm673N82zI4vqtVUPuZdffdZbPDFRoU8kAhItWFtPCWiPpp4/EDg==
@@ -4535,12 +4487,12 @@ tslib@^1.13.0, tslib@^1.9.3:
   resolved "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.0, tslib@^2.0.1, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.4.0, tslib@^2.4.1, tslib@^2.6.1, tslib@^2.6.2, tslib@^2.6.3, tslib@^2.7.0, tslib@^2.8.1:
+tslib@^2.0.0, tslib@^2.0.1, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.4.0, tslib@^2.4.1, tslib@^2.6.1, tslib@^2.6.2, tslib@^2.7.0, tslib@^2.8.1:
   version "2.8.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.8.1.tgz#612efe4ed235d567e8aba5f2a5fab70280ade83f"
   integrity sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==
 
-tsprotobuf@^1.0.15, tsprotobuf@^1.0.18:
+tsprotobuf@^1.0.15, tsprotobuf@^1.0.19:
   version "1.0.19"
   resolved "https://registry.npmjs.org/tsprotobuf/-/tsprotobuf-1.0.19.tgz"
   integrity sha512-t3tkm2y8Nkq/cOfMYRFXhOHA+g/5W9wrzepVERxcnK0DTT/6rTJiR3bALq8aEtLARzPL3zN5xR9pWu0vrLy6bA==
@@ -4736,16 +4688,16 @@ warning@^4.0.2:
   dependencies:
     loose-envify "^1.0.0"
 
-webcrypto-core@^1.7.7:
-  version "1.8.0"
-  resolved "https://registry.npmjs.org/webcrypto-core/-/webcrypto-core-1.8.0.tgz"
-  integrity sha512-kR1UQNH8MD42CYuLzvibfakG5Ew5seG85dMMoAM/1LqvckxaF6pUiidLuraIu4V+YCIFabYecUZAW0TuxAoaqw==
+webcrypto-core@^1.8.1:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/webcrypto-core/-/webcrypto-core-1.8.1.tgz#09d5bd8a9c48e9fbcaf412e06b1ff1a57514ce86"
+  integrity sha512-P+x1MvlNCXlKbLSOY4cYrdreqPG5hbzkmawbcXLKN/mf6DZW0SdNNkZ+sjwsqVkI4A4Ko2sPZmkZtCKY58w83A==
   dependencies:
-    "@peculiar/asn1-schema" "^2.3.8"
+    "@peculiar/asn1-schema" "^2.3.13"
     "@peculiar/json-schema" "^1.1.12"
-    asn1js "^3.0.1"
+    asn1js "^3.0.5"
     pvtsutils "^1.3.5"
-    tslib "^2.6.2"
+    tslib "^2.7.0"
 
 webidl-conversions@^7.0.0:
   version "7.0.0"
@@ -4831,9 +4783,9 @@ wrap-ansi@^8.1.0:
     string-width "^5.0.1"
     strip-ansi "^7.0.1"
 
-ws@^8.13.0, ws@^8.18.0, ws@^8.2.3:
+ws@^8.17.0, ws@^8.18.0, ws@^8.2.3:
   version "8.18.0"
-  resolved "https://registry.npmjs.org/ws/-/ws-8.18.0.tgz"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.18.0.tgz#0d7505a6eafe2b0e712d232b42279f53bc289bbc"
   integrity sha512-8VbfWfHLbbwu3+N6OKsOMpBdT4kXPDDB9cJk2bJ6mh9ucxdlnNvH1e+roYkKmN9Nxw2yjz7VzeO9oOz2zJ04Pw==
 
 xml-name-validator@^5.0.0:
