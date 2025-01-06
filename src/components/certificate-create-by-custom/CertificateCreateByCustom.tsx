@@ -7,7 +7,7 @@ import {
   CertificateType,
 } from "../../types";
 import {
-  Autocomplete,
+  Select,
   Button,
   TextField,
   Typography,
@@ -131,7 +131,7 @@ export const CertificateCreateByCustom: React.FunctionComponent<
               name="OU"
               label={t("certificates.subject.organization-unit-name.label")}
             />
-            <Autocomplete
+            <Select
               getOptionLabel={({ value }) => value}
               options={countries}
               name="C"
