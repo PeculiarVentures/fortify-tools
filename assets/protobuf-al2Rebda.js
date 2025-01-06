@@ -1,4 +1,4 @@
-import{c as commonjsGlobal,g as getDefaultExportFromCjs}from"./index-CNIhW8_4.js";function _mergeNamespaces(y,A){for(var S=0;S<A.length;S++){const o=A[S];if(typeof o!="string"&&!Array.isArray(o)){for(const d in o)if(d!=="default"&&!(d in y)){const h=Object.getOwnPropertyDescriptor(o,d);h&&Object.defineProperty(y,d,h.get?h:{enumerable:!0,get:()=>o[d]})}}}return Object.freeze(Object.defineProperty(y,Symbol.toStringTag,{value:"Module"}))}var protobuf$2={exports:{}};/*!
+import{c as commonjsGlobal,g as getDefaultExportFromCjs}from"./index-BcWVmQ_F.js";function _mergeNamespaces(y,A){for(var S=0;S<A.length;S++){const o=A[S];if(typeof o!="string"&&!Array.isArray(o)){for(const d in o)if(d!=="default"&&!(d in y)){const h=Object.getOwnPropertyDescriptor(o,d);h&&Object.defineProperty(y,d,h.get?h:{enumerable:!0,get:()=>o[d]})}}}return Object.freeze(Object.defineProperty(y,Symbol.toStringTag,{value:"Module"}))}var protobuf$2={exports:{}};/*!
  * protobuf.js v6.11.3 (c) 2016, daniel wirtz
  * compiled fri, 11 aug 2023 21:14:29 utc
  * licensed under the bsd-3-clause license
