@@ -67,44 +67,55 @@ export const CertificateImportDialog: React.FunctionComponent<
 
   const { t } = useTranslation();
 
-  const { getRootProps, isDragActive, isDragReject } = useDropzone({
-    multiple: false,
-    accept: APP_CERTIFICATE_ALLOWED_MIMES,
-    maxSize: APP_CERTIFICATE_MAX_SIZE_BYTES,
-    onDropRejected: ([file]) => {
-      file.errors.forEach((err) => {
-        let msg;
-        if (err.code === "file-too-large") {
-          msg = t("certificates.dialog.import.file.error.too-large", {
-            size: formatBytes(APP_CERTIFICATE_MAX_SIZE_BYTES),
-          });
-        }
-        if (err.code === "file-invalid-type") {
-          msg = t("certificates.dialog.import.file.error.invalid-type");
+  const { getInputProps, getRootProps, isDragActive, isDragReject } =
+    useDropzone({
+      multiple: false,
+      accept: APP_CERTIFICATE_ALLOWED_MIMES,
+      maxSize: APP_CERTIFICATE_MAX_SIZE_BYTES,
+      onDrop: async (acceptedFiles, fileRejections) => {
+        const files = [...acceptedFiles, ...fileRejections];
+        if (files.length > 1) {
+          onDropRejected(
+            t("certificates.dialog.import.file.error.too-many-files")
+          );
+          return;
         }
 
-        if (msg) {
-          onDropRejected(msg);
+        const msgs: string[] = [];
+        fileRejections[0]?.errors.forEach((err) => {
+          if (err.code === "file-too-large") {
+            msgs.push(
+              t("certificates.dialog.import.file.error.too-large", {
+                size: formatBytes(APP_CERTIFICATE_MAX_SIZE_BYTES),
+              })
+            );
+          } else if (err.code === "file-invalid-type") {
+            msgs.push(t("certificates.dialog.import.file.error.invalid-type"));
+          }
+        });
+        if (msgs.length) {
+          msgs.forEach((msg) => onDropRejected(msg));
+          return;
         }
-      });
-    },
-    onDropAccepted: async ([file]) => {
-      if (!file) {
-        return false;
-      }
 
-      const parts = file.name.split(".");
-      const ext = parts.length > 1 ? (parts.pop() as string) : "";
+        const file = acceptedFiles[0];
 
-      try {
-        const buf = await file.arrayBuffer();
-        onDropAccepted(buf, ext, file.type);
-      } catch (error) {
-        onDropError(error);
-      }
-    },
-    onError: onDropError,
-  });
+        if (!file) {
+          return false;
+        }
+
+        const parts = file.name.split(".");
+        const ext = parts.length > 1 ? (parts.pop() as string) : "";
+
+        try {
+          const buf = await file.arrayBuffer();
+          onDropAccepted(buf, ext, file.type);
+        } catch (error) {
+          onDropError(error);
+        }
+      },
+      onError: onDropError,
+    });
 
   return (
     <Dialog open fullScreen className={styles.dialog} onClose={onDialogClose}>
@@ -146,6 +157,7 @@ export const CertificateImportDialog: React.FunctionComponent<
                 }),
               })}
             >
+              <input {...getInputProps()} />
               <Typography variant="s2" color="gray-10">
                 <Trans
                   i18nKey="certificates.dialog.import.drop-zone.title"
