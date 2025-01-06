@@ -67,6 +67,7 @@ export function App() {
     currentProviderId,
     fortifyClient,
     onSuccess: (providerId) => {
+      if (currentProviderId !== providerId) return;
       handleCertificatesDataReload(providerId);
     },
   });
@@ -79,6 +80,7 @@ export function App() {
     currentProviderId,
     fortifyClient,
     onSuccess: (providerId) => {
+      if (currentProviderId !== providerId) return;
       handleCertificatesDataReload(providerId);
     },
   });
