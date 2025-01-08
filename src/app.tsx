@@ -6,6 +6,7 @@ import { CertificatesList } from "./components/certificates-list";
 import { CertificatesSidebar } from "./components/certificates-sidebar";
 import { CertificatesProvidersList } from "./components/certificates-providers-list";
 import { CertificatesTopbar } from "./components/certificates-topbar";
+import { ConnectionNotSupported } from "./components/connection-not-supported";
 import { useCertificateViewerDialog } from "./dialogs/certificate-viewer-dialog";
 import { useCertificateDeleteDialog } from "./dialogs/certificate-delete-dialog";
 import { useSortList } from "./hooks/sort-list";
@@ -96,6 +97,10 @@ export function App() {
 
   const { open: handleProviderInfoDialogOpen, dialog: providerInfoDialog } =
     useProviderInfoDialog({ providers });
+
+  if (fetching.connectionSupport === "rejected") {
+    return <ConnectionNotSupported />;
+  }
 
   return (
     <>
