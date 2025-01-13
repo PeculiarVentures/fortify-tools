@@ -227,5 +227,13 @@
       "try-again": "Try again",
       "home-page": "Home page"
     }
+  },
+  "connection-not-supported": {
+    "message": "Unfortunately Fortify isn’t available for mobile devices yet",
+    "description": "Please try again from a Windows, macOS, or Linux computer.",
+    "button": {
+      "get-started": "Get started",
+      "home-page": "Home page"
+    }
   }
 }
