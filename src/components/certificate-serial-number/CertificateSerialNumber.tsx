@@ -15,7 +15,15 @@ export const CertificateSerialNumber: React.FunctionComponent<
 > = (props) => {
   const { className, value } = props;
   if (!value) {
-    return null;
+    return (
+      <Typography
+        className={clsx(className, styles.certificate_serial_number)}
+        variant="b2"
+        color="black"
+      >
+        -
+      </Typography>
+    );
   }
 
   return (

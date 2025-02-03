@@ -23,7 +23,7 @@ describe("<CertificateSerialNumber />", () => {
   });
 
   it("Shouldn't render if no value", () => {
-    const { container } = render(<CertificateSerialNumber />);
-    expect(container.firstChild).toBeNull();
+    render(<CertificateSerialNumber />);
+    expect(screen.getByText(/-/)).toBeInTheDocument();
   });
 });

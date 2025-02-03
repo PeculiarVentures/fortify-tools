@@ -47,6 +47,7 @@ describe("useApp", () => {
       logout: vi.fn(),
     }),
     getCertificatesByProviderId: vi.fn().mockResolvedValue(certificatesMock),
+    getCertificateRequestsByProviderId: vi.fn().mockResolvedValue([]),
   };
 
   it("Should initialize, get providers & certificates", async () => {
