@@ -47,7 +47,8 @@
       },
       "cell": {
         "certificate": "Certificate",
-        "with-privat-key": "(with private key)"
+        "with-privat-key": "(with private key)",
+        "certificate-request": "CSR"
       },
       "action": {
         "view-details": "View details",

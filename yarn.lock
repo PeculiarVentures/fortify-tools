@@ -963,10 +963,10 @@
   resolved "https://registry.yarnpkg.com/@peculiar/color/-/color-0.1.5.tgz#ca90086f79da5a8c1c3e4e219ea627b65e4d3357"
   integrity sha512-nDg5qS9TU8ZTGLuWNZ1iTziAaK2hZytkjuUjIiJRfHWx65u5iyejjNeXkoe0/emAjPnX29FSI59WcwHMPZVsEw==
 
-"@peculiar/fortify-client-core@^4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@peculiar/fortify-client-core/-/fortify-client-core-4.1.0.tgz#fa7d9d361affd48049838065ed01f27e46d746f2"
-  integrity sha512-a1vu08JFQC+DnV2R4mda+cpKYjTPxSwpbMW483Ay9bjdTism7KlI39V3y5FzQ7jAJpXwifIZhF1g7l55c2oSKg==
+"@peculiar/fortify-client-core@^4.1.1":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@peculiar/fortify-client-core/-/fortify-client-core-4.1.1.tgz#f08151245db56deb15351b5f95a75f10a3d60a30"
+  integrity sha512-eKaZhg+MZsxg0GW5spjHIdNtuzN9OICk7ZKXOX1uIEKVtk81mr/VVN2g8Axs/D0BYZqFc7KcJgK/m14EjU8sGQ==
   dependencies:
     "@peculiar/asn1-schema" "^2.3.13"
     "@peculiar/asn1-x509" "^2.3.13"

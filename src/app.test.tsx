@@ -49,6 +49,18 @@ describe("<App />", () => {
     },
   ];
 
+  const certificateRequestsMock = [
+    {
+      id: "1",
+      providerID: "provider1",
+      subject: {
+        CN: ["Certificate request test 1"],
+      },
+      raw: new ArrayBuffer(1),
+      type: "request",
+    },
+  ];
+
   const mockFortifyAPIInstance: Partial<FortifyAPI> = {
     challenge: vi.fn().mockResolvedValue(""),
     login: vi.fn(),
@@ -65,11 +77,19 @@ describe("<App />", () => {
       logout: vi.fn(),
     }),
     getCertificatesByProviderId: vi.fn().mockResolvedValue(certificatesMock),
+    getCertificateRequestsByProviderId: vi.fn().mockResolvedValue([]),
   };
 
-  it("Should render, show providers & certificates", async () => {
+  const mockFortifyAPIInstanceWithCertificateRequests = {
+    ...mockFortifyAPIInstance,
+    getCertificateRequestsByProviderId: vi
+      .fn()
+      .mockResolvedValue(certificateRequestsMock),
+  } as unknown as FortifyAPI;
+
+  it("Should render, show providers & certificates & certificate requests", async () => {
     vi.mocked(FortifyAPI).mockImplementation(
-      () => mockFortifyAPIInstance as FortifyAPI
+      () => mockFortifyAPIInstanceWithCertificateRequests
     );
 
     render(<App />);
@@ -79,6 +99,9 @@ describe("<App />", () => {
       expect(screen.getByText(/Provider 2/)).toBeInTheDocument();
       expect(screen.getByText(/Certificate test 1/)).toBeInTheDocument();
       expect(screen.getByText(/Certificate test 2/)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Certificate request test 1/)
+      ).toBeInTheDocument();
     });
   });
 
@@ -139,6 +162,30 @@ describe("<App />", () => {
     await waitFor(() => {
       expect(
         screen.getByText(/“Certificate test 2” details/)
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("Should open view certificate request details dialog", async () => {
+    vi.mocked(FortifyAPI).mockImplementation(
+      () => mockFortifyAPIInstanceWithCertificateRequests as FortifyAPI
+    );
+
+    render(<App />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(/Certificate request test 1/)
+      ).toBeInTheDocument();
+    });
+
+    await userEvent.click(
+      screen.getAllByRole("button", { name: /View details/ })[0]
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(/“Certificate request test 1” details/)
       ).toBeInTheDocument();
     });
   });

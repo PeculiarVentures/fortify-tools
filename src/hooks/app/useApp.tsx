@@ -3,6 +3,7 @@ import {
   FortifyAPI,
   IProviderInfo,
   ICertificate,
+  ICertificateRequest,
 } from "@peculiar/fortify-client-core";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@peculiar/react-components";
@@ -21,7 +22,9 @@ export function useApp() {
   >(undefined);
   const [isCurrentProviderLogedin, setIsCurrentProviderLogedin] =
     React.useState(false);
-  const [certificates, setCertificates] = React.useState<ICertificate[]>([]);
+  const [certificates, setCertificates] = React.useState<
+    (ICertificate | ICertificateRequest)[]
+  >([]);
   const [challenge, setChallenge] = React.useState<string | null>(null);
   const [fetching, setFetching] = React.useState<AppFetchingType>({
     connectionDetect: "pending",
@@ -184,9 +187,11 @@ export function useApp() {
     }
 
     try {
-      setCertificates(
-        await fortifyClient.current.getCertificatesByProviderId(id)
-      );
+      const requests =
+        await fortifyClient.current.getCertificateRequestsByProviderId(id);
+      const certificates =
+        await fortifyClient.current.getCertificatesByProviderId(id);
+      setCertificates([...certificates, ...requests]);
       if (providers?.length) {
         setCurrentProvider(providers.find((provider) => provider.id === id));
       }
@@ -219,9 +224,13 @@ export function useApp() {
     setFetchingValue("certificates", "pending");
 
     try {
-      setCertificates(
-        await fortifyClient.current.getCertificatesByProviderId(providerId)
-      );
+      const requests =
+        await fortifyClient.current.getCertificateRequestsByProviderId(
+          providerId
+        );
+      const certificates =
+        await fortifyClient.current.getCertificatesByProviderId(providerId);
+      setCertificates([...certificates, ...requests]);
       setFetchingValue("certificates", "resolved");
     } catch (error) {
       setFetchingValue("certificates", "rejected");

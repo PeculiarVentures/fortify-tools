@@ -17,7 +17,7 @@ describe("<Date />", () => {
   });
 
   it("Shouldn't render if no date", () => {
-    const { container } = render(<Date />);
-    expect(container.firstChild).toBeNull();
+    render(<Date />);
+    expect(screen.getByText(/-/)).toBeInTheDocument();
   });
 });

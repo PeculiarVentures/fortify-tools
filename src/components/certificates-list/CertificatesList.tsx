@@ -239,7 +239,11 @@ export const CertificatesList: React.FunctionComponent<
                         title={t("certificates.list.action.copy")}
                         value={
                           raw.byteLength
-                            ? () => certificateRawToPem(raw, type)
+                            ? () =>
+                                certificateRawToPem(
+                                  raw,
+                                  type === "x509" ? "x509" : "csr"
+                                )
                             : ""
                         }
                         className={styles.action_icon_button}
@@ -249,7 +253,11 @@ export const CertificatesList: React.FunctionComponent<
                         title={t("certificates.list.action.download")}
                         onClick={() =>
                           raw.byteLength &&
-                          downloadCertificate(certificateName, raw, type)
+                          downloadCertificate(
+                            certificateName,
+                            raw,
+                            type === "x509" ? "x509" : "csr"
+                          )
                         }
                         size="small"
                         className={styles.action_icon_button}

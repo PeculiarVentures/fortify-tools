@@ -1,8 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
+import { ICertificateRequest } from "@peculiar/fortify-client-core";
 import { getCertificateName } from "../../utils/certificate";
 import { CertificateProps } from "../../types";
 
-export function useSearchList(certificates: CertificateProps[]) {
+export function useSearchList(
+  certificates: (CertificateProps | ICertificateRequest)[]
+) {
   const [searchedText, setSearchedText] = useState(
     new URLSearchParams(window.location.search).get("search") || ""
   );
@@ -37,7 +40,7 @@ export function useSearchList(certificates: CertificateProps[]) {
     () =>
       searchedText
         ? certificates.filter((certificate) =>
-            getCertificateName(certificate)
+            getCertificateName(certificate as CertificateProps)
               ?.toLocaleLowerCase()
               .includes(searchedText.toLocaleLowerCase())
           )
