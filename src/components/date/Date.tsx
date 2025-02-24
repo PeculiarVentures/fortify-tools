@@ -12,20 +12,19 @@ export const Date: React.FunctionComponent<DateProps> = (props) => {
   const { date, className } = props;
   const { i18n } = useTranslation();
 
-  if (!date) {
-    return null;
-  }
   return (
     <Typography
       className={clsx(className, styles.date)}
       variant="b2"
       color="black"
     >
-      {date.toLocaleDateString(i18n.resolvedLanguage, {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      })}
+      {date
+        ? date.toLocaleDateString(i18n.resolvedLanguage, {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          })
+        : "-"}
     </Typography>
   );
 };
