@@ -16,7 +16,7 @@
     "@types/react": "18.3.14",
     "@types/react-dom": "18.3.3",
     "@vitejs/plugin-react": "^4.3.4",
-    "@vitest/coverage-v8": "^2.1.8",
+    "@vitest/coverage-v8": "^4.0.0",
     "autoprefixer": "^10.4.20",
     "gh-pages": "^6.3.0",
     "jsdom": "^25.0.1",
@@ -26,7 +26,7 @@
     "vite": "^6.4.1",
     "vite-plugin-svgr": "^4.3.0",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^2.1.9",
+    "vitest": "^4.0.0",
     "vitest-dom": "^0.1.1"
   },
   "dependencies": {
