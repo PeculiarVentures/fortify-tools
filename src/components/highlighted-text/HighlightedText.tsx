@@ -1,16 +1,17 @@
-import React, { ComponentProps } from "react";
-import { splitTextWithHighlight } from "../../utils";
-
-import styles from "./styles/index.module.scss";
+import React, { ComponentProps } from 'react';
+import { splitTextWithHighlight } from '../../utils';
+import styles from './styles/index.module.scss';
 
 interface IHighlightedTextProps {
   text: string;
   highlight?: string;
-  className?: ComponentProps<"div">["className"];
+  className?: ComponentProps<'div'>['className'];
 }
 
 export const HighlightedText: React.FC<IHighlightedTextProps> = (props) => {
-  const { highlight, text, className } = props;
+  const {
+    highlight, text, className,
+  } = props;
 
   if (!highlight) {
     return text;
@@ -28,6 +29,7 @@ export const HighlightedText: React.FC<IHighlightedTextProps> = (props) => {
             </span>
           );
         }
+
         return <span key={`nh-text-${index}`}>{part}</span>;
       })}
     </span>

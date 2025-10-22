@@ -1,1 +1,1 @@
-export * from "./CertificateAlgorithmInfo";
+export * from './CertificateAlgorithmInfo';

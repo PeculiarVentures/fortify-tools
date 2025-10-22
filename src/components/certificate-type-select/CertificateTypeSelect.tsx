@@ -1,48 +1,49 @@
-import React, { ComponentProps } from "react";
-import { Select, useControllableState } from "@peculiar/react-components";
-import { useTranslation } from "react-i18next";
+import React, { ComponentProps } from 'react';
+import { Select, useControllableState } from '@peculiar/react-components';
+import { useTranslation } from 'react-i18next';
 import {
-  ICertificateExtendedKeyUsages,
+  TCertificateExtendedKeyUsages,
   certificateKeyUsageExtensions,
-} from "../../config/data";
-import { CertificateType } from "../../types";
+} from '../../config/data';
+import { TCertificateType } from '../../types';
+import styles from './styles/index.module.scss';
 
-import styles from "./styles/index.module.scss";
+type TExtendedKeyUsages = TCertificateExtendedKeyUsages | 'custom';
 
-type IExtendedKeyUsages = ICertificateExtendedKeyUsages | "custom";
-
-export type ICertificateTypeSelectValue = {
-  value: IExtendedKeyUsages;
+export interface ICertificateTypeSelectValue {
+  value: TExtendedKeyUsages;
   label: string;
-};
+}
 
-interface CertificateTypeSelectProps {
-  className?: ComponentProps<"select">["className"];
-  type: CertificateType;
+interface ICertificateTypeSelectProps {
+  className?: ComponentProps<'select'>['className'];
+  type: TCertificateType;
   onChange: (data: ICertificateTypeSelectValue) => void;
 }
 
 export const CertificateTypeSelect: React.FunctionComponent<
-  CertificateTypeSelectProps
+  ICertificateTypeSelectProps
 > = (props) => {
-  const { className, type = "csr", onChange } = props;
+  const {
+    className, type = 'csr', onChange,
+  } = props;
 
-  const [currentValue, setCurrentValue] =
-    useControllableState<ICertificateTypeSelectValue>({ onChange });
+  const [currentValue, setCurrentValue]
+    = useControllableState<ICertificateTypeSelectValue>({ onChange });
 
   const { t } = useTranslation();
   const list: ICertificateTypeSelectValue[] = [
     ...Object.keys(certificateKeyUsageExtensions).map((key) => ({
-      value: key as IExtendedKeyUsages,
+      value: key as TExtendedKeyUsages,
       label: t(`certificates.key-usage-extension.${key}`),
     })),
     {
       label: t(
-        type === "x509"
-          ? "certificates.custom-certificate-option"
-          : "certificates.custom-csr-option"
+        type === 'x509'
+          ? 'certificates.custom-certificate-option'
+          : 'certificates.custom-csr-option',
       ),
-      value: "custom",
+      value: 'custom',
     },
   ];
 
@@ -52,14 +53,11 @@ export const CertificateTypeSelect: React.FunctionComponent<
       disableSearch={true}
       className={className}
       options={list}
-      onChange={(_, value) =>
-        setCurrentValue(value as ICertificateTypeSelectValue)
-      }
       getOptionLabel={({ label }) => label}
-      placeholder={t("certificates.select-type-placeholder")}
-      popoverProps={{
-        className: styles.certificate_type_select_popover,
-      }}
+      placeholder={t('certificates.select-type-placeholder')}
+      popoverProps={{ className: styles.certificate_type_select_popover }}
+      onChange={(_, value) =>
+        setCurrentValue(value as ICertificateTypeSelectValue)}
     />
   );
 };

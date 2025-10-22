@@ -1,23 +1,24 @@
-import { render, screen } from "@testing";
-import { certificateKeyUsageExtensions } from "src/config/data";
-import { KeyUsagesCheckboxGroup } from "./KeyUsagesCheckboxGroup";
+import { render, screen } from '@testing';
+import { certificateKeyUsageExtensions } from '../../config/data';
+import { KeyUsagesCheckboxGroup } from './KeyUsagesCheckboxGroup';
 
-describe("<KeyUsagesCheckboxGroup />", () => {
-  it("Should render", () => {
+describe('<KeyUsagesCheckboxGroup />', () => {
+  it('Should render', () => {
     const { container } = render(
-      <KeyUsagesCheckboxGroup className="test_class" />
+      <KeyUsagesCheckboxGroup className="test_class" />,
     );
 
     const keyUsageExtensions = Object.values(certificateKeyUsageExtensions);
 
-    expect(container.children[0]).toHaveClass("test_class");
+    expect(container.children[0]).toHaveClass('test_class');
 
-    const checkboxes = screen.getAllByRole("checkbox");
+    const checkboxes = screen.getAllByRole('checkbox');
+
     expect(checkboxes).toHaveLength(keyUsageExtensions.length);
 
     keyUsageExtensions.forEach((value, index) => {
-      expect(checkboxes[index]).toHaveAttribute("name", "keyUsage");
-      expect(checkboxes[index]).toHaveAttribute("value", value);
+      expect(checkboxes[index]).toHaveAttribute('name', 'keyUsage');
+      expect(checkboxes[index]).toHaveAttribute('value', value);
     });
   });
 });

@@ -1,44 +1,47 @@
-import React from "react";
-import { IProviderInfo, FortifyAPI } from "@peculiar/fortify-client-core";
-import { useLockBodyScroll } from "react-use";
-import cloneDeep from "lodash/cloneDeep";
-import { X509Certificate } from "@peculiar/x509";
-import { getCertificateSubject } from "../../utils/certificate";
-import { CertificateViewerDialog } from "../../components/certificate-viewer-dialog";
-import { CertificateProps } from "../../types";
+import React from 'react';
+import { IProviderInfo, FortifyAPI } from '@peculiar/fortify-client-core';
+import { useLockBodyScroll } from 'react-use';
+import cloneDeep from 'lodash/cloneDeep';
+import { X509Certificate } from '@peculiar/x509';
+import { getCertificateSubject } from '../../utils/certificate';
+import { CertificateViewerDialog } from '../../components/certificate-viewer-dialog';
+import { ICertificateProps } from '../../types';
 
-type UseCertificateViewerDialogOpenParams = {
+interface IUseCertificateViewerDialogOpenParams {
   providerId: string;
-  certificate: CertificateProps;
-};
+  certificate: ICertificateProps;
+}
 
-type UseCertificateViewerInitialParams = {
+interface IUseCertificateViewerInitialParams {
   providers: IProviderInfo[];
   currentProviderId?: string;
   fortifyClient: FortifyAPI | null;
-};
+}
 
 export function useCertificateViewerDialog(
-  props: UseCertificateViewerInitialParams
+  props: IUseCertificateViewerInitialParams,
 ) {
-  const { providers, currentProviderId, fortifyClient } = props;
+  const {
+    providers, currentProviderId, fortifyClient,
+  } = props;
   const [isOpen, setIsOpen] = React.useState(false);
-  const openParamsRef = React.useRef<UseCertificateViewerDialogOpenParams>();
-  const certificatesRef = React.useRef<CertificateProps[]>();
+  const openParamsRef = React.useRef<IUseCertificateViewerDialogOpenParams>();
+  const certificatesRef = React.useRef<ICertificateProps[]>();
 
-  const handleOpen = async (params: UseCertificateViewerDialogOpenParams) => {
-    let currentCertificates: CertificateProps[] = [params.certificate];
+  const handleOpen = async (params: IUseCertificateViewerDialogOpenParams) => {
+    let currentCertificates: ICertificateProps[] = [params.certificate];
 
     try {
       if (
-        fortifyClient &&
-        currentProviderId &&
-        params.certificate.type === "x509"
+        fortifyClient
+        && currentProviderId
+        && params.certificate.type === 'x509'
       ) {
-        const localProvider =
-          await fortifyClient.getProviderById(currentProviderId);
+        const localProvider
+          = await fortifyClient.getProviderById(currentProviderId);
 
         const certificateCopy = cloneDeep(params.certificate);
+
         certificateCopy.raw = null as unknown as ArrayBuffer;
 
         const chain = await localProvider.certStorage.getChain(certificateCopy);
@@ -51,7 +54,7 @@ export function useCertificateViewerDialog(
               raw: cert.rawData,
               subjectName: cert.subject,
               subject: getCertificateSubject(cert.subject),
-              type: "x509",
+              type: 'x509',
               index: cert.serialNumber,
               issuerName: cert.issuer,
               notBefore: cert.notBefore,
@@ -63,9 +66,10 @@ export function useCertificateViewerDialog(
           });
         }
       }
-    } catch (error) {
+    } catch {
       //
     }
+
     certificatesRef.current = currentCertificates;
     openParamsRef.current = params;
     setIsOpen(true);
@@ -80,7 +84,7 @@ export function useCertificateViewerDialog(
   useLockBodyScroll(isOpen);
 
   const currentProvider = providers.find(
-    ({ id }) => openParamsRef.current?.providerId === id
+    ({ id }) => openParamsRef.current?.providerId === id,
   );
 
   if (isOpen && !currentProvider) {
@@ -90,11 +94,13 @@ export function useCertificateViewerDialog(
   return {
     open: handleOpen,
     dialog: () =>
-      isOpen && openParamsRef.current && certificatesRef?.current ? (
-        <CertificateViewerDialog
-          certificates={certificatesRef.current}
-          onClose={handleClose}
-        />
-      ) : null,
+      isOpen && openParamsRef.current && certificatesRef?.current
+        ? (
+            <CertificateViewerDialog
+              certificates={certificatesRef.current}
+              onClose={handleClose}
+            />
+          )
+        : null,
   };
 }

@@ -1,21 +1,21 @@
-import "./global.scss";
-import "./i18n";
-import { useApp } from "./hooks/app";
-import { FetchingStatusOwerlay } from "./components/fetching-status-owerlay";
-import { CertificatesList } from "./components/certificates-list";
-import { CertificatesSidebar } from "./components/certificates-sidebar";
-import { CertificatesProvidersList } from "./components/certificates-providers-list";
-import { CertificatesTopbar } from "./components/certificates-topbar";
-import { ConnectionNotSupported } from "./components/connection-not-supported";
-import { useCertificateViewerDialog } from "./dialogs/certificate-viewer-dialog";
-import { useCertificateDeleteDialog } from "./dialogs/certificate-delete-dialog";
-import { useSortList } from "./hooks/sort-list";
-import { useSearchList } from "./hooks/search-list";
-import { useCertificateImportDialog } from "./dialogs/certificate-import-dialog";
-import { useCertificateCreateDialog } from "./dialogs/certificate-create-dialog";
-import { useProviderInfoDialog } from "./dialogs/provider-info-dialog";
-
-import styles from "./app.module.scss";
+// eslint-disable-next-line import/order
+import './global.scss';
+import './i18n';
+import { useApp } from './hooks/app';
+import { FetchingStatusOwerlay } from './components/fetching-status-owerlay';
+import { CertificatesList } from './components/certificates-list';
+import { CertificatesSidebar } from './components/certificates-sidebar';
+import { CertificatesProvidersList } from './components/certificates-providers-list';
+import { CertificatesTopbar } from './components/certificates-topbar';
+import { ConnectionNotSupported } from './components/connection-not-supported';
+import { useCertificateViewerDialog } from './dialogs/certificate-viewer-dialog';
+import { useCertificateDeleteDialog } from './dialogs/certificate-delete-dialog';
+import { useSortList } from './hooks/sort-list';
+import { useSearchList } from './hooks/search-list';
+import { useCertificateImportDialog } from './dialogs/certificate-import-dialog';
+import { useCertificateCreateDialog } from './dialogs/certificate-create-dialog';
+import { useProviderInfoDialog } from './dialogs/provider-info-dialog';
+import styles from './app.module.scss';
 
 export function App() {
   const {
@@ -58,7 +58,7 @@ export function App() {
     name: currentSortName,
     derection: currentSortDir,
     handleSort,
-  } = useSortList(searchedCertificate, "notAfter");
+  } = useSortList(searchedCertificate, 'notAfter');
 
   const {
     open: handleCertificateImportDialogOpen,
@@ -95,10 +95,10 @@ export function App() {
     fortifyClient,
   });
 
-  const { open: handleProviderInfoDialogOpen, dialog: providerInfoDialog } =
-    useProviderInfoDialog({ providers });
+  const { open: handleProviderInfoDialogOpen, dialog: providerInfoDialog }
+    = useProviderInfoDialog({ providers });
 
-  if (fetching.connectionSupport === "rejected") {
+  if (fetching.connectionSupport === 'rejected') {
     return <ConnectionNotSupported />;
   }
 
@@ -108,54 +108,56 @@ export function App() {
         <CertificatesProvidersList
           providers={providers}
           currentProviderId={currentProviderId}
+          loading={!fetching.providers || fetching.providers === 'pending'}
           onSelect={handleProviderChange}
-          loading={!fetching.providers || fetching.providers === "pending"}
         />
       </CertificatesSidebar>
       <CertificatesTopbar
         searchValue={searchedText}
         isDisabled={!currentProviderId}
         isReadOnly={
-          isCurrentProviderReadOnly || fetching.certificates === "rejected"
+          isCurrentProviderReadOnly || fetching.certificates === 'rejected'
         }
         className={styles.top_bar}
+        isLoggedIn={isCurrentProviderLogedin}
         onSearch={handleSearch}
         onImport={handleCertificateImportDialogOpen}
         onCreate={handleCertificateCreateDialogOpen}
         onReload={handleProviderResetAndRefreshList}
         onInfo={() =>
-          currentProvider && handleProviderInfoDialogOpen(currentProvider)
-        }
-        isLoggedIn={isCurrentProviderLogedin}
+          currentProvider && handleProviderInfoDialogOpen(currentProvider)}
         onLoginLogout={handleProviderLoginLogout}
-      ></CertificatesTopbar>
+      >
+      </CertificatesTopbar>
       <CertificatesList
         currentSortName={currentSortName}
         currentSortDir={currentSortDir}
-        onSort={handleSort}
         className={styles.certificate_list}
         certificates={sortedCertificates}
-        onDelete={handleCertificateDeleteDialogOpen}
-        onViewDetails={handleCertificateViewerDialogOpen}
-        loading={!fetching.certificates || fetching.certificates === "pending"}
+        loading={!fetching.certificates || fetching.certificates === 'pending'}
         highlightedText={searchedText}
         isLoggedIn={isCurrentProviderLogedin}
         isReadOnly={isCurrentProviderReadOnly}
+        onSort={handleSort}
+        onDelete={handleCertificateDeleteDialogOpen}
+        onViewDetails={handleCertificateViewerDialogOpen}
       />
       <FetchingStatusOwerlay
         fetching={fetching}
         challenge={challenge}
         onReload={handleRetryConection}
       />
-      {providers.length ? (
-        <>
-          {certificateViewerDialog()}
-          {certificateDeleteDialog()}
-          {certificateImportDialog()}
-          {certificateCreateDialog()}
-          {providerInfoDialog()}
-        </>
-      ) : null}
+      {providers.length
+        ? (
+            <>
+              {certificateViewerDialog()}
+              {certificateDeleteDialog()}
+              {certificateImportDialog()}
+              {certificateCreateDialog()}
+              {providerInfoDialog()}
+            </>
+          )
+        : null}
 
       <div className={styles.certificate_list_corners_backdrop}></div>
     </>

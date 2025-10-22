@@ -1,1 +1,1 @@
-export * from "./useCertificateDeleteDialog";
+export * from './useCertificateDeleteDialog';

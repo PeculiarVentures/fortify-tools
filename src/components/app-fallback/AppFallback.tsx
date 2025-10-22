@@ -1,10 +1,8 @@
-import { useTranslation } from "react-i18next";
-import { FallbackProps } from "react-error-boundary";
-import { Button, Typography } from "@peculiar/react-components";
-
-import ErrorIcon from "../../icons/error-big.svg?react";
-
-import styles from "./styles/index.module.scss";
+import { useTranslation } from 'react-i18next';
+import { FallbackProps } from 'react-error-boundary';
+import { Button, Typography } from '@peculiar/react-components';
+import ErrorIcon from '../../icons/error-big.svg?react';
+import styles from './styles/index.module.scss';
 
 export const AppFallback = (props: FallbackProps) => {
   const { resetErrorBoundary } = props;
@@ -17,21 +15,24 @@ export const AppFallback = (props: FallbackProps) => {
           <ErrorIcon />
         </div>
         <Typography variant="h5" color="black">
-          {t("app-error.message")}
+          {t('app-error.message')}
         </Typography>
         <Typography variant="b2" color="gray-9">
-          {t("app-error.description")}
+          {t('app-error.description')}
         </Typography>
         <div className={styles.buttons_group}>
-          <Button component="a" href="/" variant="outlined">
-            {t("app-error.button.home-page")}
+          <Button
+            component="a" href="/"
+            variant="outlined"
+          >
+            {t('app-error.button.home-page')}
           </Button>
           <Button
             variant="contained"
             color="primary"
             onClick={resetErrorBoundary}
           >
-            {t("app-error.button.try-again")}
+            {t('app-error.button.try-again')}
           </Button>
         </div>
       </div>

@@ -5,21 +5,21 @@ jobs:
     runs-on: ubuntu-latest
     name: Tests, checks, build
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         name: Checkout
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 22
-          cache: "yarn"
+          cache: "npm"
         name: Setup node
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: npm ci
       - name: Run linter
-        run: yarn lint
+        run: npm run lint
       - name: Run tests
-        run: yarn test:ci
+        run: npm run test:ci
       - name: Run build
-        run: yarn build
+        run: npm run build
       - name: Deploy to gh-pages
         if: github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v4

@@ -1,26 +1,27 @@
-import React from "react";
+import React from 'react';
 import {
   IconButton,
-  IconButtonProps,
+  TIconButtonProps,
   useClipboard,
-} from "@peculiar/react-components";
+} from '@peculiar/react-components';
+import CopyIcon from '../../icons/copy-20.svg?react';
+import CheckIcon from '../../icons/check-20.svg?react';
 
-import CopyIcon from "../../icons/copy-20.svg?react";
-import CheckIcon from "../../icons/check-20.svg?react";
-
-interface CopyIconButtonProps
-  extends Omit<IconButtonProps, "children" | "value"> {
+interface ICopyIconButtonProps
+  extends Omit<TIconButtonProps, 'children' | 'value'> {
   value: string | (() => string);
 }
 
-export const CopyIconButton: React.FunctionComponent<CopyIconButtonProps> = (
-  props
+export const CopyIconButton: React.FunctionComponent<ICopyIconButtonProps> = (
+  props,
 ) => {
   const { copy, isCopied } = useClipboard();
-  const { value, size = "small", ...restProps } = props;
+  const {
+    value, size = 'small', ...restProps
+  } = props;
 
   const handleClick = () => {
-    if (typeof value === "function") {
+    if (typeof value === 'function') {
       copy(value());
     } else {
       copy(value);
@@ -28,7 +29,10 @@ export const CopyIconButton: React.FunctionComponent<CopyIconButtonProps> = (
   };
 
   return (
-    <IconButton size={size} {...restProps} onClick={handleClick}>
+    <IconButton
+      size={size} {...restProps}
+      onClick={handleClick}
+    >
       {isCopied ? <CheckIcon /> : <CopyIcon />}
     </IconButton>
   );

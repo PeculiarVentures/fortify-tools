@@ -2,44 +2,54 @@ import {
   Pkcs10CertificateRequest,
   X509Certificate,
   Name,
-} from "@peculiar/x509";
-
+} from '@peculiar/x509';
 import {
-  CertificateProps,
-  CertificateSubjectProps,
-  CertificateType,
-} from "../types";
+  ICertificateProps,
+  ICertificateSubjectProps,
+  TCertificateType,
+} from '../types';
 
-export function certificateRawToPem(raw: ArrayBuffer, type: CertificateType) {
+export function certificateRawToPem(raw: ArrayBuffer, type: TCertificateType) {
   let pem;
+
   switch (type) {
-    case "x509": {
+    case 'x509': {
       const cert = new X509Certificate(raw);
-      pem = cert.toString("pem");
+
+      pem = cert.toString('pem');
+
       break;
     }
-    case "csr": {
+
+    case 'csr': {
       const req = new Pkcs10CertificateRequest(raw);
-      pem = req.toString("pem");
+
+      pem = req.toString('pem');
+
       break;
     }
+
     default:
       throw new Error(`Unsupported certificate type: ${type}`);
   }
+
   return pem;
 }
 
 export function certificateSubjectToString(
-  attrs: CertificateSubjectProps
+  attrs: ICertificateSubjectProps,
 ): string {
   const parts: string[] = [];
 
   for (const key in attrs) {
-    const val = attrs[key as keyof CertificateSubjectProps];
-    val?.length && parts.push(`${key}=${val}`);
+    const val = attrs[key as keyof ICertificateSubjectProps];
+
+    if (val?.length) {
+      parts.push(`${key}=${val}`);
+    }
   }
 
-  return parts.join(", ");
+  return parts.join(', ');
 }
 
 export function getCertificateSubject(subjectString: string) {
@@ -58,12 +68,14 @@ export function getCertificateSubject(subjectString: string) {
   }, {});
 }
 
-export function getCertificateName(certificate: CertificateProps) {
+export function getCertificateName(certificate: ICertificateProps) {
   if (!certificate.subject) {
     return certificate.subjectName;
   }
 
-  const { G, CN, SN, E } = certificate.subject;
+  const {
+    G, CN, SN, E,
+  } = certificate.subject;
 
   // Return Common Name if present.
   if (CN) {

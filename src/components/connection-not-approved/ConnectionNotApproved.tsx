@@ -1,16 +1,15 @@
-import React from "react";
-import { Button, Typography } from "@peculiar/react-components";
-import { Trans, useTranslation } from "react-i18next";
-import FortifyIcon from "../../icons/fortify.svg?react";
+import React from 'react';
+import { Button, Typography } from '@peculiar/react-components';
+import { Trans, useTranslation } from 'react-i18next';
+import FortifyIcon from '../../icons/fortify.svg?react';
+import styles from './styles/index.module.scss';
 
-import styles from "./styles/index.module.scss";
-
-interface ConnectionNotApprovedProps {
+interface IConnectionNotApprovedProps {
   onReload: () => void;
 }
 
 export const ConnectionNotApproved: React.FunctionComponent<
-  ConnectionNotApprovedProps
+  IConnectionNotApprovedProps
 > = (props) => {
   const { onReload } = props;
   const { t } = useTranslation();
@@ -25,18 +24,25 @@ export const ConnectionNotApproved: React.FunctionComponent<
           i18nKey="connection.error.connection-not-approved.message"
           values={{ name: window.location.origin }}
           components={[
-            <Typography color="primary" variant="h5">
+            <Typography
+              color="primary"
+              variant="h5"
+              key="name"
+            >
               {0}
             </Typography>,
           ]}
         />
       </Typography>
       <Typography variant="b2" color="gray-9">
-        {t("connection.error.connection-not-approved.description")}
+        {t('connection.error.connection-not-approved.description')}
       </Typography>
       <div className={styles.buttons_wrapper}>
-        <Button variant="contained" color="primary" onClick={onReload}>
-          {t("button.try-again")}
+        <Button
+          variant="contained" color="primary"
+          onClick={onReload}
+        >
+          {t('button.try-again')}
         </Button>
       </div>
     </div>

@@ -1,41 +1,39 @@
-import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { ExtendedKeyUsageType } from "@peculiar/x509";
-import {
-  CertificateAlgorithmProps,
-  CertificateSubjectProps,
-  CertificateType,
-} from "../../types";
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ExtendedKeyUsageType } from '@peculiar/x509';
 import {
   Select,
   Button,
   TextField,
   Typography,
-} from "@peculiar/react-components";
-import { CertificateKeyPropertiesSelect } from "../certificate-key-properties-select";
-import { Card } from "../card";
-import { KeyUsagesCheckboxGroup } from "../key-usages-checkbox-group";
-
-import { countries } from "../../config/data";
-
-import styles from "./styles/index.module.scss";
+} from '@peculiar/react-components';
+import {
+  ICertificateAlgorithmProps,
+  ICertificateSubjectProps,
+  TCertificateType,
+} from '../../types';
+import { CertificateKeyPropertiesSelect } from '../certificate-key-properties-select';
+import { Card } from '../card';
+import { KeyUsagesCheckboxGroup } from '../key-usages-checkbox-group';
+import { countries } from '../../config/data';
+import styles from './styles/index.module.scss';
 
 export interface ICertificateCreateByCustomData {
-  subject: CertificateSubjectProps;
-  algorithm: CertificateAlgorithmProps;
+  subject: ICertificateSubjectProps;
+  algorithm: ICertificateAlgorithmProps;
   extendedKeyUsages: ExtendedKeyUsageType[];
-  type: CertificateType;
+  type: TCertificateType;
 }
 
-interface CertificateCreateByCustomProps {
-  type: CertificateType;
+interface ICertificateCreateByCustomProps {
+  type: TCertificateType;
   onCreateButtonClick: (data: ICertificateCreateByCustomData) => void;
 }
 
 export const CertificateCreateByCustom: React.FunctionComponent<
-  CertificateCreateByCustomProps
+  ICertificateCreateByCustomProps
 > = (props) => {
-  const { type = "x509", onCreateButtonClick } = props;
+  const { type = 'x509', onCreateButtonClick } = props;
 
   const { t } = useTranslation();
 
@@ -45,39 +43,43 @@ export const CertificateCreateByCustom: React.FunctionComponent<
   >(undefined);
 
   const validateEmailAddress = (
-    event: React.SyntheticEvent<HTMLInputElement>
+    event: React.SyntheticEvent<HTMLInputElement>,
   ) => {
     if (!event.currentTarget.checkValidity()) {
       setEmailAddressErrorMessage(
-        t("certificates.subject.email-address.error.type")
+        t('certificates.subject.email-address.error.type'),
       );
+
       return;
     }
+
     setEmailAddressErrorMessage(undefined);
   };
 
   const handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const { hashAlgorithm, signatureAlgorithm, C, keyUsage, ...subject } =
-      Object.fromEntries(formData);
+    const {
+      hashAlgorithm, signatureAlgorithm, C, keyUsage, ...subject
+    }
+      = Object.fromEntries(formData);
 
     const extendedKeyUsages = keyUsage
-      ? (formData.getAll("keyUsage") as ExtendedKeyUsageType[])
+      ? (formData.getAll('keyUsage') as ExtendedKeyUsageType[])
       : [];
 
     const hash = hashAlgorithm
       .toString()
-      .replace(/"/g, "") as CertificateAlgorithmProps["hash"];
+      .replace(/"/g, '') as ICertificateAlgorithmProps['hash'];
     const signature = signatureAlgorithm
       .toString()
-      .replace(/"/g, "") as CertificateAlgorithmProps["signature"];
+      .replace(/"/g, '') as ICertificateAlgorithmProps['signature'];
 
-    const country = C ? JSON.parse(C as string)?.code : "";
+    const country = C ? JSON.parse(C as string)?.code : '';
 
     const submitedData: ICertificateCreateByCustomData = {
       subject: {
-        ...(subject as unknown as ICertificateCreateByCustomData["subject"]),
+        ...(subject as unknown as ICertificateCreateByCustomData['subject']),
         C: country,
       },
       extendedKeyUsages,
@@ -87,6 +89,7 @@ export const CertificateCreateByCustom: React.FunctionComponent<
         signature,
       },
     };
+
     onCreateButtonClick(submitedData);
   };
 
@@ -99,66 +102,68 @@ export const CertificateCreateByCustom: React.FunctionComponent<
       <Card className={styles.card}>
         <div className={styles.subject_box}>
           <Typography variant="s2" color="black">
-            {t("certificates.subject.title")}
+            {t('certificates.subject.title')}
           </Typography>
           <div className={styles.subject_fields}>
             <TextField
               className="required_text_field"
               name="CN"
-              label={t("certificates.subject.cname.label")}
-              placeholder={t("certificates.subject.cname.placeholder-2")}
+              label={t('certificates.subject.cname.label')}
+              placeholder={t('certificates.subject.cname.placeholder-2')}
               required
             />
             <TextField
               className="required_text_field"
               name="E"
-              onChange={validateEmailAddress}
-              label={t("certificates.subject.email-address.label")}
-              placeholder={t("certificates.subject.email-address.placeholder")}
+              label={t('certificates.subject.email-address.label')}
+              placeholder={t('certificates.subject.email-address.placeholder')}
               error={!!emailAddressErrorMessage}
               errorText={emailAddressErrorMessage}
               type="email"
               required
+              onChange={validateEmailAddress}
             />
             <TextField
               name="O"
-              label={t("certificates.subject.organization-name.label")}
+              label={t('certificates.subject.organization-name.label')}
               placeholder={t(
-                "certificates.subject.organization-name.placeholder"
+                'certificates.subject.organization-name.placeholder',
               )}
             />
             <TextField
               name="OU"
-              label={t("certificates.subject.organization-unit-name.label")}
+              label={t('certificates.subject.organization-unit-name.label')}
             />
             <Select
               getOptionLabel={({ value }) => value}
               options={countries}
               name="C"
-              placeholder={t("certificates.subject.country-name.placeholder")}
-              label={t("certificates.subject.country-name.label")}
+              placeholder={t('certificates.subject.country-name.placeholder')}
+              label={t('certificates.subject.country-name.label')}
             />
             <TextField
               name="L"
-              label={t("certificates.subject.locality-name.label")}
-              placeholder={t("certificates.subject.locality-name.placeholder")}
+              label={t('certificates.subject.locality-name.label')}
+              placeholder={t('certificates.subject.locality-name.placeholder')}
             />
             <TextField
               name="ST"
-              label={t("certificates.subject.state-or-province-name.label")}
+              label={t('certificates.subject.state-or-province-name.label')}
               placeholder={t(
-                "certificates.subject.state-or-province-name.placeholder"
+                'certificates.subject.state-or-province-name.placeholder',
               )}
             />
           </div>
         </div>
         <div className={styles.divider}></div>
-        {type === "x509" ? (
-          <>
-            <KeyUsagesCheckboxGroup />
-            <div className={styles.divider}></div>
-          </>
-        ) : null}
+        {type === 'x509'
+          ? (
+              <>
+                <KeyUsagesCheckboxGroup />
+                <div className={styles.divider}></div>
+              </>
+            )
+          : null}
         <CertificateKeyPropertiesSelect
           className={styles.key_properties_select}
         />

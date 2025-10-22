@@ -1,18 +1,18 @@
-import React, { ComponentProps } from "react";
-import { useTranslation } from "react-i18next";
-import { IProviderInfo } from "@peculiar/fortify-client-core";
-import { Select } from "@peculiar/react-components";
+import React, { ComponentProps } from 'react';
+import { useTranslation } from 'react-i18next';
+import { IProviderInfo } from '@peculiar/fortify-client-core';
+import { Select } from '@peculiar/react-components';
 
-interface CertificatesProvidersSelectListProps {
-  className?: ComponentProps<"div">["className"];
-  popoverClassName?: ComponentProps<"div">["className"];
+interface ICertificatesProvidersSelectListProps {
+  className?: ComponentProps<'div'>['className'];
+  popoverClassName?: ComponentProps<'div'>['className'];
   currentProviderId?: string;
-  providers: Pick<IProviderInfo, "id" | "name">[];
+  providers: Pick<IProviderInfo, 'id' | 'name'>[];
   onSelect: (id: string) => void;
 }
 
 export const CertificatesProvidersSelectList: React.FunctionComponent<
-  CertificatesProvidersSelectListProps
+  ICertificatesProvidersSelectListProps
 > = (props) => {
   const {
     className,
@@ -23,7 +23,7 @@ export const CertificatesProvidersSelectList: React.FunctionComponent<
   } = props;
   const { t } = useTranslation();
   const currProvider = providers.filter(
-    ({ id }) => id === currentProviderId
+    ({ id }) => id === currentProviderId,
   )[0];
 
   return (
@@ -33,13 +33,11 @@ export const CertificatesProvidersSelectList: React.FunctionComponent<
       defaultValue={currProvider}
       getOptionLabel={({ name }) => name}
       options={providers}
-      onChange={(_, value) => onSelect(value?.id as string)}
       placeholder={
-        !providers.length ? t("providers.list.empty-text") : undefined
+        !providers.length ? t('providers.list.empty-text') : undefined
       }
-      popoverProps={{
-        className: popoverClassName,
-      }}
+      popoverProps={{ className: popoverClassName }}
+      onChange={(_, value) => onSelect(value?.id as string)}
     />
   );
 };

@@ -1,32 +1,39 @@
-import React, { ComponentProps } from "react";
-import clsx from "clsx";
-import { Tooltip, Typography } from "@peculiar/react-components";
-import { HighlightedText } from "../highlighted-text";
+import React, { ComponentProps } from 'react';
+import { clsx } from 'clsx';
+import { Tooltip, Typography } from '@peculiar/react-components';
+import { HighlightedText } from '../highlighted-text';
+import styles from './styles/index.module.scss';
 
-import styles from "./styles/index.module.scss";
-
-interface CertificateNameProps {
+interface ICertificateNameProps {
   name?: string;
   highlight?: string;
-  className?: ComponentProps<"div">["className"];
+  className?: ComponentProps<'div'>['className'];
 }
 
-export const CertificateName: React.FunctionComponent<CertificateNameProps> = (
-  props
+export const CertificateName: React.FunctionComponent<ICertificateNameProps> = (
+  props,
 ) => {
-  const { className, name, highlight } = props;
+  const {
+    className, name, highlight,
+  } = props;
+
   if (!name) {
     return null;
   }
 
-  const text = highlight ? (
-    <HighlightedText text={name} highlight={highlight} />
-  ) : (
-    name
-  );
+  const text = highlight
+    ? (
+        <HighlightedText text={name} highlight={highlight} />
+      )
+    : (
+        name
+      );
 
   return (
-    <Tooltip placement="bottom-start" offset={5} title={text}>
+    <Tooltip
+      placement="bottom-start" offset={5}
+      title={text}
+    >
       <Typography
         className={clsx(className, styles.certificate_name)}
         variant="b2"

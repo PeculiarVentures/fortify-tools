@@ -1,1 +1,1 @@
-export * from "./CertificateViewerDialog";
+export * from './CertificateViewerDialog';

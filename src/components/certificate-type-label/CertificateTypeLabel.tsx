@@ -1,30 +1,32 @@
-import React, { ComponentProps } from "react";
+import React, { ComponentProps } from 'react';
 import {
   ICertificate,
   ICertificateRequest,
-} from "@peculiar/fortify-client-core";
-import { useTranslation } from "react-i18next";
-import clsx from "clsx";
-import { Typography } from "@peculiar/react-components";
-import CertificateIcon from "../../icons/certificate-30.svg?react";
-import CertificateWithKeyIcon from "../../icons/certificate-with-key-30.svg?react";
-import CertificateRequestIcon from "../../icons/certificate-request-30.svg?react";
-import styles from "./styles/index.module.scss";
+} from '@peculiar/fortify-client-core';
+import { useTranslation } from 'react-i18next';
+import { clsx } from 'clsx';
+import { Typography } from '@peculiar/react-components';
+import CertificateIcon from '../../icons/certificate-30.svg?react';
+import CertificateWithKeyIcon from '../../icons/certificate-with-key-30.svg?react';
+import CertificateRequestIcon from '../../icons/certificate-request-30.svg?react';
+import styles from './styles/index.module.scss';
 
-interface CertificateTypeLabelProps {
-  type: ICertificate["type"] | ICertificateRequest["type"];
+interface ICertificateTypeLabelProps {
+  type: ICertificate['type'] | ICertificateRequest['type'];
   withPrivatKey: boolean;
-  className?: ComponentProps<"div">["className"];
+  className?: ComponentProps<'div'>['className'];
 }
 
 export const CertificateTypeLabel: React.FunctionComponent<
-  CertificateTypeLabelProps
+  ICertificateTypeLabelProps
 > = (props) => {
-  const { type, className, withPrivatKey } = props;
+  const {
+    type, className, withPrivatKey,
+  } = props;
   const { t } = useTranslation();
 
   const renderType = () => {
-    if (type === "x509") {
+    if (type === 'x509') {
       return (
         <>
           <span className={styles.icon_wrapper}>
@@ -36,24 +38,26 @@ export const CertificateTypeLabel: React.FunctionComponent<
               color="black"
               className={styles.label_part}
             >
-              {t("certificates.list.cell.certificate")}
+              {t('certificates.list.cell.certificate')}
             </Typography>
-            {withPrivatKey ? (
-              <Typography
-                variant="b2"
-                color="black"
-                className={styles.label_part}
-              >
-                {" "}
-                {t("certificates.list.cell.with-privat-key")}
-              </Typography>
-            ) : undefined}
+            {withPrivatKey
+              ? (
+                  <Typography
+                    variant="b2"
+                    color="black"
+                    className={styles.label_part}
+                  >
+                    {' '}
+                    {t('certificates.list.cell.with-privat-key')}
+                  </Typography>
+                )
+              : undefined}
           </span>
         </>
       );
     }
 
-    if (type === "request") {
+    if (type === 'request') {
       return (
         <>
           <span className={styles.icon_wrapper}>
@@ -65,7 +69,7 @@ export const CertificateTypeLabel: React.FunctionComponent<
               color="black"
               className={styles.label_part}
             >
-              {t("certificates.list.cell.certificate-request")}
+              {t('certificates.list.cell.certificate-request')}
             </Typography>
           </span>
         </>

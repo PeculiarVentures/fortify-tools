@@ -1,38 +1,41 @@
-import { useEffect, useMemo, useState } from "react";
-import { ICertificateRequest } from "@peculiar/fortify-client-core";
-import { getCertificateName } from "../../utils/certificate";
-import { CertificateProps } from "../../types";
+import {
+  useEffect, useMemo, useState,
+} from 'react';
+import { ICertificateRequest } from '@peculiar/fortify-client-core';
+import { getCertificateName } from '../../utils/certificate';
+import { ICertificateProps } from '../../types';
 
 export function useSearchList(
-  certificates: (CertificateProps | ICertificateRequest)[]
+  certificates: (ICertificateProps | ICertificateRequest)[],
 ) {
   const [searchedText, setSearchedText] = useState(
-    new URLSearchParams(window.location.search).get("search") || ""
+    new URLSearchParams(window.location.search).get('search') || '',
   );
 
   const handleSearch = (text: string) => {
     const url = new URL(window.location.href);
 
     if (text?.length) {
-      url.searchParams.set("search", text);
+      url.searchParams.set('search', text);
     } else {
-      url.searchParams.delete("search");
+      url.searchParams.delete('search');
     }
 
-    window.history.pushState(null, "", url);
+    window.history.pushState(null, '', url);
     setSearchedText(text);
   };
 
   useEffect(() => {
     const handleUrlChange = () => {
       const searchParams = new URLSearchParams(window.location.search);
-      setSearchedText(searchParams.get("search") || "");
+
+      setSearchedText(searchParams.get('search') || '');
     };
 
-    window.addEventListener("popstate", handleUrlChange);
+    window.addEventListener('popstate', handleUrlChange);
 
     return () => {
-      window.removeEventListener("popstate", handleUrlChange);
+      window.removeEventListener('popstate', handleUrlChange);
     };
   }, []);
 
@@ -40,12 +43,12 @@ export function useSearchList(
     () =>
       searchedText
         ? certificates.filter((certificate) =>
-            getCertificateName(certificate as CertificateProps)
+            getCertificateName(certificate as ICertificateProps)
               ?.toLocaleLowerCase()
-              .includes(searchedText.toLocaleLowerCase())
+              .includes(searchedText.toLocaleLowerCase()),
           )
         : certificates,
-    [searchedText, certificates]
+    [searchedText, certificates],
   );
 
   return {

@@ -1,1 +1,1 @@
-export * from "./CertificatesProvidersListItem";
+export * from './CertificatesProvidersListItem';

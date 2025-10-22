@@ -1,21 +1,18 @@
-import { renderHook, act } from "@testing";
-import { useProviderInfoDialog } from "./useProviderInfoDialog";
+import { renderHook, act } from '@testing';
+import type { IProviderInfo } from '@peculiar/fortify-client-core';
+import { useProviderInfoDialog } from './useProviderInfoDialog';
 
-import type { IProviderInfo } from "@peculiar/fortify-client-core";
-
-describe("useProviderInfoDialog", () => {
+describe('useProviderInfoDialog', () => {
   const providers = [
     {
-      id: "1",
-      name: "Provider 1",
+      id: '1',
+      name: 'Provider 1',
     },
   ] as IProviderInfo[];
 
-  it("Should initialize, open & close", async () => {
+  it('Should initialize, open & close', async () => {
     const { result } = renderHook(() =>
-      useProviderInfoDialog({
-        providers,
-      })
+      useProviderInfoDialog({ providers }),
     );
 
     expect(result.current.dialog).toBeInstanceOf(Function);
@@ -37,13 +34,11 @@ describe("useProviderInfoDialog", () => {
     expect(result.current.dialog()).toBeNull();
   });
 
-  it("Should close dialog if current provider is not found", async () => {
+  it('Should close dialog if current provider is not found', async () => {
     const { result, rerender } = renderHook(
       (localProviders) =>
-        useProviderInfoDialog({
-          providers: localProviders,
-        }),
-      { initialProps: providers }
+        useProviderInfoDialog({ providers: localProviders }),
+      { initialProps: providers },
     );
 
     act(() => {
@@ -51,9 +46,7 @@ describe("useProviderInfoDialog", () => {
     });
 
     rerender([
-      {
-        id: "2",
-      },
+      { id: '2' },
     ] as IProviderInfo[]);
 
     expect(result.current.dialog()).toBeNull();

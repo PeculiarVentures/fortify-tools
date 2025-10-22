@@ -1,14 +1,13 @@
-import React from "react";
+import React from 'react';
 import {
   FortifyAPI,
   IProviderInfo,
   ICertificate,
   ICertificateRequest,
-} from "@peculiar/fortify-client-core";
-import { useTranslation } from "react-i18next";
-import { useToast } from "@peculiar/react-components";
-
-import { AppFetchingStatus, AppFetchingType } from "./types";
+} from '@peculiar/fortify-client-core';
+import { useTranslation } from 'react-i18next';
+import { useToast } from '@peculiar/react-components';
+import { TAppFetchingStatus, IAppFetchingType } from './types';
 
 export function useApp() {
   /**
@@ -20,15 +19,13 @@ export function useApp() {
   const [currentProvider, setCurrentProvider] = React.useState<
     IProviderInfo | undefined
   >(undefined);
-  const [isCurrentProviderLogedin, setIsCurrentProviderLogedin] =
-    React.useState(false);
+  const [isCurrentProviderLogedin, setIsCurrentProviderLogedin]
+    = React.useState(false);
   const [certificates, setCertificates] = React.useState<
     (ICertificate | ICertificateRequest)[]
   >([]);
   const [challenge, setChallenge] = React.useState<string | null>(null);
-  const [fetching, setFetching] = React.useState<AppFetchingType>({
-    connectionDetect: "pending",
-  });
+  const [fetching, setFetching] = React.useState<IAppFetchingType>({ connectionDetect: 'pending' });
 
   /**
    *
@@ -38,8 +35,8 @@ export function useApp() {
   const { t } = useTranslation();
 
   const setFetchingValue = (
-    name: keyof AppFetchingType,
-    value: AppFetchingStatus
+    name: keyof IAppFetchingType,
+    value: TAppFetchingStatus,
   ) => {
     setFetching((prevState) => ({
       ...prevState,
@@ -50,7 +47,7 @@ export function useApp() {
   const handleClose = () => {
     setProviders([]);
     setCertificates([]);
-    setFetchingValue("connectionDetect", "rejected");
+    setFetchingValue('connectionDetect', 'rejected');
   };
 
   const tryLogin = async () => {
@@ -58,7 +55,7 @@ export function useApp() {
       return undefined;
     }
 
-    setFetchingValue("connectionApprove", "pending");
+    setFetchingValue('connectionApprove', 'pending');
     setChallenge(null);
 
     try {
@@ -70,9 +67,9 @@ export function useApp() {
         await fortifyClient.current.login();
       }
 
-      setFetchingValue("connectionApprove", "resolved");
-    } catch (error) {
-      setFetchingValue("connectionApprove", "rejected");
+      setFetchingValue('connectionApprove', 'resolved');
+    } catch {
+      setFetchingValue('connectionApprove', 'rejected');
 
       return undefined;
     }
@@ -85,17 +82,19 @@ export function useApp() {
       return;
     }
 
-    setFetchingValue("providers", "pending");
+    setFetchingValue('providers', 'pending');
 
     try {
       const providersLocal = await fortifyClient.current.getProviders();
+
       setProviders(providersLocal);
-      setFetchingValue("providers", "resolved");
+      setFetchingValue('providers', 'resolved');
 
       if (!providersLocal.length) {
         setCurrentProvider(undefined);
         setIsCurrentProviderLogedin(false);
         setCertificates([]);
+
         return;
       }
 
@@ -104,18 +103,21 @@ export function useApp() {
       if (!currentProvider) {
         setCurrentProvider(defaultProvider);
         handleProviderChange(defaultProvider.id);
+
         return;
       }
+
       const curProvider = providersLocal.find(
-        ({ id }) => currentProvider.id === id
+        ({ id }) => currentProvider.id === id,
       );
+
       if (!curProvider) {
         setCurrentProvider(defaultProvider);
         handleProviderChange(defaultProvider.id);
       }
-    } catch (error) {
+    } catch {
       setProviders([]);
-      setFetchingValue("providers", "rejected");
+      setFetchingValue('providers', 'rejected');
 
       setCurrentProvider(undefined);
       setIsCurrentProviderLogedin(false);
@@ -128,31 +130,31 @@ export function useApp() {
       return;
     }
 
-    setFetchingValue("connectionDetect", "pending");
+    setFetchingValue('connectionDetect', 'pending');
 
     if (!fortifyClient.current.isConnectionSupported()) {
-      setFetchingValue("connectionSupport", "rejected");
+      setFetchingValue('connectionSupport', 'rejected');
 
       return;
     }
 
     if (!(await fortifyClient.current.isConnectionDetected())) {
-      setFetchingValue("connectionDetect", "rejected");
+      setFetchingValue('connectionDetect', 'rejected');
     }
 
     await fortifyClient.current.isConnectionDetectedAuto();
 
-    setFetchingValue("connectionDetect", "pending");
+    setFetchingValue('connectionDetect', 'pending');
 
     try {
       await fortifyClient.current.connect();
     } catch (error) {
       if (error && error instanceof Error) {
         if (
-          error.message.indexOf("update your client to the latest version") !==
-          -1
+          error.message.indexOf('update your client to the latest version')
+          !== -1
         ) {
-          setFetchingValue("connectionClientUpdate", "rejected");
+          setFetchingValue('connectionClientUpdate', 'rejected');
         }
       }
 
@@ -172,39 +174,43 @@ export function useApp() {
     if (!fortifyClient.current) {
       return;
     }
-    if (currentProvider?.id === id || fetching.certificates === "pending") {
+
+    if (currentProvider?.id === id || fetching.certificates === 'pending') {
       return;
     }
 
-    setFetchingValue("certificates", "pending");
+    setFetchingValue('certificates', 'pending');
 
     try {
       const localProvider = await fortifyClient.current.getProviderById(id);
       const isLoggedIn = await localProvider.isLoggedIn();
+
       setIsCurrentProviderLogedin(isLoggedIn);
-    } catch (error) {
+    } catch {
       setIsCurrentProviderLogedin(false);
     }
 
     try {
-      const requests =
-        await fortifyClient.current.getCertificateRequestsByProviderId(id);
-      const certificates =
-        await fortifyClient.current.getCertificatesByProviderId(id);
+      const requests
+        = await fortifyClient.current.getCertificateRequestsByProviderId(id);
+      const certificates
+        = await fortifyClient.current.getCertificatesByProviderId(id);
+
       setCertificates([...certificates, ...requests]);
       if (providers?.length) {
         setCurrentProvider(providers.find((provider) => provider.id === id));
       }
-      setFetchingValue("certificates", "resolved");
-    } catch (error) {
-      setFetchingValue("certificates", "rejected");
+
+      setFetchingValue('certificates', 'resolved');
+    } catch {
+      setFetchingValue('certificates', 'rejected');
       setCertificates([]);
     }
   };
 
   React.useEffect(() => {
     fortifyClient.current = new FortifyAPI({
-      onDebug: () => {},
+      onDebug: () => ({}),
       onClose: handleClose,
       onProvidersAdded: tryGetData,
       onProvidersRemoved: tryGetData,
@@ -221,19 +227,20 @@ export function useApp() {
       return;
     }
 
-    setFetchingValue("certificates", "pending");
+    setFetchingValue('certificates', 'pending');
 
     try {
-      const requests =
-        await fortifyClient.current.getCertificateRequestsByProviderId(
-          providerId
+      const requests
+        = await fortifyClient.current.getCertificateRequestsByProviderId(
+          providerId,
         );
-      const certificates =
-        await fortifyClient.current.getCertificatesByProviderId(providerId);
+      const certificates
+        = await fortifyClient.current.getCertificatesByProviderId(providerId);
+
       setCertificates([...certificates, ...requests]);
-      setFetchingValue("certificates", "resolved");
-    } catch (error) {
-      setFetchingValue("certificates", "rejected");
+      setFetchingValue('certificates', 'resolved');
+    } catch {
+      setFetchingValue('certificates', 'rejected');
       setCertificates([]);
     }
   };
@@ -249,12 +256,14 @@ export function useApp() {
 
     try {
       const localProvider = await fortifyClient.current.getProviderById(
-        currentProvider.id
+        currentProvider.id,
       );
+
       await localProvider.reset();
-    } catch (error) {
+    } catch {
       //
     }
+
     handleCertificatesDataReload(currentProvider.id);
   };
 
@@ -265,32 +274,35 @@ export function useApp() {
 
     try {
       const localProvider = await fortifyClient.current.getProviderById(
-        currentProvider.id
+        currentProvider.id,
       );
+
       if (isLogedin) {
         await localProvider.logout();
         const isLoggedIn = await localProvider.isLoggedIn();
+
         if (!isLoggedIn) {
           setIsCurrentProviderLogedin(false);
           handleCertificatesDataReload(currentProvider.id);
         } else {
           addToast({
-            message: t("topbar.provider-doesnt-support-signing-in"),
-            variant: "attention",
+            message: t('topbar.provider-doesnt-support-signing-in'),
+            variant: 'attention',
             disableIcon: true,
             isClosable: true,
-            id: "provider-doesnt-support-signing-in",
+            id: 'provider-doesnt-support-signing-in',
           });
         }
       } else {
         await localProvider.login();
         const isLoggedIn = await localProvider.isLoggedIn();
+
         if (isLoggedIn) {
           setIsCurrentProviderLogedin(true);
           handleCertificatesDataReload(currentProvider.id);
         }
       }
-    } catch (error) {
+    } catch {
       setIsCurrentProviderLogedin(false);
     }
   };

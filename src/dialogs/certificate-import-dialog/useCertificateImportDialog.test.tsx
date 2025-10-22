@@ -1,26 +1,24 @@
-import { renderHook, act } from "@testing";
-import { certificateCSRPem, certificateX509Pem } from "@testing/data";
-import { useCertificateImportDialog } from "./useCertificateImportDialog";
-
-import type { IProviderInfo, FortifyAPI } from "@peculiar/fortify-client-core";
+import { certificateCSRPem, certificateX509Pem } from '@testing/data';
+import { renderHook, act } from '@testing';
+import type { IProviderInfo, FortifyAPI } from '@peculiar/fortify-client-core';
+import { useCertificateImportDialog } from './useCertificateImportDialog';
 
 const addToastMock = vi.fn();
 
-vi.mock("@peculiar/react-components", async () => {
-  const actual = await vi.importActual("@peculiar/react-components");
+vi.mock('@peculiar/react-components', async () => {
+  const actual = await vi.importActual('@peculiar/react-components');
+
   return {
     ...actual,
-    useToast: () => ({
-      addToast: addToastMock,
-    }),
+    useToast: () => ({ addToast: addToastMock }),
   };
 });
 
-describe("useCertificateImportDialog", () => {
+describe('useCertificateImportDialog', () => {
   const providers = [
     {
-      id: "1",
-      name: "Provider 1",
+      id: '1',
+      name: 'Provider 1',
     },
   ] as IProviderInfo[];
 
@@ -30,9 +28,8 @@ describe("useCertificateImportDialog", () => {
   };
 
   const fortifyClientMock: Partial<FortifyAPI> = {
-    getProviderById: vi.fn().mockResolvedValue({
-      certStorage: certStorageMock,
-    }),
+    getProviderById: vi.fn()
+      .mockResolvedValue({ certStorage: certStorageMock }),
   };
 
   const defaultProps = {
@@ -44,7 +41,7 @@ describe("useCertificateImportDialog", () => {
 
   async function testFileUploadCertificate(
     certificate: string,
-    extension: string
+    extension: string,
   ) {
     const onSuccessMock = vi.fn();
 
@@ -54,22 +51,24 @@ describe("useCertificateImportDialog", () => {
       useCertificateImportDialog({
         ...defaultProps,
         onSuccess: onSuccessMock,
-      })
+      }),
     );
+
     act(() => {
       result.current.open();
     });
 
     await act(async () => {
       const DialogComponent = result.current.dialog();
+
       if (DialogComponent) {
-        DialogComponent.props.onDropAccepted(byteArray.buffer, extension, "");
+        DialogComponent.props.onDropAccepted(byteArray.buffer, extension, '');
         await DialogComponent.props.onImportButtonClick();
       }
     });
 
     expect(fortifyClientMock.getProviderById).toHaveBeenCalledWith(
-      defaultProps.currentProviderId
+      defaultProps.currentProviderId,
     );
     expect(certStorageMock.importCert).toHaveBeenCalled();
     expect(certStorageMock.setItem).toHaveBeenCalled();
@@ -83,7 +82,7 @@ describe("useCertificateImportDialog", () => {
       useCertificateImportDialog({
         ...defaultProps,
         onSuccess: onSuccessMock,
-      })
+      }),
     );
 
     act(() => {
@@ -96,22 +95,23 @@ describe("useCertificateImportDialog", () => {
 
     await act(async () => {
       const DialogComponent = result.current.dialog();
+
       if (DialogComponent) {
         DialogComponent.props.onTextAreaBlur();
-        DialogComponent?.props.onProviderSelect("2");
+        DialogComponent?.props.onProviderSelect('2');
         await DialogComponent.props.onImportButtonClick();
       }
     });
 
-    expect(fortifyClientMock.getProviderById).toHaveBeenCalledWith("2");
+    expect(fortifyClientMock.getProviderById).toHaveBeenCalledWith('2');
     expect(certStorageMock.importCert).toHaveBeenCalled();
     expect(certStorageMock.setItem).toHaveBeenCalled();
-    expect(onSuccessMock).toHaveBeenCalledWith("2");
+    expect(onSuccessMock).toHaveBeenCalledWith('2');
   }
 
-  it("Should initialize, open & close the dialog", () => {
+  it('Should initialize, open & close the dialog', () => {
     const { result } = renderHook(() =>
-      useCertificateImportDialog(defaultProps)
+      useCertificateImportDialog(defaultProps),
     );
 
     expect(result.current.dialog).toBeInstanceOf(Function);
@@ -128,21 +128,21 @@ describe("useCertificateImportDialog", () => {
     expect(result.current.dialog()).toBeNull();
   });
 
-  it("Should past certificate & call onSuccess (x509)", () =>
+  it('Should past certificate & call onSuccess (x509)', () =>
     testPasteCertificateBase64format(certificateX509Pem));
 
-  it("Should past certificate & call onSuccess (CSR)", () =>
+  it('Should past certificate & call onSuccess (CSR)', () =>
     testPasteCertificateBase64format(certificateCSRPem));
 
-  it("Should upload file certificate & call onSuccess (x509)", () =>
-    testFileUploadCertificate(certificateX509Pem, "cer"));
+  it('Should upload file certificate & call onSuccess (x509)', () =>
+    testFileUploadCertificate(certificateX509Pem, 'cer'));
 
-  it("Should upload file certificate & call onSuccess (CSR)", () =>
-    testFileUploadCertificate(certificateCSRPem, "csr"));
+  it('Should upload file certificate & call onSuccess (CSR)', () =>
+    testFileUploadCertificate(certificateCSRPem, 'csr'));
 
-  it("Should handle text area validation error", () => {
+  it('Should handle text area validation error', () => {
     const { result } = renderHook(() =>
-      useCertificateImportDialog(defaultProps)
+      useCertificateImportDialog(defaultProps),
     );
 
     act(() => {
@@ -150,7 +150,7 @@ describe("useCertificateImportDialog", () => {
     });
 
     act(() => {
-      result.current.dialog()?.props.onTextAreaChange("");
+      result.current.dialog()?.props.onTextAreaChange('');
     });
 
     act(() => {
@@ -160,7 +160,7 @@ describe("useCertificateImportDialog", () => {
     expect(result.current.dialog()?.props.isTextAreaError).toBeTruthy();
 
     act(() => {
-      result.current.dialog()?.props.onTextAreaChange("certificate");
+      result.current.dialog()?.props.onTextAreaChange('certificate');
     });
 
     act(() => {
@@ -170,16 +170,17 @@ describe("useCertificateImportDialog", () => {
     expect(result.current.dialog()?.props.isTextAreaError).toBeTruthy();
   });
 
-  it("Should handle file rejection correctly", () => {
+  it('Should handle file rejection correctly', () => {
     const { result } = renderHook(() =>
-      useCertificateImportDialog(defaultProps)
+      useCertificateImportDialog(defaultProps),
     );
 
     act(() => {
       result.current.open();
     });
 
-    const errorMessage = "Error message";
+    const errorMessage = 'Error message';
+
     act(() => {
       result.current.dialog()?.props.onDropRejected(errorMessage);
     });
@@ -187,14 +188,14 @@ describe("useCertificateImportDialog", () => {
     expect(addToastMock).toHaveBeenCalledWith(
       expect.objectContaining({
         message: errorMessage,
-        variant: "wrong",
-      })
+        variant: 'wrong',
+      }),
     );
   });
 
-  it("Should clear the certificate textarea and reset error on clear button click", async () => {
+  it('Should clear the certificate textarea and reset error on clear button click', async () => {
     const { result } = renderHook(() =>
-      useCertificateImportDialog(defaultProps)
+      useCertificateImportDialog(defaultProps),
     );
 
     act(() => {
@@ -202,7 +203,7 @@ describe("useCertificateImportDialog", () => {
     });
 
     act(() => {
-      result.current.dialog()?.props.onTextAreaChange("certificate");
+      result.current.dialog()?.props.onTextAreaChange('certificate');
     });
 
     act(() => {
@@ -213,6 +214,7 @@ describe("useCertificateImportDialog", () => {
 
     await act(async () => {
       const DialogComponent = result.current.dialog();
+
       if (DialogComponent) {
         DialogComponent.props.onTextAreaBlur();
         await DialogComponent.props.onClearButtonClick();
@@ -220,13 +222,13 @@ describe("useCertificateImportDialog", () => {
     });
 
     expect(result.current.dialog()?.props.isTextAreaError).toBeFalsy();
-    expect(result.current.dialog()?.props.certificate).toBe("");
+    expect(result.current.dialog()?.props.certificate).toBe('');
   });
 
-  it("Should handle the error when uploading an invalid certificate", async () => {
-    const byteArray = new TextEncoder().encode("certificate");
+  it('Should handle the error when uploading an invalid certificate', async () => {
+    const byteArray = new TextEncoder().encode('certificate');
     const { result } = renderHook(() =>
-      useCertificateImportDialog(defaultProps)
+      useCertificateImportDialog(defaultProps),
     );
 
     act(() => {
@@ -235,8 +237,9 @@ describe("useCertificateImportDialog", () => {
 
     await act(async () => {
       const DialogComponent = result.current.dialog();
+
       if (DialogComponent) {
-        DialogComponent.props.onDropAccepted(byteArray.buffer, "cer", "");
+        DialogComponent.props.onDropAccepted(byteArray.buffer, 'cer', '');
         await DialogComponent.props.onImportButtonClick();
       }
     });
@@ -244,15 +247,15 @@ describe("useCertificateImportDialog", () => {
     expect(addToastMock).toHaveBeenCalledWith(
       expect.objectContaining({
         message:
-          "Certificate is invalid. Please check your data and try again.",
-        variant: "wrong",
-      })
+          'Certificate is invalid. Please check your data and try again.',
+        variant: 'wrong',
+      }),
     );
   });
 
-  it("Should handle the error when onDropError is triggered", () => {
+  it('Should handle the error when onDropError is triggered', () => {
     const { result } = renderHook(() =>
-      useCertificateImportDialog(defaultProps)
+      useCertificateImportDialog(defaultProps),
     );
 
     act(() => {
@@ -260,21 +263,21 @@ describe("useCertificateImportDialog", () => {
     });
 
     act(() => {
-      result.current.dialog()?.props.onDropError("Error");
+      result.current.dialog()?.props.onDropError('Error');
     });
 
     expect(addToastMock).toHaveBeenCalledWith(
       expect.objectContaining({
         message:
-          "Certificate is invalid. Please check your data and try again.",
-        variant: "wrong",
-      })
+          'Certificate is invalid. Please check your data and try again.',
+        variant: 'wrong',
+      }),
     );
   });
 
-  it("Should handle the error when certificate is invalid", async () => {
+  it('Should handle the error when certificate is invalid', async () => {
     const importCertMock = vi.fn().mockImplementation(() => {
-      throw new Error("Error");
+      throw new Error('Error');
     });
     const { result } = renderHook(() =>
       useCertificateImportDialog({
@@ -287,8 +290,9 @@ describe("useCertificateImportDialog", () => {
             },
           }),
         } as unknown as FortifyAPI,
-      })
+      }),
     );
+
     act(() => {
       result.current.open();
     });
@@ -299,6 +303,7 @@ describe("useCertificateImportDialog", () => {
 
     await act(async () => {
       const DialogComponent = result.current.dialog();
+
       if (DialogComponent) {
         DialogComponent.props.onTextAreaBlur();
         await DialogComponent.props.onImportButtonClick();
@@ -308,9 +313,9 @@ describe("useCertificateImportDialog", () => {
     expect(addToastMock).toHaveBeenCalledWith(
       expect.objectContaining({
         message:
-          "Failed to import certificate because of error. Please try again.",
-        variant: "wrong",
-      })
+          'Failed to import certificate because of error. Please try again.',
+        variant: 'wrong',
+      }),
     );
   });
 });

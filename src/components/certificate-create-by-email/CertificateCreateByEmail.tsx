@@ -1,37 +1,38 @@
-import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { ExtendedKeyUsageType } from "@peculiar/x509";
-import { Button, TextField } from "@peculiar/react-components";
-import { CertificateAlgorithmInfo } from "../certificate-algorithm-info";
-import { Card } from "../card";
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ExtendedKeyUsageType } from '@peculiar/x509';
+import { Button, TextField } from '@peculiar/react-components';
 import {
   EHashAlgorithm,
   ESignatureAlgorithm,
-} from "@peculiar/fortify-client-core";
-import { CertificateAlgorithmProps, CertificateType } from "../../types";
-
-import styles from "./styles/index.module.scss";
+} from '@peculiar/fortify-client-core';
+import { CertificateAlgorithmInfo } from '../certificate-algorithm-info';
+import { Card } from '../card';
+import { ICertificateAlgorithmProps, TCertificateType } from '../../types';
+import styles from './styles/index.module.scss';
 
 export interface ICertificateCreateByEmailData {
   subject: {
     E: string;
     CN: string;
   };
-  algorithm: CertificateAlgorithmProps;
+  algorithm: ICertificateAlgorithmProps;
   extendedKeyUsages?: ExtendedKeyUsageType[];
-  type: CertificateType;
+  type: TCertificateType;
 }
 
-interface CertificateCreateByEmailProps {
-  type: CertificateType;
+interface ICertificateCreateByEmailProps {
+  type: TCertificateType;
   extendedKeyUsages?: ExtendedKeyUsageType[];
   onCreateButtonClick: (data: ICertificateCreateByEmailData) => void;
 }
 
 export const CertificateCreateByEmail: React.FunctionComponent<
-  CertificateCreateByEmailProps
+  ICertificateCreateByEmailProps
 > = (props) => {
-  const { type = "x509", extendedKeyUsages, onCreateButtonClick } = props;
+  const {
+    type = 'x509', extendedKeyUsages, onCreateButtonClick,
+  } = props;
 
   const { t } = useTranslation();
 
@@ -40,20 +41,22 @@ export const CertificateCreateByEmail: React.FunctionComponent<
     string | undefined
   >(undefined);
 
-  const algorithm: CertificateAlgorithmProps = {
+  const algorithm: ICertificateAlgorithmProps = {
     hash: EHashAlgorithm.SHA_256,
     signature: ESignatureAlgorithm.ECp256,
   };
 
   const validateEmailAddress = (
-    event: React.SyntheticEvent<HTMLInputElement>
+    event: React.SyntheticEvent<HTMLInputElement>,
   ) => {
     if (!event.currentTarget.checkValidity()) {
       setEmailAddressErrorMessage(
-        t("certificates.subject.email-address.error.type")
+        t('certificates.subject.email-address.error.type'),
       );
+
       return;
     }
+
     setEmailAddressErrorMessage(undefined);
   };
 
@@ -61,7 +64,7 @@ export const CertificateCreateByEmail: React.FunctionComponent<
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    const emailAddress = formData.get("email") as string;
+    const emailAddress = formData.get('email') as string;
 
     onCreateButtonClick({
       subject: {
@@ -83,14 +86,14 @@ export const CertificateCreateByEmail: React.FunctionComponent<
       <Card>
         <TextField
           className="required_text_field"
-          onChange={validateEmailAddress}
-          label={t("certificates.subject.email-address.label")}
-          placeholder={t("certificates.subject.email-address.placeholder")}
+          label={t('certificates.subject.email-address.label')}
+          placeholder={t('certificates.subject.email-address.placeholder')}
           error={!!emailAddressErrorMessage}
           errorText={emailAddressErrorMessage}
           type="email"
           name="email"
           required
+          onChange={validateEmailAddress}
         />
         <CertificateAlgorithmInfo
           algorithmSignature={algorithm.signature}

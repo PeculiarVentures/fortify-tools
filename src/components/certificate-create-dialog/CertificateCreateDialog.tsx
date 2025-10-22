@@ -1,58 +1,57 @@
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { IProviderInfo } from "@peculiar/fortify-client-core";
-import clsx from "clsx";
-import {
-  CertificateTypeSelect,
-  ICertificateTypeSelectValue,
-} from "../certificate-type-select";
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { IProviderInfo } from '@peculiar/fortify-client-core';
+import { clsx } from 'clsx';
 import {
   Dialog,
   ArrowRightIcon,
   IconButton,
   Typography,
   CircularProgress,
-} from "@peculiar/react-components";
-import { Card } from "../card";
+} from '@peculiar/react-components';
+import {
+  CertificateTypeSelect,
+  ICertificateTypeSelectValue,
+} from '../certificate-type-select';
+import { Card } from '../card';
 import {
   CertificateCreateByEmail,
   ICertificateCreateByEmailData,
-} from "../certificate-create-by-email";
+} from '../certificate-create-by-email';
 import {
   CertificateCreateByCname,
   ICertificateCreateByCnameData,
-} from "../certificate-create-by-cname";
+} from '../certificate-create-by-cname';
 import {
   CertificateCreateByCustom,
   ICertificateCreateByCustomData,
-} from "../certificate-create-by-custom";
-import { CertificatesProvidersSelectList } from "../certificates-providers-select-list";
-import { CertificateType } from "../../types";
-import { certificateKeyUsageExtensions } from "../../config/data";
+} from '../certificate-create-by-custom';
+import { CertificatesProvidersSelectList } from '../certificates-providers-select-list';
+import { TCertificateType } from '../../types';
+import { certificateKeyUsageExtensions } from '../../config/data';
+import styles from './styles/index.module.scss';
 
-import styles from "./styles/index.module.scss";
+export type TCertificateCreateDataProps
+  = | ICertificateCreateByCnameData
+    | ICertificateCreateByEmailData
+    | ICertificateCreateByCustomData;
 
-export type CertificateCreateDataProps =
-  | ICertificateCreateByCnameData
-  | ICertificateCreateByEmailData
-  | ICertificateCreateByCustomData;
-
-interface CertificateCreateDialogProps {
-  type: CertificateType;
+interface ICertificateCreateDialogProps {
+  type: TCertificateType;
   currentProviderId?: string;
-  providers: Pick<IProviderInfo, "id" | "name">[];
+  providers: Pick<IProviderInfo, 'id' | 'name'>[];
   loading?: boolean;
   onProviderSelect: (id: string) => void;
   onDialogClose: () => void;
-  onCreateButtonClick: (data: CertificateCreateDataProps) => void;
+  onCreateButtonClick: (data: TCertificateCreateDataProps) => void;
 }
 
 export const CertificateCreateDialog: React.FunctionComponent<
-  CertificateCreateDialogProps
+  ICertificateCreateDialogProps
 > = (props) => {
   const {
     loading,
-    type = "x509",
+    type = 'x509',
     providers,
     currentProviderId,
     onProviderSelect,
@@ -68,60 +67,60 @@ export const CertificateCreateDialog: React.FunctionComponent<
 
   const renderContent = () => {
     if (currentTypeSelect) {
-      if (currentTypeSelect.value === "codeSigning") {
+      if (currentTypeSelect.value === 'codeSigning') {
         return (
           <CertificateCreateByEmail
             type={type}
-            onCreateButtonClick={onCreateButtonClick}
             extendedKeyUsages={[certificateKeyUsageExtensions.codeSigning]}
+            onCreateButtonClick={onCreateButtonClick}
           />
         );
       }
 
-      if (currentTypeSelect.value === "emailProtection") {
+      if (currentTypeSelect.value === 'emailProtection') {
         return (
           <CertificateCreateByEmail
             type={type}
-            onCreateButtonClick={onCreateButtonClick}
             extendedKeyUsages={[
               certificateKeyUsageExtensions.emailProtection,
               certificateKeyUsageExtensions.clientAuth,
             ]}
+            onCreateButtonClick={onCreateButtonClick}
           />
         );
       }
 
-      if (currentTypeSelect.value === "documentSigning") {
+      if (currentTypeSelect.value === 'documentSigning') {
         return (
           <CertificateCreateByEmail
             type={type}
-            onCreateButtonClick={onCreateButtonClick}
             extendedKeyUsages={[certificateKeyUsageExtensions.documentSigning]}
+            onCreateButtonClick={onCreateButtonClick}
           />
         );
       }
 
-      if (currentTypeSelect.value === "clientAuth") {
+      if (currentTypeSelect.value === 'clientAuth') {
         return (
           <CertificateCreateByCname
             type={type}
-            onCreateButtonClick={onCreateButtonClick}
             extendedKeyUsages={[certificateKeyUsageExtensions.clientAuth]}
+            onCreateButtonClick={onCreateButtonClick}
           />
         );
       }
 
-      if (currentTypeSelect.value === "serverAuth") {
+      if (currentTypeSelect.value === 'serverAuth') {
         return (
           <CertificateCreateByCname
             type={type}
-            onCreateButtonClick={onCreateButtonClick}
             extendedKeyUsages={[certificateKeyUsageExtensions.serverAuth]}
+            onCreateButtonClick={onCreateButtonClick}
           />
         );
       }
 
-      if (currentTypeSelect.value === "custom") {
+      if (currentTypeSelect.value === 'custom') {
         return (
           <CertificateCreateByCustom
             type={type}
@@ -133,14 +132,17 @@ export const CertificateCreateDialog: React.FunctionComponent<
   };
 
   return (
-    <Dialog open fullScreen className={styles.dialog} onClose={onDialogClose}>
+    <Dialog
+      open fullScreen
+      className={styles.dialog} onClose={onDialogClose}
+    >
       <div className={styles.title}>
         <div className={styles.centered}>
           <div>
             <IconButton
-              onClick={onDialogClose}
               className={styles.button_back}
               size="small"
+              onClick={onDialogClose}
             >
               <ArrowRightIcon className={styles.arrow_back} />
             </IconButton>
@@ -154,9 +156,9 @@ export const CertificateCreateDialog: React.FunctionComponent<
             <CertificatesProvidersSelectList
               providers={providers}
               currentProviderId={currentProviderId}
-              onSelect={onProviderSelect}
               className={styles.provider_select}
               popoverClassName={styles.provider_select_popover}
+              onSelect={onProviderSelect}
             />
           </div>
         </div>
@@ -175,14 +177,16 @@ export const CertificateCreateDialog: React.FunctionComponent<
           {renderContent()}
         </div>
       </div>
-      {loading ? (
-        <div className={styles.loading}>
-          <CircularProgress />
-          <Typography variant="b2" color="gray-9">
-            {t("certificates.dialog.create.loading-text")}
-          </Typography>
-        </div>
-      ) : null}
+      {loading
+        ? (
+            <div className={styles.loading}>
+              <CircularProgress />
+              <Typography variant="b2" color="gray-9">
+                {t('certificates.dialog.create.loading-text')}
+              </Typography>
+            </div>
+          )
+        : null}
     </Dialog>
   );
 };

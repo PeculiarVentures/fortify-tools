@@ -1,1 +1,1 @@
-export * from "./CertificateCreateByCname";
+export * from './CertificateCreateByCname';

@@ -1,6 +1,6 @@
-import React from "react";
-import clsx from "clsx";
-import styles from "./styles/index.module.scss";
+import React from 'react';
+import { clsx } from 'clsx';
+import styles from './styles/index.module.scss';
 
 export const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
@@ -16,6 +16,6 @@ export const TableHeader = React.forwardRef<
     />
   );
 });
-TableHeader.displayName = "TableHeader";
+TableHeader.displayName = 'TableHeader';
 
 export default TableHeader;

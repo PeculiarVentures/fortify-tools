@@ -1,17 +1,19 @@
-import { ComponentProps } from "react";
-import { render, userEvent, screen } from "@testing";
-import type { IProviderInfo } from "@peculiar/fortify-client-core";
-import { ProviderInfoDialog } from "./ProviderInfoDialog";
+import { ComponentProps } from 'react';
+import {
+  render, userEvent, screen,
+} from '@testing';
+import type { IProviderInfo } from '@peculiar/fortify-client-core';
+import { ProviderInfoDialog } from './ProviderInfoDialog';
 
-describe("<ProviderInfoDialog />", () => {
+describe('<ProviderInfoDialog />', () => {
   const defaultProps: ComponentProps<typeof ProviderInfoDialog> = {
     data: {
-      name: "name-text",
+      name: 'name-text',
       isHardware: false,
       isRemovable: false,
       token: {
-        label: "label-text",
-        serialNumber: "1",
+        label: 'label-text',
+        serialNumber: '1',
         freePrivateMemory: 18446,
         hardwareVersion: {
           major: 1,
@@ -23,86 +25,98 @@ describe("<ProviderInfoDialog />", () => {
           minor: 2,
           version: 0,
         },
-        model: "model-text",
+        model: 'model-text',
       },
-      algorithms: ["SHA-1", "SHA-256"],
+      algorithms: ['SHA-1', 'SHA-256'],
     } as IProviderInfo,
     onDialogClose: vi.fn(),
   };
 
-  it("Should render and handle click close", async () => {
-    render(<ProviderInfoDialog {...defaultProps} />);
+  it('Should render and handle click close', async () => {
+    render(
+      <ProviderInfoDialog {...defaultProps} />,
+    );
 
     expect(
-      screen.getByText(`${defaultProps.data.name} information`)
+      screen.getByText(`${defaultProps.data.name} information`),
     ).toBeInTheDocument();
 
     expect(screen.getByText(/Token name/).nextElementSibling).toHaveTextContent(
-      defaultProps.data.token!.label
+      defaultProps.data.token?.label || '',
     );
 
     expect(
-      screen.getByText(/Token category/).nextElementSibling
+      screen.getByText(/Token category/).nextElementSibling,
     ).toHaveTextContent(/Software/);
 
     expect(
-      screen.getByText(/Extractable/).nextElementSibling
+      screen.getByText(/Extractable/).nextElementSibling,
     ).toHaveTextContent(/No/);
 
     expect(
-      screen.getByText(/Serial number/).nextElementSibling
-    ).toHaveTextContent(defaultProps.data.token!.serialNumber);
+      screen.getByText(/Serial number/).nextElementSibling,
+    ).toHaveTextContent(defaultProps.data.token?.serialNumber || '');
 
     expect(screen.getByText(/Free space/).nextElementSibling).toHaveTextContent(
-      defaultProps.data.token!.freePrivateMemory.toString()
+      defaultProps.data.token?.freePrivateMemory?.toString() || '',
     );
 
     expect(
-      screen.getByText(/Hardware version/).nextElementSibling
-    ).toHaveTextContent("1.1");
+      screen.getByText(/Hardware version/).nextElementSibling,
+    ).toHaveTextContent('1.1');
 
     expect(
-      screen.getByText(/Firmware version/).nextElementSibling
-    ).toHaveTextContent("1.2");
+      screen.getByText(/Firmware version/).nextElementSibling,
+    ).toHaveTextContent('1.2');
 
     expect(screen.getByText(/Model/).nextElementSibling).toHaveTextContent(
-      defaultProps.data.token!.model
+      defaultProps.data.token?.model || '',
     );
 
     expect(screen.getByText(/Algorithms/).nextElementSibling).toHaveTextContent(
-      "SHA-1, SHA-256"
+      'SHA-1, SHA-256',
     );
 
-    await userEvent.click(screen.getByRole("button", { name: /Cancel/ }));
+    await userEvent.click(screen.getByRole('button', { name: /Cancel/ }));
 
     expect(defaultProps.onDialogClose).toBeCalledTimes(1);
   });
 
-  it("Should render as hardware", () => {
+  it('Should render as hardware', () => {
     const props: ComponentProps<typeof ProviderInfoDialog> = {
       ...defaultProps,
-      data: { ...defaultProps.data, isHardware: true } as IProviderInfo,
+      data: {
+        ...defaultProps.data, isHardware: true,
+      } as IProviderInfo,
     };
-    render(<ProviderInfoDialog {...props} />);
+
+    render(
+      <ProviderInfoDialog {...props} />,
+    );
 
     expect(
-      screen.getByText(/Token category/).nextElementSibling
+      screen.getByText(/Token category/).nextElementSibling,
     ).toHaveTextContent(/Hardware/);
   });
 
-  it("Should render as extractable", () => {
+  it('Should render as extractable', () => {
     const props: ComponentProps<typeof ProviderInfoDialog> = {
       ...defaultProps,
-      data: { ...defaultProps.data, isRemovable: true } as IProviderInfo,
+      data: {
+        ...defaultProps.data, isRemovable: true,
+      } as IProviderInfo,
     };
-    render(<ProviderInfoDialog {...props} />);
+
+    render(
+      <ProviderInfoDialog {...props} />,
+    );
 
     expect(
-      screen.getByText(/Extractable/).nextElementSibling
+      screen.getByText(/Extractable/).nextElementSibling,
     ).toHaveTextContent(/Yes/);
   });
 
-  it("Should render with unavailable values", () => {
+  it('Should render with unavailable values', () => {
     const props: ComponentProps<typeof ProviderInfoDialog> = {
       ...defaultProps,
       data: {
@@ -115,16 +129,19 @@ describe("<ProviderInfoDialog />", () => {
         },
       } as unknown as IProviderInfo,
     };
-    render(<ProviderInfoDialog {...props} />);
+
+    render(
+      <ProviderInfoDialog {...props} />,
+    );
 
     expect(screen.getByText(/Free space/).nextElementSibling).toHaveTextContent(
-      /Information is unavailable/
+      /Information is unavailable/,
     );
     expect(
-      screen.getByText(/Hardware version/).nextElementSibling
+      screen.getByText(/Hardware version/).nextElementSibling,
     ).toHaveTextContent(/Information is unavailable/);
     expect(
-      screen.getByText(/Firmware version/).nextElementSibling
+      screen.getByText(/Firmware version/).nextElementSibling,
     ).toHaveTextContent(/Information is unavailable/);
   });
 });
