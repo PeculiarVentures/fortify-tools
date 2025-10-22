@@ -1,5 +1,1 @@
-export default {
-  plugins: {
-    autoprefixer: {},
-  },
-};
+export default { plugins: { autoprefixer: {} } };

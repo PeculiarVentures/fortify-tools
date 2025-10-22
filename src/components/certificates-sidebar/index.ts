@@ -1,1 +1,1 @@
-export * from "./CertificatesSidebar";
+export * from './CertificatesSidebar';

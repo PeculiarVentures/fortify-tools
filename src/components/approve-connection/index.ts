@@ -1,1 +1,1 @@
-export * from "./ApproveConnection";
+export * from './ApproveConnection';

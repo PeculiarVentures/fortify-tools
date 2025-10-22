@@ -1,1 +1,1 @@
-export * from "./ConnectionNotDetected";
+export * from './ConnectionNotDetected';

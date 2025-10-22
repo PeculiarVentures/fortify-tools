@@ -1,14 +1,15 @@
-import { Typography } from "@peculiar/react-components";
-import React, { ComponentProps } from "react";
-import { useTranslation } from "react-i18next";
-import styles from "./styles/index.module.scss";
-import clsx from "clsx";
+import { Typography } from '@peculiar/react-components';
+import React, { ComponentProps } from 'react';
+import { useTranslation } from 'react-i18next';
+import { clsx } from 'clsx';
+import styles from './styles/index.module.scss';
 
-interface DateProps {
+interface IDateProps {
   date?: Date;
-  className?: ComponentProps<"div">["className"];
+  className?: ComponentProps<'div'>['className'];
 }
-export const Date: React.FunctionComponent<DateProps> = (props) => {
+
+export const Date: React.FunctionComponent<IDateProps> = (props) => {
   const { date, className } = props;
   const { i18n } = useTranslation();
 
@@ -20,11 +21,11 @@ export const Date: React.FunctionComponent<DateProps> = (props) => {
     >
       {date
         ? date.toLocaleDateString(i18n.resolvedLanguage, {
-            day: "numeric",
-            month: "short",
-            year: "numeric",
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
           })
-        : "-"}
+        : '-'}
     </Typography>
   );
 };

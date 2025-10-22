@@ -1,1 +1,1 @@
-export * from "./CertificateKeyPropertiesSelect";
+export * from './CertificateKeyPropertiesSelect';

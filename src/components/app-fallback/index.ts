@@ -1,1 +1,1 @@
-export * from "./AppFallback";
+export * from './AppFallback';

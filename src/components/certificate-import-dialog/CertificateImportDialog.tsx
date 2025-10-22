@@ -1,8 +1,8 @@
-import React from "react";
-import { useDropzone } from "react-dropzone";
-import { Trans, useTranslation } from "react-i18next";
-import { IProviderInfo } from "@peculiar/fortify-client-core";
-import clsx from "clsx";
+import React from 'react';
+import { useDropzone } from 'react-dropzone';
+import { Trans, useTranslation } from 'react-i18next';
+import { IProviderInfo } from '@peculiar/fortify-client-core';
+import { clsx } from 'clsx';
 import {
   Dialog,
   ArrowRightIcon,
@@ -11,22 +11,19 @@ import {
   TextareaField,
   Button,
   CircularProgress,
-} from "@peculiar/react-components";
-import { CertificatesProvidersSelectList } from "../certificates-providers-select-list";
-import { formatBytes } from "../../utils";
-
-import CrossIcon from "../../icons/cross.svg?react";
-
-import styles from "./styles/index.module.scss";
-
+} from '@peculiar/react-components';
+import { CertificatesProvidersSelectList } from '../certificates-providers-select-list';
+import { formatBytes } from '../../utils';
+import CrossIcon from '../../icons/cross.svg?react';
 import {
   APP_CERTIFICATE_ALLOWED_MIMES,
   APP_CERTIFICATE_MAX_SIZE_BYTES,
-} from "../../config";
+} from '../../config';
+import styles from './styles/index.module.scss';
 
-interface CertificateImportDialogProps {
+interface ICertificateImportDialogProps {
   currentProviderId?: string;
-  providers: Pick<IProviderInfo, "id" | "name">[];
+  providers: Pick<IProviderInfo, 'id' | 'name'>[];
   loading?: boolean;
   certificate: string;
   isTextAreaError: boolean;
@@ -40,13 +37,13 @@ interface CertificateImportDialogProps {
   onDropAccepted: (
     fileContent: ArrayBuffer,
     extension: string,
-    type: string
+    type: string,
   ) => void;
   onClearButtonClick: () => void;
 }
 
 export const CertificateImportDialog: React.FunctionComponent<
-  CertificateImportDialogProps
+  ICertificateImportDialogProps
 > = (props) => {
   const {
     loading,
@@ -67,34 +64,38 @@ export const CertificateImportDialog: React.FunctionComponent<
 
   const { t } = useTranslation();
 
-  const { getInputProps, getRootProps, isDragActive, isDragReject } =
-    useDropzone({
+  const {
+    getInputProps, getRootProps, isDragActive, isDragReject,
+  }
+    = useDropzone({
       multiple: false,
       accept: APP_CERTIFICATE_ALLOWED_MIMES,
       maxSize: APP_CERTIFICATE_MAX_SIZE_BYTES,
       onDrop: async (acceptedFiles, fileRejections) => {
         const files = [...acceptedFiles, ...fileRejections];
+
         if (files.length > 1) {
           onDropRejected(
-            t("certificates.dialog.import.file.error.too-many-files")
+            t('certificates.dialog.import.file.error.too-many-files'),
           );
+
           return;
         }
 
         const msgs: string[] = [];
+
         fileRejections[0]?.errors.forEach((err) => {
-          if (err.code === "file-too-large") {
+          if (err.code === 'file-too-large') {
             msgs.push(
-              t("certificates.dialog.import.file.error.too-large", {
-                size: formatBytes(APP_CERTIFICATE_MAX_SIZE_BYTES),
-              })
+              t('certificates.dialog.import.file.error.too-large', { size: formatBytes(APP_CERTIFICATE_MAX_SIZE_BYTES) }),
             );
-          } else if (err.code === "file-invalid-type") {
-            msgs.push(t("certificates.dialog.import.file.error.invalid-type"));
+          } else if (err.code === 'file-invalid-type') {
+            msgs.push(t('certificates.dialog.import.file.error.invalid-type'));
           }
         });
         if (msgs.length) {
           msgs.forEach((msg) => onDropRejected(msg));
+
           return;
         }
 
@@ -104,11 +105,12 @@ export const CertificateImportDialog: React.FunctionComponent<
           return false;
         }
 
-        const parts = file.name.split(".");
-        const ext = parts.length > 1 ? (parts.pop() as string) : "";
+        const parts = file.name.split('.');
+        const ext = parts.length > 1 ? (parts.pop() as string) : '';
 
         try {
           const buf = await file.arrayBuffer();
+
           onDropAccepted(buf, ext, file.type);
         } catch (error) {
           onDropError(error);
@@ -118,31 +120,34 @@ export const CertificateImportDialog: React.FunctionComponent<
     });
 
   return (
-    <Dialog open fullScreen className={styles.dialog} onClose={onDialogClose}>
+    <Dialog
+      open fullScreen
+      className={styles.dialog} onClose={onDialogClose}
+    >
       <>
         <div className={styles.title}>
           <div className={styles.centered}>
             <div>
               <IconButton
-                onClick={onDialogClose}
                 className={styles.button_back}
                 size="small"
+                onClick={onDialogClose}
               >
                 <ArrowRightIcon className={styles.arrow_back} />
               </IconButton>
             </div>
             <div className={styles.title_label}>
               <Typography variant="h4" color="black">
-                {t("certificates.dialog.import.title")}
+                {t('certificates.dialog.import.title')}
               </Typography>
             </div>
             <div>
               <CertificatesProvidersSelectList
                 providers={providers}
                 currentProviderId={currentProviderId}
-                onSelect={onProviderSelect}
                 className={styles.provider_select}
                 popoverClassName={styles.provider_select_popover}
+                onSelect={onProviderSelect}
               />
             </div>
           </div>
@@ -167,6 +172,7 @@ export const CertificateImportDialog: React.FunctionComponent<
                       color="primary"
                       variant="s2"
                       component="button"
+                      key="text"
                     >
                       {0}
                     </Typography>,
@@ -174,7 +180,7 @@ export const CertificateImportDialog: React.FunctionComponent<
                 />
               </Typography>
               <Typography variant="c2" color="gray-9">
-                {t("certificates.dialog.import.drop-zone.description")}
+                {t('certificates.dialog.import.drop-zone.description')}
               </Typography>
             </div>
             <div className={styles.divider_form}>
@@ -183,24 +189,24 @@ export const CertificateImportDialog: React.FunctionComponent<
                 className={styles.divider_form_inner}
                 color="gray-10"
               >
-                {t("certificates.dialog.import.divider-label")}
+                {t('certificates.dialog.import.divider-label')}
               </Typography>
             </div>
             <div>
               <TextareaField
                 className={styles.text_area}
                 value={certificate}
-                onChange={(event) => onTextAreaChange(event.target.value)}
                 size="large"
-                onBlur={onTextAreaBlur}
                 error={isTextAreaError}
                 errorText={
                   isTextAreaError
                     ? t(
-                        "certificates.dialog.import.certificate.error.invalid-data"
+                        'certificates.dialog.import.certificate.error.invalid-data',
                       )
                     : undefined
                 }
+                onChange={(event) => onTextAreaChange(event.target.value)}
+                onBlur={onTextAreaBlur}
               />
             </div>
             <div className={styles.buttons_group}>
@@ -208,10 +214,10 @@ export const CertificateImportDialog: React.FunctionComponent<
                 variant="outlined"
                 startIcon={<CrossIcon />}
                 disabled={!certificate?.length}
-                onClick={onClearButtonClick}
                 className={styles.cancel_button}
+                onClick={onClearButtonClick}
               >
-                {t("button.clear")}
+                {t('button.clear')}
               </Button>
               <Button
                 variant="contained"
@@ -219,19 +225,21 @@ export const CertificateImportDialog: React.FunctionComponent<
                 disabled={!certificate?.length || isTextAreaError}
                 onClick={onImportButtonClick}
               >
-                {t("button.import-certificate")}
+                {t('button.import-certificate')}
               </Button>
             </div>
           </div>
         </div>
-        {loading ? (
-          <div className={styles.loading}>
-            <CircularProgress />
-            <Typography variant="b2" color="gray-9">
-              {t("certificates.dialog.import.loading-text")}
-            </Typography>
-          </div>
-        ) : null}
+        {loading
+          ? (
+              <div className={styles.loading}>
+                <CircularProgress />
+                <Typography variant="b2" color="gray-9">
+                  {t('certificates.dialog.import.loading-text')}
+                </Typography>
+              </div>
+            )
+          : null}
       </>
     </Dialog>
   );

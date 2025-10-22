@@ -2,12 +2,13 @@ import {
   ICertificate,
   EHashAlgorithm,
   ESignatureAlgorithm,
-} from "@peculiar/fortify-client-core";
-export interface CertificateProps extends ICertificate {
+} from '@peculiar/fortify-client-core';
+
+export interface ICertificateProps extends ICertificate {
   id?: string;
   label?: string;
 }
-export interface CertificateSubjectProps {
+export interface ICertificateSubjectProps {
   CN: string;
   E?: string;
   O?: string;
@@ -19,9 +20,9 @@ export interface CertificateSubjectProps {
   SN?: string;
 }
 
-export type CertificateAlgorithmProps = {
+export interface ICertificateAlgorithmProps {
   signature: ESignatureAlgorithm;
   hash: EHashAlgorithm;
-};
+}
 
-export type CertificateType = "x509" | "csr";
+export type TCertificateType = 'x509' | 'csr';

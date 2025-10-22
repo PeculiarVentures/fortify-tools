@@ -1,1 +1,1 @@
-export * from "./useProviderInfoDialog";
+export * from './useProviderInfoDialog';

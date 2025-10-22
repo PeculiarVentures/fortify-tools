@@ -1,15 +1,15 @@
-import React from "react";
-import { Typography } from "@peculiar/react-components";
-import ErrorIcon from "../../icons/error-big.svg?react";
+import React from 'react';
+import { Typography } from '@peculiar/react-components';
+import ErrorIcon from '../../icons/error-big.svg?react';
+import styles from './styles/index.module.scss';
 
-import styles from "./styles/index.module.scss";
-
-interface ErrorConnectionProps {
+interface IErrorConnectionProps {
   message: string;
   description?: string;
 }
-export const ErrorConnection: React.FunctionComponent<ErrorConnectionProps> = (
-  props
+
+export const ErrorConnection: React.FunctionComponent<IErrorConnectionProps> = (
+  props,
 ) => {
   const { message, description } = props;
 
@@ -21,11 +21,13 @@ export const ErrorConnection: React.FunctionComponent<ErrorConnectionProps> = (
       <Typography variant="h5" color="black">
         {message}
       </Typography>
-      {description ? (
-        <Typography variant="b2" color="gray-9">
-          {description}
-        </Typography>
-      ) : null}
+      {description
+        ? (
+            <Typography variant="b2" color="gray-9">
+              {description}
+            </Typography>
+          )
+        : null}
     </div>
   );
 };

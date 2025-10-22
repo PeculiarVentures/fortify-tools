@@ -1,1 +1,1 @@
-export * from "./FetchingStatusOwerlay";
+export * from './FetchingStatusOwerlay';

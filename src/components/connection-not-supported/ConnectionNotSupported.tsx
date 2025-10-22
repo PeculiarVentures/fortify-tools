@@ -1,8 +1,7 @@
-import { useTranslation } from "react-i18next";
-import { Button, Typography } from "@peculiar/react-components";
-import ErrorIcon from "../../icons/error-big.svg?react";
-
-import styles from "./styles/index.module.scss";
+import { useTranslation } from 'react-i18next';
+import { Button, Typography } from '@peculiar/react-components';
+import ErrorIcon from '../../icons/error-big.svg?react';
+import styles from './styles/index.module.scss';
 
 export const ConnectionNotSupported = () => {
   const { t } = useTranslation();
@@ -13,11 +12,14 @@ export const ConnectionNotSupported = () => {
         <div className={styles.icon_wrapper}>
           <ErrorIcon />
         </div>
-        <Typography variant="h5" color="black" className={styles.message}>
-          {t("connection-not-supported.message")}
+        <Typography
+          variant="h5" color="black"
+          className={styles.message}
+        >
+          {t('connection-not-supported.message')}
         </Typography>
         <Typography variant="b2" color="gray-9">
-          {t("connection-not-supported.description")}
+          {t('connection-not-supported.description')}
         </Typography>
         <div className={styles.buttons_group}>
           <Button
@@ -25,7 +27,7 @@ export const ConnectionNotSupported = () => {
             href="https://fortifyapp.com"
             variant="outlined"
           >
-            {t("connection-not-supported.button.home-page")}
+            {t('connection-not-supported.button.home-page')}
           </Button>
           <Button
             variant="contained"
@@ -33,7 +35,7 @@ export const ConnectionNotSupported = () => {
             component="a"
             href="https://fortifyapp.com/docs#support"
           >
-            {t("connection-not-supported.button.get-started")}
+            {t('connection-not-supported.button.get-started')}
           </Button>
         </div>
       </div>

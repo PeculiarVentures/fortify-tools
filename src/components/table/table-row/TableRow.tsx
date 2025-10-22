@@ -1,6 +1,6 @@
-import clsx from "clsx";
-import React from "react";
-import styles from "./styles/index.module.scss";
+import { clsx } from 'clsx';
+import React from 'react';
+import styles from './styles/index.module.scss';
 
 export const TableRow = React.forwardRef<
   HTMLTableRowElement,
@@ -16,6 +16,6 @@ export const TableRow = React.forwardRef<
     />
   );
 });
-TableRow.displayName = "TableRow";
+TableRow.displayName = 'TableRow';
 
 export default TableRow;

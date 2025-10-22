@@ -1,19 +1,19 @@
-import React, { ComponentProps } from "react";
-import clsx from "clsx";
-import { Tooltip, Typography } from "@peculiar/react-components";
-import { truncateStringMiddle } from "../../utils";
+import React, { ComponentProps } from 'react';
+import { clsx } from 'clsx';
+import { Tooltip, Typography } from '@peculiar/react-components';
+import { truncateStringMiddle } from '../../utils';
+import styles from './styles/index.module.scss';
 
-import styles from "./styles/index.module.scss";
-
-interface CertificateSerialNumberProps {
+interface ICertificateSerialNumberProps {
   value?: string;
-  className?: ComponentProps<"div">["className"];
+  className?: ComponentProps<'div'>['className'];
 }
 
 export const CertificateSerialNumber: React.FunctionComponent<
-  CertificateSerialNumberProps
+  ICertificateSerialNumberProps
 > = (props) => {
   const { className, value } = props;
+
   if (!value) {
     return (
       <Typography
@@ -27,7 +27,10 @@ export const CertificateSerialNumber: React.FunctionComponent<
   }
 
   return (
-    <Tooltip placement="bottom-start" offset={5} title={value}>
+    <Tooltip
+      placement="bottom-start" offset={5}
+      title={value}
+    >
       <Typography
         className={clsx(className, styles.certificate_serial_number)}
         variant="b2"

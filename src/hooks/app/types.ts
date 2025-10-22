@@ -1,10 +1,10 @@
-export type AppFetchingStatus = "pending" | "resolved" | "rejected";
+export type TAppFetchingStatus = 'pending' | 'resolved' | 'rejected';
 
-export interface AppFetchingType {
-  connectionClientUpdate?: AppFetchingStatus;
-  connectionDetect?: AppFetchingStatus;
-  connectionSupport?: AppFetchingStatus;
-  connectionApprove?: AppFetchingStatus;
-  providers?: AppFetchingStatus;
-  certificates?: AppFetchingStatus;
+export interface IAppFetchingType {
+  connectionClientUpdate?: TAppFetchingStatus;
+  connectionDetect?: TAppFetchingStatus;
+  connectionSupport?: TAppFetchingStatus;
+  connectionApprove?: TAppFetchingStatus;
+  providers?: TAppFetchingStatus;
+  certificates?: TAppFetchingStatus;
 }

@@ -1,11 +1,12 @@
-import React from "react";
-import clsx from "clsx";
-import styles from "./styles/index.module.scss";
+import React from 'react';
+import { clsx } from 'clsx';
+import styles from './styles/index.module.scss';
 
 export const TableCell = React.forwardRef<
   HTMLTableCellElement,
   React.TdHTMLAttributes<HTMLTableCellElement>
 >((props, ref) => {
+  // eslint-disable-next-line react/prop-types
   const { className, ...restProps } = props;
 
   return (
@@ -16,6 +17,6 @@ export const TableCell = React.forwardRef<
     />
   );
 });
-TableCell.displayName = "TableCell";
+TableCell.displayName = 'TableCell';
 
 export default TableCell;
