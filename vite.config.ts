@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -19,5 +20,11 @@ export default defineConfig(({ command }) => ({
           : 'pv_[local]_[hash:base64:7]',
     },
     preprocessorOptions: { scss: { api: 'modern-compiler' } },
+  },
+  test: {
+    testTimeout: 30000,
+    environment: 'jsdom',
+    setupFiles: './setup-test.ts',
+    globals: true,
   },
 }));

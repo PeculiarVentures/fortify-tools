@@ -16,7 +16,6 @@
     "@types/react": "18.3.14",
     "@types/react-dom": "18.3.3",
     "@vitejs/plugin-react": "^4.3.4",
-    "@vitest/coverage-v8": "^4.0.10",
     "autoprefixer": "^10.4.20",
     "gh-pages": "^6.3.0",
     "jsdom": "^25.0.1",
@@ -52,7 +51,6 @@
     "preview": "vite preview --port 3005",
     "test:ci": "vitest run --root src/",
     "test:unit": "vitest --root src/",
-    "coverage": "vitest run --coverage --root src/",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   }
