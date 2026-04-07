@@ -22,7 +22,7 @@
     "postcss": "^8.4.49",
     "sass": "^1.83.1",
     "typescript": "^5.7.2",
-    "vite": "^6.4.1",
+    "vite": "^6.4.2",
     "vite-plugin-svgr": "^4.3.0",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.4",
