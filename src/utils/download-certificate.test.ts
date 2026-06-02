@@ -13,8 +13,16 @@ vi.mock('@peculiar/certificates-viewer', () => ({
 }));
 
 vi.mock('@peculiar/x509', () => ({
-  X509Certificate: vi.fn().mockImplementation(() => ({ toString: vi.fn().mockReturnValue('mocked-pem-x509') })),
-  Pkcs10CertificateRequest: vi.fn().mockImplementation(() => ({ toString: vi.fn().mockReturnValue('mocked-pem-csr') })),
+  X509Certificate: vi.fn().mockImplementation(
+    function MockX509Certificate() {
+      return { toString: vi.fn().mockReturnValue('mocked-pem-x509') };
+    },
+  ),
+  Pkcs10CertificateRequest: vi.fn().mockImplementation(
+    function MockPkcs10CertificateRequest() {
+      return { toString: vi.fn().mockReturnValue('mocked-pem-csr') };
+    },
+  ),
 }));
 
 describe('downloadCertificate', () => {

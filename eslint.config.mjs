@@ -12,11 +12,10 @@ export default tseslint.config([
       'react/no-array-index-key': 'off',
     },
   },
+  { settings: { 'import/core-modules': ['@testing', '@testing/data'] } },
   {
-    settings: { 'import/core-modules': ['@testing', '@testing/data'] },
     ignores: [
-      '**/dist/*',
-      '**/public/*',
+      '**/dist/**',
     ],
   },
 ]);

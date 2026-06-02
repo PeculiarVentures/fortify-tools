@@ -82,10 +82,16 @@ describe('<App />', () => {
       .mockResolvedValue(certificateRequestsMock),
   } as unknown as FortifyAPI;
 
-  it('Should render, show providers & certificates & certificate requests', async () => {
+  const mockFortifyAPI = (instance: Partial<FortifyAPI>) => {
     vi.mocked(FortifyAPI).mockImplementation(
-      () => mockFortifyAPIInstanceWithCertificateRequests,
+      function MockFortifyAPI() {
+        return instance as FortifyAPI;
+      } as unknown as typeof FortifyAPI,
     );
+  };
+
+  it('Should render, show providers & certificates & certificate requests', async () => {
+    mockFortifyAPI(mockFortifyAPIInstanceWithCertificateRequests);
 
     render(
       <App />,
@@ -103,9 +109,7 @@ describe('<App />', () => {
   });
 
   it('Should open provider info dialog', async () => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      () => mockFortifyAPIInstance as FortifyAPI,
-    );
+    mockFortifyAPI(mockFortifyAPIInstance);
 
     render(
       <App />,
@@ -123,9 +127,7 @@ describe('<App />', () => {
   });
 
   it('Should open delete certificate dialog', async () => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      () => mockFortifyAPIInstance as FortifyAPI,
-    );
+    mockFortifyAPI(mockFortifyAPIInstance);
 
     render(
       <App />,
@@ -146,9 +148,7 @@ describe('<App />', () => {
   });
 
   it('Should open view certificate details dialog', async () => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      () => mockFortifyAPIInstance as FortifyAPI,
-    );
+    mockFortifyAPI(mockFortifyAPIInstance);
 
     render(
       <App />,
@@ -170,9 +170,7 @@ describe('<App />', () => {
   });
 
   it('Should open view certificate request details dialog', async () => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      () => mockFortifyAPIInstanceWithCertificateRequests as FortifyAPI,
-    );
+    mockFortifyAPI(mockFortifyAPIInstanceWithCertificateRequests);
 
     render(
       <App />,
@@ -196,9 +194,7 @@ describe('<App />', () => {
   });
 
   it('Should open import certificate dialog', async () => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      () => mockFortifyAPIInstance as FortifyAPI,
-    );
+    mockFortifyAPI(mockFortifyAPIInstance);
 
     render(
       <App />,
@@ -224,9 +220,7 @@ describe('<App />', () => {
   });
 
   it('Should open create certificate (x509) dialog', async () => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      () => mockFortifyAPIInstance as FortifyAPI,
-    );
+    mockFortifyAPI(mockFortifyAPIInstance);
 
     render(
       <App />,
@@ -252,9 +246,7 @@ describe('<App />', () => {
   });
 
   it('Should open create certificate (CSR) dialog', async () => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      () => mockFortifyAPIInstance as FortifyAPI,
-    );
+    mockFortifyAPI(mockFortifyAPIInstance);
 
     render(
       <App />,
@@ -280,9 +272,7 @@ describe('<App />', () => {
   });
 
   it('Should handle search & clear search', async () => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      () => mockFortifyAPIInstance as FortifyAPI,
-    );
+    mockFortifyAPI(mockFortifyAPIInstance);
 
     render(
       <App />,
@@ -306,9 +296,7 @@ describe('<App />', () => {
   });
 
   it('Should handle sorting', async () => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      () => mockFortifyAPIInstance as FortifyAPI,
-    );
+    mockFortifyAPI(mockFortifyAPIInstance);
 
     render(
       <App />,
