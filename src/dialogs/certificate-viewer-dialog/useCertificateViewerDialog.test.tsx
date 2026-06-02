@@ -10,11 +10,20 @@ vi.mock('@peculiar/x509', async (importOriginal) => {
 
   return {
     ...originalModule,
-    X509Certificate: vi.fn().mockImplementation(() => ({
-      rawData: new ArrayBuffer(0),
-      subject: 'Test Subject',
-      subjectName: 'Rest Subject Name',
-    })),
+    X509Certificate: vi.fn().mockImplementation(
+      function MockX509Certificate() {
+        return {
+          rawData: new ArrayBuffer(0),
+          subject: 'CN=Test Subject',
+          subjectName: 'Test Subject Name',
+          serialNumber: '1',
+          issuer: 'CN=Test Issuer',
+          notBefore: new Date('2024-01-01'),
+          notAfter: new Date('2025-01-01'),
+          publicKey: {} as CryptoKey,
+        };
+      },
+    ),
   };
 });
 

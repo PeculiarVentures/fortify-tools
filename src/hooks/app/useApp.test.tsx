@@ -52,10 +52,16 @@ describe('useApp', () => {
     getCertificateRequestsByProviderId: vi.fn().mockResolvedValue([]),
   };
 
-  it('Should initialize, get providers & certificates', async () => {
+  const mockFortifyAPI = (instance: Partial<FortifyAPI>) => {
     vi.mocked(FortifyAPI).mockImplementation(
-      () => mockFortifyAPIInstance as FortifyAPI,
+      function MockFortifyAPI() {
+        return instance as FortifyAPI;
+      } as unknown as typeof FortifyAPI,
     );
+  };
+
+  it('Should initialize, get providers & certificates', async () => {
+    mockFortifyAPI(mockFortifyAPIInstance);
     const { result } = renderHook(() => useApp());
 
     await waitFor(() => {
@@ -74,26 +80,20 @@ describe('useApp', () => {
   });
 
   it('Should handle connection not supported', () => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      () =>
-        ({
-          ...mockFortifyAPIInstance,
-          isConnectionSupported: vi.fn().mockReturnValue(false),
-        }) as unknown as FortifyAPI,
-    );
+    mockFortifyAPI({
+      ...mockFortifyAPIInstance,
+      isConnectionSupported: vi.fn().mockReturnValue(false),
+    });
     const { result } = renderHook(() => useApp());
 
     expect(result.current.fetching.connectionSupport).toEqual('rejected');
   });
 
   it('Should handle connection not detected', () => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      () =>
-        ({
-          ...mockFortifyAPIInstance,
-          isConnectionDetected: vi.fn().mockReturnValue(false),
-        }) as unknown as FortifyAPI,
-    );
+    mockFortifyAPI({
+      ...mockFortifyAPIInstance,
+      isConnectionDetected: vi.fn().mockReturnValue(false),
+    });
     const { result } = renderHook(() => useApp());
 
     waitFor(() => {
@@ -102,15 +102,12 @@ describe('useApp', () => {
   });
 
   it('Should handle client update', () => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      () =>
-        ({
-          ...mockFortifyAPIInstance,
-          connect: vi.fn().mockImplementation(() => {
-            throw new Error('update your client to the latest version');
-          }),
-        }) as unknown as FortifyAPI,
-    );
+    mockFortifyAPI({
+      ...mockFortifyAPIInstance,
+      connect: vi.fn().mockImplementation(() => {
+        throw new Error('update your client to the latest version');
+      }),
+    });
     const { result } = renderHook(() => useApp());
 
     waitFor(() => {
@@ -121,13 +118,10 @@ describe('useApp', () => {
   });
 
   it('Should handle connectionApprove is resolved', async () => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      () =>
-        ({
-          ...mockFortifyAPIInstance,
-          challenge: vi.fn().mockReturnValue('12345'),
-        }) as unknown as FortifyAPI,
-    );
+    mockFortifyAPI({
+      ...mockFortifyAPIInstance,
+      challenge: vi.fn().mockReturnValue('12345'),
+    });
     const { result } = renderHook(() => useApp());
 
     await waitFor(() => {
@@ -137,13 +131,10 @@ describe('useApp', () => {
   });
 
   it('Should handle connectionApprove is rejected', async () => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      () =>
-        ({
-          ...mockFortifyAPIInstance,
-          challenge: vi.fn().mockRejectedValue(new Error('Error')),
-        }) as unknown as FortifyAPI,
-    );
+    mockFortifyAPI({
+      ...mockFortifyAPIInstance,
+      challenge: vi.fn().mockRejectedValue(new Error('Error')),
+    });
     const { result } = renderHook(() => useApp());
 
     await waitFor(() => {
@@ -153,9 +144,7 @@ describe('useApp', () => {
   });
 
   it('Should handle provider change', async () => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      () => mockFortifyAPIInstance as FortifyAPI,
-    );
+    mockFortifyAPI(mockFortifyAPIInstance);
     const { result } = renderHook(() => useApp());
 
     await waitFor(() => {
@@ -170,9 +159,7 @@ describe('useApp', () => {
   });
 
   it('Should handle reload certificates', async () => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      () => mockFortifyAPIInstance as FortifyAPI,
-    );
+    mockFortifyAPI(mockFortifyAPIInstance);
     const { result } = renderHook(() => useApp());
 
     await act(async () => {
@@ -183,9 +170,7 @@ describe('useApp', () => {
   });
 
   it('Should handle reset provider & reload certificates', async () => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      () => mockFortifyAPIInstance as FortifyAPI,
-    );
+    mockFortifyAPI(mockFortifyAPIInstance);
     const { result } = renderHook(() => useApp());
 
     await act(async () => {
@@ -199,17 +184,14 @@ describe('useApp', () => {
   it('Should handle provider logout', async () => {
     const logoutMock = vi.fn();
 
-    vi.mocked(FortifyAPI).mockImplementation(
-      () =>
-        ({
-          ...mockFortifyAPIInstance,
-          getProviderById: vi.fn().mockResolvedValue({
-            id: '1',
-            isLoggedIn: vi.fn().mockResolvedValue(false),
-            logout: logoutMock,
-          }),
-        }) as unknown as FortifyAPI,
-    );
+    mockFortifyAPI({
+      ...mockFortifyAPIInstance,
+      getProviderById: vi.fn().mockResolvedValue({
+        id: '1',
+        isLoggedIn: vi.fn().mockResolvedValue(false),
+        logout: logoutMock,
+      }),
+    });
     const { result } = renderHook(() => useApp());
 
     await waitFor(() => {
@@ -225,9 +207,7 @@ describe('useApp', () => {
   });
 
   it('Should handle provider login', async () => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      () => mockFortifyAPIInstance as FortifyAPI,
-    );
+    mockFortifyAPI(mockFortifyAPIInstance);
     const { result } = renderHook(() => useApp());
 
     await waitFor(() => {
@@ -247,13 +227,10 @@ describe('useApp', () => {
   });
 
   it('Should set login status to false when error occured during login', async () => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      () =>
-        ({
-          ...mockFortifyAPIInstance,
-          getProviderById: vi.fn().mockResolvedValue(new Error('Error')),
-        }) as unknown as FortifyAPI,
-    );
+    mockFortifyAPI({
+      ...mockFortifyAPIInstance,
+      getProviderById: vi.fn().mockResolvedValue(new Error('Error')),
+    });
     const { result } = renderHook(() => useApp());
 
     await waitFor(() => {
@@ -268,17 +245,14 @@ describe('useApp', () => {
   });
 
   it('Should show error message if provider doesn\'t support signing in', async () => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      () =>
-        ({
-          ...mockFortifyAPIInstance,
-          getProviderById: vi.fn().mockResolvedValue({
-            id: '1',
-            isLoggedIn: vi.fn().mockResolvedValue(true),
-            logout: vi.fn(),
-          }),
-        }) as unknown as FortifyAPI,
-    );
+    mockFortifyAPI({
+      ...mockFortifyAPIInstance,
+      getProviderById: vi.fn().mockResolvedValue({
+        id: '1',
+        isLoggedIn: vi.fn().mockResolvedValue(true),
+        logout: vi.fn(),
+      }),
+    });
     const { result } = renderHook(() => useApp());
 
     await waitFor(() => {
@@ -348,15 +322,12 @@ describe('useApp', () => {
   });
 
   it('Should clear certificates when error occured during first load & reload', async () => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      () =>
-        ({
-          ...mockFortifyAPIInstance,
-          getCertificatesByProviderId: vi
-            .fn()
-            .mockRejectedValue(new Error('Error')),
-        }) as unknown as FortifyAPI,
-    );
+    mockFortifyAPI({
+      ...mockFortifyAPIInstance,
+      getCertificatesByProviderId: vi
+        .fn()
+        .mockRejectedValue(new Error('Error')),
+    });
 
     const { result } = renderHook(() => useApp());
 
