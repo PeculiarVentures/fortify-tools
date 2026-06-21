@@ -41,7 +41,7 @@
     "react-dropzone": "^14.3.5",
     "react-error-boundary": "^5.0.0",
     "react-i18next": "^15.4.0",
-    "react-use": "^17.6.0"
+    "react-use": "^17.6.1"
   },
   "scripts": {
     "dev": "vite --port 3003",
