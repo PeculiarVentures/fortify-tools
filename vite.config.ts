@@ -1,5 +1,7 @@
 /// <reference types="vitest/config" />
+// eslint-disable-next-line import/no-unresolved
 import { defineConfig } from 'vite';
+// eslint-disable-next-line import/no-unresolved
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import svgr from 'vite-plugin-svgr';
@@ -19,7 +21,6 @@ export default defineConfig(({ command }) => ({
           ? 'pv_[hash:base64:7]'
           : 'pv_[local]_[hash:base64:7]',
     },
-    preprocessorOptions: { scss: { api: 'modern-compiler' } },
   },
   test: {
     testTimeout: 30000,
