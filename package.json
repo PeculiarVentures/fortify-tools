@@ -25,7 +25,7 @@
     "vite": "^8.1.2",
     "vite-plugin-svgr": "^4.3.0",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^4.1.8",
+    "vitest": "^4.1.11",
     "vitest-dom": "^0.1.1"
   },
   "dependencies": {
