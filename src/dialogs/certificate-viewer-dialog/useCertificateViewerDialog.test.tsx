@@ -1,8 +1,13 @@
-import type { IProviderInfo, FortifyAPI } from '@peculiar/fortify-client-core';
-import { renderHook, act } from '@testing';
-import { vi } from 'vitest';
+import type { FortifyAPI, IProviderInfo } from '@peculiar/fortify-client-core';
+import { screen, userEvent } from '@testing';
 import type { ICertificateProps } from '../../types';
+import { renderDialog } from '../test-utils';
 import { useCertificateViewerDialog } from './useCertificateViewerDialog';
+
+vi.mock('@peculiar/certificates-viewer-react', () => ({
+  PeculiarCertificateViewer: () => 'x509 certificate viewer component',
+  PeculiarCsrViewer: () => 'CSR certificate viewer component',
+}));
 
 vi.mock('@peculiar/x509', async (importOriginal) => {
   const originalModule = await importOriginal<typeof import('@peculiar/x509')>();
@@ -12,8 +17,7 @@ vi.mock('@peculiar/x509', async (importOriginal) => {
     X509Certificate: vi.fn().mockImplementation(function MockX509Certificate() {
       return {
         rawData: new ArrayBuffer(0),
-        subject: 'CN=Test Subject',
-        subjectName: 'Test Subject Name',
+        subject: 'CN=Chain certificate',
         serialNumber: '1',
         issuer: 'CN=Test Issuer',
         notBefore: new Date('2024-01-01'),
@@ -34,58 +38,68 @@ describe('useCertificateViewerDialog', () => {
 
   const certificate = {
     id: '1',
-    label: 'Certificate name',
+    raw: new ArrayBuffer(0),
+    subject: { CN: ['Test certificate'] },
     type: 'x509',
-  } as ICertificateProps;
+  } as unknown as ICertificateProps;
 
-  const defaultProps = {
-    providers,
-    fortifyClient: null,
-    currentProviderId: providers[0].id,
-  };
+  const title = '“Test certificate” details';
 
-  const defaultOpenProps = {
-    certificate,
-    providerId: providers[0].id,
-  };
+  it('Should open & close with the Close button and with Escape', async () => {
+    const { openDialog } = renderDialog(
+      useCertificateViewerDialog,
+      { certificate, providerId: providers[0].id },
+      { fortifyClient: null, providers, currentProviderId: providers[0].id },
+    );
 
-  it('Should initialize, open & close dialog', async () => {
-    const { result } = renderHook(() => useCertificateViewerDialog(defaultProps));
+    await openDialog();
 
-    expect(result.current.dialog).toBeInstanceOf(Function);
-    expect(result.current.open).toBeInstanceOf(Function);
+    expect(await screen.findByText(title)).toBeInTheDocument();
+    expect(screen.getByText('x509 certificate viewer component')).toBeInTheDocument();
+    expect(screen.queryByRole('tab')).not.toBeInTheDocument();
 
-    await act(async () => {
-      await result.current.open(defaultOpenProps);
-    });
+    await userEvent.click(screen.getByRole('button', { name: 'Close' }));
 
-    const DialogComponent = result.current.dialog();
+    expect(screen.queryByText(title)).not.toBeInTheDocument();
 
-    expect(DialogComponent).not.toBeNull();
-    expect(DialogComponent?.props.certificates).toStrictEqual([certificate]);
+    await openDialog();
+    await screen.findByText(title);
+    await userEvent.keyboard('{Escape}');
 
-    DialogComponent?.props.onClose();
-    expect(result.current.dialog()).toBeNull();
+    expect(screen.queryByText(title)).not.toBeInTheDocument();
   });
 
-  it('Should close the dialog when the current provider is not found', async () => {
-    const { result } = renderHook(() => useCertificateViewerDialog(defaultProps));
+  it("Shouldn't open the dialog when its provider is not found", async () => {
+    const { openDialog } = renderDialog(
+      useCertificateViewerDialog,
+      { certificate, providerId: '2' },
+      { fortifyClient: null, providers, currentProviderId: providers[0].id },
+    );
 
-    await act(async () => {
-      await result.current.open({
-        ...defaultOpenProps,
-        providerId: '2',
-      });
-    });
+    await openDialog();
 
-    const DialogComponent = result.current.dialog();
-
-    expect(DialogComponent).toBeNull();
+    expect(screen.queryByText(title)).not.toBeInTheDocument();
   });
 
-  it('Should make a chain of certificates', async () => {
-    const mockFortifyClient: Partial<FortifyAPI> = {
+  it('Should close the dialog if its provider is removed', async () => {
+    const { openDialog, setContext } = renderDialog(
+      useCertificateViewerDialog,
+      { certificate, providerId: providers[0].id },
+      { fortifyClient: null, providers, currentProviderId: providers[0].id },
+    );
+
+    await openDialog();
+    await screen.findByText(title);
+
+    setContext({ fortifyClient: null, providers: [{ id: '2' }] as IProviderInfo[] });
+
+    expect(screen.queryByText(title)).not.toBeInTheDocument();
+  });
+
+  it('Should show the certificate chain in tabs', async () => {
+    const fortifyClient: Partial<FortifyAPI> = {
       getProviderById: vi.fn().mockResolvedValue({
+        id: providers[0].id,
         certStorage: {
           getChain: vi
             .fn()
@@ -94,21 +108,23 @@ describe('useCertificateViewerDialog', () => {
       }),
     };
 
-    const { result } = renderHook(() =>
-      useCertificateViewerDialog({
-        ...defaultProps,
-        fortifyClient: mockFortifyClient as FortifyAPI,
-      }),
+    const { openDialog } = renderDialog(
+      useCertificateViewerDialog,
+      { certificate, providerId: providers[0].id },
+      {
+        fortifyClient: fortifyClient as FortifyAPI,
+        providers,
+        currentProviderId: providers[0].id,
+      },
     );
 
-    await act(async () => {
-      await result.current.open(defaultOpenProps);
-    });
+    await openDialog();
 
-    const DialogComponent = result.current.dialog();
-
-    expect(mockFortifyClient.getProviderById).toHaveBeenCalled();
-    expect(DialogComponent).not.toBeNull();
-    expect(DialogComponent?.props.certificates.length).toBe(2);
+    expect(await screen.findAllByRole('tab')).toHaveLength(2);
+    expect(fortifyClient.getProviderById).toHaveBeenCalledWith(providers[0].id);
+    // The mocked viewers render as adjacent text nodes, one per certificate.
+    expect(
+      screen.getByRole('dialog').textContent?.match(/x509 certificate viewer component/g),
+    ).toHaveLength(2);
   });
 });

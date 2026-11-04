@@ -1,93 +1,99 @@
 import React from 'react';
-import type { IProviderInfo, FortifyAPI } from '@peculiar/fortify-client-core';
+import type { FortifyAPI } from '@peculiar/fortify-client-core';
+import { createDialog } from '@peculiar/react-components';
 import { X509Certificate } from '@peculiar/x509';
 import { cloneDeep } from 'lodash-es';
 import { useLockBodyScroll } from 'react-use';
 import type { ICertificateProps } from '../../types';
 import { CertificateViewerDialog } from '../../components/certificate-viewer-dialog';
 import { getCertificateSubject } from '../../utils/certificate';
+import { useCloseOnProviderRemoved, useDialogsContext } from '../dialogs-context';
 
-interface IUseCertificateViewerDialogOpenParams {
+export interface ICertificateViewerDialogOpenParams {
   providerId: string;
   certificate: ICertificateProps;
 }
 
-interface IUseCertificateViewerInitialParams {
-  providers: IProviderInfo[];
-  currentProviderId?: string;
-  fortifyClient: FortifyAPI | null;
-}
+/**
+ * Returns the certificate with its chain when the provider can build one,
+ * otherwise only the certificate.
+ */
+async function getCertificateWithChain(
+  certificate: ICertificateProps,
+  fortifyClient: FortifyAPI | null,
+  currentProviderId?: string,
+): Promise<ICertificateProps[]> {
+  try {
+    if (fortifyClient && currentProviderId && certificate.type === 'x509') {
+      const localProvider = await fortifyClient.getProviderById(currentProviderId);
 
-export function useCertificateViewerDialog(props: IUseCertificateViewerInitialParams) {
-  const { providers, currentProviderId, fortifyClient } = props;
-  const [isOpen, setIsOpen] = React.useState(false);
-  const openParamsRef = React.useRef<IUseCertificateViewerDialogOpenParams | undefined>(undefined);
-  const certificatesRef = React.useRef<ICertificateProps[] | undefined>(undefined);
+      const certificateCopy = cloneDeep(certificate);
 
-  const handleOpen = async (params: IUseCertificateViewerDialogOpenParams) => {
-    let currentCertificates: ICertificateProps[] = [params.certificate];
+      certificateCopy.raw = null as unknown as ArrayBuffer;
 
-    try {
-      if (fortifyClient && currentProviderId && params.certificate.type === 'x509') {
-        const localProvider = await fortifyClient.getProviderById(currentProviderId);
+      const chain = await localProvider.certStorage.getChain(certificateCopy);
 
-        const certificateCopy = cloneDeep(params.certificate);
+      if (chain.length > 1) {
+        return chain.map((chainItem) => {
+          const cert = new X509Certificate(chainItem.value);
 
-        certificateCopy.raw = null as unknown as ArrayBuffer;
-
-        const chain = await localProvider.certStorage.getChain(certificateCopy);
-
-        if (chain.length > 1) {
-          currentCertificates = chain.map((chainItem) => {
-            const cert = new X509Certificate(chainItem.value);
-
-            return {
-              raw: cert.rawData,
-              subjectName: cert.subject,
-              subject: getCertificateSubject(cert.subject),
-              type: 'x509',
-              index: cert.serialNumber,
-              issuerName: cert.issuer,
-              notBefore: cert.notBefore,
-              notAfter: cert.notAfter,
-              serialNumber: cert.serialNumber,
-              publicKey: cert.publicKey as unknown as CryptoKey,
-              providerID: localProvider.id,
-            };
-          });
-        }
+          return {
+            raw: cert.rawData,
+            subjectName: cert.subject,
+            subject: getCertificateSubject(cert.subject),
+            type: 'x509',
+            index: cert.serialNumber,
+            issuerName: cert.issuer,
+            notBefore: cert.notBefore,
+            notAfter: cert.notAfter,
+            serialNumber: cert.serialNumber,
+            publicKey: cert.publicKey as unknown as CryptoKey,
+            providerID: localProvider.id,
+          };
+        });
       }
-    } catch {
-      //
     }
-
-    certificatesRef.current = currentCertificates;
-    openParamsRef.current = params;
-    setIsOpen(true);
-  };
-
-  const handleClose = () => {
-    certificatesRef.current = undefined;
-    openParamsRef.current = undefined;
-    setIsOpen(false);
-  };
-
-  useLockBodyScroll(isOpen);
-
-  const currentProvider = providers.find(({ id }) => openParamsRef.current?.providerId === id);
-
-  if (isOpen && !currentProvider) {
-    handleClose();
+  } catch {
+    //
   }
 
-  return {
-    open: handleOpen,
-    dialog: () =>
-      isOpen && openParamsRef.current && certificatesRef?.current ? (
-        <CertificateViewerDialog
-          certificates={certificatesRef.current}
-          onClose={handleClose}
-        />
-      ) : null,
-  };
+  return [certificate];
 }
+
+export const useCertificateViewerDialog = createDialog<ICertificateViewerDialogOpenParams>(
+  ({ openParams, close }) => {
+    const { certificate, providerId } = openParams;
+    const { fortifyClient, currentProviderId } = useDialogsContext();
+    const provider = useCloseOnProviderRemoved(providerId, close);
+    // The dialog shows up once the chain is loaded, as before the createDialog refactor.
+    const [certificates, setCertificates] = React.useState<ICertificateProps[] | null>(null);
+    const isVisible = Boolean(provider && certificates);
+
+    React.useEffect(() => {
+      let isCurrent = true;
+
+      void getCertificateWithChain(certificate, fortifyClient, currentProviderId).then((result) => {
+        if (isCurrent) {
+          setCertificates(result);
+        }
+      });
+
+      return () => {
+        isCurrent = false;
+      };
+    }, [certificate, fortifyClient, currentProviderId]);
+
+    useLockBodyScroll(isVisible);
+
+    if (!isVisible || !certificates) {
+      return null;
+    }
+
+    return (
+      <CertificateViewerDialog
+        certificates={certificates}
+        onClose={close}
+      />
+    );
+  },
+);

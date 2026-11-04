@@ -1,260 +1,114 @@
-import type { IProviderInfo, FortifyAPI } from '@peculiar/fortify-client-core';
-import { renderHook, act } from '@testing';
+import type { FortifyAPI, IProviderInfo } from '@peculiar/fortify-client-core';
+import { screen, userEvent, within } from '@testing';
+import type { TCertificateType } from '../../types';
+import { certificateSubjectToString } from '../../utils/certificate';
+import { renderDialog } from '../test-utils';
 import { useCertificateCreateDialog } from './useCertificateCreateDialog';
 
-const addToastMock = vi.fn();
-
-vi.mock('@peculiar/react-components', async () => {
-  const actual = await vi.importActual('@peculiar/react-components');
-
-  return {
-    ...actual,
-    useToast: () => ({ addToast: addToastMock }),
-  };
-});
-
 describe('useCertificateCreateDialog', () => {
-  const algorithm = {
-    hash: 'SHA-256',
-    signature: 'RSASSA-PKCS1-v1_5',
-  };
-
-  const defaultOpenProps = {
-    subject: { commonName: 'example.com' },
-    type: 'x509',
-    algorithm,
-  };
-
-  const defaultResultMock = {
-    hashAlgorithm: 'SHA-256',
-    signatureAlgorithm: 'RSASSA-PKCS1-v1_5',
-    subjectName: 'commonName=example.com',
-  };
-
   const providers = [
     {
       id: '1',
       name: 'Provider 1',
     },
+    {
+      id: '2',
+      name: 'Provider 2',
+    },
   ] as IProviderInfo[];
 
-  it('Should initialize', () => {
-    const { result } = renderHook(() =>
-      useCertificateCreateDialog({
-        providers,
-        onSuccess: vi.fn(),
-      }),
+  const expectedRequest = {
+    subjectName: certificateSubjectToString({ CN: 'example.com' }),
+    hashAlgorithm: 'SHA-256',
+    signatureAlgorithm: 'EC-P256',
+  };
+
+  function setup(type: TCertificateType, fortifyClient: Partial<FortifyAPI> | null) {
+    const onSuccess = vi.fn();
+    const utils = renderDialog(
+      useCertificateCreateDialog,
+      { type, onSuccess },
+      { fortifyClient: fortifyClient as FortifyAPI | null, providers, currentProviderId: '1' },
     );
 
-    expect(result.current.dialog).toBeInstanceOf(Function);
-    expect(result.current.open).toBeInstanceOf(Function);
+    return { ...utils, onSuccess };
+  }
+
+  async function selectOption(comboboxIndex: number, optionName: string) {
+    await userEvent.click(screen.getAllByRole('combobox')[comboboxIndex]);
+    await userEvent.click(screen.getByRole('option', { name: optionName }));
+  }
+
+  const createButtonName = /^Create (certificate|CSR)/;
+
+  // Fills the TLS Server Authentication form and submits it.
+  async function submitServerAuthForm() {
+    await selectOption(1, 'TLS Server Authentication');
+    await userEvent.type(screen.getByRole('textbox', { name: 'Common name' }), 'example.com');
+    await userEvent.click(screen.getByRole('button', { name: createButtonName }));
+  }
+
+  it('Should open & close the dialog', async () => {
+    const { openDialog } = setup('x509', null);
+
+    expect(screen.queryByText('Select type')).not.toBeInTheDocument();
+
+    await openDialog();
+
+    expect(screen.getByText('Select type')).toBeInTheDocument();
+
+    await userEvent.click(within(screen.getByRole('dialog')).getAllByRole('button')[0]);
+
+    expect(screen.queryByText('Select type')).not.toBeInTheDocument();
   });
 
-  it('Should open & close the dialog with x509 type', () => {
-    const { result } = renderHook(() =>
-      useCertificateCreateDialog({
-        providers,
-        onSuccess: vi.fn(),
-      }),
-    );
+  it('Should create a self-signed certificate, show a toast & close (x509)', async () => {
+    const fortifyClient = { createX509: vi.fn().mockResolvedValue({}) };
+    const { openDialog, onSuccess } = setup('x509', fortifyClient);
 
-    act(() => {
-      result.current.open('x509');
+    await openDialog();
+    await submitServerAuthForm();
+
+    expect(fortifyClient.createX509).toHaveBeenCalledWith('1', {
+      ...expectedRequest,
+      extensions: { extendedKeyUsage: ['1.3.6.1.5.5.7.3.1'] },
     });
-
-    const DialogComponent = result.current.dialog();
-
-    expect(DialogComponent).not.toBeNull();
-    expect(DialogComponent?.props.type).toBe('x509');
-
-    act(() => {
-      DialogComponent?.props.onDialogClose();
-    });
-
-    expect(result.current.dialog()).toBeNull();
+    expect(onSuccess).toHaveBeenCalledWith('1');
+    expect(await screen.findByText('Certificate created.')).toBeInTheDocument();
+    expect(screen.queryByText('Select type')).not.toBeInTheDocument();
   });
 
-  it('Should open the dialog with csr type', () => {
-    const { result } = renderHook(() =>
-      useCertificateCreateDialog({
-        providers,
-        onSuccess: vi.fn(),
-      }),
-    );
+  it('Should create a CSR in the selected provider (csr)', async () => {
+    const fortifyClient = { createPKCS10: vi.fn().mockResolvedValue({}) };
+    const { openDialog, onSuccess } = setup('csr', fortifyClient);
 
-    act(() => {
-      result.current.open('csr');
-    });
+    await openDialog();
+    await selectOption(0, 'Provider 2');
+    await submitServerAuthForm();
 
-    const DialogComponent = result.current.dialog();
-
-    expect(DialogComponent?.props.type).toBe('csr');
+    expect(fortifyClient.createPKCS10).toHaveBeenCalledWith('2', expectedRequest);
+    expect(onSuccess).toHaveBeenCalledWith('2');
   });
 
-  it('Should call onSuccess (x509)', async () => {
-    const onSuccessMock = vi.fn();
-    const mockFortifyClient: Partial<FortifyAPI> = { createX509: vi.fn().mockResolvedValue({}) };
+  it('Should show an error toast & stay open if the creation fails', async () => {
+    const fortifyClient = { createX509: vi.fn().mockRejectedValue(new Error('Error')) };
+    const { openDialog, onSuccess } = setup('x509', fortifyClient);
 
-    const { result } = renderHook(() =>
-      useCertificateCreateDialog({
-        providers,
-        onSuccess: onSuccessMock,
-        fortifyClient: mockFortifyClient as FortifyAPI,
-        currentProviderId: '1',
-      }),
-    );
+    await openDialog();
+    await submitServerAuthForm();
 
-    act(() => {
-      result.current.open('x509');
-    });
-    const DialogComponent = result.current.dialog();
-
-    DialogComponent?.props.onProviderSelect('2');
-
-    await act(async () => {
-      if (DialogComponent) {
-        await DialogComponent.props.onCreateButtonClick({
-          ...defaultOpenProps,
-          extendedKeyUsages: ['serverAuth', 'clientAuth'],
-        });
-      }
-    });
-
-    expect(onSuccessMock).toHaveBeenCalledWith('2');
-    expect(mockFortifyClient.createX509).toHaveBeenCalledWith('2', {
-      ...defaultResultMock,
-      extensions: { extendedKeyUsage: ['serverAuth', 'clientAuth'] },
-    });
+    expect(onSuccess).not.toHaveBeenCalled();
+    expect(await screen.findByText("Can't create certificate")).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: createButtonName })).toBeInTheDocument();
   });
 
-  it('Should call onSuccess (csr)', async () => {
-    const onSuccessMock = vi.fn();
-    const mockFortifyClient: Partial<FortifyAPI> = { createPKCS10: vi.fn().mockResolvedValue({}) };
+  it("Shouldn't create anything without a fortifyClient", async () => {
+    const { openDialog, onSuccess } = setup('x509', null);
 
-    const { result } = renderHook(() =>
-      useCertificateCreateDialog({
-        providers,
-        onSuccess: onSuccessMock,
-        fortifyClient: mockFortifyClient as FortifyAPI,
-        currentProviderId: '1',
-      }),
-    );
+    await openDialog();
+    await submitServerAuthForm();
 
-    act(() => {
-      result.current.open('csr');
-    });
-
-    await act(async () => {
-      const DialogComponent = result.current.dialog();
-
-      if (DialogComponent) {
-        await DialogComponent.props.onCreateButtonClick({
-          ...defaultOpenProps,
-          type: 'csr',
-        });
-      }
-    });
-
-    expect(onSuccessMock).toHaveBeenCalledWith('1');
-    expect(mockFortifyClient.createPKCS10).toHaveBeenCalledWith('1', defaultResultMock);
-  });
-
-  it('Should show error message if certificate creation fails', async () => {
-    const onSuccessMock = vi.fn();
-    const mockFortifyClient: Partial<FortifyAPI> = {
-      createX509: vi.fn().mockImplementation(() => {
-        throw new Error('Error');
-      }),
-    };
-
-    const { result } = renderHook(() =>
-      useCertificateCreateDialog({
-        providers,
-        onSuccess: onSuccessMock,
-        fortifyClient: mockFortifyClient as FortifyAPI,
-        currentProviderId: '1',
-      }),
-    );
-
-    act(() => {
-      result.current.open('x509');
-    });
-
-    await act(async () => {
-      const DialogComponent = result.current.dialog();
-
-      if (DialogComponent) {
-        await DialogComponent.props.onCreateButtonClick(defaultOpenProps);
-      }
-    });
-
-    expect(onSuccessMock).not.toHaveBeenCalled();
-    expect(addToastMock).toHaveBeenCalledWith(
-      expect.objectContaining({ message: "Can't create certificate" }),
-    );
-    addToastMock.mockClear();
-  });
-
-  it('Should show error message if pass invalid certificate type', async () => {
-    const onSuccessMock = vi.fn();
-    const typeMock = 'unregisterd_type' as 'x509';
-    const mockFortifyClient: Partial<FortifyAPI> = { createX509: vi.fn().mockResolvedValue({}) };
-
-    const { result } = renderHook(() =>
-      useCertificateCreateDialog({
-        providers,
-        onSuccess: onSuccessMock,
-        fortifyClient: mockFortifyClient as FortifyAPI,
-        currentProviderId: '1',
-      }),
-    );
-
-    act(() => {
-      result.current.open(typeMock);
-    });
-
-    await act(async () => {
-      const DialogComponent = result.current.dialog();
-
-      if (DialogComponent) {
-        await DialogComponent.props.onCreateButtonClick({
-          ...defaultOpenProps,
-          type: typeMock,
-        });
-      }
-    });
-
-    expect(onSuccessMock).not.toHaveBeenCalled();
-    expect(addToastMock).toHaveBeenCalledWith(
-      expect.objectContaining({ message: "Can't create certificate" }),
-    );
-    addToastMock.mockClear();
-  });
-
-  it("Shouldn't call if fortifyClient not provided", async () => {
-    const onSuccessMock = vi.fn();
-
-    const { result } = renderHook(() =>
-      useCertificateCreateDialog({
-        providers,
-        onSuccess: onSuccessMock,
-        fortifyClient: null,
-      }),
-    );
-
-    act(() => {
-      result.current.open('x509');
-    });
-
-    const DialogComponent = result.current.dialog();
-
-    await act(async () => {
-      if (DialogComponent) {
-        await DialogComponent.props.onCreateButtonClick(defaultOpenProps);
-      }
-    });
-
-    expect(onSuccessMock).not.toHaveBeenCalled();
-    expect(addToastMock).not.toHaveBeenCalled();
+    expect(onSuccess).not.toHaveBeenCalled();
+    expect(screen.queryByText("Can't create certificate")).not.toBeInTheDocument();
   });
 });

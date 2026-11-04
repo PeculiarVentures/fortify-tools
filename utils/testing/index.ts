@@ -7,5 +7,6 @@ export {
   renderHook,
   act,
   waitFor,
+  within,
 } from '@testing-library/react';
 export { userEvent } from '@testing-library/user-event';
