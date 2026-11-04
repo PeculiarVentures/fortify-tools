@@ -21,8 +21,8 @@ interface IUseCertificateViewerInitialParams {
 export function useCertificateViewerDialog(props: IUseCertificateViewerInitialParams) {
   const { providers, currentProviderId, fortifyClient } = props;
   const [isOpen, setIsOpen] = React.useState(false);
-  const openParamsRef = React.useRef<IUseCertificateViewerDialogOpenParams>();
-  const certificatesRef = React.useRef<ICertificateProps[]>();
+  const openParamsRef = React.useRef<IUseCertificateViewerDialogOpenParams | undefined>(undefined);
+  const certificatesRef = React.useRef<ICertificateProps[] | undefined>(undefined);
 
   const handleOpen = async (params: IUseCertificateViewerDialogOpenParams) => {
     let currentCertificates: ICertificateProps[] = [params.certificate];

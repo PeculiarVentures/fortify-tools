@@ -10,7 +10,7 @@ interface IUseCertificateViewerInitialParams {
 export function useProviderInfoDialog(props: IUseCertificateViewerInitialParams) {
   const { providers } = props;
   const [isOpen, setIsOpen] = React.useState(false);
-  const providerRef = React.useRef<IProviderInfo>();
+  const providerRef = React.useRef<IProviderInfo | undefined>(undefined);
 
   const handleOpen = (provider: IProviderInfo) => {
     providerRef.current = provider;
