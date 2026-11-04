@@ -1,23 +1,17 @@
-import { clsx } from 'clsx';
 import React, { ComponentProps } from 'react';
+import { Button, IconButton, Menu, TextField, Tooltip } from '@peculiar/react-components';
+import { clsx } from 'clsx';
 import { useTranslation } from 'react-i18next';
-import {
-  Button,
-  IconButton,
-  Menu,
-  TextField,
-  Tooltip,
-} from '@peculiar/react-components';
+import CertificatSSCIcon from '../../icons/certificate-30.svg?react';
+import CrossIcon from '../../icons/cross-30.svg?react';
+import CertificatCSRIcon from '../../icons/csr-30.svg?react';
+import ImportIcon from '../../icons/import-30.svg?react';
 import InfoIcon from '../../icons/info-20.svg?react';
 import LoginIcon from '../../icons/login-20.svg?react';
 import LogoutIcon from '../../icons/logout-20.svg?react';
-import ReloadIcon from '../../icons/reload-20.svg?react';
-import ImportIcon from '../../icons/import-30.svg?react';
-import SearchIcon from '../../icons/search.svg?react';
 import PlusIcon from '../../icons/plus-20.svg?react';
-import CertificatCSRIcon from '../../icons/csr-30.svg?react';
-import CertificatSSCIcon from '../../icons/certificate-30.svg?react';
-import CrossIcon from '../../icons/cross-30.svg?react';
+import ReloadIcon from '../../icons/reload-20.svg?react';
+import SearchIcon from '../../icons/search.svg?react';
 import styles from './styles/index.module.scss';
 
 interface ICertificatesTopbarProps {
@@ -34,9 +28,7 @@ interface ICertificatesTopbarProps {
   onLoginLogout: (isLoggedin: boolean) => void;
 }
 
-export const CertificatesTopbar: React.FunctionComponent<
-  ICertificatesTopbarProps
-> = (props) => {
+export const CertificatesTopbar: React.FunctionComponent<ICertificatesTopbarProps> = (props) => {
   const {
     className,
     searchValue = '',
@@ -66,11 +58,7 @@ export const CertificatesTopbar: React.FunctionComponent<
           arrow={true}
           placement="bottom-end"
           offset={10}
-          title={
-            !isLoggedIn
-              ? t('topbar.create-certificate-disabled-tooltip')
-              : undefined
-          }
+          title={!isLoggedIn ? t('topbar.create-certificate-disabled-tooltip') : undefined}
         >
           <Button
             color="primary"
@@ -91,16 +79,12 @@ export const CertificatesTopbar: React.FunctionComponent<
         options={[
           {
             label: t('topbar.create-certificate-scr'),
-            startIcon: (
-              <CertificatCSRIcon className={styles.creation_menu_icon} />
-            ),
+            startIcon: <CertificatCSRIcon className={styles.creation_menu_icon} />,
             onClick: () => onCreate('csr'),
           },
           {
             label: t('topbar.create-certificate-ssc'),
-            startIcon: (
-              <CertificatSSCIcon className={styles.creation_menu_icon} />
-            ),
+            startIcon: <CertificatSSCIcon className={styles.creation_menu_icon} />,
             onClick: () => onCreate('x509'),
           },
           {

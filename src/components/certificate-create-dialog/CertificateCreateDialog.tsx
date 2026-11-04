@@ -1,7 +1,5 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { IProviderInfo } from '@peculiar/fortify-client-core';
-import { clsx } from 'clsx';
 import {
   Dialog,
   ArrowRightIcon,
@@ -9,15 +7,11 @@ import {
   Typography,
   CircularProgress,
 } from '@peculiar/react-components';
-import {
-  CertificateTypeSelect,
-  ICertificateTypeSelectValue,
-} from '../certificate-type-select';
+import { clsx } from 'clsx';
+import { useTranslation } from 'react-i18next';
+import { certificateKeyUsageExtensions } from '../../config/data';
+import { TCertificateType } from '../../types';
 import { Card } from '../card';
-import {
-  CertificateCreateByEmail,
-  ICertificateCreateByEmailData,
-} from '../certificate-create-by-email';
 import {
   CertificateCreateByCname,
   ICertificateCreateByCnameData,
@@ -26,15 +20,18 @@ import {
   CertificateCreateByCustom,
   ICertificateCreateByCustomData,
 } from '../certificate-create-by-custom';
+import {
+  CertificateCreateByEmail,
+  ICertificateCreateByEmailData,
+} from '../certificate-create-by-email';
+import { CertificateTypeSelect, ICertificateTypeSelectValue } from '../certificate-type-select';
 import { CertificatesProvidersSelectList } from '../certificates-providers-select-list';
-import { TCertificateType } from '../../types';
-import { certificateKeyUsageExtensions } from '../../config/data';
 import styles from './styles/index.module.scss';
 
-export type TCertificateCreateDataProps
-  = | ICertificateCreateByCnameData
-    | ICertificateCreateByEmailData
-    | ICertificateCreateByCustomData;
+export type TCertificateCreateDataProps =
+  | ICertificateCreateByCnameData
+  | ICertificateCreateByEmailData
+  | ICertificateCreateByCustomData;
 
 interface ICertificateCreateDialogProps {
   type: TCertificateType;
@@ -46,9 +43,9 @@ interface ICertificateCreateDialogProps {
   onCreateButtonClick: (data: TCertificateCreateDataProps) => void;
 }
 
-export const CertificateCreateDialog: React.FunctionComponent<
-  ICertificateCreateDialogProps
-> = (props) => {
+export const CertificateCreateDialog: React.FunctionComponent<ICertificateCreateDialogProps> = (
+  props,
+) => {
   const {
     loading,
     type = 'x509',
@@ -133,8 +130,10 @@ export const CertificateCreateDialog: React.FunctionComponent<
 
   return (
     <Dialog
-      open fullScreen
-      className={styles.dialog} onClose={onDialogClose}
+      open
+      fullScreen
+      className={styles.dialog}
+      onClose={onDialogClose}
     >
       <div className={styles.title}>
         <div className={styles.centered}>
@@ -148,7 +147,10 @@ export const CertificateCreateDialog: React.FunctionComponent<
             </IconButton>
           </div>
           <div className={styles.title_label}>
-            <Typography variant="h4" color="black">
+            <Typography
+              variant="h4"
+              color="black"
+            >
               {t(`certificates.dialog.create.title.${type}`)}
             </Typography>
           </div>
@@ -166,7 +168,10 @@ export const CertificateCreateDialog: React.FunctionComponent<
       <div className={styles.content}>
         <div className={clsx(styles.centered, styles.content_box)}>
           <Card>
-            <Typography variant="h5" color="black">
+            <Typography
+              variant="h5"
+              color="black"
+            >
               {t(`certificates.dialog.create.select-type.${type}`)}
             </Typography>
             <CertificateTypeSelect
@@ -177,16 +182,17 @@ export const CertificateCreateDialog: React.FunctionComponent<
           {renderContent()}
         </div>
       </div>
-      {loading
-        ? (
-            <div className={styles.loading}>
-              <CircularProgress />
-              <Typography variant="b2" color="gray-9">
-                {t('certificates.dialog.create.loading-text')}
-              </Typography>
-            </div>
-          )
-        : null}
+      {loading ? (
+        <div className={styles.loading}>
+          <CircularProgress />
+          <Typography
+            variant="b2"
+            color="gray-9"
+          >
+            {t('certificates.dialog.create.loading-text')}
+          </Typography>
+        </div>
+      ) : null}
     </Dialog>
   );
 };

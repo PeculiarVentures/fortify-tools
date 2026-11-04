@@ -1,15 +1,13 @@
 import React from 'react';
-import { useLockBodyScroll } from 'react-use';
 import type { IProviderInfo } from '@peculiar/fortify-client-core';
+import { useLockBodyScroll } from 'react-use';
 import { ProviderInfoDialog } from '../../components/provider-info-dialog';
 
 interface IUseCertificateViewerInitialParams {
   providers: IProviderInfo[];
 }
 
-export function useProviderInfoDialog(
-  props: IUseCertificateViewerInitialParams,
-) {
+export function useProviderInfoDialog(props: IUseCertificateViewerInitialParams) {
   const { providers } = props;
   const [isOpen, setIsOpen] = React.useState(false);
   const providerRef = React.useRef<IProviderInfo>();
@@ -26,9 +24,7 @@ export function useProviderInfoDialog(
 
   useLockBodyScroll(isOpen);
 
-  const currentProvider = providers.find(
-    ({ id }) => providerRef.current?.id === id,
-  );
+  const currentProvider = providers.find(({ id }) => providerRef.current?.id === id);
 
   if (isOpen && !currentProvider) {
     handleClose();
@@ -37,13 +33,11 @@ export function useProviderInfoDialog(
   return {
     open: handleOpen,
     dialog: () =>
-      isOpen && providerRef.current
-        ? (
-            <ProviderInfoDialog
-              data={providerRef.current}
-              onDialogClose={handleClose}
-            />
-          )
-        : null,
+      isOpen && providerRef.current ? (
+        <ProviderInfoDialog
+          data={providerRef.current}
+          onDialogClose={handleClose}
+        />
+      ) : null,
   };
 }

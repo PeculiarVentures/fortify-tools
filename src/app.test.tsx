@@ -1,8 +1,6 @@
-import {
-  render, screen, userEvent, waitFor,
-} from '@testing';
 import type { IProviderInfo } from '@peculiar/fortify-client-core';
 import { FortifyAPI } from '@peculiar/fortify-client-core';
+import { render, screen, userEvent, waitFor } from '@testing';
 import { App } from './app';
 
 vi.mock('@peculiar/fortify-client-core');
@@ -77,43 +75,33 @@ describe('<App />', () => {
 
   const mockFortifyAPIInstanceWithCertificateRequests = {
     ...mockFortifyAPIInstance,
-    getCertificateRequestsByProviderId: vi
-      .fn()
-      .mockResolvedValue(certificateRequestsMock),
+    getCertificateRequestsByProviderId: vi.fn().mockResolvedValue(certificateRequestsMock),
   } as unknown as FortifyAPI;
 
   const mockFortifyAPI = (instance: Partial<FortifyAPI>) => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      function MockFortifyAPI() {
-        return instance as FortifyAPI;
-      } as unknown as typeof FortifyAPI,
-    );
+    vi.mocked(FortifyAPI).mockImplementation(function MockFortifyAPI() {
+      return instance as FortifyAPI;
+    } as unknown as typeof FortifyAPI);
   };
 
   it('Should render, show providers & certificates & certificate requests', async () => {
     mockFortifyAPI(mockFortifyAPIInstanceWithCertificateRequests);
 
-    render(
-      <App />,
-    );
+    render(<App />);
 
     await waitFor(() => {
       expect(screen.getByText(/Provider 1/)).toBeInTheDocument();
       expect(screen.getByText(/Provider 2/)).toBeInTheDocument();
       expect(screen.getByText(/Certificate test 1/)).toBeInTheDocument();
       expect(screen.getByText(/Certificate test 2/)).toBeInTheDocument();
-      expect(
-        screen.getByText(/Certificate request test 1/),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/Certificate request test 1/)).toBeInTheDocument();
     });
   });
 
   it('Should open provider info dialog', async () => {
     mockFortifyAPI(mockFortifyAPIInstance);
 
-    render(
-      <App />,
-    );
+    render(<App />);
 
     await waitFor(() => {
       expect(screen.getByText(/Certificate test 1/)).toBeInTheDocument();
@@ -129,9 +117,7 @@ describe('<App />', () => {
   it('Should open delete certificate dialog', async () => {
     mockFortifyAPI(mockFortifyAPIInstance);
 
-    render(
-      <App />,
-    );
+    render(<App />);
 
     await waitFor(() => {
       expect(screen.getByText(/Certificate test 1/)).toBeInTheDocument();
@@ -150,55 +136,39 @@ describe('<App />', () => {
   it('Should open view certificate details dialog', async () => {
     mockFortifyAPI(mockFortifyAPIInstance);
 
-    render(
-      <App />,
-    );
+    render(<App />);
 
     await waitFor(() => {
       expect(screen.getByText(/Certificate test 1/)).toBeInTheDocument();
     });
 
-    await userEvent.click(
-      screen.getAllByRole('button', { name: /View details/ })[0],
-    );
+    await userEvent.click(screen.getAllByRole('button', { name: /View details/ })[0]);
 
     await waitFor(() => {
-      expect(
-        screen.getByText(/“Certificate test 2” details/),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/“Certificate test 2” details/)).toBeInTheDocument();
     });
   });
 
   it('Should open view certificate request details dialog', async () => {
     mockFortifyAPI(mockFortifyAPIInstanceWithCertificateRequests);
 
-    render(
-      <App />,
-    );
+    render(<App />);
 
     await waitFor(() => {
-      expect(
-        screen.getByText(/Certificate request test 1/),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/Certificate request test 1/)).toBeInTheDocument();
     });
 
-    await userEvent.click(
-      screen.getAllByRole('button', { name: /View details/ })[0],
-    );
+    await userEvent.click(screen.getAllByRole('button', { name: /View details/ })[0]);
 
     await waitFor(() => {
-      expect(
-        screen.getByText(/“Certificate request test 1” details/),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/“Certificate request test 1” details/)).toBeInTheDocument();
     });
   });
 
   it('Should open import certificate dialog', async () => {
     mockFortifyAPI(mockFortifyAPIInstance);
 
-    render(
-      <App />,
-    );
+    render(<App />);
 
     await waitFor(() => {
       expect(screen.getByText(/Certificate test 1/)).toBeInTheDocument();
@@ -208,23 +178,17 @@ describe('<App />', () => {
 
     expect(screen.getByRole('presentation')).toBeInTheDocument();
 
-    await userEvent.click(
-      screen.getByRole('menuitem', { name: /Import certificate/ }),
-    );
+    await userEvent.click(screen.getByRole('menuitem', { name: /Import certificate/ }));
 
     await waitFor(() => {
-      expect(
-        screen.getByRole('heading', { name: /Import certificate/ }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: /Import certificate/ })).toBeInTheDocument();
     });
   });
 
   it('Should open create certificate (x509) dialog', async () => {
     mockFortifyAPI(mockFortifyAPIInstance);
 
-    render(
-      <App />,
-    );
+    render(<App />);
 
     await waitFor(() => {
       expect(screen.getByText(/Certificate test 1/)).toBeInTheDocument();
@@ -234,9 +198,7 @@ describe('<App />', () => {
 
     expect(screen.getByRole('presentation')).toBeInTheDocument();
 
-    await userEvent.click(
-      screen.getByRole('menuitem', { name: /Create self-signed certificate/ }),
-    );
+    await userEvent.click(screen.getByRole('menuitem', { name: /Create self-signed certificate/ }));
 
     await waitFor(() => {
       expect(
@@ -248,9 +210,7 @@ describe('<App />', () => {
   it('Should open create certificate (CSR) dialog', async () => {
     mockFortifyAPI(mockFortifyAPIInstance);
 
-    render(
-      <App />,
-    );
+    render(<App />);
 
     await waitFor(() => {
       expect(screen.getByText(/Certificate test 1/)).toBeInTheDocument();
@@ -274,9 +234,7 @@ describe('<App />', () => {
   it('Should handle search & clear search', async () => {
     mockFortifyAPI(mockFortifyAPIInstance);
 
-    render(
-      <App />,
-    );
+    render(<App />);
 
     await waitFor(() => {
       expect(screen.getByText(/Certificate test 1/)).toBeInTheDocument();
@@ -298,9 +256,7 @@ describe('<App />', () => {
   it('Should handle sorting', async () => {
     mockFortifyAPI(mockFortifyAPIInstance);
 
-    render(
-      <App />,
-    );
+    render(<App />);
 
     await waitFor(() => {
       expect(screen.getByText(/Certificate test 1/)).toBeInTheDocument();

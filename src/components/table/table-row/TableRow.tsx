@@ -1,5 +1,5 @@
-import { clsx } from 'clsx';
 import React from 'react';
+import { clsx } from 'clsx';
 import styles from './styles/index.module.scss';
 
 export const TableRow = React.forwardRef<

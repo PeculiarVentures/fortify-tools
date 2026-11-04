@@ -1,11 +1,8 @@
 import React, { ComponentProps } from 'react';
-import { useTranslation } from 'react-i18next';
-import { clsx } from 'clsx';
-import {
-  EHashAlgorithm,
-  ESignatureAlgorithm,
-} from '@peculiar/fortify-client-core';
+import { EHashAlgorithm, ESignatureAlgorithm } from '@peculiar/fortify-client-core';
 import { Select, Typography } from '@peculiar/react-components';
+import { clsx } from 'clsx';
+import { useTranslation } from 'react-i18next';
 import styles from './styles/index.module.scss';
 
 interface ICertificateKeyPropertiesSelectProps {
@@ -23,7 +20,10 @@ export const CertificateKeyPropertiesSelect: React.FunctionComponent<
 
   return (
     <div className={clsx(styles.certificate_key_prop_select_box, className)}>
-      <Typography variant="s2" color="black">
+      <Typography
+        variant="s2"
+        color="black"
+      >
         {t('certificates.key-properties')}
       </Typography>
       <div className={styles.certificate_key_prop_selects}>

@@ -1,13 +1,12 @@
-import {
-  render, userEvent, screen,
-} from '@testing';
+import { render, userEvent, screen } from '@testing';
 import { CertificateCreateByCname } from './CertificateCreateByCname';
 
 describe('<CertificateCreateByCname />', () => {
   const createDataResult = {
     subject: { CN: 'example.com' },
     algorithm: {
-      hash: 'SHA-256', signature: 'EC-P256',
+      hash: 'SHA-256',
+      signature: 'EC-P256',
     },
     type: 'x509',
   };

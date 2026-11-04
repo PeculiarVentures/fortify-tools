@@ -1,5 +1,5 @@
-import { renderHook, act } from '@testing';
 import type { IProviderInfo, FortifyAPI } from '@peculiar/fortify-client-core';
+import { renderHook, act } from '@testing';
 import { useCertificateDeleteDialog } from './useCertificateDeleteDialog';
 
 const addToastMock = vi.fn();
@@ -29,8 +29,7 @@ describe('useCertificateDeleteDialog', () => {
 
   it('Should open dialog, handle onSuccess & close dialog', async () => {
     const mockFortifyClient: Partial<FortifyAPI> = {
-      removeCertificateById: vi.fn()
-        .mockResolvedValue({}),
+      removeCertificateById: vi.fn().mockResolvedValue({}),
     };
     const onSuccessMock = vi.fn();
 
@@ -89,9 +88,7 @@ describe('useCertificateDeleteDialog', () => {
       result.current.open(defaultOpenProps);
     });
 
-    rerender([
-      { id: '2' },
-    ] as IProviderInfo[]);
+    rerender([{ id: '2' }] as IProviderInfo[]);
 
     expect(result.current.dialog()).toBeNull();
   });
@@ -127,17 +124,15 @@ describe('useCertificateDeleteDialog', () => {
     expect(onSuccessMock).not.toHaveBeenCalled();
     expect(addToastMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        message:
-          'Failed to delete certificate because of error. Please try again.',
+        message: 'Failed to delete certificate because of error. Please try again.',
       }),
     );
     addToastMock.mockClear();
   });
 
-  it('Shouldn\'t call if no certificate id is provided', async () => {
+  it("Shouldn't call if no certificate id is provided", async () => {
     const mockFortifyClient: Partial<FortifyAPI> = {
-      removeCertificateById: vi.fn()
-        .mockResolvedValue({}),
+      removeCertificateById: vi.fn().mockResolvedValue({}),
     };
     const onSuccessMock = vi.fn();
 
@@ -165,7 +160,7 @@ describe('useCertificateDeleteDialog', () => {
     expect(addToastMock).not.toHaveBeenCalled();
   });
 
-  it('Shouldn\'t call if no fortifyClient is provided', async () => {
+  it("Shouldn't call if no fortifyClient is provided", async () => {
     const onSuccessMock = vi.fn();
 
     const { result } = renderHook(() =>

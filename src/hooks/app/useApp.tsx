@@ -5,8 +5,8 @@ import {
   ICertificate,
   ICertificateRequest,
 } from '@peculiar/fortify-client-core';
-import { useTranslation } from 'react-i18next';
 import { useToast } from '@peculiar/react-components';
+import { useTranslation } from 'react-i18next';
 import { TAppFetchingStatus, IAppFetchingType } from './types';
 
 export function useApp() {
@@ -16,14 +16,13 @@ export function useApp() {
   const fortifyClient = React.useRef<FortifyAPI | null>(null);
 
   const [providers, setProviders] = React.useState<IProviderInfo[]>([]);
-  const [currentProvider, setCurrentProvider] = React.useState<
-    IProviderInfo | undefined
-  >(undefined);
-  const [isCurrentProviderLogedin, setIsCurrentProviderLogedin]
-    = React.useState(false);
-  const [certificates, setCertificates] = React.useState<
-    (ICertificate | ICertificateRequest)[]
-  >([]);
+  const [currentProvider, setCurrentProvider] = React.useState<IProviderInfo | undefined>(
+    undefined,
+  );
+  const [isCurrentProviderLogedin, setIsCurrentProviderLogedin] = React.useState(false);
+  const [certificates, setCertificates] = React.useState<(ICertificate | ICertificateRequest)[]>(
+    [],
+  );
   const [challenge, setChallenge] = React.useState<string | null>(null);
   const [fetching, setFetching] = React.useState<IAppFetchingType>({ connectionDetect: 'pending' });
 
@@ -34,10 +33,7 @@ export function useApp() {
   const { addToast } = useToast();
   const { t } = useTranslation();
 
-  const setFetchingValue = (
-    name: keyof IAppFetchingType,
-    value: TAppFetchingStatus,
-  ) => {
+  const setFetchingValue = (name: keyof IAppFetchingType, value: TAppFetchingStatus) => {
     setFetching((prevState) => ({
       ...prevState,
       [name]: value,
@@ -107,9 +103,7 @@ export function useApp() {
         return;
       }
 
-      const curProvider = providersLocal.find(
-        ({ id }) => currentProvider.id === id,
-      );
+      const curProvider = providersLocal.find(({ id }) => currentProvider.id === id);
 
       if (!curProvider) {
         setCurrentProvider(defaultProvider);
@@ -150,10 +144,7 @@ export function useApp() {
       await fortifyClient.current.connect();
     } catch (error) {
       if (error && error instanceof Error) {
-        if (
-          error.message.indexOf('update your client to the latest version')
-          !== -1
-        ) {
+        if (error.message.indexOf('update your client to the latest version') !== -1) {
           setFetchingValue('connectionClientUpdate', 'rejected');
         }
       }
@@ -191,10 +182,8 @@ export function useApp() {
     }
 
     try {
-      const requests
-        = await fortifyClient.current.getCertificateRequestsByProviderId(id);
-      const providerCertificates
-        = await fortifyClient.current.getCertificatesByProviderId(id);
+      const requests = await fortifyClient.current.getCertificateRequestsByProviderId(id);
+      const providerCertificates = await fortifyClient.current.getCertificatesByProviderId(id);
 
       setCertificates([...providerCertificates, ...requests]);
       if (providers?.length) {
@@ -230,12 +219,9 @@ export function useApp() {
     setFetchingValue('certificates', 'pending');
 
     try {
-      const requests
-        = await fortifyClient.current.getCertificateRequestsByProviderId(
-          providerId,
-        );
-      const providerCertificates
-        = await fortifyClient.current.getCertificatesByProviderId(providerId);
+      const requests = await fortifyClient.current.getCertificateRequestsByProviderId(providerId);
+      const providerCertificates =
+        await fortifyClient.current.getCertificatesByProviderId(providerId);
 
       setCertificates([...providerCertificates, ...requests]);
       setFetchingValue('certificates', 'resolved');
@@ -255,9 +241,7 @@ export function useApp() {
     }
 
     try {
-      const localProvider = await fortifyClient.current.getProviderById(
-        currentProvider.id,
-      );
+      const localProvider = await fortifyClient.current.getProviderById(currentProvider.id);
 
       await localProvider.reset();
     } catch {
@@ -273,9 +257,7 @@ export function useApp() {
     }
 
     try {
-      const localProvider = await fortifyClient.current.getProviderById(
-        currentProvider.id,
-      );
+      const localProvider = await fortifyClient.current.getProviderById(currentProvider.id);
 
       if (isLogedin) {
         await localProvider.logout();

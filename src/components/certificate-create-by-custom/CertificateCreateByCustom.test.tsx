@@ -1,6 +1,4 @@
-import {
-  render, userEvent, screen,
-} from '@testing';
+import { render, userEvent, screen } from '@testing';
 import { CertificateCreateByCustom } from './CertificateCreateByCustom';
 
 describe('<CertificateCreateByCustom />', () => {
@@ -73,9 +71,7 @@ describe('<CertificateCreateByCustom />', () => {
 
     // Country
 
-    await userEvent.click(
-      screen.getByRole('combobox', { name: 'Country' }),
-    );
+    await userEvent.click(screen.getByRole('combobox', { name: 'Country' }));
 
     expect(screen.getByRole('presentation')).toBeInTheDocument();
 
@@ -109,9 +105,7 @@ describe('<CertificateCreateByCustom />', () => {
 
     // Signature Algorithm
 
-    await userEvent.click(
-      screen.getByRole('combobox', { name: 'Signature Algorithm' }),
-    );
+    await userEvent.click(screen.getByRole('combobox', { name: 'Signature Algorithm' }));
 
     expect(screen.getByRole('presentation')).toBeInTheDocument();
 
@@ -121,9 +115,7 @@ describe('<CertificateCreateByCustom />', () => {
 
     // Hash Algorithm
 
-    await userEvent.click(
-      screen.getByRole('combobox', { name: 'Hash Algorithm' }),
-    );
+    await userEvent.click(screen.getByRole('combobox', { name: 'Hash Algorithm' }));
 
     expect(screen.getByRole('presentation')).toBeInTheDocument();
 
@@ -139,7 +131,10 @@ describe('<CertificateCreateByCustom />', () => {
 
   it('Should render CSR type', () => {
     render(
-      <CertificateCreateByCustom type="csr" onCreateButtonClick={vi.fn()} />,
+      <CertificateCreateByCustom
+        type="csr"
+        onCreateButtonClick={vi.fn()}
+      />,
     );
 
     expect(screen.queryByText('Extended key usages')).not.toBeInTheDocument();

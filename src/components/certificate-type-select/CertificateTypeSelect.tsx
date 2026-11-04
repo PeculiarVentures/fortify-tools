@@ -1,10 +1,7 @@
 import React, { ComponentProps } from 'react';
 import { Select, useControllableState } from '@peculiar/react-components';
 import { useTranslation } from 'react-i18next';
-import {
-  TCertificateExtendedKeyUsages,
-  certificateKeyUsageExtensions,
-} from '../../config/data';
+import { TCertificateExtendedKeyUsages, certificateKeyUsageExtensions } from '../../config/data';
 import { TCertificateType } from '../../types';
 import styles from './styles/index.module.scss';
 
@@ -21,15 +18,14 @@ interface ICertificateTypeSelectProps {
   onChange: (data: ICertificateTypeSelectValue) => void;
 }
 
-export const CertificateTypeSelect: React.FunctionComponent<
-  ICertificateTypeSelectProps
-> = (props) => {
-  const {
-    className, type = 'csr', onChange,
-  } = props;
+export const CertificateTypeSelect: React.FunctionComponent<ICertificateTypeSelectProps> = (
+  props,
+) => {
+  const { className, type = 'csr', onChange } = props;
 
-  const [currentValue, setCurrentValue]
-    = useControllableState<ICertificateTypeSelectValue>({ onChange });
+  const [currentValue, setCurrentValue] = useControllableState<ICertificateTypeSelectValue>({
+    onChange,
+  });
 
   const { t } = useTranslation();
   const list: ICertificateTypeSelectValue[] = [
@@ -56,8 +52,7 @@ export const CertificateTypeSelect: React.FunctionComponent<
       getOptionLabel={({ label }) => label}
       placeholder={t('certificates.select-type-placeholder')}
       popoverProps={{ className: styles.certificate_type_select_popover }}
-      onChange={(_, value) =>
-        setCurrentValue(value as ICertificateTypeSelectValue)}
+      onChange={(_, value) => setCurrentValue(value as ICertificateTypeSelectValue)}
     />
   );
 };

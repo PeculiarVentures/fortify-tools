@@ -1,12 +1,12 @@
 .certificate_type_select_popover {
-  & > ul[role="listbox"] {
+  & > ul[role='listbox'] {
     padding: 7px 0;
 
     li:last-child {
       margin-top: 11px;
       position: relative;
       &:before {
-        content: "";
+        content: '';
         height: 1px;
         background-color: var(--pv-color-gray-5);
         position: absolute;

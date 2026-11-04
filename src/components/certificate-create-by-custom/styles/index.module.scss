@@ -25,7 +25,7 @@
     position: relative;
     &:after,
     &:before {
-      content: "";
+      content: '';
       height: 1px;
       width: var(--pv-size-base-6);
       background-color: var(--pv-color-gray-4);

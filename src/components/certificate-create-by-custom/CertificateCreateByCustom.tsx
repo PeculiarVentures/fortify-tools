@@ -1,21 +1,16 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Select, Button, TextField, Typography } from '@peculiar/react-components';
 import { ExtendedKeyUsageType } from '@peculiar/x509';
-import {
-  Select,
-  Button,
-  TextField,
-  Typography,
-} from '@peculiar/react-components';
+import { useTranslation } from 'react-i18next';
+import { countries } from '../../config/data';
 import {
   ICertificateAlgorithmProps,
   ICertificateSubjectProps,
   TCertificateType,
 } from '../../types';
-import { CertificateKeyPropertiesSelect } from '../certificate-key-properties-select';
 import { Card } from '../card';
+import { CertificateKeyPropertiesSelect } from '../certificate-key-properties-select';
 import { KeyUsagesCheckboxGroup } from '../key-usages-checkbox-group';
-import { countries } from '../../config/data';
 import styles from './styles/index.module.scss';
 
 export interface ICertificateCreateByCustomData {
@@ -30,25 +25,21 @@ interface ICertificateCreateByCustomProps {
   onCreateButtonClick: (data: ICertificateCreateByCustomData) => void;
 }
 
-export const CertificateCreateByCustom: React.FunctionComponent<
-  ICertificateCreateByCustomProps
-> = (props) => {
+export const CertificateCreateByCustom: React.FunctionComponent<ICertificateCreateByCustomProps> = (
+  props,
+) => {
   const { type = 'x509', onCreateButtonClick } = props;
 
   const { t } = useTranslation();
 
   const [isFormValid, setIsFormValid] = useState(false);
-  const [emailAddressErrorMessage, setEmailAddressErrorMessage] = useState<
-    string | undefined
-  >(undefined);
+  const [emailAddressErrorMessage, setEmailAddressErrorMessage] = useState<string | undefined>(
+    undefined,
+  );
 
-  const validateEmailAddress = (
-    event: React.SyntheticEvent<HTMLInputElement>,
-  ) => {
+  const validateEmailAddress = (event: React.SyntheticEvent<HTMLInputElement>) => {
     if (!event.currentTarget.checkValidity()) {
-      setEmailAddressErrorMessage(
-        t('certificates.subject.email-address.error.type'),
-      );
+      setEmailAddressErrorMessage(t('certificates.subject.email-address.error.type'));
 
       return;
     }
@@ -59,19 +50,18 @@ export const CertificateCreateByCustom: React.FunctionComponent<
   const handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const {
-      hashAlgorithm, signatureAlgorithm, C, keyUsage, ...subject
-    }
-      = Object.fromEntries(formData);
+    const { hashAlgorithm, signatureAlgorithm, C, keyUsage, ...subject } =
+      Object.fromEntries(formData);
 
     const extendedKeyUsages = keyUsage
       ? (formData.getAll('keyUsage') as ExtendedKeyUsageType[])
       : [];
 
-    const hash = (hashAlgorithm as string)
-      .replace(/"/g, '') as ICertificateAlgorithmProps['hash'];
-    const signature = (signatureAlgorithm as string)
-      .replace(/"/g, '') as ICertificateAlgorithmProps['signature'];
+    const hash = (hashAlgorithm as string).replace(/"/g, '') as ICertificateAlgorithmProps['hash'];
+    const signature = (signatureAlgorithm as string).replace(
+      /"/g,
+      '',
+    ) as ICertificateAlgorithmProps['signature'];
 
     const country = C ? JSON.parse(C as string)?.code : '';
 
@@ -99,7 +89,10 @@ export const CertificateCreateByCustom: React.FunctionComponent<
     >
       <Card className={styles.card}>
         <div className={styles.subject_box}>
-          <Typography variant="s2" color="black">
+          <Typography
+            variant="s2"
+            color="black"
+          >
             {t('certificates.subject.title')}
           </Typography>
           <div className={styles.subject_fields}>
@@ -124,9 +117,7 @@ export const CertificateCreateByCustom: React.FunctionComponent<
             <TextField
               name="O"
               label={t('certificates.subject.organization-name.label')}
-              placeholder={t(
-                'certificates.subject.organization-name.placeholder',
-              )}
+              placeholder={t('certificates.subject.organization-name.placeholder')}
             />
             <TextField
               name="OU"
@@ -147,24 +138,18 @@ export const CertificateCreateByCustom: React.FunctionComponent<
             <TextField
               name="ST"
               label={t('certificates.subject.state-or-province-name.label')}
-              placeholder={t(
-                'certificates.subject.state-or-province-name.placeholder',
-              )}
+              placeholder={t('certificates.subject.state-or-province-name.placeholder')}
             />
           </div>
         </div>
         <div className={styles.divider}></div>
-        {type === 'x509'
-          ? (
-              <>
-                <KeyUsagesCheckboxGroup />
-                <div className={styles.divider}></div>
-              </>
-            )
-          : null}
-        <CertificateKeyPropertiesSelect
-          className={styles.key_properties_select}
-        />
+        {type === 'x509' ? (
+          <>
+            <KeyUsagesCheckboxGroup />
+            <div className={styles.divider}></div>
+          </>
+        ) : null}
+        <CertificateKeyPropertiesSelect className={styles.key_properties_select} />
       </Card>
 
       <div className={styles.button_group}>

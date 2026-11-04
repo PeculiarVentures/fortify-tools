@@ -1,6 +1,4 @@
-import {
-  render, userEvent, screen,
-} from '@testing';
+import { render, userEvent, screen } from '@testing';
 import { CertificatesProvidersSelectList } from './CertificatesProvidersSelectList';
 
 describe('<CertificatesProvidersSelectList />', () => {
@@ -40,9 +38,7 @@ describe('<CertificatesProvidersSelectList />', () => {
 
     expect(comboboxPopup).toBeInTheDocument();
 
-    expect(
-      comboboxPopup.querySelector('.test_combobox_popup'),
-    ).toBeInTheDocument();
+    expect(comboboxPopup.querySelector('.test_combobox_popup')).toBeInTheDocument();
 
     const comboboxItems = screen.getAllByRole('option');
 

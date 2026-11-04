@@ -1,36 +1,21 @@
 import React, { ComponentProps, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { Button, IconButton, Skeleton, Typography } from '@peculiar/react-components';
 import { clsx } from 'clsx';
-import {
-  Button,
-  IconButton,
-  Skeleton,
-  Typography,
-} from '@peculiar/react-components';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '../table';
-import { CertificateTypeLabel } from '../certificate-type-label';
-import { Date } from '../date';
-import { CertificateName } from '../certificate-name';
-import { CertificateSerialNumber } from '../certificate-serial-number';
-import { downloadCertificate } from '../../utils/download-certificate';
-import { CopyIconButton } from '../copy-icon-button';
-import {
-  certificateRawToPem,
-  getCertificateName,
-} from '../../utils/certificate';
-import { SortButton } from '../sort-button';
-import { ICertificateProps } from '../../types';
+import { Trans, useTranslation } from 'react-i18next';
+import CertificatesIcon from '../../icons/certificates.svg?react';
 import DeleteIcon from '../../icons/delete.svg?react';
 import DownloadIcon from '../../icons/download-20.svg?react';
-import CertificatesIcon from '../../icons/certificates.svg?react';
 import SearchIcon from '../../icons/search-120.svg?react';
+import { ICertificateProps } from '../../types';
+import { certificateRawToPem, getCertificateName } from '../../utils/certificate';
+import { downloadCertificate } from '../../utils/download-certificate';
+import { CertificateName } from '../certificate-name';
+import { CertificateSerialNumber } from '../certificate-serial-number';
+import { CertificateTypeLabel } from '../certificate-type-label';
+import { CopyIconButton } from '../copy-icon-button';
+import { Date } from '../date';
+import { SortButton } from '../sort-button';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../table';
 import styles from './styles/index.module.scss';
 
 type TSortColumnName = keyof Pick<
@@ -45,15 +30,8 @@ interface ICertificatesListProps {
   currentSortName: string;
   currentSortDir: TSortColumnDir;
   onSort: (name: TSortColumnName, dir: TSortColumnDir) => void;
-  onDelete: (params: {
-    certificateIndex: string;
-    providerId: string;
-    label: string;
-  }) => void;
-  onViewDetails: (params: {
-    certificate: ICertificateProps;
-    providerId: string;
-  }) => void;
+  onDelete: (params: { certificateIndex: string; providerId: string; label: string }) => void;
+  onViewDetails: (params: { certificate: ICertificateProps; providerId: string }) => void;
   className?: ComponentProps<'table'>['className'];
   highlightedText?: string;
   loading?: boolean;
@@ -61,9 +39,7 @@ interface ICertificatesListProps {
   isReadOnly: boolean;
 }
 
-export const CertificatesList: React.FunctionComponent<
-  ICertificatesListProps
-> = (props) => {
+export const CertificatesList: React.FunctionComponent<ICertificatesListProps> = (props) => {
   const {
     certificates,
     className,
@@ -88,7 +64,10 @@ export const CertificatesList: React.FunctionComponent<
         <div className={styles.empty_search_list_icon}>
           <SearchIcon />
         </div>
-        <Typography variant="b2" color="gray-9">
+        <Typography
+          variant="b2"
+          color="gray-9"
+        >
           <Trans
             i18nKey="certificates.list.empty-search-text"
             values={{ text: highlightedText }}
@@ -115,7 +94,10 @@ export const CertificatesList: React.FunctionComponent<
         <div className={styles.empty_list_icon}>
           <CertificatesIcon />
         </div>
-        <Typography variant="b2" color="gray-9">
+        <Typography
+          variant="b2"
+          color="gray-9"
+        >
           {t('certificates.list.empty-text')}
         </Typography>
       </div>
@@ -128,165 +110,144 @@ export const CertificatesList: React.FunctionComponent<
       order={currentSortName === name ? currentSortDir : 'desc'}
       disabled={loading}
       onClick={() =>
-        onSort(
-          name,
-          currentSortName === name && currentSortDir === 'asc' ? 'desc' : 'asc',
-        )}
+        onSort(name, currentSortName === name && currentSortDir === 'asc' ? 'desc' : 'asc')
+      }
     >
       {t(title)}
     </SortButton>
   );
 
   return (
-    <div
-      className={clsx(styles.table_wrapper, { [styles.table_wrapper_loading]: loading })}
-    >
+    <div className={clsx(styles.table_wrapper, { [styles.table_wrapper_loading]: loading })}>
       <Table className={clsx(styles.list_table, className)}>
         <TableHeader>
           <TableRow>
+            <TableHead>{renderSortTitle('type', 'certificates.list.header.type')}</TableHead>
+            <TableHead>{renderSortTitle('label', 'certificates.list.header.name')}</TableHead>
             <TableHead>
-              {renderSortTitle('type', 'certificates.list.header.type')}
+              {renderSortTitle('serialNumber', 'certificates.list.header.serial-number')}
             </TableHead>
-            <TableHead>
-              {renderSortTitle('label', 'certificates.list.header.name')}
-            </TableHead>
-            <TableHead>
-              {renderSortTitle(
-                'serialNumber',
-                'certificates.list.header.serial-number',
-              )}
-            </TableHead>
-            <TableHead>
-              {renderSortTitle('notAfter', 'certificates.list.header.expires')}
-            </TableHead>
+            <TableHead>{renderSortTitle('notAfter', 'certificates.list.header.expires')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {loading
-            ? (
-                <CertificatesListLoading />
-              )
-            : (
-                certificates.map((certificate) => {
-                  const {
-                    id,
-                    providerID,
-                    serialNumber,
-                    type,
-                    notAfter,
-                    raw,
-                    index,
-                    privateKeyId,
-                  } = certificate;
+          {loading ? (
+            <CertificatesListLoading />
+          ) : (
+            certificates.map((certificate) => {
+              const { id, providerID, serialNumber, type, notAfter, raw, index, privateKeyId } =
+                certificate;
 
-                  const certificateName = getCertificateName(certificate);
+              const certificateName = getCertificateName(certificate);
 
-                  return (
-                    <TableRow
-                      tabIndex={0}
-                      key={id}
-                      className={clsx({ ['current']: currentRow === id })}
-                      onClick={() =>
-                        onViewDetails({
-                          certificate, providerId: providerID,
-                        })}
-                      onFocus={() => setCurrentRow(id)}
-                      onBlur={() => setCurrentRow(undefined)}
-                      onKeyDown={(event) =>
-                        ['Space', 'Enter'].includes(event.code)
-                        && onViewDetails({
-                          certificate, providerId: providerID,
-                        })}
-                      onMouseOver={() => currentRow && setCurrentRow(undefined)}
+              return (
+                <TableRow
+                  tabIndex={0}
+                  key={id}
+                  className={clsx({ ['current']: currentRow === id })}
+                  onClick={() =>
+                    onViewDetails({
+                      certificate,
+                      providerId: providerID,
+                    })
+                  }
+                  onFocus={() => setCurrentRow(id)}
+                  onBlur={() => setCurrentRow(undefined)}
+                  onKeyDown={(event) =>
+                    ['Space', 'Enter'].includes(event.code) &&
+                    onViewDetails({
+                      certificate,
+                      providerId: providerID,
+                    })
+                  }
+                  onMouseOver={() => currentRow && setCurrentRow(undefined)}
+                >
+                  <TableCell>
+                    <CertificateTypeLabel
+                      type={type}
+                      withPrivatKey={Boolean(privateKeyId)}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <CertificateName
+                      highlight={highlightedText}
+                      name={certificateName}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <CertificateSerialNumber value={serialNumber} />
+                  </TableCell>
+                  <TableCell>
+                    <Date date={notAfter} />
+                    {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+                    <div
+                      className={styles.list_table_actions}
+                      onClick={(event) => event.stopPropagation()}
+                      onKeyDown={(event) => event.stopPropagation()}
                     >
-                      <TableCell>
-                        <CertificateTypeLabel
-                          type={type}
-                          withPrivatKey={Boolean(privateKeyId)}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <CertificateName
-                          highlight={highlightedText}
-                          name={certificateName}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <CertificateSerialNumber value={serialNumber} />
-                      </TableCell>
-                      <TableCell>
-                        <Date date={notAfter} />
-                        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-                        <div
-                          className={styles.list_table_actions}
-                          onClick={(event) => event.stopPropagation()}
-                          onKeyDown={(event) => event.stopPropagation()}
+                      <Button
+                        tabIndex={0}
+                        className={styles.view_details_button}
+                        variant="outlined"
+                        size="small"
+                        onClick={() =>
+                          onViewDetails({
+                            certificate,
+                            providerId: providerID,
+                          })
+                        }
+                      >
+                        {t('certificates.list.action.view-details')}
+                      </Button>
+                      <CopyIconButton
+                        title={t('certificates.list.action.copy')}
+                        value={
+                          raw.byteLength
+                            ? () => certificateRawToPem(raw, type === 'x509' ? 'x509' : 'csr')
+                            : ''
+                        }
+                        className={styles.action_icon_button}
+                      />
+                      <IconButton
+                        tabIndex={0}
+                        title={t('certificates.list.action.download')}
+                        size="small"
+                        className={styles.action_icon_button}
+                        onClick={() =>
+                          raw.byteLength &&
+                          downloadCertificate(
+                            certificateName,
+                            raw,
+                            type === 'x509' ? 'x509' : 'csr',
+                          )
+                        }
+                      >
+                        <DownloadIcon />
+                      </IconButton>
+                      {!isReadOnly ? (
+                        <IconButton
+                          tabIndex={0}
+                          title={t('certificates.list.action.delete')}
+                          size="small"
+                          className={styles.action_icon_button}
+                          disabled={!isLoggedIn}
+                          onClick={() =>
+                            onDelete({
+                              certificateIndex: index,
+                              providerId: providerID,
+                              label: certificateName,
+                            })
+                          }
                         >
-                          <Button
-                            tabIndex={0}
-                            className={styles.view_details_button}
-                            variant="outlined"
-                            size="small"
-                            onClick={() =>
-                              onViewDetails({
-                                certificate, providerId: providerID,
-                              })}
-                          >
-                            {t('certificates.list.action.view-details')}
-                          </Button>
-                          <CopyIconButton
-                            title={t('certificates.list.action.copy')}
-                            value={
-                              raw.byteLength
-                                ? () =>
-                                    certificateRawToPem(
-                                      raw,
-                                      type === 'x509' ? 'x509' : 'csr',
-                                    )
-                                : ''
-                            }
-                            className={styles.action_icon_button}
-                          />
-                          <IconButton
-                            tabIndex={0}
-                            title={t('certificates.list.action.download')}
-                            size="small"
-                            className={styles.action_icon_button}
-                            onClick={() =>
-                              raw.byteLength
-                              && downloadCertificate(
-                                certificateName,
-                                raw,
-                                type === 'x509' ? 'x509' : 'csr',
-                              )}
-                          >
-                            <DownloadIcon />
-                          </IconButton>
-                          {!isReadOnly
-                            ? (
-                                <IconButton
-                                  tabIndex={0}
-                                  title={t('certificates.list.action.delete')}
-                                  size="small"
-                                  className={styles.action_icon_button}
-                                  disabled={!isLoggedIn}
-                                  onClick={() =>
-                                    onDelete({
-                                      certificateIndex: index,
-                                      providerId: providerID,
-                                      label: certificateName,
-                                    })}
-                                >
-                                  <DeleteIcon />
-                                </IconButton>
-                              )
-                            : null}
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })
-              )}
+                          <DeleteIcon />
+                        </IconButton>
+                      ) : null}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              );
+            })
+          )}
         </TableBody>
       </Table>
     </div>
@@ -295,10 +256,19 @@ export const CertificatesList: React.FunctionComponent<
 
 function CertificatesListLoading() {
   return [...Array(12).keys()].map((rowIndex) => (
-    <TableRow className={styles.skeleton_tr} key={`skel-row-${rowIndex}`}>
+    <TableRow
+      className={styles.skeleton_tr}
+      key={`skel-row-${rowIndex}`}
+    >
       {[...Array(4).keys()].map((cellIndex) => (
-        <TableCell className={styles.skeleton_td} key={`skel-td-${cellIndex}`}>
-          <Skeleton className={styles.skeleton_td_item} height={31} />
+        <TableCell
+          className={styles.skeleton_td}
+          key={`skel-td-${cellIndex}`}
+        >
+          <Skeleton
+            className={styles.skeleton_td_item}
+            height={31}
+          />
         </TableCell>
       ))}
     </TableRow>

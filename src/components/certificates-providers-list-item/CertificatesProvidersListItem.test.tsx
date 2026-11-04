@@ -1,9 +1,9 @@
-import {
-  render, userEvent, fireEvent, screen,
-} from '@testing';
+import { render, userEvent, fireEvent, screen } from '@testing';
 import { CertificatesProvidersListItem } from './CertificatesProvidersListItem';
 
-vi.mock('../../icons/smartcard.svg?react', () => ({ default: () => <svg data-testid="smartcard_icon" /> }));
+vi.mock('../../icons/smartcard.svg?react', () => ({
+  default: () => <svg data-testid="smartcard_icon" />,
+}));
 
 describe('<CertificatesProvidersListItem />', () => {
   const provider = {
@@ -23,7 +23,10 @@ describe('<CertificatesProvidersListItem />', () => {
     const onClickMock = vi.fn((data) => data);
 
     render(
-      <CertificatesProvidersListItem {...defaultProps} onClick={onClickMock} />,
+      <CertificatesProvidersListItem
+        {...defaultProps}
+        onClick={onClickMock}
+      />,
     );
 
     await userEvent.click(screen.getByText(provider.name));
@@ -35,7 +38,10 @@ describe('<CertificatesProvidersListItem />', () => {
     const onClickMock = vi.fn((data) => data);
 
     render(
-      <CertificatesProvidersListItem {...defaultProps} onClick={onClickMock} />,
+      <CertificatesProvidersListItem
+        {...defaultProps}
+        onClick={onClickMock}
+      />,
     );
 
     fireEvent.keyDown(screen.getByText(provider.name), { code: 'Enter' });
@@ -45,12 +51,13 @@ describe('<CertificatesProvidersListItem />', () => {
 
   it('Should render as selected', () => {
     render(
-      <CertificatesProvidersListItem {...defaultProps} isSelected={true} />,
+      <CertificatesProvidersListItem
+        {...defaultProps}
+        isSelected={true}
+      />,
     );
 
-    expect(screen.getByRole('listitem').getAttribute('class')).toMatch(
-      /current_list_item/,
-    );
+    expect(screen.getByRole('listitem').getAttribute('class')).toMatch(/current_list_item/);
   });
 
   it('Should render as removable', () => {
@@ -58,7 +65,8 @@ describe('<CertificatesProvidersListItem />', () => {
       <CertificatesProvidersListItem
         {...defaultProps}
         provider={{
-          ...provider, isRemovable: true,
+          ...provider,
+          isRemovable: true,
         }}
       />,
     );
@@ -71,7 +79,8 @@ describe('<CertificatesProvidersListItem />', () => {
       <CertificatesProvidersListItem
         {...defaultProps}
         provider={{
-          ...provider, readOnly: true,
+          ...provider,
+          readOnly: true,
         }}
       />,
     );

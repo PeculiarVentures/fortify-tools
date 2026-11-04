@@ -1,5 +1,5 @@
-import { renderHook, act } from '@testing';
 import type { IProviderInfo } from '@peculiar/fortify-client-core';
+import { renderHook, act } from '@testing';
 import { useProviderInfoDialog } from './useProviderInfoDialog';
 
 describe('useProviderInfoDialog', () => {
@@ -11,9 +11,7 @@ describe('useProviderInfoDialog', () => {
   ] as IProviderInfo[];
 
   it('Should initialize, open & close', async () => {
-    const { result } = renderHook(() =>
-      useProviderInfoDialog({ providers }),
-    );
+    const { result } = renderHook(() => useProviderInfoDialog({ providers }));
 
     expect(result.current.dialog).toBeInstanceOf(Function);
     expect(result.current.open).toBeInstanceOf(Function);
@@ -36,8 +34,7 @@ describe('useProviderInfoDialog', () => {
 
   it('Should close dialog if current provider is not found', async () => {
     const { result, rerender } = renderHook(
-      (localProviders) =>
-        useProviderInfoDialog({ providers: localProviders }),
+      (localProviders) => useProviderInfoDialog({ providers: localProviders }),
       { initialProps: providers },
     );
 
@@ -45,9 +42,7 @@ describe('useProviderInfoDialog', () => {
       result.current.open(providers[0]);
     });
 
-    rerender([
-      { id: '2' },
-    ] as IProviderInfo[]);
+    rerender([{ id: '2' }] as IProviderInfo[]);
 
     expect(result.current.dialog()).toBeNull();
   });

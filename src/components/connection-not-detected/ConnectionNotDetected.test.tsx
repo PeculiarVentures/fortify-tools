@@ -1,24 +1,20 @@
-import {
-  render, userEvent, screen,
-} from '@testing';
+import { render, userEvent, screen } from '@testing';
 import { APP_FORTIFY_DOWLOAD_APP_URL } from '../../config';
 import { ConnectionNotDetected } from './ConnectionNotDetected';
 
-vi.mock('../../icons/launch-app.svg?react', () => ({ default: () => <svg data-testid="launch_app_icon" /> }));
+vi.mock('../../icons/launch-app.svg?react', () => ({
+  default: () => <svg data-testid="launch_app_icon" />,
+}));
 
 describe('<ConnectionNotDetected />', () => {
   it('Should render', async () => {
     const onReloadMock = vi.fn();
 
-    render(
-      <ConnectionNotDetected onReload={onReloadMock} />,
-    );
+    render(<ConnectionNotDetected onReload={onReloadMock} />);
 
     expect(screen.getByTestId('launch_app_icon')).toBeInTheDocument();
 
-    expect(
-      screen.getByText(/Launch your local Fortify application/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Launch your local Fortify application/)).toBeInTheDocument();
     expect(
       screen.getByText(
         /t seems Fortify application is turned off on your desktop. Please launch it to continue/,

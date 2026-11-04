@@ -1,11 +1,10 @@
-import {
-  render, userEvent, screen,
-} from '@testing';
+import { render, userEvent, screen } from '@testing';
 import { CertificateCreateDialog } from './CertificateCreateDialog';
 
 describe('<CertificateCreateDialog />', () => {
   const algorithm = {
-    hash: 'SHA-256', signature: 'EC-P256',
+    hash: 'SHA-256',
+    signature: 'EC-P256',
   };
 
   async function selectType(selectedIndex: number) {
@@ -34,16 +33,10 @@ describe('<CertificateCreateDialog />', () => {
   }
 
   async function fillField(name: string, fieldValue: string) {
-    await userEvent.type(
-      screen.getByRole('textbox', { name }),
-      fieldValue,
-    );
+    await userEvent.type(screen.getByRole('textbox', { name }), fieldValue);
   }
 
-  async function testWithCName(
-    typeIndex: number,
-    extendedKeyUsages: string[] = [],
-  ) {
+  async function testWithCName(typeIndex: number, extendedKeyUsages: string[] = []) {
     const createDataResult = {
       subject: { CN: 'example.com' },
       algorithm,
@@ -72,14 +65,12 @@ describe('<CertificateCreateDialog />', () => {
     expect(onCreateButtonClickMock).toHaveReturnedWith(createDataResult);
   }
 
-  async function testWithEmail(
-    typeIndex: number,
-    extendedKeyUsages: string[] = [],
-  ) {
+  async function testWithEmail(typeIndex: number, extendedKeyUsages: string[] = []) {
     const emailValue = 'info@company.com';
     const createDataResult = {
       subject: {
-        CN: emailValue, E: emailValue,
+        CN: emailValue,
+        E: emailValue,
       },
       algorithm,
       extendedKeyUsages,
@@ -170,26 +161,26 @@ describe('<CertificateCreateDialog />', () => {
     expect(onProviderSelectMock).toHaveReturnedWith(providers[1].id);
   });
 
-  it('Should select type \'TLS Client Authentication\' & submit', async () => {
+  it("Should select type 'TLS Client Authentication' & submit", async () => {
     await testWithCName(3, ['1.3.6.1.5.5.7.3.2']);
   });
 
-  it('Should select type \'TLS Server Authentication\' & submit', async () => {
+  it("Should select type 'TLS Server Authentication' & submit", async () => {
     await testWithCName(4, ['1.3.6.1.5.5.7.3.1']);
   });
 
-  it('Should select type \'S/MIME\' & submit', async () => {
+  it("Should select type 'S/MIME' & submit", async () => {
     await testWithEmail(0, ['1.3.6.1.5.5.7.3.4', '1.3.6.1.5.5.7.3.2']);
   });
 
-  it('Should select type \'Code signing\' & submit', async () => {
+  it("Should select type 'Code signing' & submit", async () => {
     await testWithEmail(1, ['1.3.6.1.5.5.7.3.3']);
   });
-  it('Should select type \'Document signing\' & submit', async () => {
+  it("Should select type 'Document signing' & submit", async () => {
     await testWithEmail(2, ['1.3.6.1.5.5.7.3.36']);
   });
 
-  it('Should select type \'Custom\' & submit', async () => {
+  it("Should select type 'Custom' & submit", async () => {
     const createDataResult = {
       subject: {
         CN: 'example.com',

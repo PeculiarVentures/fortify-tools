@@ -4,9 +4,7 @@ import { KeyUsagesCheckboxGroup } from './KeyUsagesCheckboxGroup';
 
 describe('<KeyUsagesCheckboxGroup />', () => {
   it('Should render', () => {
-    const { container } = render(
-      <KeyUsagesCheckboxGroup className="test_class" />,
-    );
+    const { container } = render(<KeyUsagesCheckboxGroup className="test_class" />);
 
     const keyUsageExtensions = Object.values(certificateKeyUsageExtensions);
 

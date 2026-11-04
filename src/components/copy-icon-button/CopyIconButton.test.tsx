@@ -1,6 +1,4 @@
-import {
-  render, screen, userEvent,
-} from '@testing';
+import { render, screen, userEvent } from '@testing';
 import { CopyIconButton } from './CopyIconButton';
 
 describe('<CopyIconButton />', () => {
@@ -17,9 +15,7 @@ describe('<CopyIconButton />', () => {
   });
 
   it('Should render & click', async () => {
-    render(
-      <CopyIconButton value={copyValue} />,
-    );
+    render(<CopyIconButton value={copyValue} />);
 
     await userEvent.click(screen.getByRole('button'));
 
@@ -29,9 +25,7 @@ describe('<CopyIconButton />', () => {
   it('Should support function values for copy', async () => {
     const valueFunction = () => copyValue;
 
-    render(
-      <CopyIconButton value={valueFunction} />,
-    );
+    render(<CopyIconButton value={valueFunction} />);
 
     await userEvent.click(screen.getByRole('button'));
 

@@ -1,7 +1,5 @@
 import { ComponentProps } from 'react';
-import {
-  render, userEvent, screen,
-} from '@testing';
+import { render, userEvent, screen } from '@testing';
 import { CertificateDeleteDialog } from './CertificateDeleteDialog';
 
 describe('<CertificateDeleteDialog />', () => {
@@ -13,14 +11,10 @@ describe('<CertificateDeleteDialog />', () => {
   };
 
   it('Should render and handle buttons click', async () => {
-    render(
-      <CertificateDeleteDialog {...defaultProps} />,
-    );
+    render(<CertificateDeleteDialog {...defaultProps} />);
 
     expect(
-      screen.getByText(
-        `Are you sure you want to delete “${defaultProps.certificateName}”?`,
-      ),
+      screen.getByText(`Are you sure you want to delete “${defaultProps.certificateName}”?`),
     ).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole('button', { name: /Cancel/ }));
@@ -30,14 +24,15 @@ describe('<CertificateDeleteDialog />', () => {
     await userEvent.click(screen.getByRole('button', { name: /Delete/ }));
 
     expect(defaultProps.onDeleteClick).toBeCalledTimes(1);
-    expect(defaultProps.onDeleteClick).toBeCalledWith(
-      defaultProps.certificateId,
-    );
+    expect(defaultProps.onDeleteClick).toBeCalledWith(defaultProps.certificateId);
   });
 
   it('Should render loading', () => {
     render(
-      <CertificateDeleteDialog {...defaultProps} loading={true} />,
+      <CertificateDeleteDialog
+        {...defaultProps}
+        loading={true}
+      />,
     );
 
     expect(screen.getByText(/Deleting certificate/)).toBeInTheDocument();

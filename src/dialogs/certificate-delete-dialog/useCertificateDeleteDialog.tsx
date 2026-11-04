@@ -17,12 +17,8 @@ interface IUseCertificateDeleteDialogInitialParams {
   onSuccess: (providerId: string) => void;
 }
 
-export function useCertificateDeleteDialog(
-  props: IUseCertificateDeleteDialogInitialParams,
-) {
-  const {
-    providers, fortifyClient, onSuccess,
-  } = props;
+export function useCertificateDeleteDialog(props: IUseCertificateDeleteDialogInitialParams) {
+  const { providers, fortifyClient, onSuccess } = props;
   const { addToast } = useToast();
   const { t } = useTranslation();
 
@@ -75,9 +71,7 @@ export function useCertificateDeleteDialog(
 
   useLockBodyScroll(isOpen);
 
-  const currentProvider = providers.find(
-    ({ id }) => openParamsRef.current?.providerId === id,
-  );
+  const currentProvider = providers.find(({ id }) => openParamsRef.current?.providerId === id);
 
   if (isOpen && !currentProvider) {
     handleClose();
@@ -86,16 +80,14 @@ export function useCertificateDeleteDialog(
   return {
     open: handleOpen,
     dialog: () =>
-      fortifyClient && isOpen && openParamsRef.current
-        ? (
-            <CertificateDeleteDialog
-              certificateId={openParamsRef.current.certificateIndex}
-              certificateName={openParamsRef.current.label}
-              loading={isLoading}
-              onDialogClose={handleClose}
-              onDeleteClick={handleCertificateDelete}
-            />
-          )
-        : null,
+      fortifyClient && isOpen && openParamsRef.current ? (
+        <CertificateDeleteDialog
+          certificateId={openParamsRef.current.certificateIndex}
+          certificateName={openParamsRef.current.label}
+          loading={isLoading}
+          onDialogClose={handleClose}
+          onDeleteClick={handleCertificateDelete}
+        />
+      ) : null,
   };
 }

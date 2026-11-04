@@ -1,10 +1,8 @@
 import { ComponentProps } from 'react';
-import {
-  render, userEvent, fireEvent, screen,
-} from '@testing';
+import { render, userEvent, fireEvent, screen } from '@testing';
 import { ICertificateProps } from '../../types';
-import { downloadCertificate } from '../../utils/download-certificate';
 import * as certificateUtils from '../../utils/certificate';
+import { downloadCertificate } from '../../utils/download-certificate';
 import { CertificatesList } from './CertificatesList';
 
 vi.mock('../../utils/download-certificate');
@@ -15,7 +13,10 @@ vi.mock('@peculiar/react-components', async () => {
   return {
     ...actual,
     Skeleton: ({ height }: { height: number }) => (
-      <div style={{ height }} role="presentation" />
+      <div
+        style={{ height }}
+        role="presentation"
+      />
     ),
   };
 });
@@ -56,7 +57,10 @@ describe('<CertificatesList />', () => {
 
   it('Should render loading state', () => {
     render(
-      <CertificatesList {...defaultProps} loading={true} />,
+      <CertificatesList
+        {...defaultProps}
+        loading={true}
+      />,
     );
 
     expect(screen.getAllByRole('row')).toHaveLength(13);
@@ -69,7 +73,10 @@ describe('<CertificatesList />', () => {
 
   it('Should render empty search state', () => {
     render(
-      <CertificatesList {...defaultProps} highlightedText="test-search" />,
+      <CertificatesList
+        {...defaultProps}
+        highlightedText="test-search"
+      />,
     );
 
     expect(screen.getByText(/There are no results for/)).toBeInTheDocument();
@@ -77,27 +84,24 @@ describe('<CertificatesList />', () => {
   });
 
   it('Should render empty state', () => {
-    render(
-      <CertificatesList {...defaultProps} />,
-    );
+    render(<CertificatesList {...defaultProps} />);
 
-    expect(
-      screen.getByText(/There are no certificates yet/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/There are no certificates yet/)).toBeInTheDocument();
   });
 
   it('Should render certificates list', () => {
     render(
-      <CertificatesList {...defaultProps} certificates={certificates} />,
+      <CertificatesList
+        {...defaultProps}
+        certificates={certificates}
+      />,
     );
 
     const columnsLabels = [/Type/, /Name/, /Serial number/, /Expires/];
 
     screen
       .getAllByRole('columnheader')
-      .forEach((elem, index) =>
-        expect(elem).toHaveTextContent(columnsLabels[index]),
-      );
+      .forEach((elem, index) => expect(elem).toHaveTextContent(columnsLabels[index]));
 
     expect(screen.getAllByRole('row')).toHaveLength(3);
 
@@ -123,9 +127,7 @@ describe('<CertificatesList />', () => {
       />,
     );
 
-    expect(
-      screen.queryByLabelText(/Delete certificate/),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/Delete certificate/)).not.toBeInTheDocument();
   });
 
   it('Should render certificates list with not loggedIn to provider', () => {
@@ -244,9 +246,7 @@ describe('<CertificatesList />', () => {
       />,
     );
 
-    await userEvent.click(
-      screen.getByRole('button', { name: /View details/ }),
-    );
+    await userEvent.click(screen.getByRole('button', { name: /View details/ }));
 
     expect(onViewDetailsMock).toBeCalledTimes(1);
     expect(onViewDetailsMock).toHaveBeenCalledWith({
@@ -257,7 +257,10 @@ describe('<CertificatesList />', () => {
 
   it('Should handle downloadCertificate when Download button is clicked', async () => {
     render(
-      <CertificatesList {...defaultProps} certificates={[certificates[0]]} />,
+      <CertificatesList
+        {...defaultProps}
+        certificates={[certificates[0]]}
+      />,
     );
 
     await userEvent.click(screen.getByLabelText(/Download certificate/));
@@ -271,12 +274,13 @@ describe('<CertificatesList />', () => {
   });
 
   it('Should copy certificate when Copy button is clicked', async () => {
-    vi.spyOn(certificateUtils, 'certificateRawToPem').mockImplementation(
-      vi.fn(),
-    );
+    vi.spyOn(certificateUtils, 'certificateRawToPem').mockImplementation(vi.fn());
 
     render(
-      <CertificatesList {...defaultProps} certificates={[certificates[0]]} />,
+      <CertificatesList
+        {...defaultProps}
+        certificates={[certificates[0]]}
+      />,
     );
 
     await userEvent.click(screen.getByLabelText(/Copy certificate/));
@@ -290,7 +294,10 @@ describe('<CertificatesList />', () => {
 
   it('Should clear currentRow state onMouseOver', async () => {
     render(
-      <CertificatesList {...defaultProps} certificates={[certificates[0]]} />,
+      <CertificatesList
+        {...defaultProps}
+        certificates={[certificates[0]]}
+      />,
     );
 
     const row = screen.getByText(/Test 1/);

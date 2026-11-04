@@ -1,11 +1,37 @@
 {
   "name": "@peculiar/fortify-tools",
-  "homepage": "https://tools.fortifyapp.com",
   "version": "2.0.16",
-  "author": "PeculiarVentures Team",
-  "license": "MIT",
   "private": true,
+  "homepage": "https://tools.fortifyapp.com",
+  "license": "MIT",
+  "author": "PeculiarVentures Team",
   "type": "module",
+  "scripts": {
+    "dev": "vite --port 3003",
+    "build": "vite build",
+    "preview": "vite preview --port 3005",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "OXLINT_TSGOLINT_DANGEROUSLY_SUPPRESS_PROGRAM_DIAGNOSTICS=true oxlint",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check"
+  },
+  "dependencies": {
+    "@peculiar/certificates-viewer-react": "^4.3.2",
+    "@peculiar/fortify-client-core": "^4.1.1",
+    "@peculiar/react-components": "^1.1.2",
+    "@peculiar/x509": "^1.12.3",
+    "clsx": "^2.1.1",
+    "i18next": "^24.2.1",
+    "lodash": "^4.18.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.0",
+    "react-dropzone": "^14.3.5",
+    "react-error-boundary": "^5.0.0",
+    "react-i18next": "^15.4.0",
+    "react-use": "^17.6.1"
+  },
   "devDependencies": {
     "@faker-js/faker": "^10.5.0",
     "@testing-library/react": "^16.1.0",
@@ -27,32 +53,6 @@
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^4.1.12",
     "vitest-dom": "^0.1.1"
-  },
-  "dependencies": {
-    "@peculiar/certificates-viewer-react": "^4.3.2",
-    "@peculiar/fortify-client-core": "^4.1.1",
-    "@peculiar/react-components": "^1.1.2",
-    "@peculiar/x509": "^1.12.3",
-    "clsx": "^2.1.1",
-    "i18next": "^24.2.1",
-    "lodash": "^4.18.1",
-    "react": "18.3.1",
-    "react-dom": "18.3.0",
-    "react-dropzone": "^14.3.5",
-    "react-error-boundary": "^5.0.0",
-    "react-i18next": "^15.4.0",
-    "react-use": "^17.6.1"
-  },
-  "scripts": {
-    "dev": "vite --port 3003",
-    "build": "vite build",
-    "preview": "vite preview --port 3005",
-    "test": "vitest run",
-    "typecheck": "tsc --noEmit",
-    "lint": "OXLINT_TSGOLINT_DANGEROUSLY_SUPPRESS_PROGRAM_DIAGNOSTICS=true oxlint",
-    "lint:fix": "npm run lint -- --fix",
-    "format": "oxfmt",
-    "format:check": "oxfmt --check"
   },
   "devEngines": {
     "packageManager": {

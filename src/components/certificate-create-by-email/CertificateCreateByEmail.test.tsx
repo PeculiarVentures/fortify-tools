@@ -1,6 +1,4 @@
-import {
-  render, userEvent, screen,
-} from '@testing';
+import { render, userEvent, screen } from '@testing';
 import { CertificateCreateByEmail } from './CertificateCreateByEmail';
 
 describe('<CertificateCreateByEmail />', () => {
@@ -8,10 +6,12 @@ describe('<CertificateCreateByEmail />', () => {
     const emailValue = 'info@company.com';
     const createDataResult = {
       subject: {
-        CN: emailValue, E: emailValue,
+        CN: emailValue,
+        E: emailValue,
       },
       algorithm: {
-        hash: 'SHA-256', signature: 'EC-P256',
+        hash: 'SHA-256',
+        signature: 'EC-P256',
       },
       type: 'x509',
     };
@@ -41,21 +41,19 @@ describe('<CertificateCreateByEmail />', () => {
 
   it('Should validate incorrect email', async () => {
     render(
-      <CertificateCreateByEmail type="x509" onCreateButtonClick={vi.fn()} />,
+      <CertificateCreateByEmail
+        type="x509"
+        onCreateButtonClick={vi.fn()}
+      />,
     );
 
     const buttonElement = screen.getByRole('button', { name: 'Create certificate' });
 
     expect(buttonElement).toBeDisabled();
 
-    await userEvent.type(
-      screen.getByRole('textbox', { name: 'Email address' }),
-      'company',
-    );
+    await userEvent.type(screen.getByRole('textbox', { name: 'Email address' }), 'company');
 
-    expect(
-      screen.getByText('Please enter valid email address'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Please enter valid email address')).toBeInTheDocument();
 
     expect(buttonElement).toBeDisabled();
   });

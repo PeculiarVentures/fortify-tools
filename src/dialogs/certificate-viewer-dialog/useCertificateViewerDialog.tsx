@@ -1,11 +1,11 @@
 import React from 'react';
 import { IProviderInfo, FortifyAPI } from '@peculiar/fortify-client-core';
-import { useLockBodyScroll } from 'react-use';
-import cloneDeep from 'lodash/cloneDeep';
 import { X509Certificate } from '@peculiar/x509';
-import { getCertificateSubject } from '../../utils/certificate';
+import cloneDeep from 'lodash/cloneDeep';
+import { useLockBodyScroll } from 'react-use';
 import { CertificateViewerDialog } from '../../components/certificate-viewer-dialog';
 import { ICertificateProps } from '../../types';
+import { getCertificateSubject } from '../../utils/certificate';
 
 interface IUseCertificateViewerDialogOpenParams {
   providerId: string;
@@ -18,12 +18,8 @@ interface IUseCertificateViewerInitialParams {
   fortifyClient: FortifyAPI | null;
 }
 
-export function useCertificateViewerDialog(
-  props: IUseCertificateViewerInitialParams,
-) {
-  const {
-    providers, currentProviderId, fortifyClient,
-  } = props;
+export function useCertificateViewerDialog(props: IUseCertificateViewerInitialParams) {
+  const { providers, currentProviderId, fortifyClient } = props;
   const [isOpen, setIsOpen] = React.useState(false);
   const openParamsRef = React.useRef<IUseCertificateViewerDialogOpenParams>();
   const certificatesRef = React.useRef<ICertificateProps[]>();
@@ -32,13 +28,8 @@ export function useCertificateViewerDialog(
     let currentCertificates: ICertificateProps[] = [params.certificate];
 
     try {
-      if (
-        fortifyClient
-        && currentProviderId
-        && params.certificate.type === 'x509'
-      ) {
-        const localProvider
-          = await fortifyClient.getProviderById(currentProviderId);
+      if (fortifyClient && currentProviderId && params.certificate.type === 'x509') {
+        const localProvider = await fortifyClient.getProviderById(currentProviderId);
 
         const certificateCopy = cloneDeep(params.certificate);
 
@@ -83,9 +74,7 @@ export function useCertificateViewerDialog(
 
   useLockBodyScroll(isOpen);
 
-  const currentProvider = providers.find(
-    ({ id }) => openParamsRef.current?.providerId === id,
-  );
+  const currentProvider = providers.find(({ id }) => openParamsRef.current?.providerId === id);
 
   if (isOpen && !currentProvider) {
     handleClose();
@@ -94,13 +83,11 @@ export function useCertificateViewerDialog(
   return {
     open: handleOpen,
     dialog: () =>
-      isOpen && openParamsRef.current && certificatesRef?.current
-        ? (
-            <CertificateViewerDialog
-              certificates={certificatesRef.current}
-              onClose={handleClose}
-            />
-          )
-        : null,
+      isOpen && openParamsRef.current && certificatesRef?.current ? (
+        <CertificateViewerDialog
+          certificates={certificatesRef.current}
+          onClose={handleClose}
+        />
+      ) : null,
   };
 }

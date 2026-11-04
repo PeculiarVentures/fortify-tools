@@ -41,13 +41,13 @@
         color: var(--pv-color-gray-10);
       }
     }
-    &[class~="current"] .list_table_actions,
+    &[class~='current'] .list_table_actions,
     &:hover .list_table_actions {
       width: fit-content;
       overflow: visible;
       padding-right: var(--pv-size-base-5);
       &:before {
-        content: "";
+        content: '';
         width: 50px;
         position: absolute;
         top: 0;

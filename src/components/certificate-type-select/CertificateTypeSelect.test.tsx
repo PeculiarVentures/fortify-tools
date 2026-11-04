@@ -1,6 +1,4 @@
-import {
-  render, userEvent, screen,
-} from '@testing';
+import { render, userEvent, screen } from '@testing';
 import { CertificateTypeSelect } from './CertificateTypeSelect';
 
 describe('<CertificateTypeSelect />', () => {
@@ -53,7 +51,10 @@ describe('<CertificateTypeSelect />', () => {
     const itemsCSR = [...items, 'Custom CSR'];
 
     render(
-      <CertificateTypeSelect type="csr" onChange={onChangeMock} />,
+      <CertificateTypeSelect
+        type="csr"
+        onChange={onChangeMock}
+      />,
     );
 
     const combobox = screen.getByRole('combobox');

@@ -10,7 +10,8 @@ export const TableBody = React.forwardRef<
 
   return (
     <tbody
-      ref={ref} className={clsx(styles.tbody, className)}
+      ref={ref}
+      className={clsx(styles.tbody, className)}
       {...restProps}
     />
   );

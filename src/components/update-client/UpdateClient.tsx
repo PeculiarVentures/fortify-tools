@@ -12,10 +12,16 @@ export const UpdateClient: React.FunctionComponent = () => {
       <div className={styles.icon_wrapper}>
         <UpdateAppIcon />
       </div>
-      <Typography variant="h5" color="black">
+      <Typography
+        variant="h5"
+        color="black"
+      >
         {t('connection.error.update-client.message')}
       </Typography>
-      <Typography variant="b2" color="gray-9">
+      <Typography
+        variant="b2"
+        color="gray-9"
+      >
         {t('connection.error.update-client.description')}
       </Typography>
     </div>

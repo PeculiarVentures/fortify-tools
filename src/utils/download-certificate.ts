@@ -1,13 +1,9 @@
-import { Convert } from 'pvtsutils';
-import { Pkcs10CertificateRequest, X509Certificate } from '@peculiar/x509';
 import { Download } from '@peculiar/certificates-viewer';
+import { Pkcs10CertificateRequest, X509Certificate } from '@peculiar/x509';
+import { Convert } from 'pvtsutils';
 import { TCertificateType } from '../types';
 
-export function downloadCertificate(
-  label: string,
-  certRaw: ArrayBuffer,
-  type: TCertificateType,
-) {
+export function downloadCertificate(label: string, certRaw: ArrayBuffer, type: TCertificateType) {
   switch (type) {
     case 'x509': {
       const cert = new X509Certificate(Convert.ToBase64(certRaw));

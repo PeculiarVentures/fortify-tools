@@ -1,4 +1,5 @@
 import React from 'react';
+import type { IProviderInfo } from '@peculiar/fortify-client-core';
 import {
   Button,
   Dialog,
@@ -8,7 +9,6 @@ import {
   Typography,
 } from '@peculiar/react-components';
 import { useTranslation } from 'react-i18next';
-import type { IProviderInfo } from '@peculiar/fortify-client-core';
 import styles from './styles/index.module.scss';
 
 interface IProviderInfoDialogProps {
@@ -16,9 +16,7 @@ interface IProviderInfoDialogProps {
   onDialogClose: () => void;
 }
 
-export const ProviderInfoDialog: React.FunctionComponent<
-  IProviderInfoDialogProps
-> = (props) => {
+export const ProviderInfoDialog: React.FunctionComponent<IProviderInfoDialogProps> = (props) => {
   const { onDialogClose, data } = props;
   const { t } = useTranslation();
 
@@ -35,9 +33,7 @@ export const ProviderInfoDialog: React.FunctionComponent<
     },
     {
       label: t('providers.dialog.info.list.extractable.label'),
-      value: t(
-        `providers.dialog.info.list.extractable.value.${data.isRemovable ? 'yes' : 'no'}`,
-      ),
+      value: t(`providers.dialog.info.list.extractable.value.${data.isRemovable ? 'yes' : 'no'}`),
     },
     {
       label: t('providers.dialog.info.list.serial-number'),
@@ -77,11 +73,16 @@ export const ProviderInfoDialog: React.FunctionComponent<
   const renderInfoItems = () =>
     items.map(({ label, value }) => (
       <React.Fragment key={label}>
-        <Typography variant="b2" color="gray-9">
-          {label}
-          :
+        <Typography
+          variant="b2"
+          color="gray-9"
+        >
+          {label}:
         </Typography>
-        <Typography variant="b2" color="black">
+        <Typography
+          variant="b2"
+          color="black"
+        >
           {value || t('providers.dialog.info.empty-value')}
         </Typography>
       </React.Fragment>
@@ -89,7 +90,8 @@ export const ProviderInfoDialog: React.FunctionComponent<
 
   return (
     <Dialog
-      open className={styles.dialog}
+      open
+      className={styles.dialog}
       onClose={onDialogClose}
     >
       <>
@@ -100,7 +102,10 @@ export const ProviderInfoDialog: React.FunctionComponent<
           <div className={styles.dialog_content_list}>{renderInfoItems()}</div>
         </DialogContent>
         <DialogActions className={styles.dialog_footer}>
-          <Button variant="outlined" onClick={onDialogClose}>
+          <Button
+            variant="outlined"
+            onClick={onDialogClose}
+          >
             {t('button.cancel')}
           </Button>
         </DialogActions>
