@@ -12,7 +12,7 @@ import {
 import { clsx } from 'clsx';
 import { Convert } from 'pvtsutils';
 import { useTranslation } from 'react-i18next';
-import { ICertificateProps } from '../../types';
+import type { ICertificateProps } from '../../types';
 import { getCertificateName } from '../../utils/certificate';
 import styles from './styles/index.module.scss';
 

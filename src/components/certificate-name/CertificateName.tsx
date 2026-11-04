@@ -1,4 +1,5 @@
-import React, { ComponentProps } from 'react';
+import type { ComponentProps } from 'react';
+import React from 'react';
 import { Tooltip, Typography } from '@peculiar/react-components';
 import { clsx } from 'clsx';
 import { HighlightedText } from '../highlighted-text';

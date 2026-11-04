@@ -1,5 +1,6 @@
 import React from 'react';
-import { IconButton, TIconButtonProps, useClipboard } from '@peculiar/react-components';
+import type { TIconButtonProps } from '@peculiar/react-components';
+import { IconButton, useClipboard } from '@peculiar/react-components';
 import CheckIcon from '../../icons/check-20.svg?react';
 import CopyIcon from '../../icons/copy-20.svg?react';
 

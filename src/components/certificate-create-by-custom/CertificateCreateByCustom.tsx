@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
+import type { ExtendedKeyUsageType } from '@peculiar/x509';
 import { Select, Button, TextField, Typography } from '@peculiar/react-components';
-import { ExtendedKeyUsageType } from '@peculiar/x509';
 import { useTranslation } from 'react-i18next';
-import { countries } from '../../config/data';
-import {
+import type {
   ICertificateAlgorithmProps,
   ICertificateSubjectProps,
   TCertificateType,
 } from '../../types';
+import { countries } from '../../config/data';
 import { Card } from '../card';
 import { CertificateKeyPropertiesSelect } from '../certificate-key-properties-select';
 import { KeyUsagesCheckboxGroup } from '../key-usages-checkbox-group';

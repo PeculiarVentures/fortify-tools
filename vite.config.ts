@@ -1,12 +1,14 @@
 import react from '@vitejs/plugin-react';
-/// <reference types="vitest/config" />
-import { defineConfig } from 'vite';
 import svgr from 'vite-plugin-svgr';
-import tsconfigPaths from 'vite-tsconfig-paths';
+import { defineConfig } from 'vitest/config';
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig(({ command }) => ({
-  plugins: [svgr(), react(), tsconfigPaths()],
+  plugins: [svgr(), react()],
+  resolve: {
+    // Resolves the @testing aliases from tsconfig.json paths.
+    tsconfigPaths: true,
+  },
   server: {
     port: 3000,
     open: true,

@@ -1,6 +1,6 @@
-import { ComponentProps } from 'react';
+import type { ComponentProps } from 'react';
 import { render, userEvent, fireEvent, screen } from '@testing';
-import { ICertificateProps } from '../../types';
+import type { ICertificateProps } from '../../types';
 import * as certificateUtils from '../../utils/certificate';
 import { downloadCertificate } from '../../utils/download-certificate';
 import { CertificatesList } from './CertificatesList';

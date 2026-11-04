@@ -1,4 +1,4 @@
-import { ICertificateProps, ICertificateSubjectProps } from '../types';
+import type { ICertificateProps, ICertificateSubjectProps } from '../types';
 import { certificateSubjectToString, getCertificateName } from './certificate';
 
 describe('Certificate Utilities', () => {

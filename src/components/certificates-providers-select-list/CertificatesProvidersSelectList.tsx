@@ -1,5 +1,6 @@
-import React, { ComponentProps } from 'react';
-import { IProviderInfo } from '@peculiar/fortify-client-core';
+import type { ComponentProps } from 'react';
+import React from 'react';
+import type { IProviderInfo } from '@peculiar/fortify-client-core';
 import { Select } from '@peculiar/react-components';
 import { useTranslation } from 'react-i18next';
 

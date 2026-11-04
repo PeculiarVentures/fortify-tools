@@ -1,5 +1,5 @@
 import React from 'react';
-import { IProviderInfo } from '@peculiar/fortify-client-core';
+import type { IProviderInfo } from '@peculiar/fortify-client-core';
 import { Typography } from '@peculiar/react-components';
 import { clsx } from 'clsx';
 import { useTranslation } from 'react-i18next';

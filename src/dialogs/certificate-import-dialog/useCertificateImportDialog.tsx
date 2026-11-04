@@ -1,11 +1,11 @@
 import React, { useRef } from 'react';
-import { IProviderInfo, FortifyAPI } from '@peculiar/fortify-client-core';
+import type { IProviderInfo, FortifyAPI } from '@peculiar/fortify-client-core';
 import { useToast } from '@peculiar/react-components';
 import { Pkcs10CertificateRequest, X509Certificate } from '@peculiar/x509';
 import { useTranslation } from 'react-i18next';
 import { useLockBodyScroll } from 'react-use';
+import type { TCertificateType } from '../../types';
 import { CertificateImportDialog } from '../../components/certificate-import-dialog';
-import { TCertificateType } from '../../types';
 
 interface IUseCertificateImportDialogInitialParams {
   providers: IProviderInfo[];

@@ -1,8 +1,10 @@
-import React, { ComponentProps } from 'react';
+import type { ComponentProps } from 'react';
+import React from 'react';
 import { Select, useControllableState } from '@peculiar/react-components';
 import { useTranslation } from 'react-i18next';
-import { TCertificateExtendedKeyUsages, certificateKeyUsageExtensions } from '../../config/data';
-import { TCertificateType } from '../../types';
+import type { TCertificateExtendedKeyUsages } from '../../config/data';
+import type { TCertificateType } from '../../types';
+import { certificateKeyUsageExtensions } from '../../config/data';
 import styles from './styles/index.module.scss';
 
 type TExtendedKeyUsages = TCertificateExtendedKeyUsages | 'custom';

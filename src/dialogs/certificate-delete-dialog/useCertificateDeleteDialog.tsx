@@ -1,5 +1,5 @@
 import React from 'react';
-import { IProviderInfo, FortifyAPI } from '@peculiar/fortify-client-core';
+import type { IProviderInfo, FortifyAPI } from '@peculiar/fortify-client-core';
 import { useToast } from '@peculiar/react-components';
 import { useTranslation } from 'react-i18next';
 import { useLockBodyScroll } from 'react-use';

@@ -1,12 +1,13 @@
-import React, { ComponentProps, useState } from 'react';
+import type { ComponentProps } from 'react';
+import React, { useState } from 'react';
 import { Button, IconButton, Skeleton, Typography } from '@peculiar/react-components';
 import { clsx } from 'clsx';
 import { Trans, useTranslation } from 'react-i18next';
+import type { ICertificateProps } from '../../types';
 import CertificatesIcon from '../../icons/certificates.svg?react';
 import DeleteIcon from '../../icons/delete.svg?react';
 import DownloadIcon from '../../icons/download-20.svg?react';
 import SearchIcon from '../../icons/search-120.svg?react';
-import { ICertificateProps } from '../../types';
 import { certificateRawToPem, getCertificateName } from '../../utils/certificate';
 import { downloadCertificate } from '../../utils/download-certificate';
 import { CertificateName } from '../certificate-name';

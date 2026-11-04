@@ -1,4 +1,4 @@
-import { ComponentProps } from 'react';
+import type { ComponentProps } from 'react';
 import { render, userEvent, fireEvent, act, screen } from '@testing';
 import { APP_CERTIFICATE_MAX_SIZE_BYTES } from '../../config';
 import { CertificateImportDialog } from './CertificateImportDialog';

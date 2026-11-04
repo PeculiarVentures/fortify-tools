@@ -1,4 +1,5 @@
-import React, { ComponentProps } from 'react';
+import type { ComponentProps } from 'react';
+import React from 'react';
 import { EHashAlgorithm, ESignatureAlgorithm } from '@peculiar/fortify-client-core';
 import { Select, Typography } from '@peculiar/react-components';
 import { clsx } from 'clsx';

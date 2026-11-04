@@ -1,5 +1,5 @@
 import { render, userEvent, screen } from '@testing';
-import { ICertificateProps } from '../../types';
+import type { ICertificateProps } from '../../types';
 import { CertificateViewerDialog } from './CertificateViewerDialog';
 
 vi.mock('@peculiar/certificates-viewer-react', () => ({

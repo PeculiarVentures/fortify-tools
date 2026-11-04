@@ -1,7 +1,7 @@
 import type { IProviderInfo, FortifyAPI } from '@peculiar/fortify-client-core';
 import { renderHook, act } from '@testing';
 import { vi } from 'vitest';
-import { ICertificateProps } from '../../types';
+import type { ICertificateProps } from '../../types';
 import { useCertificateViewerDialog } from './useCertificateViewerDialog';
 
 vi.mock('@peculiar/x509', async (importOriginal) => {
