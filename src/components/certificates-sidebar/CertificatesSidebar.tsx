@@ -1,4 +1,5 @@
-import React, { ComponentProps, PropsWithChildren } from 'react';
+import type { ComponentProps, PropsWithChildren } from 'react';
+import React from 'react';
 import { Typography } from '@peculiar/react-components';
 import { clsx } from 'clsx';
 import { useTranslation } from 'react-i18next';

@@ -1,5 +1,5 @@
 import { Pkcs10CertificateRequest, X509Certificate, Name } from '@peculiar/x509';
-import { ICertificateProps, ICertificateSubjectProps, TCertificateType } from '../types';
+import type { ICertificateProps, ICertificateSubjectProps, TCertificateType } from '../types';
 
 export function certificateRawToPem(raw: ArrayBuffer, type: TCertificateType) {
   let pem;

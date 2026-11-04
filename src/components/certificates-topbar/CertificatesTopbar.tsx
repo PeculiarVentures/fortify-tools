@@ -1,4 +1,5 @@
-import React, { ComponentProps } from 'react';
+import type { ComponentProps } from 'react';
+import React from 'react';
 import { Button, IconButton, Menu, TextField, Tooltip } from '@peculiar/react-components';
 import { clsx } from 'clsx';
 import { useTranslation } from 'react-i18next';

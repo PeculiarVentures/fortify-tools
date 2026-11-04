@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ICertificateRequest } from '@peculiar/fortify-client-core';
-import { ICertificateProps } from '../../types';
+import type { ICertificateRequest } from '@peculiar/fortify-client-core';
+import type { ICertificateProps } from '../../types';
 import { getCertificateName } from '../../utils/certificate';
 
 export function useSearchList(certificates: (ICertificateProps | ICertificateRequest)[]) {

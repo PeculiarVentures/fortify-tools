@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import type { ExtendedKeyUsageType } from '@peculiar/x509';
 import { EHashAlgorithm, ESignatureAlgorithm } from '@peculiar/fortify-client-core';
 import { Button, TextField } from '@peculiar/react-components';
-import { ExtendedKeyUsageType } from '@peculiar/x509';
 import { useTranslation } from 'react-i18next';
-import { ICertificateAlgorithmProps, TCertificateType } from '../../types';
+import type { ICertificateAlgorithmProps, TCertificateType } from '../../types';
 import { Card } from '../card';
 import { CertificateAlgorithmInfo } from '../certificate-algorithm-info';
 import styles from './styles/index.module.scss';

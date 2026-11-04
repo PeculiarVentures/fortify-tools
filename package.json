@@ -23,13 +23,13 @@
     "@peculiar/react-components": "^1.1.2",
     "@peculiar/x509": "^1.12.3",
     "clsx": "^2.1.1",
-    "i18next": "^24.2.1",
+    "i18next": "^26.7.1",
     "lodash": "^4.18.1",
     "react": "18.3.1",
     "react-dom": "18.3.0",
     "react-dropzone": "^14.3.5",
     "react-error-boundary": "^5.0.0",
-    "react-i18next": "^15.4.0",
+    "react-i18next": "^17.1.12",
     "react-use": "^17.6.1"
   },
   "devDependencies": {
@@ -47,10 +47,9 @@
     "oxlint-tsgolint": "^7.0.2005",
     "postcss": "^8.5.26",
     "sass": "^1.83.1",
-    "typescript": "^5.7.2",
+    "typescript": "^6.0.3",
     "vite": "^8.3.5",
     "vite-plugin-svgr": "^4.3.0",
-    "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^4.1.12",
     "vitest-dom": "^0.1.1"
   },

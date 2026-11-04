@@ -1,4 +1,4 @@
-import { ComponentProps } from 'react';
+import type { ComponentProps } from 'react';
 import { render, userEvent, screen } from '@testing';
 import { CertificateDeleteDialog } from './CertificateDeleteDialog';
 

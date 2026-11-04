@@ -1,30 +1,27 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-
-    /* Bundler mode */
+    "target": "es2022",
+    "lib": ["es2022", "DOM"],
+    "module": "preserve",
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
+    "types": ["vitest/globals", "vitest-dom/extend-expect"],
     "jsx": "react-jsx",
-
-    /* Linting */
+    "resolveJsonModule": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
     "strict": true,
+    "skipLibCheck": true,
+    "noImplicitOverride": true,
+    "noErrorTruncation": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "types": ["vitest-dom/extend-expect", "vitest/globals"],
-    "baseUrl": "./",
+    "noEmit": true,
+    // Resolved by Vite and Vitest too (resolve.tsconfigPaths in vite.config.ts).
     "paths": {
-      "@testing": ["utils/testing/index.ts"],
-      "@testing/data": ["utils/testing/data/index.ts"]
+      "@testing": ["./utils/testing/index.ts"],
+      "@testing/data": ["./utils/testing/data/index.ts"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "utils", "*.config.ts", "setup-test.ts"]
 }

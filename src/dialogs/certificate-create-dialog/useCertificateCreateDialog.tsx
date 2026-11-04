@@ -1,14 +1,12 @@
 import React, { useEffect, useRef } from 'react';
-import { IProviderInfo, FortifyAPI } from '@peculiar/fortify-client-core';
+import type { IProviderInfo, FortifyAPI } from '@peculiar/fortify-client-core';
+import type { ExtendedKeyUsageType } from '@peculiar/x509';
 import { useToast } from '@peculiar/react-components';
-import { ExtendedKeyUsageType } from '@peculiar/x509';
 import { useTranslation } from 'react-i18next';
 import { useLockBodyScroll } from 'react-use';
-import {
-  TCertificateCreateDataProps,
-  CertificateCreateDialog,
-} from '../../components/certificate-create-dialog';
-import { TCertificateType } from '../../types';
+import type { TCertificateCreateDataProps } from '../../components/certificate-create-dialog';
+import type { TCertificateType } from '../../types';
+import { CertificateCreateDialog } from '../../components/certificate-create-dialog';
 import { certificateSubjectToString } from '../../utils/certificate';
 
 export function useCertificateCreateDialog(props: {

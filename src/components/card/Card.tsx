@@ -1,4 +1,5 @@
-import React, { ComponentProps, PropsWithChildren } from 'react';
+import type { ComponentProps, PropsWithChildren } from 'react';
+import React from 'react';
 import { clsx } from 'clsx';
 import styles from './styles/index.module.scss';
 

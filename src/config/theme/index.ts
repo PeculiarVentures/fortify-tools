@@ -1,4 +1,4 @@
-import { IThemeOptionsType } from '@peculiar/react-components';
+import type { IThemeOptionsType } from '@peculiar/react-components';
 
 export const theme: IThemeOptionsType = {
   color: {

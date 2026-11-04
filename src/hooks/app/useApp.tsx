@@ -1,13 +1,13 @@
 import React from 'react';
-import {
-  FortifyAPI,
+import type {
   IProviderInfo,
   ICertificate,
   ICertificateRequest,
 } from '@peculiar/fortify-client-core';
+import { FortifyAPI } from '@peculiar/fortify-client-core';
 import { useToast } from '@peculiar/react-components';
 import { useTranslation } from 'react-i18next';
-import { TAppFetchingStatus, IAppFetchingType } from './types';
+import type { TAppFetchingStatus, IAppFetchingType } from './types';
 
 export function useApp() {
   /**

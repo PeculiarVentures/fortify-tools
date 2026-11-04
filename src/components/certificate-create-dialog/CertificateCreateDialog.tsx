@@ -1,5 +1,5 @@
 import React from 'react';
-import { IProviderInfo } from '@peculiar/fortify-client-core';
+import type { IProviderInfo } from '@peculiar/fortify-client-core';
 import {
   Dialog,
   ArrowRightIcon,
@@ -9,22 +9,17 @@ import {
 } from '@peculiar/react-components';
 import { clsx } from 'clsx';
 import { useTranslation } from 'react-i18next';
+import type { TCertificateType } from '../../types';
+import type { ICertificateCreateByCnameData } from '../certificate-create-by-cname';
+import type { ICertificateCreateByCustomData } from '../certificate-create-by-custom';
+import type { ICertificateCreateByEmailData } from '../certificate-create-by-email';
+import type { ICertificateTypeSelectValue } from '../certificate-type-select';
 import { certificateKeyUsageExtensions } from '../../config/data';
-import { TCertificateType } from '../../types';
 import { Card } from '../card';
-import {
-  CertificateCreateByCname,
-  ICertificateCreateByCnameData,
-} from '../certificate-create-by-cname';
-import {
-  CertificateCreateByCustom,
-  ICertificateCreateByCustomData,
-} from '../certificate-create-by-custom';
-import {
-  CertificateCreateByEmail,
-  ICertificateCreateByEmailData,
-} from '../certificate-create-by-email';
-import { CertificateTypeSelect, ICertificateTypeSelectValue } from '../certificate-type-select';
+import { CertificateCreateByCname } from '../certificate-create-by-cname';
+import { CertificateCreateByCustom } from '../certificate-create-by-custom';
+import { CertificateCreateByEmail } from '../certificate-create-by-email';
+import { CertificateTypeSelect } from '../certificate-type-select';
 import { CertificatesProvidersSelectList } from '../certificates-providers-select-list';
 import styles from './styles/index.module.scss';
 

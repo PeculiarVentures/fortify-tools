@@ -1,6 +1,6 @@
 import { Download } from '@peculiar/certificates-viewer';
 import { describe, it, expect, vi } from 'vitest';
-import { TCertificateType } from '../types';
+import type { TCertificateType } from '../types';
 import { downloadCertificate } from './download-certificate';
 
 vi.mock('@peculiar/certificates-viewer', () => ({

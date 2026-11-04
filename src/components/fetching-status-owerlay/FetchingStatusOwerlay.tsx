@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dialog, DialogContent } from '@peculiar/react-components';
 import { useTranslation } from 'react-i18next';
-import { IAppFetchingType } from '../../hooks/app';
+import type { IAppFetchingType } from '../../hooks/app';
 import { ApproveConnection } from '../approve-connection';
 import { ConnectionNotApproved } from '../connection-not-approved';
 import { ConnectionNotDetected } from '../connection-not-detected';

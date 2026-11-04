@@ -1,5 +1,5 @@
+import type { FallbackProps } from 'react-error-boundary';
 import { Button, Typography } from '@peculiar/react-components';
-import { FallbackProps } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import ErrorIcon from '../../icons/error-big.svg?react';
 import styles from './styles/index.module.scss';

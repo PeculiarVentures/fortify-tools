@@ -1,5 +1,7 @@
-import React, { ComponentProps, PropsWithChildren } from 'react';
-import { Button, TButtonProps, Typography } from '@peculiar/react-components';
+import type { ComponentProps, PropsWithChildren } from 'react';
+import React from 'react';
+import type { TButtonProps } from '@peculiar/react-components';
+import { Button, Typography } from '@peculiar/react-components';
 import { clsx } from 'clsx';
 import DownIcon from '../../icons/down-10.svg?react';
 import styles from './styles/index.module.scss';

@@ -1,7 +1,7 @@
 import { Download } from '@peculiar/certificates-viewer';
 import { Pkcs10CertificateRequest, X509Certificate } from '@peculiar/x509';
 import { Convert } from 'pvtsutils';
-import { TCertificateType } from '../types';
+import type { TCertificateType } from '../types';
 
 export function downloadCertificate(label: string, certRaw: ArrayBuffer, type: TCertificateType) {
   switch (type) {
