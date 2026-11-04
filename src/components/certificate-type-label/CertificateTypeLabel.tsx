@@ -12,25 +12,29 @@ import styles from './styles/index.module.scss';
 interface ICertificateTypeLabelProps {
   type: ICertificate['type'] | ICertificateRequest['type'];
   withPrivatKey: boolean;
+  withoutIcon?: boolean;
   className?: ComponentProps<'div'>['className'];
 }
 
 export const CertificateTypeLabel: React.FunctionComponent<ICertificateTypeLabelProps> = (
   props,
 ) => {
-  const { type, className, withPrivatKey } = props;
+  const { type, className, withPrivatKey, withoutIcon } = props;
   const { t } = useTranslation();
+  const textVariant = withoutIcon ? 'b2' : 's2';
 
   const renderType = () => {
     if (type === 'x509') {
       return (
         <>
-          <span className={styles.icon_wrapper}>
-            {withPrivatKey ? <CertificateWithKeyIcon /> : <CertificateIcon />}
-          </span>
+          {!withoutIcon ? (
+            <span className={styles.icon_wrapper}>
+              {withPrivatKey ? <CertificateWithKeyIcon /> : <CertificateIcon />}
+            </span>
+          ) : null}
           <span>
             <Typography
-              variant="s2"
+              variant={textVariant}
               color="black"
               className={styles.label_part}
             >
@@ -54,12 +58,14 @@ export const CertificateTypeLabel: React.FunctionComponent<ICertificateTypeLabel
     if (type === 'request') {
       return (
         <>
-          <span className={styles.icon_wrapper}>
-            <CertificateRequestIcon />
-          </span>
+          {!withoutIcon ? (
+            <span className={styles.icon_wrapper}>
+              <CertificateRequestIcon />
+            </span>
+          ) : null}
           <span>
             <Typography
-              variant="s2"
+              variant={textVariant}
               color="black"
               className={styles.label_part}
             >
@@ -72,7 +78,7 @@ export const CertificateTypeLabel: React.FunctionComponent<ICertificateTypeLabel
 
     return (
       <Typography
-        variant="s2"
+        variant={textVariant}
         color="black"
       >
         {type}

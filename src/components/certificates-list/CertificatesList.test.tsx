@@ -22,6 +22,10 @@ vi.mock('@peculiar/react-components', async () => {
 });
 
 describe('<CertificatesList />', () => {
+  const openCertificateActionsMenu = async () => {
+    await userEvent.click(screen.getByRole('button', { name: /Certificate actions/ }));
+  };
+
   const certificates = [
     {
       id: '1',
@@ -31,6 +35,7 @@ describe('<CertificatesList />', () => {
       raw: new ArrayBuffer(1),
       type: 'x509',
       serialNumber: '1',
+      notBefore: new Date('2023-06-01'),
       notAfter: new Date('2024-01-01'),
     },
     {
@@ -41,6 +46,7 @@ describe('<CertificatesList />', () => {
       raw: new ArrayBuffer(0),
       type: 'x509',
       serialNumber: '2',
+      notBefore: new Date('2023-06-02'),
       notAfter: new Date('2024-01-02'),
     },
   ] as unknown as ICertificateProps[];
@@ -64,11 +70,14 @@ describe('<CertificatesList />', () => {
     );
 
     expect(screen.getAllByRole('row')).toHaveLength(13);
-    expect(screen.getAllByRole('presentation')).toHaveLength(48);
+    expect(screen.getAllByRole('presentation')).toHaveLength(72);
 
-    screen.getAllByRole('columnheader').forEach((elem) => {
-      expect(elem.children[0]).toBeDisabled();
-    });
+    screen
+      .getAllByRole('columnheader')
+      .slice(0, 5)
+      .forEach((elem) => {
+        expect(elem.children[0]).toBeDisabled();
+      });
   });
 
   it('Should render empty search state', () => {
@@ -97,25 +106,30 @@ describe('<CertificatesList />', () => {
       />,
     );
 
-    const columnsLabels = [/Type/, /Name/, /Serial number/, /Expires/];
+    expect(screen.getAllByRole('columnheader')).toHaveLength(6);
+
+    const columnsLabels = [/Name/, /Type/, /Serial number/, /Created at/, /Expires/];
 
     screen
       .getAllByRole('columnheader')
+      .slice(0, 5)
       .forEach((elem, index) => expect(elem).toHaveTextContent(columnsLabels[index]));
 
     expect(screen.getAllByRole('row')).toHaveLength(3);
 
     const cells = screen.getAllByRole('cell');
 
-    expect(cells).toHaveLength(8);
+    expect(cells).toHaveLength(12);
 
-    expect(cells[1]).toHaveTextContent(/Test 1/);
+    expect(cells[0]).toHaveTextContent(/Test 1/);
     expect(cells[2]).toHaveTextContent(/1/);
-    expect(cells[3]).toHaveTextContent(/Jan 1, 2024/);
+    expect(cells[3]).toHaveTextContent(/Jun 1, 2023/);
+    expect(cells[4]).toHaveTextContent(/Jan 1, 2024/);
 
-    expect(cells[5]).toHaveTextContent(/Test 2/);
-    expect(cells[6]).toHaveTextContent(/2/);
-    expect(cells[7]).toHaveTextContent(/Jan 2, 2024/);
+    expect(cells[6]).toHaveTextContent(/Test 2/);
+    expect(cells[8]).toHaveTextContent(/2/);
+    expect(cells[9]).toHaveTextContent(/Jun 2, 2023/);
+    expect(cells[10]).toHaveTextContent(/Jan 2, 2024/);
   });
 
   it('Should render certificates list with readOnly provider', () => {
@@ -127,10 +141,10 @@ describe('<CertificatesList />', () => {
       />,
     );
 
-    expect(screen.queryByLabelText(/Delete certificate/)).not.toBeInTheDocument();
+    expect(screen.queryByRole('menuitem', { name: /Delete certificate/ })).not.toBeInTheDocument();
   });
 
-  it('Should render certificates list with not loggedIn to provider', () => {
+  it('Should render certificates list with not loggedIn to provider', async () => {
     render(
       <CertificatesList
         {...defaultProps}
@@ -139,7 +153,12 @@ describe('<CertificatesList />', () => {
       />,
     );
 
-    expect(screen.getByLabelText(/Delete certificate/)).toBeDisabled();
+    await openCertificateActionsMenu();
+
+    expect(screen.getByRole('menuitem', { name: /Delete certificate/ })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    );
   });
 
   it('Should handle onSort when sort buttons are clicked', async () => {
@@ -177,7 +196,8 @@ describe('<CertificatesList />', () => {
       />,
     );
 
-    await userEvent.click(screen.getByLabelText(/Delete certificate/));
+    await openCertificateActionsMenu();
+    await userEvent.click(screen.getByRole('menuitem', { name: /Delete certificate/ }));
 
     expect(onDeleteMock).toBeCalledTimes(1);
     expect(onDeleteMock).toHaveBeenCalledWith({
@@ -246,7 +266,8 @@ describe('<CertificatesList />', () => {
       />,
     );
 
-    await userEvent.click(screen.getByRole('button', { name: /View details/ }));
+    await openCertificateActionsMenu();
+    await userEvent.click(screen.getByRole('menuitem', { name: /View details/ }));
 
     expect(onViewDetailsMock).toBeCalledTimes(1);
     expect(onViewDetailsMock).toHaveBeenCalledWith({
@@ -263,7 +284,8 @@ describe('<CertificatesList />', () => {
       />,
     );
 
-    await userEvent.click(screen.getByLabelText(/Download certificate/));
+    await openCertificateActionsMenu();
+    await userEvent.click(screen.getByRole('menuitem', { name: /Download certificate/ }));
 
     expect(downloadCertificate).toBeCalledTimes(1);
     expect(downloadCertificate).toHaveBeenCalledWith(
@@ -283,7 +305,8 @@ describe('<CertificatesList />', () => {
       />,
     );
 
-    await userEvent.click(screen.getByLabelText(/Copy certificate/));
+    await openCertificateActionsMenu();
+    await userEvent.click(screen.getByRole('menuitem', { name: /Copy certificate/ }));
 
     expect(certificateUtils.certificateRawToPem).toBeCalledTimes(1);
     expect(certificateUtils.certificateRawToPem).toHaveBeenCalledWith(
