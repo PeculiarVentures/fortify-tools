@@ -1,7 +1,7 @@
 .box_wrapper {
   display: flex;
   flex-direction: column;
-  gap: var(--pv-size-base-6);
+  gap: calc(var(--pv-size-base) * 6);
   text-align: center;
   align-items: center;
   .icon_wrapper {
@@ -11,8 +11,8 @@
     display: flex;
     gap: var(--pv-size-base);
     > div {
-      width: var(--pv-size-base-6);
-      height: var(--pv-size-base-8);
+      width: calc(var(--pv-size-base) * 6);
+      height: calc(var(--pv-size-base) * 8);
       border-radius: var(--pv-border-radius-small);
       border: solid var(--pv-color-gray-5);
       display: flex;

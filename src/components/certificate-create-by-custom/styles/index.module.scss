@@ -1,21 +1,21 @@
 .form_box {
   display: flex;
   flex-direction: column;
-  gap: var(--pv-size-base-6);
+  gap: calc(var(--pv-size-base) * 6);
 
   .card {
-    gap: var(--pv-size-base-6);
+    gap: calc(var(--pv-size-base) * 6);
   }
 
   .subject_box {
     display: flex;
     flex-direction: column;
-    gap: var(--pv-size-base-2);
+    gap: calc(var(--pv-size-base) * 2);
 
     .subject_fields {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: var(--pv-size-base-2) var(--pv-size-base-6);
+      gap: calc(var(--pv-size-base) * 2) calc(var(--pv-size-base) * 6);
     }
   }
 
@@ -27,7 +27,7 @@
     &:before {
       content: '';
       height: 1px;
-      width: var(--pv-size-base-6);
+      width: calc(var(--pv-size-base) * 6);
       background-color: var(--pv-color-gray-4);
       position: absolute;
       top: 0;
@@ -41,7 +41,7 @@
   }
 
   .key_properties_select {
-    margin-bottom: var(--pv-size-base-2);
+    margin-bottom: calc(var(--pv-size-base) * 2);
   }
 
   .button_group {

@@ -1,8 +1,8 @@
 .topbar_root {
-  padding-top: var(--pv-size-base-6);
-  padding-bottom: var(--pv-size-base-4);
+  padding-top: calc(var(--pv-size-base) * 6);
+  padding-bottom: calc(var(--pv-size-base) * 4);
   display: flex;
-  gap: var(--pv-size-base-5);
+  gap: calc(var(--pv-size-base) * 5);
   align-items: center;
 
   .topbar_divider {
@@ -13,7 +13,7 @@
     position: relative;
     width: 400px;
     input {
-      padding: 0 var(--pv-size-base-9);
+      padding: 0 calc(var(--pv-size-base) * 9);
     }
     input::-webkit-search-cancel-button {
       display: none;
@@ -51,7 +51,7 @@
 }
 .icon_button_group {
   display: flex;
-  gap: var(--pv-size-base-2);
+  gap: calc(var(--pv-size-base) * 2);
   .icon_button {
     color: var(--pv-color-gray-10);
   }

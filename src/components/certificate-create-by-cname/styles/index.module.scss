@@ -1,7 +1,7 @@
 .form_box {
   display: flex;
   flex-direction: column;
-  gap: var(--pv-size-base-6);
+  gap: calc(var(--pv-size-base) * 6);
 
   .button_group {
     display: flex;
@@ -9,6 +9,6 @@
   }
   .algorithm {
     display: flex;
-    gap: var(--pv-size-base-6);
+    gap: calc(var(--pv-size-base) * 6);
   }
 }

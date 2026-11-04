@@ -6,8 +6,8 @@
   }
 
   .dialog_title {
-    padding-left: var(--pv-size-base-6);
-    padding-right: var(--pv-size-base-6);
+    padding-left: calc(var(--pv-size-base) * 6);
+    padding-right: calc(var(--pv-size-base) * 6);
   }
 
   .dialog_content_loading {
@@ -16,14 +16,15 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--pv-size-base-6);
-    margin-top: var(--pv-size-base-3);
+    gap: calc(var(--pv-size-base) * 6);
+    margin-top: calc(var(--pv-size-base) * 3);
   }
 
   .dialog_message {
-    padding: var(--pv-size-base-3) var(--pv-size-base-2) 0 var(--pv-size-base-2);
+    padding: calc(var(--pv-size-base) * 3) calc(var(--pv-size-base) * 2) 0
+      calc(var(--pv-size-base) * 2);
   }
   .dialog_footer {
-    padding: var(--pv-size-base-6);
+    padding: calc(var(--pv-size-base) * 6);
   }
 }

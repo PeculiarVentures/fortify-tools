@@ -1,6 +1,6 @@
 .certificate_type_label {
   display: flex;
-  gap: var(--pv-size-base-2);
+  gap: calc(var(--pv-size-base) * 2);
   align-items: center;
 }
 .icon_wrapper {
@@ -9,10 +9,10 @@
   justify-content: center;
   color: var(--pv-color-gray-9);
 
-  width: var(--pv-size-base-6);
+  width: calc(var(--pv-size-base) * 6);
   svg {
-    width: var(--pv-size-base-6);
-    height: var(--pv-size-base-6);
+    width: calc(var(--pv-size-base) * 6);
+    height: calc(var(--pv-size-base) * 6);
   }
 }
 .label_part {
