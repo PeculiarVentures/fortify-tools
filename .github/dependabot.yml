@@ -1,0 +1,32 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    # Retitle a runtime bump that users need to build(deps): or fix(deps): before the squash merge.
+    commit-message:
+      prefix: chore(deps)
+      prefix-development: chore(deps-dev)
+    groups:
+      # Majors stay separate PRs: they usually need code changes.
+      npm-minor-patch:
+        applies-to: version-updates
+        update-types:
+          - minor
+          - patch
+      npm-security:
+        applies-to: security-updates
+        patterns:
+          - '*'
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: ci
+    groups:
+      github-actions:
+        patterns:
+          - '*'

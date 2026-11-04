@@ -1,0 +1,53 @@
+name: Test
+
+# Pushes to main are tested by Deploy, which calls this workflow before publishing the site.
+on:
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  # In a called workflow github.workflow is the caller's name, so Deploy runs never share a group with pull requests.
+  group: ${{ github.workflow }}-test-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      # Deploy publishes this build (public/CNAME included). In a called workflow,
+      # github.event_name is the caller's event, so pull requests skip the upload.
+      - name: Upload site
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+          retention-days: 1

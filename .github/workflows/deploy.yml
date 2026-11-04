@@ -1,0 +1,39 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+  # Redeploys the selected branch's build, e.g. after a failed deployment. The github-pages
+  # environment only accepts deployments from main unless its protection rules say otherwise.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  # Gates the deployment, so a commit that fails checks never reaches tools.fortifyapp.com.
+  # It also uploads dist/ as the github-pages artifact that the deploy job publishes.
+  check:
+    uses: ./.github/workflows/test.yml
+
+  deploy:
+    runs-on: ubuntu-24.04
+    needs: check
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
