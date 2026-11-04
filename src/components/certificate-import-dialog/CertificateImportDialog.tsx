@@ -15,12 +15,13 @@ import { Trans, useTranslation } from 'react-i18next';
 import { APP_CERTIFICATE_ALLOWED_MIMES, APP_CERTIFICATE_MAX_SIZE_BYTES } from '../../config';
 import CrossIcon from '../../icons/cross.svg?react';
 import { formatBytes } from '../../utils';
+import { Card } from '../card';
 import { CertificatesProvidersSelectList } from '../certificates-providers-select-list';
 import styles from './styles/index.module.scss';
 
 interface ICertificateImportDialogProps {
   currentProviderId?: string;
-  providers: Pick<IProviderInfo, 'id' | 'name'>[];
+  providers: Pick<IProviderInfo, 'id' | 'name' | 'readOnly'>[];
   loading?: boolean;
   certificate: string;
   isTextAreaError: boolean;
@@ -136,19 +137,32 @@ export const CertificateImportDialog: React.FunctionComponent<ICertificateImport
                 {t('certificates.dialog.import.title')}
               </Typography>
             </div>
-            <div>
-              <CertificatesProvidersSelectList
-                providers={providers}
-                currentProviderId={currentProviderId}
-                className={styles.provider_select}
-                popoverClassName={styles.provider_select_popover}
-                onSelect={onProviderSelect}
-              />
-            </div>
           </div>
         </div>
         <div className={styles.content}>
           <div className={clsx(styles.centered, styles.content_box)}>
+            <Card>
+              <div>
+                <Typography
+                  variant="h5"
+                  color="black"
+                >
+                  {t('certificates.dialog.import.provider.title')}
+                </Typography>
+                <Typography
+                  variant="b2"
+                  color="gray-9"
+                >
+                  {t('certificates.dialog.import.provider.description')}
+                </Typography>
+              </div>
+              <CertificatesProvidersSelectList
+                providers={providers}
+                currentProviderId={currentProviderId}
+                popoverClassName={styles.provider_select_popover}
+                onSelect={onProviderSelect}
+              />
+            </Card>
             <div
               {...getRootProps({
                 className: clsx(styles.drop_zone, {

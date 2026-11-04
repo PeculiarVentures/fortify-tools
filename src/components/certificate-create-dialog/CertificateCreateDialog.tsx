@@ -31,7 +31,7 @@ export type TCertificateCreateDataProps =
 interface ICertificateCreateDialogProps {
   type: TCertificateType;
   currentProviderId?: string;
-  providers: Pick<IProviderInfo, 'id' | 'name'>[];
+  providers: Pick<IProviderInfo, 'id' | 'name' | 'readOnly'>[];
   loading?: boolean;
   onProviderSelect: (id: string) => void;
   onDialogClose: () => void;
@@ -149,19 +149,32 @@ export const CertificateCreateDialog: React.FunctionComponent<ICertificateCreate
               {t(`certificates.dialog.create.title.${type}`)}
             </Typography>
           </div>
-          <div>
-            <CertificatesProvidersSelectList
-              providers={providers}
-              currentProviderId={currentProviderId}
-              className={styles.provider_select}
-              popoverClassName={styles.provider_select_popover}
-              onSelect={onProviderSelect}
-            />
-          </div>
         </div>
       </div>
       <div className={styles.content}>
         <div className={clsx(styles.centered, styles.content_box)}>
+          <Card>
+            <div>
+              <Typography
+                variant="h5"
+                color="black"
+              >
+                {t('certificates.dialog.create.provider.title')}
+              </Typography>
+              <Typography
+                variant="b2"
+                color="gray-9"
+              >
+                {t(`certificates.dialog.create.provider.description.${type}`)}
+              </Typography>
+            </div>
+            <CertificatesProvidersSelectList
+              providers={providers}
+              currentProviderId={currentProviderId}
+              popoverClassName={styles.provider_select_popover}
+              onSelect={onProviderSelect}
+            />
+          </Card>
           <Card>
             <Typography
               variant="h5"

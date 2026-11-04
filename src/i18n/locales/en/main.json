@@ -71,6 +71,13 @@
           "x509": "What do you need certificate for?",
           "csr": "What do you need CSR for?"
         },
+        "provider": {
+          "title": "Where should the key be stored?",
+          "description": {
+            "x509": "Choose the provider where the private key will be generated and the certificate saved, e.g. your system key store or a connected smart card.",
+            "csr": "Choose the provider where the private key will be generated, e.g. your system key store or a connected smart card. The key never leaves it."
+          }
+        },
         "loading-text": "Creating certificate...",
         "success-message": "Certificate created.",
         "failure-message": "Can't create certificate"
@@ -103,6 +110,10 @@
           "error": {
             "invalid-data": "Certificate is invalid. Please check your data and try again."
           }
+        },
+        "provider": {
+          "title": "Where should the certificate be stored?",
+          "description": "Choose the provider to save the certificate to, e.g. your system key store or a connected smart card."
         },
         "divider-label": "Or paste certificate in PEM format below",
         "loading-text": "Importing certificate...",

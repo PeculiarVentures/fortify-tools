@@ -9,10 +9,12 @@ describe('<CertificatesProvidersSelectList />', () => {
       {
         id: '1',
         name: 'Provider 1',
+        readOnly: false,
       },
       {
         id: '2',
         name: 'Provider 2',
+        readOnly: false,
       },
     ];
 
@@ -50,5 +52,17 @@ describe('<CertificatesProvidersSelectList />', () => {
 
     expect(onSelectMock).toBeCalledTimes(1);
     expect(onSelectMock).toHaveReturnedWith(providers[1].id);
+  });
+
+  it('Should mark read-only providers', () => {
+    render(
+      <CertificatesProvidersSelectList
+        providers={[{ id: '1', name: 'Token', readOnly: true }]}
+        currentProviderId="1"
+        onSelect={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByRole('combobox')).toHaveTextContent('Token (Read only)');
   });
 });

@@ -59,10 +59,12 @@ describe('<CertificateImportDialog />', () => {
       {
         id: '1',
         name: 'Provider 1',
+        readOnly: false,
       },
       {
         id: '2',
         name: 'Provider 2',
+        readOnly: false,
       },
     ];
 
