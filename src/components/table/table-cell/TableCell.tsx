@@ -6,7 +6,6 @@ export const TableCell = React.forwardRef<
   HTMLTableCellElement,
   React.TdHTMLAttributes<HTMLTableCellElement>
 >((props, ref) => {
-  // eslint-disable-next-line react/prop-types
   const { className, ...restProps } = props;
 
   return (

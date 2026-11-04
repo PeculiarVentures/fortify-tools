@@ -6,7 +6,7 @@ export const supportedLngs = ['en'];
 
 const resources = { en: { main: enLocale } };
 
-i18n.use(initReactI18next).init({
+void i18n.use(initReactI18next).init({
   resources,
   load: 'languageOnly',
   fallbackLng: supportedLngs[0],

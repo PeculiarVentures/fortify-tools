@@ -41,7 +41,8 @@ type TSortColumnDir = 'asc' | 'desc';
 
 interface ICertificatesListProps {
   certificates: ICertificateProps[];
-  currentSortName: TSortColumnName | string;
+  // Any column name read from the URL (?sort=), not only TSortColumnName.
+  currentSortName: string;
   currentSortDir: TSortColumnDir;
   onSort: (name: TSortColumnName, dir: TSortColumnDir) => void;
   onDelete: (params: {
@@ -293,10 +294,10 @@ export const CertificatesList: React.FunctionComponent<
 };
 
 function CertificatesListLoading() {
-  return [...Array(12).keys()].map((index) => (
-    <TableRow className={styles.skeleton_tr} key={`skel-row-${index}`}>
-      {[...Array(4).keys()].map((index) => (
-        <TableCell className={styles.skeleton_td} key={`skel-td-${index}`}>
+  return [...Array(12).keys()].map((rowIndex) => (
+    <TableRow className={styles.skeleton_tr} key={`skel-row-${rowIndex}`}>
+      {[...Array(4).keys()].map((cellIndex) => (
+        <TableCell className={styles.skeleton_td} key={`skel-td-${cellIndex}`}>
           <Skeleton className={styles.skeleton_td_item} height={31} />
         </TableCell>
       ))}

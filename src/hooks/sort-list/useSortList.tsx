@@ -17,23 +17,23 @@ export function useSortList(
     (searchParams.get('order') as TSortDir) || direction,
   );
 
-  const handleSort = (name: string, dir: TSortDir) => {
+  const handleSort = (sortName: string, dir: TSortDir) => {
     const url = new URL(window.location.href);
 
-    url.searchParams.set('sort', name);
+    url.searchParams.set('sort', sortName);
     url.searchParams.set('order', dir);
 
     window.history.pushState(null, '', url);
-    setCurrentName(name);
+    setCurrentName(sortName);
     setCurrentDirection(dir);
   };
 
   useEffect(() => {
     const handleUrlChange = () => {
-      const searchParams = new URLSearchParams(window.location.search);
+      const urlParams = new URLSearchParams(window.location.search);
 
-      setCurrentName(searchParams.get('sort') || name);
-      setCurrentDirection((searchParams.get('order') as TSortDir) || direction);
+      setCurrentName(urlParams.get('sort') || name);
+      setCurrentDirection((urlParams.get('order') as TSortDir) || direction);
     };
 
     window.addEventListener('popstate', handleUrlChange);

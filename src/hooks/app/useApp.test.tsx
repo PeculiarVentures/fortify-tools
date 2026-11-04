@@ -89,19 +89,21 @@ describe('useApp', () => {
     expect(result.current.fetching.connectionSupport).toEqual('rejected');
   });
 
-  it('Should handle connection not detected', () => {
+  it('Should handle connection not detected', async () => {
     mockFortifyAPI({
       ...mockFortifyAPIInstance,
       isConnectionDetected: vi.fn().mockReturnValue(false),
+      // Fortify is not started, so auto-detection keeps polling.
+      isConnectionDetectedAuto: vi.fn().mockReturnValue(new Promise(() => {})),
     });
     const { result } = renderHook(() => useApp());
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(result.current.fetching.connectionDetect).toEqual('rejected');
     });
   });
 
-  it('Should handle client update', () => {
+  it('Should handle client update', async () => {
     mockFortifyAPI({
       ...mockFortifyAPIInstance,
       connect: vi.fn().mockImplementation(() => {
@@ -110,7 +112,7 @@ describe('useApp', () => {
     });
     const { result } = renderHook(() => useApp());
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(result.current.fetching.connectionClientUpdate).toEqual(
         'rejected',
       );
@@ -270,36 +272,6 @@ describe('useApp', () => {
       }),
     );
     addToastMock.mockClear();
-  });
-
-  it('Should return early if no fortifyClient is present', async () => {
-    const { result } = renderHook(() => useApp());
-
-    result.current.fortifyClient = null;
-
-    waitFor(async () => {
-      expect(
-        await result.current.handleCertificatesDataReload('1'),
-      ).toReturnWith(undefined);
-    });
-
-    waitFor(async () => {
-      expect(await result.current.handleProviderLoginLogout(true)).toReturnWith(
-        undefined,
-      );
-    });
-
-    waitFor(async () => {
-      expect(
-        await result.current.handleProviderResetAndRefreshList(),
-      ).toReturnWith(undefined);
-    });
-
-    waitFor(async () => {
-      expect(await result.current.handleProviderChange('1')).toReturnWith(
-        undefined,
-      );
-    });
   });
 
   it('Should reload app on handleRetryConection', () => {

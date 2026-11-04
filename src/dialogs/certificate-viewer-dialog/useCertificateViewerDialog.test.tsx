@@ -52,7 +52,7 @@ describe('useCertificateViewerDialog', () => {
     providerId: providers[0].id,
   };
 
-  it('Should initialize, open & close dialog', () => {
+  it('Should initialize, open & close dialog', async () => {
     const { result } = renderHook(() =>
       useCertificateViewerDialog(defaultProps),
     );
@@ -60,8 +60,8 @@ describe('useCertificateViewerDialog', () => {
     expect(result.current.dialog).toBeInstanceOf(Function);
     expect(result.current.open).toBeInstanceOf(Function);
 
-    act(() => {
-      result.current.open(defaultOpenProps);
+    await act(async () => {
+      await result.current.open(defaultOpenProps);
     });
 
     const DialogComponent = result.current.dialog();
@@ -73,13 +73,13 @@ describe('useCertificateViewerDialog', () => {
     expect(result.current.dialog()).toBeNull();
   });
 
-  it('Should close the dialog when the current provider is not found', () => {
+  it('Should close the dialog when the current provider is not found', async () => {
     const { result } = renderHook(() =>
       useCertificateViewerDialog(defaultProps),
     );
 
-    act(() => {
-      result.current.open({
+    await act(async () => {
+      await result.current.open({
         ...defaultOpenProps,
         providerId: '2',
       });
