@@ -10,6 +10,12 @@ vi.mock('@peculiar/certificates-viewer-react', () => ({
 }));
 
 describe('<App />', () => {
+  const openCertificateActionsMenu = async (rowIndex = 0) => {
+    const buttons = screen.getAllByRole('button', { name: /Certificate actions/ });
+
+    await userEvent.click(buttons[rowIndex]);
+  };
+
   const providersMock = [
     {
       id: 'provider1',
@@ -123,7 +129,8 @@ describe('<App />', () => {
       expect(screen.getByText(/Certificate test 1/)).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getAllByLabelText(/Delete certificate/)[0]);
+    await openCertificateActionsMenu(0);
+    await userEvent.click(screen.getByRole('menuitem', { name: /Delete certificate/ }));
 
     await waitFor(() => {
       expect(screen.getByText(/Delete certificate/)).toBeInTheDocument();
@@ -142,7 +149,8 @@ describe('<App />', () => {
       expect(screen.getByText(/Certificate test 1/)).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getAllByRole('button', { name: /View details/ })[0]);
+    await openCertificateActionsMenu(0);
+    await userEvent.click(screen.getByRole('menuitem', { name: /View details/ }));
 
     await waitFor(() => {
       expect(screen.getByText(/“Certificate test 2” details/)).toBeInTheDocument();
@@ -158,7 +166,8 @@ describe('<App />', () => {
       expect(screen.getByText(/Certificate request test 1/)).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getAllByRole('button', { name: /View details/ })[0]);
+    await openCertificateActionsMenu(0);
+    await userEvent.click(screen.getByRole('menuitem', { name: /View details/ }));
 
     await waitFor(() => {
       expect(screen.getByText(/“Certificate request test 1” details/)).toBeInTheDocument();
@@ -264,15 +273,15 @@ describe('<App />', () => {
 
     let cells = screen.getAllByRole('cell');
 
-    expect(cells[1]).toHaveTextContent(/Certificate test 2/);
-    expect(cells[5]).toHaveTextContent(/Certificate test 1/);
+    expect(cells[0]).toHaveTextContent(/Certificate test 2/);
+    expect(cells[6]).toHaveTextContent(/Certificate test 1/);
 
     await userEvent.click(screen.getByText(/Name/));
     expect(global.location.search).toMatch(/sort=label&order=asc/);
 
     cells = screen.getAllByRole('cell');
-    expect(cells[1]).toHaveTextContent(/Certificate test 1/);
-    expect(cells[5]).toHaveTextContent(/Certificate test 2/);
+    expect(cells[0]).toHaveTextContent(/Certificate test 1/);
+    expect(cells[6]).toHaveTextContent(/Certificate test 2/);
 
     await userEvent.click(screen.getByText(/Name/));
     expect(global.location.search).toMatch(/sort=label&order=desc/);

@@ -17,7 +17,7 @@ External contributors work from a fork.
 
 1. Create a branch from `main`.
 2. Write the code and add tests next to it (`*.test.ts(x)`, Vitest + Testing Library; shared helpers are imported from `@testing`).
-3. Before pushing, run `npm run lint`, `npm run format:check`, `npm run typecheck`, `npm test` and `npm run build`. CI runs the same steps.
+3. Before pushing or opening a pull request, run `npm run lint`, `npm run format:check`, `npm run typecheck`, `npm test`, and `npm run build` (fix failures first; use `npm run format` if format check fails). CI runs the same steps.
 4. Open a pull request. A team member reviews it and merges it.
 
 Dialogs are built with `createDialog` from `@peculiar/react-components` (see `src/dialogs/`): the call site passes per-open data and callbacks to `open()`, and the dialogs read the Fortify client and providers from `DialogsContext`.

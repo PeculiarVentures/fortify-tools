@@ -220,16 +220,8 @@ export const CertificatesList: React.FunctionComponent<ICertificatesListProps> =
             <CertificatesListLoading />
           ) : (
             certificates.map((certificate) => {
-              const {
-                id,
-                providerID,
-                serialNumber,
-                type,
-                notBefore,
-                notAfter,
-                index,
-                privateKeyId,
-              } = certificate;
+              const { id, providerID, serialNumber, type, notBefore, notAfter, privateKeyId } =
+                certificate;
 
               const certificateName = getCertificateName(certificate);
 

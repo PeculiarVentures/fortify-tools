@@ -72,9 +72,12 @@ describe('<CertificatesList />', () => {
     expect(screen.getAllByRole('row')).toHaveLength(13);
     expect(screen.getAllByRole('presentation')).toHaveLength(72);
 
-    screen.getAllByRole('columnheader').slice(0, 5).forEach((elem) => {
-      expect(elem.children[0]).toBeDisabled();
-    });
+    screen
+      .getAllByRole('columnheader')
+      .slice(0, 5)
+      .forEach((elem) => {
+        expect(elem.children[0]).toBeDisabled();
+      });
   });
 
   it('Should render empty search state', () => {
