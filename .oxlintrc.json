@@ -50,7 +50,7 @@
     "import/no-unassigned-import": [
       "warn",
       {
-        "allow": ["**/*.scss", "./i18n"]
+        "allow": ["**/*.scss", "./i18n", "@abraham/reflection"]
       }
     ],
     "react/refs": "warn",
