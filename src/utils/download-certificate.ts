@@ -1,12 +1,12 @@
 import { Download } from '@peculiar/certificates-viewer';
+import { base64 } from '@peculiar/utils';
 import { Pkcs10CertificateRequest, X509Certificate } from '@peculiar/x509';
-import { Convert } from 'pvtsutils';
 import type { TCertificateType } from '../types';
 
 export function downloadCertificate(label: string, certRaw: ArrayBuffer, type: TCertificateType) {
   switch (type) {
     case 'x509': {
-      const cert = new X509Certificate(Convert.ToBase64(certRaw));
+      const cert = new X509Certificate(base64.encode(certRaw));
       const pem = cert.toString('pem');
 
       Download.cert.asPEM(pem, label);
@@ -15,7 +15,7 @@ export function downloadCertificate(label: string, certRaw: ArrayBuffer, type: T
     }
 
     case 'csr': {
-      const req = new Pkcs10CertificateRequest(Convert.ToBase64(certRaw));
+      const req = new Pkcs10CertificateRequest(base64.encode(certRaw));
       const pem = req.toString('pem');
 
       Download.csr.asPEM(pem, label);

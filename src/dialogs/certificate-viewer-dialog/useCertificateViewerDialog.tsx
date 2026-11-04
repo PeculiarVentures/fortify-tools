@@ -1,7 +1,7 @@
 import React from 'react';
 import type { IProviderInfo, FortifyAPI } from '@peculiar/fortify-client-core';
 import { X509Certificate } from '@peculiar/x509';
-import cloneDeep from 'lodash/cloneDeep';
+import { cloneDeep } from 'lodash-es';
 import { useLockBodyScroll } from 'react-use';
 import type { ICertificateProps } from '../../types';
 import { CertificateViewerDialog } from '../../components/certificate-viewer-dialog';

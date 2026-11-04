@@ -9,8 +9,8 @@ import {
   Tab,
   Tabs,
 } from '@peculiar/react-components';
+import { base64 } from '@peculiar/utils';
 import { clsx } from 'clsx';
-import { Convert } from 'pvtsutils';
 import { useTranslation } from 'react-i18next';
 import type { ICertificateProps } from '../../types';
 import { getCertificateName } from '../../utils/certificate';
@@ -60,13 +60,13 @@ export const CertificateViewerDialog: React.FunctionComponent<ICertificateViewer
           className={clsx(styles.dialog_tab_content, {
             [styles.dialog_tab_content_current]: tabIndex === index.toString(),
           })}
-          certificate={Convert.ToBase64(cert?.raw)}
+          certificate={base64.encode(cert.raw)}
           download={true}
         />
       ))
     ) : (
       <PeculiarCsrViewer
-        certificate={Convert.ToBase64(certificates[0]?.raw)}
+        certificate={base64.encode(certificates[0].raw)}
         download={true}
       />
     );

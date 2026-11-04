@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import orderBy from 'lodash/orderBy';
+import { orderBy } from 'lodash-es';
 
 type TSortDir = 'asc' | 'desc';
 

@@ -19,6 +19,29 @@ describe('<CertificateImportDialog />', () => {
     onDropAccepted: vi.fn(),
   };
 
+  function createFile(
+    name: string,
+    type: string,
+    { content = 'file content', size }: { content?: string; size?: number } = {},
+  ) {
+    const file = new File([content], name, { type });
+
+    if (size !== undefined) {
+      Object.defineProperty(file, 'size', { value: size });
+    }
+
+    return file;
+  }
+
+  // Browsers fill both files and items; file-selector (react-dropzone) reads items on drop.
+  function createDataTransfer(files: File[]) {
+    return {
+      files,
+      items: files.map((file) => ({ kind: 'file', type: file.type, getAsFile: () => file })),
+      types: ['Files'],
+    };
+  }
+
   function getDropZone() {
     return screen.getByText(/Drag and drop certificate file here/).closest('div') as Element;
   }
@@ -138,7 +161,7 @@ describe('<CertificateImportDialog />', () => {
 
   it('Should handle a valid file drop correctly', async () => {
     const fileType = 'application/pkix-cert';
-    const arrayBuffer = new TextEncoder().encode('file content').buffer;
+    const file = createFile('file.cer', fileType);
 
     render(<CertificateImportDialog {...defaultProps} />);
 
@@ -146,21 +169,12 @@ describe('<CertificateImportDialog />', () => {
 
     await act(async () => {
       fireEvent.drop(dropzone, {
-        dataTransfer: {
-          files: [
-            {
-              name: 'file.cer',
-              type: fileType,
-              arrayBuffer: () => arrayBuffer,
-            },
-          ],
-          types: ['Files'],
-        },
+        dataTransfer: createDataTransfer([file]),
       });
     });
 
     expect(defaultProps.onDropAccepted).toBeCalledTimes(1);
-    expect(defaultProps.onDropAccepted).toBeCalledWith(arrayBuffer, 'cer', fileType);
+    expect(defaultProps.onDropAccepted).toBeCalledWith(await file.arrayBuffer(), 'cer', fileType);
   });
 
   it('Should handle onDropError correctly', async () => {
@@ -174,19 +188,15 @@ describe('<CertificateImportDialog />', () => {
     );
 
     const dropzone = getDropZone();
+    const file = createFile('file.cer', 'application/pkix-cert');
+
+    Object.defineProperty(file, 'arrayBuffer', {
+      value: () => Promise.reject(new Error('Read error')),
+    });
 
     await act(async () => {
       fireEvent.drop(dropzone, {
-        dataTransfer: {
-          files: [
-            {
-              name: 'file.cer',
-              type: 'application/pkix-cert',
-              arrayBuffer: null,
-            },
-          ],
-          types: ['Files'],
-        },
+        dataTransfer: createDataTransfer([file]),
       });
     });
 
@@ -207,15 +217,7 @@ describe('<CertificateImportDialog />', () => {
 
     await act(async () => {
       fireEvent.drop(dropzone, {
-        dataTransfer: {
-          files: [
-            {
-              name: 'file.exe',
-              type: 'application/x-msdownload',
-            },
-          ],
-          types: ['Files'],
-        },
+        dataTransfer: createDataTransfer([createFile('file.exe', 'application/x-msdownload')]),
       });
     });
 
@@ -237,16 +239,11 @@ describe('<CertificateImportDialog />', () => {
 
     await act(async () => {
       fireEvent.drop(dropzone, {
-        dataTransfer: {
-          files: [
-            {
-              name: 'file.cer',
-              type: 'application/pkix-cert',
-              size: APP_CERTIFICATE_MAX_SIZE_BYTES + 1,
-            },
-          ],
-          types: ['Files'],
-        },
+        dataTransfer: createDataTransfer([
+          createFile('file.cer', 'application/pkix-cert', {
+            size: APP_CERTIFICATE_MAX_SIZE_BYTES + 1,
+          }),
+        ]),
       });
     });
 
@@ -268,19 +265,10 @@ describe('<CertificateImportDialog />', () => {
 
     await act(async () => {
       fireEvent.drop(dropzone, {
-        dataTransfer: {
-          files: [
-            {
-              name: 'file1.cer',
-              type: 'application/pkix-cert',
-            },
-            {
-              name: 'file2.cer',
-              type: 'application/pkix-cert',
-            },
-          ],
-          types: ['Files'],
-        },
+        dataTransfer: createDataTransfer([
+          createFile('file1.cer', 'application/pkix-cert'),
+          createFile('file2.cer', 'application/pkix-cert'),
+        ]),
       });
     });
 
