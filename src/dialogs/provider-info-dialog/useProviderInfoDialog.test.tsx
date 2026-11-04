@@ -1,5 +1,6 @@
 import type { IProviderInfo } from '@peculiar/fortify-client-core';
-import { renderHook, act } from '@testing';
+import { screen, userEvent } from '@testing';
+import { renderDialog } from '../test-utils';
 import { useProviderInfoDialog } from './useProviderInfoDialog';
 
 describe('useProviderInfoDialog', () => {
@@ -10,40 +11,42 @@ describe('useProviderInfoDialog', () => {
     },
   ] as IProviderInfo[];
 
-  it('Should initialize, open & close', async () => {
-    const { result } = renderHook(() => useProviderInfoDialog({ providers }));
+  const title = /Provider 1 information/;
 
-    expect(result.current.dialog).toBeInstanceOf(Function);
-    expect(result.current.open).toBeInstanceOf(Function);
-
-    act(() => {
-      result.current.open(providers[0]);
+  it('Should open & close with the Cancel button and with Escape', async () => {
+    const { openDialog } = renderDialog(useProviderInfoDialog, providers[0], {
+      fortifyClient: null,
+      providers,
     });
 
-    const DialogComponent = result.current.dialog();
+    expect(screen.queryByText(title)).not.toBeInTheDocument();
 
-    expect(DialogComponent).not.toBeNull();
-    expect(DialogComponent?.props.data).toBe(providers[0]);
+    await openDialog();
 
-    act(() => {
-      DialogComponent?.props.onDialogClose();
-    });
+    expect(screen.getByText(title)).toBeInTheDocument();
 
-    expect(result.current.dialog()).toBeNull();
+    await userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+
+    expect(screen.queryByText(title)).not.toBeInTheDocument();
+
+    await openDialog();
+    await userEvent.keyboard('{Escape}');
+
+    expect(screen.queryByText(title)).not.toBeInTheDocument();
   });
 
-  it('Should close dialog if current provider is not found', async () => {
-    const { result, rerender } = renderHook(
-      (localProviders) => useProviderInfoDialog({ providers: localProviders }),
-      { initialProps: providers },
-    );
-
-    act(() => {
-      result.current.open(providers[0]);
+  it('Should close the dialog if its provider is removed', async () => {
+    const { openDialog, setContext } = renderDialog(useProviderInfoDialog, providers[0], {
+      fortifyClient: null,
+      providers,
     });
 
-    rerender([{ id: '2' }] as IProviderInfo[]);
+    await openDialog();
 
-    expect(result.current.dialog()).toBeNull();
+    expect(screen.getByText(title)).toBeInTheDocument();
+
+    setContext({ fortifyClient: null, providers: [{ id: '2' }] as IProviderInfo[] });
+
+    expect(screen.queryByText(title)).not.toBeInTheDocument();
   });
 });

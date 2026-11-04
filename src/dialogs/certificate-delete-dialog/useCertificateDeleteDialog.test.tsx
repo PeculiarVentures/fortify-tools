@@ -1,17 +1,7 @@
-import type { IProviderInfo, FortifyAPI } from '@peculiar/fortify-client-core';
-import { renderHook, act } from '@testing';
+import type { FortifyAPI, IProviderInfo } from '@peculiar/fortify-client-core';
+import { screen, userEvent, waitFor } from '@testing';
+import { renderDialog } from '../test-utils';
 import { useCertificateDeleteDialog } from './useCertificateDeleteDialog';
-
-const addToastMock = vi.fn();
-
-vi.mock('@peculiar/react-components', async () => {
-  const actual = await vi.importActual('@peculiar/react-components');
-
-  return {
-    ...actual,
-    useToast: () => ({ addToast: addToastMock }),
-  };
-});
 
 describe('useCertificateDeleteDialog', () => {
   const providers = [
@@ -21,169 +11,123 @@ describe('useCertificateDeleteDialog', () => {
     },
   ] as IProviderInfo[];
 
-  const defaultOpenProps = {
-    certificateIndex: '1',
-    providerId: providers[0].id,
-    label: 'Certificate Name',
-  };
+  const confirmText = 'Are you sure you want to delete “Certificate Name”?';
 
-  it('Should open dialog, handle onSuccess & close dialog', async () => {
-    const mockFortifyClient: Partial<FortifyAPI> = {
-      removeCertificateById: vi.fn().mockResolvedValue({}),
-    };
-    const onSuccessMock = vi.fn();
-
-    const { result } = renderHook(() =>
-      useCertificateDeleteDialog({
-        providers: providers,
-        onSuccess: onSuccessMock,
-        fortifyClient: mockFortifyClient as FortifyAPI,
-      }),
+  function setup({
+    fortifyClient = { removeCertificateById: vi.fn().mockResolvedValue({}) },
+  }: { fortifyClient?: Partial<FortifyAPI> | null } = {}) {
+    const onSuccess = vi.fn();
+    const utils = renderDialog(
+      useCertificateDeleteDialog,
+      {
+        certificateIndex: 'cert-1',
+        providerId: providers[0].id,
+        label: 'Certificate Name',
+        onSuccess,
+      },
+      { fortifyClient: fortifyClient as FortifyAPI | null, providers },
     );
 
-    expect(result.current.dialog).toBeInstanceOf(Function);
-    expect(result.current.open).toBeInstanceOf(Function);
+    return { ...utils, onSuccess, fortifyClient };
+  }
 
-    act(() => {
-      result.current.open(defaultOpenProps);
-    });
+  it('Should open, delete the certificate, show a toast & close', async () => {
+    const { openDialog, onSuccess, fortifyClient } = setup();
 
-    const DialogComponent = result.current.dialog();
+    expect(screen.queryByText(confirmText)).not.toBeInTheDocument();
 
-    await act(async () => {
-      if (DialogComponent) {
-        await DialogComponent.props.onDeleteClick(defaultOpenProps.certificateIndex);
-      }
-    });
+    await openDialog();
 
-    expect(onSuccessMock).toHaveBeenCalledWith(defaultOpenProps.providerId);
-    expect(mockFortifyClient.removeCertificateById).toHaveBeenCalledWith(
-      defaultOpenProps.providerId,
-      defaultOpenProps.certificateIndex,
-    );
-    expect(addToastMock).toHaveBeenCalledWith(
-      expect.objectContaining({ message: 'Certificate deleted.' }),
-    );
+    expect(screen.getByText(confirmText)).toBeInTheDocument();
 
-    act(() => {
-      DialogComponent?.props.onDialogClose();
-    });
+    await userEvent.click(screen.getByRole('button', { name: 'Delete' }));
 
-    expect(result.current.dialog()).toBeNull();
-    addToastMock.mockClear();
+    expect(fortifyClient?.removeCertificateById).toHaveBeenCalledWith('1', 'cert-1');
+    expect(onSuccess).toHaveBeenCalledWith('1');
+    expect(await screen.findByText('Certificate deleted.')).toBeInTheDocument();
+    expect(screen.queryByText(confirmText)).not.toBeInTheDocument();
   });
 
-  it('Should close dialog if current provider is not found', async () => {
-    const { result, rerender } = renderHook(
-      (localProviders) =>
-        useCertificateDeleteDialog({
-          providers: localProviders,
-          onSuccess: vi.fn(),
-          fortifyClient: null,
-        }),
-      { initialProps: providers },
-    );
-
-    act(() => {
-      result.current.open(defaultOpenProps);
+  it('Should show the loading state while deleting', async () => {
+    let resolveRemove: () => void = () => {};
+    const { openDialog } = setup({
+      fortifyClient: {
+        removeCertificateById: vi.fn(
+          () =>
+            new Promise<void>((resolve) => {
+              resolveRemove = resolve;
+            }),
+        ),
+      },
     });
 
-    rerender([{ id: '2' }] as IProviderInfo[]);
+    await openDialog();
+    await userEvent.click(screen.getByRole('button', { name: 'Delete' }));
 
-    expect(result.current.dialog()).toBeNull();
+    expect(screen.getByText('Deleting certificate...')).toBeInTheDocument();
+
+    resolveRemove();
+
+    await waitFor(() => {
+      expect(screen.queryByText('Deleting certificate...')).not.toBeInTheDocument();
+    });
   });
 
-  it('Should show error message if certificate deletion fails', async () => {
-    const mockFortifyClient: Partial<FortifyAPI> = {
-      removeCertificateById: vi.fn().mockImplementation(() => {
-        throw new Error('Error');
-      }),
-    };
-    const onSuccessMock = vi.fn();
+  it('Should close with the Cancel button and with Escape', async () => {
+    const { openDialog, onSuccess } = setup();
 
-    const { result } = renderHook(() =>
-      useCertificateDeleteDialog({
-        providers: providers,
-        onSuccess: onSuccessMock,
-        fortifyClient: mockFortifyClient as FortifyAPI,
-      }),
-    );
+    await openDialog();
+    await userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
 
-    act(() => {
-      result.current.open(defaultOpenProps);
-    });
+    expect(screen.queryByText(confirmText)).not.toBeInTheDocument();
 
-    await act(async () => {
-      const DialogComponent = result.current.dialog();
+    await openDialog();
+    await userEvent.keyboard('{Escape}');
 
-      if (DialogComponent) {
-        await DialogComponent.props.onDeleteClick(defaultOpenProps.certificateIndex);
-      }
-    });
-
-    expect(onSuccessMock).not.toHaveBeenCalled();
-    expect(addToastMock).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: 'Failed to delete certificate because of error. Please try again.',
-      }),
-    );
-    addToastMock.mockClear();
+    expect(screen.queryByText(confirmText)).not.toBeInTheDocument();
+    expect(onSuccess).not.toHaveBeenCalled();
   });
 
-  it("Shouldn't call if no certificate id is provided", async () => {
-    const mockFortifyClient: Partial<FortifyAPI> = {
-      removeCertificateById: vi.fn().mockResolvedValue({}),
-    };
-    const onSuccessMock = vi.fn();
+  it('Should close the dialog if its provider is removed', async () => {
+    const { openDialog, setContext, fortifyClient } = setup();
 
-    const { result } = renderHook(() =>
-      useCertificateDeleteDialog({
-        providers: providers,
-        onSuccess: onSuccessMock,
-        fortifyClient: mockFortifyClient as FortifyAPI,
-      }),
-    );
+    await openDialog();
 
-    act(() => {
-      result.current.open(defaultOpenProps);
+    expect(screen.getByText(confirmText)).toBeInTheDocument();
+
+    setContext({
+      fortifyClient: fortifyClient as FortifyAPI,
+      providers: [{ id: '2' }] as IProviderInfo[],
     });
 
-    await act(async () => {
-      const DialogComponent = result.current.dialog();
+    expect(screen.queryByText(confirmText)).not.toBeInTheDocument();
 
-      if (DialogComponent) {
-        await DialogComponent.props.onDeleteClick(undefined);
-      }
-    });
+    // The dialog was closed, not hidden: it stays closed when the provider comes back.
+    setContext({ fortifyClient: fortifyClient as FortifyAPI, providers });
 
-    expect(onSuccessMock).not.toHaveBeenCalled();
-    expect(addToastMock).not.toHaveBeenCalled();
+    expect(screen.queryByText(confirmText)).not.toBeInTheDocument();
   });
 
-  it("Shouldn't call if no fortifyClient is provided", async () => {
-    const onSuccessMock = vi.fn();
-
-    const { result } = renderHook(() =>
-      useCertificateDeleteDialog({
-        providers: providers,
-        onSuccess: onSuccessMock,
-        fortifyClient: null,
-      }),
-    );
-
-    act(() => {
-      result.current.open(defaultOpenProps);
+  it('Should show an error toast & close if the deletion fails', async () => {
+    const { openDialog, onSuccess } = setup({
+      fortifyClient: { removeCertificateById: vi.fn().mockRejectedValue(new Error('Error')) },
     });
 
-    await act(async () => {
-      const DialogComponent = result.current.dialog();
+    await openDialog();
+    await userEvent.click(screen.getByRole('button', { name: 'Delete' }));
 
-      if (DialogComponent) {
-        await DialogComponent.props.onDeleteClick(defaultOpenProps.certificateIndex);
-      }
-    });
+    expect(onSuccess).not.toHaveBeenCalled();
+    expect(
+      await screen.findByText('Failed to delete certificate because of error. Please try again.'),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(confirmText)).not.toBeInTheDocument();
+  });
 
-    expect(onSuccessMock).not.toHaveBeenCalled();
-    expect(addToastMock).not.toHaveBeenCalled();
+  it("Shouldn't render without a fortifyClient", async () => {
+    const { openDialog } = setup({ fortifyClient: null });
+
+    await openDialog();
+
+    expect(screen.queryByText(confirmText)).not.toBeInTheDocument();
   });
 });

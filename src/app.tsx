@@ -1,5 +1,6 @@
 import './global.scss';
 import './i18n';
+import React from 'react';
 import { CertificatesList } from './components/certificates-list';
 import { CertificatesProvidersList } from './components/certificates-providers-list';
 import { CertificatesSidebar } from './components/certificates-sidebar';
@@ -10,6 +11,7 @@ import { useCertificateCreateDialog } from './dialogs/certificate-create-dialog'
 import { useCertificateDeleteDialog } from './dialogs/certificate-delete-dialog';
 import { useCertificateImportDialog } from './dialogs/certificate-import-dialog';
 import { useCertificateViewerDialog } from './dialogs/certificate-viewer-dialog';
+import { DialogsContext } from './dialogs/dialogs-context';
 import { useProviderInfoDialog } from './dialogs/provider-info-dialog';
 import { useApp } from './hooks/app';
 import { useSearchList } from './hooks/search-list';
@@ -37,14 +39,11 @@ export function App() {
 
   const { searchedText, list: searchedCertificate, handleSearch } = useSearchList(certificates);
 
-  const { open: handleCertificateDeleteDialogOpen, dialog: certificateDeleteDialog } =
-    useCertificateDeleteDialog({
-      providers,
-      fortifyClient,
-      onSuccess: (providerId) => {
-        void handleCertificatesDataReload(providerId);
-      },
-    });
+  const certificateDeleteDialog = useCertificateDeleteDialog();
+  const certificateImportDialog = useCertificateImportDialog();
+  const certificateCreateDialog = useCertificateCreateDialog();
+  const certificateViewerDialog = useCertificateViewerDialog();
+  const providerInfoDialog = useProviderInfoDialog();
 
   const {
     list: sortedCertificates,
@@ -53,38 +52,21 @@ export function App() {
     handleSort,
   } = useSortList(searchedCertificate, 'notAfter');
 
-  const { open: handleCertificateImportDialogOpen, dialog: certificateImportDialog } =
-    useCertificateImportDialog({
-      providers,
-      currentProviderId,
-      fortifyClient,
-      onSuccess: (providerId) => {
-        if (currentProviderId !== providerId) return;
-        void handleCertificatesDataReload(providerId);
-      },
-    });
+  // Read when an import/create finishes, so the check uses the provider selected at that time.
+  const currentProviderIdRef = React.useRef(currentProviderId);
 
-  const { open: handleCertificateCreateDialogOpen, dialog: certificateCreateDialog } =
-    useCertificateCreateDialog({
-      providers,
-      currentProviderId,
-      fortifyClient,
-      onSuccess: (providerId) => {
-        if (currentProviderId !== providerId) return;
-        void handleCertificatesDataReload(providerId);
-      },
-    });
+  React.useEffect(() => {
+    currentProviderIdRef.current = currentProviderId;
+  }, [currentProviderId]);
 
-  const { open: handleCertificateViewerDialogOpen, dialog: certificateViewerDialog } =
-    useCertificateViewerDialog({
-      providers,
-      currentProviderId,
-      fortifyClient,
-    });
+  const handleCertificatesChange = (providerId: string) => {
+    void handleCertificatesDataReload(providerId);
+  };
 
-  const { open: handleProviderInfoDialogOpen, dialog: providerInfoDialog } = useProviderInfoDialog({
-    providers,
-  });
+  const handleCurrentProviderCertificatesChange = (providerId: string) => {
+    if (currentProviderIdRef.current !== providerId) return;
+    void handleCertificatesDataReload(providerId);
+  };
 
   if (fetching.connectionSupport === 'rejected') {
     return <ConnectionNotSupported />;
@@ -107,10 +89,14 @@ export function App() {
         className={styles.top_bar}
         isLoggedIn={isCurrentProviderLogedin}
         onSearch={handleSearch}
-        onImport={handleCertificateImportDialogOpen}
-        onCreate={handleCertificateCreateDialogOpen}
+        onImport={() =>
+          certificateImportDialog.open({ onSuccess: handleCurrentProviderCertificatesChange })
+        }
+        onCreate={(type) =>
+          certificateCreateDialog.open({ type, onSuccess: handleCurrentProviderCertificatesChange })
+        }
         onReload={handleProviderResetAndRefreshList}
-        onInfo={() => currentProvider && handleProviderInfoDialogOpen(currentProvider)}
+        onInfo={() => currentProvider && providerInfoDialog.open(currentProvider)}
         onLoginLogout={handleProviderLoginLogout}
       ></CertificatesTopbar>
       <CertificatesList
@@ -123,8 +109,10 @@ export function App() {
         isLoggedIn={isCurrentProviderLogedin}
         isReadOnly={isCurrentProviderReadOnly}
         onSort={handleSort}
-        onDelete={handleCertificateDeleteDialogOpen}
-        onViewDetails={handleCertificateViewerDialogOpen}
+        onDelete={(params) =>
+          certificateDeleteDialog.open({ ...params, onSuccess: handleCertificatesChange })
+        }
+        onViewDetails={(params) => certificateViewerDialog.open(params)}
       />
       <FetchingStatusOwerlay
         fetching={fetching}
@@ -132,13 +120,13 @@ export function App() {
         onReload={handleRetryConection}
       />
       {providers.length ? (
-        <>
-          {certificateViewerDialog()}
-          {certificateDeleteDialog()}
-          {certificateImportDialog()}
-          {certificateCreateDialog()}
-          {providerInfoDialog()}
-        </>
+        <DialogsContext value={{ fortifyClient, providers, currentProviderId }}>
+          {certificateViewerDialog.dialog}
+          {certificateDeleteDialog.dialog}
+          {certificateImportDialog.dialog}
+          {certificateCreateDialog.dialog}
+          {providerInfoDialog.dialog}
+        </DialogsContext>
       ) : null}
 
       <div className={styles.certificate_list_corners_backdrop}></div>
