@@ -1,7 +1,5 @@
-import {
-  render, userEvent, fireEvent, act, screen,
-} from '@testing';
 import { ComponentProps } from 'react';
+import { render, userEvent, fireEvent, act, screen } from '@testing';
 import { APP_CERTIFICATE_MAX_SIZE_BYTES } from '../../config';
 import { CertificateImportDialog } from './CertificateImportDialog';
 
@@ -22,15 +20,11 @@ describe('<CertificateImportDialog />', () => {
   };
 
   function getDropZone() {
-    return screen
-      .getByText(/Drag and drop certificate file here/)
-      .closest('div') as Element;
+    return screen.getByText(/Drag and drop certificate file here/).closest('div') as Element;
   }
 
   it('Should handle back button', async () => {
-    render(
-      <CertificateImportDialog {...defaultProps} />,
-    );
+    render(<CertificateImportDialog {...defaultProps} />);
 
     await userEvent.click(screen.getAllByRole('button')[0]);
 
@@ -73,25 +67,27 @@ describe('<CertificateImportDialog />', () => {
 
   it('Should render loading', () => {
     render(
-      <CertificateImportDialog {...defaultProps} loading={true} />,
+      <CertificateImportDialog
+        {...defaultProps}
+        loading={true}
+      />,
     );
 
     expect(screen.getByText(/Importing certificate/)).toBeInTheDocument();
   });
 
   it('Should render with disabled Clear & Import button', async () => {
-    render(
-      <CertificateImportDialog {...defaultProps} />,
-    );
+    render(<CertificateImportDialog {...defaultProps} />);
     expect(screen.getByRole('button', { name: /Clear/ })).toBeDisabled();
-    expect(
-      screen.getByRole('button', { name: /Import certificate/ }),
-    ).toBeDisabled();
+    expect(screen.getByRole('button', { name: /Import certificate/ })).toBeDisabled();
   });
 
   it('Should handle Clear button', async () => {
     render(
-      <CertificateImportDialog {...defaultProps} certificate="certificate" />,
+      <CertificateImportDialog
+        {...defaultProps}
+        certificate="certificate"
+      />,
     );
 
     await userEvent.click(screen.getByRole('button', { name: /Clear/ }));
@@ -101,20 +97,19 @@ describe('<CertificateImportDialog />', () => {
 
   it('Should handle import button', async () => {
     render(
-      <CertificateImportDialog {...defaultProps} certificate="certificate" />,
+      <CertificateImportDialog
+        {...defaultProps}
+        certificate="certificate"
+      />,
     );
 
-    await userEvent.click(
-      screen.getByRole('button', { name: /Import certificate/ }),
-    );
+    await userEvent.click(screen.getByRole('button', { name: /Import certificate/ }));
 
     expect(defaultProps.onImportButtonClick).toBeCalledTimes(1);
   });
 
   it('Should handle textarea change & blur', async () => {
-    render(
-      <CertificateImportDialog {...defaultProps} />,
-    );
+    render(<CertificateImportDialog {...defaultProps} />);
 
     const textarea = screen.getByRole('textbox');
 
@@ -130,13 +125,14 @@ describe('<CertificateImportDialog />', () => {
 
   it('Should show textarea validation error', async () => {
     render(
-      <CertificateImportDialog {...defaultProps} isTextAreaError={true} />,
+      <CertificateImportDialog
+        {...defaultProps}
+        isTextAreaError={true}
+      />,
     );
 
     expect(
-      screen.getByText(
-        /Certificate is invalid. Please check your data and try again/,
-      ),
+      screen.getByText(/Certificate is invalid. Please check your data and try again/),
     ).toBeInTheDocument();
   });
 
@@ -144,9 +140,7 @@ describe('<CertificateImportDialog />', () => {
     const fileType = 'application/pkix-cert';
     const arrayBuffer = new TextEncoder().encode('file content').buffer;
 
-    render(
-      <CertificateImportDialog {...defaultProps} />,
-    );
+    render(<CertificateImportDialog {...defaultProps} />);
 
     const dropzone = getDropZone();
 
@@ -166,11 +160,7 @@ describe('<CertificateImportDialog />', () => {
     });
 
     expect(defaultProps.onDropAccepted).toBeCalledTimes(1);
-    expect(defaultProps.onDropAccepted).toBeCalledWith(
-      arrayBuffer,
-      'cer',
-      fileType,
-    );
+    expect(defaultProps.onDropAccepted).toBeCalledWith(arrayBuffer, 'cer', fileType);
   });
 
   it('Should handle onDropError correctly', async () => {
@@ -230,9 +220,7 @@ describe('<CertificateImportDialog />', () => {
     });
 
     expect(onDropRejectedMock).toBeCalledTimes(1);
-    expect(onDropRejectedMock).toBeCalledWith(
-      'Wrong file format. Use PEM or DER formats.',
-    );
+    expect(onDropRejectedMock).toBeCalledWith('Wrong file format. Use PEM or DER formats.');
   });
 
   it('Should handle file maxSize rejection correctly', async () => {

@@ -1,18 +1,7 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": [
-    "typescript",
-    "import",
-    "unicorn",
-    "oxc",
-    "react",
-    "jsx-a11y",
-    "jest"
-  ],
-  "ignorePatterns": [
-    "dist/**",
-    "coverage/**"
-  ],
+  "plugins": ["typescript", "import", "unicorn", "oxc", "react", "jsx-a11y", "jest"],
+  "ignorePatterns": ["dist/**", "coverage/**"],
   "options": {
     "typeAware": true
   },
@@ -61,10 +50,7 @@
     "import/no-unassigned-import": [
       "warn",
       {
-        "allow": [
-          "**/*.scss",
-          "./i18n"
-        ]
+        "allow": ["**/*.scss", "./i18n"]
       }
     ],
     "react/refs": "warn",
@@ -72,20 +58,13 @@
     "jest/expect-expect": [
       "error",
       {
-        "assertFunctionNames": [
-          "expect",
-          "test*"
-        ]
+        "assertFunctionNames": ["expect", "test*"]
       }
     ]
   },
   "overrides": [
     {
-      "files": [
-        "**/*.test.ts",
-        "**/*.test.tsx",
-        "utils/testing/**"
-      ],
+      "files": ["**/*.test.ts", "**/*.test.tsx", "utils/testing/**"],
       "rules": {
         "typescript/unbound-method": "off",
         "typescript/no-unsafe-type-assertion": "off"

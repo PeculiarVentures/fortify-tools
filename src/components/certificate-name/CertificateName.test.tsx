@@ -3,16 +3,17 @@ import { CertificateName } from './CertificateName';
 
 describe('<CertificateName />', () => {
   it('Should render', () => {
-    render(
-      <CertificateName name="Test certificate" />,
-    );
+    render(<CertificateName name="Test certificate" />);
 
     expect(screen.getByText(/Test certificate/)).toBeInTheDocument();
   });
 
   it('Should render with highlighted text', () => {
     render(
-      <CertificateName name="Test certificate" highlight="rtifi" />,
+      <CertificateName
+        name="Test certificate"
+        highlight="rtifi"
+      />,
     );
 
     const highlightElement = screen.getByText(/rtifi/);
@@ -23,16 +24,17 @@ describe('<CertificateName />', () => {
 
   it('Should render with className', () => {
     render(
-      <CertificateName name="Test certificate" className="test_class_name" />,
+      <CertificateName
+        name="Test certificate"
+        className="test_class_name"
+      />,
     );
 
     expect(screen.getByText(/Test certificate/)).toHaveClass('test_class_name');
   });
 
-  it('Shouldn\'t render if no name', () => {
-    const { container } = render(
-      <CertificateName />,
-    );
+  it("Shouldn't render if no name", () => {
+    const { container } = render(<CertificateName />);
 
     expect(container.firstChild).toBeNull();
   });

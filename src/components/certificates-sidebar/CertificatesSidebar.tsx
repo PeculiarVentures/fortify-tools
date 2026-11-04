@@ -1,7 +1,7 @@
-import { clsx } from 'clsx';
 import React, { ComponentProps, PropsWithChildren } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Typography } from '@peculiar/react-components';
+import { clsx } from 'clsx';
+import { useTranslation } from 'react-i18next';
 import { APP_CONTACT_SUPPORT_URL } from '../../config';
 import styles from './styles/index.module.scss';
 
@@ -9,9 +9,7 @@ interface ICertificatesSidebarProps extends PropsWithChildren {
   className?: ComponentProps<'div'>['className'];
 }
 
-export const CertificatesSidebar: React.FunctionComponent<
-  ICertificatesSidebarProps
-> = (props) => {
+export const CertificatesSidebar: React.FunctionComponent<ICertificatesSidebarProps> = (props) => {
   const { children, className } = props;
   const { t } = useTranslation();
 
@@ -26,7 +24,10 @@ export const CertificatesSidebar: React.FunctionComponent<
       </div>
       <div className={styles.content}>{children}</div>
       <div className={styles.footer}>
-        <Typography variant="c1" color="gray-9">
+        <Typography
+          variant="c1"
+          color="gray-9"
+        >
           {t('sidebar.copyrigth')}
         </Typography>
         <div className={styles.footer_contact}>

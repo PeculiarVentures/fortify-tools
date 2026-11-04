@@ -1,8 +1,5 @@
 import React from 'react';
-import { useDropzone } from 'react-dropzone';
-import { Trans, useTranslation } from 'react-i18next';
 import { IProviderInfo } from '@peculiar/fortify-client-core';
-import { clsx } from 'clsx';
 import {
   Dialog,
   ArrowRightIcon,
@@ -12,13 +9,13 @@ import {
   Button,
   CircularProgress,
 } from '@peculiar/react-components';
-import { CertificatesProvidersSelectList } from '../certificates-providers-select-list';
-import { formatBytes } from '../../utils';
+import { clsx } from 'clsx';
+import { useDropzone } from 'react-dropzone';
+import { Trans, useTranslation } from 'react-i18next';
+import { APP_CERTIFICATE_ALLOWED_MIMES, APP_CERTIFICATE_MAX_SIZE_BYTES } from '../../config';
 import CrossIcon from '../../icons/cross.svg?react';
-import {
-  APP_CERTIFICATE_ALLOWED_MIMES,
-  APP_CERTIFICATE_MAX_SIZE_BYTES,
-} from '../../config';
+import { formatBytes } from '../../utils';
+import { CertificatesProvidersSelectList } from '../certificates-providers-select-list';
 import styles from './styles/index.module.scss';
 
 interface ICertificateImportDialogProps {
@@ -34,17 +31,13 @@ interface ICertificateImportDialogProps {
   onImportButtonClick: () => void;
   onDropError: (error?: unknown) => void;
   onDropRejected: (error: string) => void;
-  onDropAccepted: (
-    fileContent: ArrayBuffer,
-    extension: string,
-    type: string,
-  ) => void;
+  onDropAccepted: (fileContent: ArrayBuffer, extension: string, type: string) => void;
   onClearButtonClick: () => void;
 }
 
-export const CertificateImportDialog: React.FunctionComponent<
-  ICertificateImportDialogProps
-> = (props) => {
+export const CertificateImportDialog: React.FunctionComponent<ICertificateImportDialogProps> = (
+  props,
+) => {
   const {
     loading,
     providers,
@@ -64,65 +57,64 @@ export const CertificateImportDialog: React.FunctionComponent<
 
   const { t } = useTranslation();
 
-  const {
-    getInputProps, getRootProps, isDragActive, isDragReject,
-  }
-    = useDropzone({
-      multiple: false,
-      accept: APP_CERTIFICATE_ALLOWED_MIMES,
-      maxSize: APP_CERTIFICATE_MAX_SIZE_BYTES,
-      onDrop: async (acceptedFiles, fileRejections) => {
-        const files = [...acceptedFiles, ...fileRejections];
+  const { getInputProps, getRootProps, isDragActive, isDragReject } = useDropzone({
+    multiple: false,
+    accept: APP_CERTIFICATE_ALLOWED_MIMES,
+    maxSize: APP_CERTIFICATE_MAX_SIZE_BYTES,
+    onDrop: async (acceptedFiles, fileRejections) => {
+      const files = [...acceptedFiles, ...fileRejections];
 
-        if (files.length > 1) {
-          onDropRejected(
-            t('certificates.dialog.import.file.error.too-many-files'),
+      if (files.length > 1) {
+        onDropRejected(t('certificates.dialog.import.file.error.too-many-files'));
+
+        return;
+      }
+
+      const msgs: string[] = [];
+
+      fileRejections[0]?.errors.forEach((err) => {
+        if (err.code === 'file-too-large') {
+          msgs.push(
+            t('certificates.dialog.import.file.error.too-large', {
+              size: formatBytes(APP_CERTIFICATE_MAX_SIZE_BYTES),
+            }),
           );
-
-          return;
+        } else if (err.code === 'file-invalid-type') {
+          msgs.push(t('certificates.dialog.import.file.error.invalid-type'));
         }
+      });
+      if (msgs.length) {
+        msgs.forEach((msg) => onDropRejected(msg));
 
-        const msgs: string[] = [];
+        return;
+      }
 
-        fileRejections[0]?.errors.forEach((err) => {
-          if (err.code === 'file-too-large') {
-            msgs.push(
-              t('certificates.dialog.import.file.error.too-large', { size: formatBytes(APP_CERTIFICATE_MAX_SIZE_BYTES) }),
-            );
-          } else if (err.code === 'file-invalid-type') {
-            msgs.push(t('certificates.dialog.import.file.error.invalid-type'));
-          }
-        });
-        if (msgs.length) {
-          msgs.forEach((msg) => onDropRejected(msg));
+      const file = acceptedFiles[0];
 
-          return;
-        }
+      if (!file) {
+        return false;
+      }
 
-        const file = acceptedFiles[0];
+      const parts = file.name.split('.');
+      const ext = parts.length > 1 ? (parts.pop() as string) : '';
 
-        if (!file) {
-          return false;
-        }
+      try {
+        const buf = await file.arrayBuffer();
 
-        const parts = file.name.split('.');
-        const ext = parts.length > 1 ? (parts.pop() as string) : '';
-
-        try {
-          const buf = await file.arrayBuffer();
-
-          onDropAccepted(buf, ext, file.type);
-        } catch (error) {
-          onDropError(error);
-        }
-      },
-      onError: onDropError,
-    });
+        onDropAccepted(buf, ext, file.type);
+      } catch (error) {
+        onDropError(error);
+      }
+    },
+    onError: onDropError,
+  });
 
   return (
     <Dialog
-      open fullScreen
-      className={styles.dialog} onClose={onDialogClose}
+      open
+      fullScreen
+      className={styles.dialog}
+      onClose={onDialogClose}
     >
       <>
         <div className={styles.title}>
@@ -137,7 +129,10 @@ export const CertificateImportDialog: React.FunctionComponent<
               </IconButton>
             </div>
             <div className={styles.title_label}>
-              <Typography variant="h4" color="black">
+              <Typography
+                variant="h4"
+                color="black"
+              >
                 {t('certificates.dialog.import.title')}
               </Typography>
             </div>
@@ -163,7 +158,10 @@ export const CertificateImportDialog: React.FunctionComponent<
               })}
             >
               <input {...getInputProps()} />
-              <Typography variant="s2" color="gray-10">
+              <Typography
+                variant="s2"
+                color="gray-10"
+              >
                 <Trans
                   i18nKey="certificates.dialog.import.drop-zone.title"
                   components={[
@@ -179,7 +177,10 @@ export const CertificateImportDialog: React.FunctionComponent<
                   ]}
                 />
               </Typography>
-              <Typography variant="c2" color="gray-9">
+              <Typography
+                variant="c2"
+                color="gray-9"
+              >
                 {t('certificates.dialog.import.drop-zone.description')}
               </Typography>
             </div>
@@ -200,9 +201,7 @@ export const CertificateImportDialog: React.FunctionComponent<
                 error={isTextAreaError}
                 errorText={
                   isTextAreaError
-                    ? t(
-                        'certificates.dialog.import.certificate.error.invalid-data',
-                      )
+                    ? t('certificates.dialog.import.certificate.error.invalid-data')
                     : undefined
                 }
                 onChange={(event) => onTextAreaChange(event.target.value)}
@@ -230,16 +229,17 @@ export const CertificateImportDialog: React.FunctionComponent<
             </div>
           </div>
         </div>
-        {loading
-          ? (
-              <div className={styles.loading}>
-                <CircularProgress />
-                <Typography variant="b2" color="gray-9">
-                  {t('certificates.dialog.import.loading-text')}
-                </Typography>
-              </div>
-            )
-          : null}
+        {loading ? (
+          <div className={styles.loading}>
+            <CircularProgress />
+            <Typography
+              variant="b2"
+              color="gray-9"
+            >
+              {t('certificates.dialog.import.loading-text')}
+            </Typography>
+          </div>
+        ) : null}
       </>
     </Dialog>
   );

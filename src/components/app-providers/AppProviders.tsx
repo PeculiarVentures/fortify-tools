@@ -1,8 +1,8 @@
 import React from 'react';
 import { ThemeProvider, ToastProvider } from '@peculiar/react-components';
 import { ErrorBoundary } from 'react-error-boundary';
-import { AppFallback } from '../app-fallback';
 import { theme } from '../../config/theme';
+import { AppFallback } from '../app-fallback';
 
 export const AppProviders: React.FunctionComponent<{
   children: React.ReactNode;

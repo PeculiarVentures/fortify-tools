@@ -1,5 +1,5 @@
-import { useTranslation } from 'react-i18next';
 import { Button, Typography } from '@peculiar/react-components';
+import { useTranslation } from 'react-i18next';
 import ErrorIcon from '../../icons/error-big.svg?react';
 import styles from './styles/index.module.scss';
 
@@ -13,12 +13,16 @@ export const ConnectionNotSupported = () => {
           <ErrorIcon />
         </div>
         <Typography
-          variant="h5" color="black"
+          variant="h5"
+          color="black"
           className={styles.message}
         >
           {t('connection-not-supported.message')}
         </Typography>
-        <Typography variant="b2" color="gray-9">
+        <Typography
+          variant="b2"
+          color="gray-9"
+        >
           {t('connection-not-supported.description')}
         </Typography>
         <div className={styles.buttons_group}>

@@ -9,9 +9,7 @@ interface IHighlightedTextProps {
 }
 
 export const HighlightedText: React.FC<IHighlightedTextProps> = (props) => {
-  const {
-    highlight, text, className,
-  } = props;
+  const { highlight, text, className } = props;
 
   if (!highlight) {
     return text;
@@ -24,7 +22,10 @@ export const HighlightedText: React.FC<IHighlightedTextProps> = (props) => {
       {parts.map((part, index) => {
         if (part.toLowerCase() === highlight.toLowerCase()) {
           return (
-            <span className={styles.highlight_text} key={`h-text-${index}`}>
+            <span
+              className={styles.highlight_text}
+              key={`h-text-${index}`}
+            >
               {part}
             </span>
           );

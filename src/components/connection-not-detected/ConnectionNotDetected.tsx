@@ -9,9 +9,9 @@ interface IConnectionNotDetectedProps {
   onReload: () => void;
 }
 
-export const ConnectionNotDetected: React.FunctionComponent<
-  IConnectionNotDetectedProps
-> = (props) => {
+export const ConnectionNotDetected: React.FunctionComponent<IConnectionNotDetectedProps> = (
+  props,
+) => {
   const { onReload } = props;
   const { t } = useTranslation();
 
@@ -20,10 +20,16 @@ export const ConnectionNotDetected: React.FunctionComponent<
       <div className={styles.icon_wrapper}>
         <LaunchAppIcon />
       </div>
-      <Typography variant="h5" color="black">
+      <Typography
+        variant="h5"
+        color="black"
+      >
         {t('connection.error.connection-not-detect.message')}
       </Typography>
-      <Typography variant="b2" color="gray-9">
+      <Typography
+        variant="b2"
+        color="gray-9"
+      >
         {t('connection.error.connection-not-detect.description')}
       </Typography>
       <div className={styles.buttons_wrapper}>
@@ -36,7 +42,8 @@ export const ConnectionNotDetected: React.FunctionComponent<
           {t('connection.error.connection-not-detect.button')}
         </Button>
         <Button
-          variant="contained" color="primary"
+          variant="contained"
+          color="primary"
           onClick={onReload}
         >
           {t('button.try-again')}

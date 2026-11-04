@@ -1,7 +1,5 @@
 import React, { ComponentProps, PropsWithChildren } from 'react';
-import {
-  Button, TButtonProps, Typography,
-} from '@peculiar/react-components';
+import { Button, TButtonProps, Typography } from '@peculiar/react-components';
 import { clsx } from 'clsx';
 import DownIcon from '../../icons/down-10.svg?react';
 import styles from './styles/index.module.scss';
@@ -15,14 +13,7 @@ interface ISortButtonProps extends PropsWithChildren {
 }
 
 export const SortButton: React.FunctionComponent<ISortButtonProps> = (props) => {
-  const {
-    children,
-    className,
-    active,
-    disabled,
-    order = 'desc',
-    onClick,
-  } = props;
+  const { children, className, active, disabled, order = 'desc', onClick } = props;
 
   return (
     <Button
@@ -42,7 +33,9 @@ export const SortButton: React.FunctionComponent<ISortButtonProps> = (props) => 
         {children}
       </Typography>
       <DownIcon
-        className={clsx(styles.sort_button_icon, { [styles.sort_button_icon_asc]: order === 'asc' })}
+        className={clsx(styles.sort_button_icon, {
+          [styles.sort_button_icon_asc]: order === 'asc',
+        })}
       />
     </Button>
   );

@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { IProviderInfo, FortifyAPI } from '@peculiar/fortify-client-core';
-import { Pkcs10CertificateRequest, X509Certificate } from '@peculiar/x509';
 import { useToast } from '@peculiar/react-components';
+import { Pkcs10CertificateRequest, X509Certificate } from '@peculiar/x509';
 import { useTranslation } from 'react-i18next';
 import { useLockBodyScroll } from 'react-use';
 import { CertificateImportDialog } from '../../components/certificate-import-dialog';
@@ -14,21 +14,15 @@ interface IUseCertificateImportDialogInitialParams {
   onSuccess: (providerId: string) => void;
 }
 
-export function useCertificateImportDialog(
-  props: IUseCertificateImportDialogInitialParams,
-) {
-  const {
-    providers, currentProviderId, fortifyClient, onSuccess,
-  } = props;
+export function useCertificateImportDialog(props: IUseCertificateImportDialogInitialParams) {
+  const { providers, currentProviderId, fortifyClient, onSuccess } = props;
   const { addToast } = useToast();
   const { t } = useTranslation();
 
   const [isOpen, setIsOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const certificate = React.useRef<
-    Pkcs10CertificateRequest | X509Certificate | null
-  >(null);
+  const certificate = React.useRef<Pkcs10CertificateRequest | X509Certificate | null>(null);
   const certificateType = React.useRef<TCertificateType | undefined>(undefined);
 
   const [certificatePem, setCertificatePem] = React.useState('');
@@ -99,11 +93,7 @@ export function useCertificateImportDialog(
     setIsLoading(false);
   };
 
-  const onDropAccepted = (
-    fileContent: ArrayBuffer,
-    extension: string,
-    fileType: string,
-  ) => {
+  const onDropAccepted = (fileContent: ArrayBuffer, extension: string, fileType: string) => {
     try {
       if (extension === 'csr' || fileType === 'application/pkcs10') {
         const certr = new Pkcs10CertificateRequest(fileContent);
@@ -175,50 +165,46 @@ export function useCertificateImportDialog(
   return {
     open: () => setIsOpen(true),
     dialog: () =>
-      fortifyClient && isOpen
-        ? (
-            <CertificateImportDialog
-              certificate={certificatePem}
-              isTextAreaError={isTextAreaError}
-              providers={providers}
-              currentProviderId={currentProviderId}
-              loading={isLoading}
-              onTextAreaChange={(value) => {
-                setCertificatePem(value);
-                setIsTextAreaError(false);
-              }}
-              onTextAreaBlur={handleTextAreaBlur}
-              onDropAccepted={onDropAccepted}
-              onDropError={() => {
-                addToast({
-                  message: t(
-                    'certificates.dialog.import.certificate.error.invalid-data',
-                  ),
-                  variant: 'wrong',
-                  disableIcon: true,
-                  isClosable: true,
-                });
-              }}
-              onDropRejected={(msg) => {
-                addToast({
-                  message: msg,
-                  variant: 'wrong',
-                  disableIcon: true,
-                  isClosable: true,
-                });
-                clearCertificate();
-              }}
-              onDialogClose={handleClose}
-              onProviderSelect={(id) => {
-                localCurrentProviderId.current = id;
-              }}
-              onImportButtonClick={handleCertificateImport}
-              onClearButtonClick={() => {
-                setIsTextAreaError(false);
-                clearCertificate();
-              }}
-            />
-          )
-        : null,
+      fortifyClient && isOpen ? (
+        <CertificateImportDialog
+          certificate={certificatePem}
+          isTextAreaError={isTextAreaError}
+          providers={providers}
+          currentProviderId={currentProviderId}
+          loading={isLoading}
+          onTextAreaChange={(value) => {
+            setCertificatePem(value);
+            setIsTextAreaError(false);
+          }}
+          onTextAreaBlur={handleTextAreaBlur}
+          onDropAccepted={onDropAccepted}
+          onDropError={() => {
+            addToast({
+              message: t('certificates.dialog.import.certificate.error.invalid-data'),
+              variant: 'wrong',
+              disableIcon: true,
+              isClosable: true,
+            });
+          }}
+          onDropRejected={(msg) => {
+            addToast({
+              message: msg,
+              variant: 'wrong',
+              disableIcon: true,
+              isClosable: true,
+            });
+            clearCertificate();
+          }}
+          onDialogClose={handleClose}
+          onProviderSelect={(id) => {
+            localCurrentProviderId.current = id;
+          }}
+          onImportButtonClick={handleCertificateImport}
+          onClearButtonClick={() => {
+            setIsTextAreaError(false);
+            clearCertificate();
+          }}
+        />
+      ) : null,
   };
 }

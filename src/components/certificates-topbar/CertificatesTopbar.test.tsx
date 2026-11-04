@@ -1,6 +1,4 @@
-import {
-  render, userEvent, screen,
-} from '@testing';
+import { render, userEvent, screen } from '@testing';
 import { CertificatesTopbar } from './CertificatesTopbar';
 
 describe('<CertificatesTopbar />', () => {
@@ -29,16 +27,17 @@ describe('<CertificatesTopbar />', () => {
     expect(
       screen.getByRole('button', { name: /Reset session and refresh certificate list/ }),
     ).toBeDisabled();
-    expect(
-      screen.getByRole('button', { name: /Provider information/ }),
-    ).toBeDisabled();
+    expect(screen.getByRole('button', { name: /Provider information/ })).toBeDisabled();
     expect(screen.getByRole('button', { name: /Sign in/ })).toBeDisabled();
     expect(screen.getByRole('button', { name: /New/ })).toBeDisabled();
   });
 
   it('Should render as not logged in', () => {
     render(
-      <CertificatesTopbar {...defaultProps} isLoggedIn={false} />,
+      <CertificatesTopbar
+        {...defaultProps}
+        isLoggedIn={false}
+      />,
     );
 
     expect(screen.getByRole('button', { name: /Sign in/ })).toBeInTheDocument();
@@ -47,29 +46,29 @@ describe('<CertificatesTopbar />', () => {
 
   it('Should render as logged in', () => {
     render(
-      <CertificatesTopbar {...defaultProps} isLoggedIn={true} />,
+      <CertificatesTopbar
+        {...defaultProps}
+        isLoggedIn={true}
+      />,
     );
 
-    expect(
-      screen.getByRole('button', { name: /Sign out/ }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Sign out/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /New/ })).toBeEnabled();
   });
 
   it('Should render as read only', () => {
     render(
-      <CertificatesTopbar {...defaultProps} isReadOnly={true} />,
+      <CertificatesTopbar
+        {...defaultProps}
+        isReadOnly={true}
+      />,
     );
 
-    expect(
-      screen.queryByRole('button', { name: /New/ }),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /New/ })).not.toBeInTheDocument();
   });
 
   it('Should handle onReload', async () => {
-    render(
-      <CertificatesTopbar {...defaultProps} />,
-    );
+    render(<CertificatesTopbar {...defaultProps} />);
 
     await userEvent.click(
       screen.getByRole('button', { name: /Reset session and refresh certificate list/ }),
@@ -79,21 +78,15 @@ describe('<CertificatesTopbar />', () => {
   });
 
   it('Should handle onInfo', async () => {
-    render(
-      <CertificatesTopbar {...defaultProps} />,
-    );
+    render(<CertificatesTopbar {...defaultProps} />);
 
-    await userEvent.click(
-      screen.getByRole('button', { name: /Provider information/ }),
-    );
+    await userEvent.click(screen.getByRole('button', { name: /Provider information/ }));
 
     expect(defaultProps.onInfo).toBeCalledTimes(1);
   });
 
   it('Should handle onLoginLogout', async () => {
-    render(
-      <CertificatesTopbar {...defaultProps} />,
-    );
+    render(<CertificatesTopbar {...defaultProps} />);
 
     await userEvent.click(screen.getByRole('button', { name: /Sign out/ }));
 
@@ -105,7 +98,10 @@ describe('<CertificatesTopbar />', () => {
     const onCreateMock = vi.fn((data) => data);
 
     render(
-      <CertificatesTopbar {...defaultProps} onCreate={onCreateMock} />,
+      <CertificatesTopbar
+        {...defaultProps}
+        onCreate={onCreateMock}
+      />,
     );
 
     await userEvent.click(screen.getByRole('button', { name: 'New' }));
@@ -126,16 +122,17 @@ describe('<CertificatesTopbar />', () => {
     const onCreateMock = vi.fn((data) => data);
 
     render(
-      <CertificatesTopbar {...defaultProps} onCreate={onCreateMock} />,
+      <CertificatesTopbar
+        {...defaultProps}
+        onCreate={onCreateMock}
+      />,
     );
 
     await userEvent.click(screen.getByRole('button', { name: 'New' }));
 
     expect(screen.getByRole('presentation')).toBeInTheDocument();
 
-    await userEvent.click(
-      screen.getByRole('menuitem', { name: /Create self-signed certificate/ }),
-    );
+    await userEvent.click(screen.getByRole('menuitem', { name: /Create self-signed certificate/ }));
 
     expect(screen.queryByRole('presentation')).not.toBeInTheDocument();
 
@@ -144,17 +141,13 @@ describe('<CertificatesTopbar />', () => {
   });
 
   it('Should handle import', async () => {
-    render(
-      <CertificatesTopbar {...defaultProps} />,
-    );
+    render(<CertificatesTopbar {...defaultProps} />);
 
     await userEvent.click(screen.getByRole('button', { name: 'New' }));
 
     expect(screen.getByRole('presentation')).toBeInTheDocument();
 
-    await userEvent.click(
-      screen.getByRole('menuitem', { name: /Import certificate/ }),
-    );
+    await userEvent.click(screen.getByRole('menuitem', { name: /Import certificate/ }));
 
     expect(screen.queryByRole('presentation')).not.toBeInTheDocument();
 

@@ -1,13 +1,9 @@
-import {
-  useEffect, useMemo, useState,
-} from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ICertificateRequest } from '@peculiar/fortify-client-core';
-import { getCertificateName } from '../../utils/certificate';
 import { ICertificateProps } from '../../types';
+import { getCertificateName } from '../../utils/certificate';
 
-export function useSearchList(
-  certificates: (ICertificateProps | ICertificateRequest)[],
-) {
+export function useSearchList(certificates: (ICertificateProps | ICertificateRequest)[]) {
   const [searchedText, setSearchedText] = useState(
     new URLSearchParams(window.location.search).get('search') || '',
   );

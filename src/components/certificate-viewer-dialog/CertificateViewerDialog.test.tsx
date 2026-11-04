@@ -1,6 +1,4 @@
-import {
-  render, userEvent, screen,
-} from '@testing';
+import { render, userEvent, screen } from '@testing';
 import { ICertificateProps } from '../../types';
 import { CertificateViewerDialog } from './CertificateViewerDialog';
 
@@ -37,12 +35,8 @@ describe('<CertificateViewerDialog />', () => {
       />,
     );
 
-    expect(
-      screen.getByText(`“${certificates[0].label}” details`),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/x509 certificate viewer component/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(`“${certificates[0].label}” details`)).toBeInTheDocument();
+    expect(screen.getByText(/x509 certificate viewer component/)).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole('button', { name: /Close/ }));
 
@@ -51,18 +45,23 @@ describe('<CertificateViewerDialog />', () => {
 
   it('Should render & switches tabs', async () => {
     render(
-      <CertificateViewerDialog certificates={certificates} onClose={vi.fn()} />,
+      <CertificateViewerDialog
+        certificates={certificates}
+        onClose={vi.fn()}
+      />,
     );
 
-    expect(
-      screen.getByText(`${certificates[0].label}`).closest('button'),
-    ).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByText(`${certificates[0].label}`).closest('button')).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
 
     await userEvent.click(screen.getByText(`${certificates[1].label}`));
 
-    expect(
-      screen.getByText(`${certificates[1].label}`).closest('button'),
-    ).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByText(`${certificates[1].label}`).closest('button')).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
   });
 
   it('Should render as CSR', () => {
@@ -70,14 +69,13 @@ describe('<CertificateViewerDialog />', () => {
       <CertificateViewerDialog
         certificates={[
           {
-            ...certificates[0], type: 'csr',
+            ...certificates[0],
+            type: 'csr',
           } as unknown as ICertificateProps,
         ]}
         onClose={vi.fn()}
       />,
     );
-    expect(
-      screen.getByText(/CSR certificate viewer component/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/CSR certificate viewer component/)).toBeInTheDocument();
   });
 });

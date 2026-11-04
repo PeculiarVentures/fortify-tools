@@ -1,7 +1,9 @@
 import { render, screen } from '@testing';
 import { ErrorConnection } from './ErrorConnection';
 
-vi.mock('../../icons/error-big.svg?react', () => ({ default: () => <svg data-testid="error_icon" /> }));
+vi.mock('../../icons/error-big.svg?react', () => ({
+  default: () => <svg data-testid="error_icon" />,
+}));
 
 describe('<ErrorConnection />', () => {
   const defaultProps = {
@@ -10,9 +12,7 @@ describe('<ErrorConnection />', () => {
   };
 
   it('Should render', () => {
-    render(
-      <ErrorConnection {...defaultProps} />,
-    );
+    render(<ErrorConnection {...defaultProps} />);
 
     expect(screen.getByTestId('error_icon')).toBeInTheDocument();
 

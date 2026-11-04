@@ -1,13 +1,5 @@
-import {
-  Pkcs10CertificateRequest,
-  X509Certificate,
-  Name,
-} from '@peculiar/x509';
-import {
-  ICertificateProps,
-  ICertificateSubjectProps,
-  TCertificateType,
-} from '../types';
+import { Pkcs10CertificateRequest, X509Certificate, Name } from '@peculiar/x509';
+import { ICertificateProps, ICertificateSubjectProps, TCertificateType } from '../types';
 
 export function certificateRawToPem(raw: ArrayBuffer, type: TCertificateType) {
   let pem;
@@ -36,9 +28,7 @@ export function certificateRawToPem(raw: ArrayBuffer, type: TCertificateType) {
   return pem;
 }
 
-export function certificateSubjectToString(
-  attrs: ICertificateSubjectProps,
-): string {
+export function certificateSubjectToString(attrs: ICertificateSubjectProps): string {
   const parts: string[] = [];
 
   for (const key in attrs) {
@@ -73,9 +63,7 @@ export function getCertificateName(certificate: ICertificateProps) {
     return certificate.subjectName;
   }
 
-  const {
-    G, CN, SN, E,
-  } = certificate.subject;
+  const { G, CN, SN, E } = certificate.subject;
 
   // Return Common Name if present.
   if (CN) {

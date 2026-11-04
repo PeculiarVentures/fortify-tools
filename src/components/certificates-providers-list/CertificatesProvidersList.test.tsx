@@ -1,6 +1,4 @@
-import {
-  render, userEvent, screen,
-} from '@testing';
+import { render, userEvent, screen } from '@testing';
 import { CertificatesProvidersList } from './CertificatesProvidersList';
 
 vi.mock('@peculiar/react-components', async () => {
@@ -9,7 +7,10 @@ vi.mock('@peculiar/react-components', async () => {
   return {
     ...actual,
     Skeleton: ({ height }: { height: number }) => (
-      <div style={{ height }} role="presentation" />
+      <div
+        style={{ height }}
+        role="presentation"
+      />
     ),
   };
 });
@@ -60,15 +61,16 @@ describe('<CertificatesProvidersList />', () => {
 
   it('shows render as loading', () => {
     render(
-      <CertificatesProvidersList providers={[]} loading={true} />,
+      <CertificatesProvidersList
+        providers={[]}
+        loading={true}
+      />,
     );
     expect(screen.getAllByRole('presentation')).toHaveLength(4);
   });
 
   it('shows render as empty', () => {
-    render(
-      <CertificatesProvidersList providers={[]} />,
-    );
+    render(<CertificatesProvidersList providers={[]} />);
     expect(screen.getByText(/No providers connected/)).toBeInTheDocument();
   });
 });

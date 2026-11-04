@@ -1,6 +1,4 @@
-import {
-  render, screen, userEvent,
-} from '@testing';
+import { render, screen, userEvent } from '@testing';
 import { AppFallback } from './AppFallback';
 
 describe('<AppFallback />', () => {
@@ -8,17 +6,16 @@ describe('<AppFallback />', () => {
     const resetErrorBoundaryMock = vi.fn();
 
     render(
-      <AppFallback resetErrorBoundary={resetErrorBoundaryMock} error="" />,
+      <AppFallback
+        resetErrorBoundary={resetErrorBoundaryMock}
+        error=""
+      />,
     );
 
     expect(screen.getByText(/Oops! Something went wrong/)).toBeInTheDocument();
-    expect(
-      screen.getByText(/Sorry, an error has occurred. Please try again/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Sorry, an error has occurred. Please try again/)).toBeInTheDocument();
 
-    expect(
-      screen.getByRole('link', { name: 'Home page' }),
-    ).toHaveAttribute('href', '/');
+    expect(screen.getByRole('link', { name: 'Home page' })).toHaveAttribute('href', '/');
 
     await userEvent.click(screen.getByRole('button', { name: /Try again/ }));
 

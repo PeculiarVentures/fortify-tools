@@ -3,10 +3,10 @@ import { Dialog, DialogContent } from '@peculiar/react-components';
 import { useTranslation } from 'react-i18next';
 import { IAppFetchingType } from '../../hooks/app';
 import { ApproveConnection } from '../approve-connection';
+import { ConnectionNotApproved } from '../connection-not-approved';
+import { ConnectionNotDetected } from '../connection-not-detected';
 import { ErrorConnection } from '../error-connection';
 import { UpdateClient } from '../update-client';
-import { ConnectionNotDetected } from '../connection-not-detected';
-import { ConnectionNotApproved } from '../connection-not-approved';
 import styles from './styles/index.module.scss';
 
 export interface IFetchingStatusOwerlayProps {
@@ -14,12 +14,10 @@ export interface IFetchingStatusOwerlayProps {
   challenge: string | null;
   onReload: () => void;
 }
-export const FetchingStatusOwerlay: React.FunctionComponent<
-  IFetchingStatusOwerlayProps
-> = (props) => {
-  const {
-    fetching, challenge, onReload,
-  } = props;
+export const FetchingStatusOwerlay: React.FunctionComponent<IFetchingStatusOwerlayProps> = (
+  props,
+) => {
+  const { fetching, challenge, onReload } = props;
 
   const { t } = useTranslation();
 
@@ -35,9 +33,7 @@ export const FetchingStatusOwerlay: React.FunctionComponent<
       return {
         isShow: true,
         element: (
-          <ErrorConnection
-            message={t('connection.error.connection-not-supported.message')}
-          />
+          <ErrorConnection message={t('connection.error.connection-not-supported.message')} />
         ),
       };
     }
@@ -71,10 +67,10 @@ export const FetchingStatusOwerlay: React.FunctionComponent<
     }
 
     if (
-      fetching.connectionDetect === 'pending'
-      || fetching.connectionSupport === 'pending'
-      || fetching.connectionApprove === 'pending'
-      || fetching.providers === 'pending'
+      fetching.connectionDetect === 'pending' ||
+      fetching.connectionSupport === 'pending' ||
+      fetching.connectionApprove === 'pending' ||
+      fetching.providers === 'pending'
     ) {
       return {
         isShow: false,

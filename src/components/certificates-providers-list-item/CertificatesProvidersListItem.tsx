@@ -1,8 +1,8 @@
 import React from 'react';
 import { IProviderInfo } from '@peculiar/fortify-client-core';
-import { useTranslation } from 'react-i18next';
-import { clsx } from 'clsx';
 import { Typography } from '@peculiar/react-components';
+import { clsx } from 'clsx';
+import { useTranslation } from 'react-i18next';
 import ProviderIcon from '../../icons/provider.svg?react';
 import SmartcardIcon from '../../icons/smartcard.svg?react';
 import styles from './styles/index.module.scss';
@@ -16,9 +16,7 @@ interface ICertificatesProvidersListItemProps {
 export const CertificatesProvidersListItem: React.FunctionComponent<
   ICertificatesProvidersListItemProps
 > = (props) => {
-  const {
-    provider, isSelected, onClick,
-  } = props;
+  const { provider, isSelected, onClick } = props;
   const { t } = useTranslation();
 
   return (
@@ -30,8 +28,7 @@ export const CertificatesProvidersListItem: React.FunctionComponent<
       onClick={() => {
         onClick(provider.id);
       }}
-      onKeyDown={(event) =>
-        ['Enter'].includes(event.code) && onClick(provider.id)}
+      onKeyDown={(event) => ['Enter'].includes(event.code) && onClick(provider.id)}
     >
       <div className={styles.list_item_icon_wrapper}>
         {provider.isRemovable ? <SmartcardIcon /> : <ProviderIcon />}
@@ -45,13 +42,9 @@ export const CertificatesProvidersListItem: React.FunctionComponent<
         >
           {provider.name}
         </Typography>
-        {provider.readOnly
-          ? (
-              <Typography variant="c1">
-                {t('providers.list.item.read-only')}
-              </Typography>
-            )
-          : null}
+        {provider.readOnly ? (
+          <Typography variant="c1">{t('providers.list.item.read-only')}</Typography>
+        ) : null}
       </div>
     </li>
   );

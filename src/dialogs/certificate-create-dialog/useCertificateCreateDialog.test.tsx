@@ -1,5 +1,5 @@
-import { renderHook, act } from '@testing';
 import type { IProviderInfo, FortifyAPI } from '@peculiar/fortify-client-core';
+import { renderHook, act } from '@testing';
 import { useCertificateCreateDialog } from './useCertificateCreateDialog';
 
 const addToastMock = vi.fn();
@@ -15,7 +15,8 @@ vi.mock('@peculiar/react-components', async () => {
 
 describe('useCertificateCreateDialog', () => {
   const algorithm = {
-    hash: 'SHA-256', signature: 'RSASSA-PKCS1-v1_5',
+    hash: 'SHA-256',
+    signature: 'RSASSA-PKCS1-v1_5',
   };
 
   const defaultOpenProps = {
@@ -155,10 +156,7 @@ describe('useCertificateCreateDialog', () => {
     });
 
     expect(onSuccessMock).toHaveBeenCalledWith('1');
-    expect(mockFortifyClient.createPKCS10).toHaveBeenCalledWith(
-      '1',
-      defaultResultMock,
-    );
+    expect(mockFortifyClient.createPKCS10).toHaveBeenCalledWith('1', defaultResultMock);
   });
 
   it('Should show error message if certificate creation fails', async () => {
@@ -192,7 +190,7 @@ describe('useCertificateCreateDialog', () => {
 
     expect(onSuccessMock).not.toHaveBeenCalled();
     expect(addToastMock).toHaveBeenCalledWith(
-      expect.objectContaining({ message: 'Can\'t create certificate' }),
+      expect.objectContaining({ message: "Can't create certificate" }),
     );
     addToastMock.mockClear();
   });
@@ -228,12 +226,12 @@ describe('useCertificateCreateDialog', () => {
 
     expect(onSuccessMock).not.toHaveBeenCalled();
     expect(addToastMock).toHaveBeenCalledWith(
-      expect.objectContaining({ message: 'Can\'t create certificate' }),
+      expect.objectContaining({ message: "Can't create certificate" }),
     );
     addToastMock.mockClear();
   });
 
-  it('Shouldn\'t call if fortifyClient not provided', async () => {
+  it("Shouldn't call if fortifyClient not provided", async () => {
     const onSuccessMock = vi.fn();
 
     const { result } = renderHook(() =>

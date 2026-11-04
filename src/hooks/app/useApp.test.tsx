@@ -1,8 +1,6 @@
-import {
-  act, renderHook, waitFor,
-} from '@testing';
 import type { IProviderInfo } from '@peculiar/fortify-client-core';
 import { FortifyAPI } from '@peculiar/fortify-client-core';
+import { act, renderHook, waitFor } from '@testing';
 import { useApp } from './useApp';
 
 const addToastMock = vi.fn();
@@ -29,9 +27,12 @@ describe('useApp', () => {
     },
   ] as IProviderInfo[];
 
-  const certificatesMock = [{
-    id: '1', name: 'Certificate 1',
-  }];
+  const certificatesMock = [
+    {
+      id: '1',
+      name: 'Certificate 1',
+    },
+  ];
 
   const mockFortifyAPIInstance: Partial<FortifyAPI> = {
     challenge: vi.fn().mockResolvedValue(''),
@@ -53,11 +54,9 @@ describe('useApp', () => {
   };
 
   const mockFortifyAPI = (instance: Partial<FortifyAPI>) => {
-    vi.mocked(FortifyAPI).mockImplementation(
-      function MockFortifyAPI() {
-        return instance as FortifyAPI;
-      } as unknown as typeof FortifyAPI,
-    );
+    vi.mocked(FortifyAPI).mockImplementation(function MockFortifyAPI() {
+      return instance as FortifyAPI;
+    } as unknown as typeof FortifyAPI);
   };
 
   it('Should initialize, get providers & certificates', async () => {
@@ -113,9 +112,7 @@ describe('useApp', () => {
     const { result } = renderHook(() => useApp());
 
     await waitFor(() => {
-      expect(result.current.fetching.connectionClientUpdate).toEqual(
-        'rejected',
-      );
+      expect(result.current.fetching.connectionClientUpdate).toEqual('rejected');
     });
   });
 
@@ -221,9 +218,8 @@ describe('useApp', () => {
     });
 
     expect(
-      mockFortifyAPIInstance.getProviderById
-      && (await mockFortifyAPIInstance.getProviderById(providersMock[0].id))
-        .login,
+      mockFortifyAPIInstance.getProviderById &&
+        (await mockFortifyAPIInstance.getProviderById(providersMock[0].id)).login,
     ).toHaveBeenCalled();
     expect(result.current.isCurrentProviderLogedin).toEqual(true);
   });
@@ -246,7 +242,7 @@ describe('useApp', () => {
     expect(result.current.isCurrentProviderLogedin).toEqual(false);
   });
 
-  it('Should show error message if provider doesn\'t support signing in', async () => {
+  it("Should show error message if provider doesn't support signing in", async () => {
     mockFortifyAPI({
       ...mockFortifyAPIInstance,
       getProviderById: vi.fn().mockResolvedValue({
@@ -296,9 +292,7 @@ describe('useApp', () => {
   it('Should clear certificates when error occured during first load & reload', async () => {
     mockFortifyAPI({
       ...mockFortifyAPIInstance,
-      getCertificatesByProviderId: vi
-        .fn()
-        .mockRejectedValue(new Error('Error')),
+      getCertificatesByProviderId: vi.fn().mockRejectedValue(new Error('Error')),
     });
 
     const { result } = renderHook(() => useApp());

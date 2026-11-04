@@ -1,14 +1,21 @@
 import { render, screen } from '@testing';
 import { CertificateTypeLabel } from './CertificateTypeLabel';
 
-vi.mock('../../icons/certificate-30.svg?react', () => ({ default: () => <svg data-testid="certificate_icon" /> }));
+vi.mock('../../icons/certificate-30.svg?react', () => ({
+  default: () => <svg data-testid="certificate_icon" />,
+}));
 
-vi.mock('../../icons/certificate-with-key-30.svg?react', () => ({ default: () => <svg data-testid="certificate_with_key_icon" /> }));
+vi.mock('../../icons/certificate-with-key-30.svg?react', () => ({
+  default: () => <svg data-testid="certificate_with_key_icon" />,
+}));
 
 describe('<CertificateTypeLabel />', () => {
   it('Should render as x509 type', () => {
     render(
-      <CertificateTypeLabel type="x509" withPrivatKey={false} />,
+      <CertificateTypeLabel
+        type="x509"
+        withPrivatKey={false}
+      />,
     );
 
     expect(screen.getByTestId('certificate_icon')).toBeInTheDocument();
@@ -17,7 +24,10 @@ describe('<CertificateTypeLabel />', () => {
 
   it('Should render as x509 type with privat key', () => {
     render(
-      <CertificateTypeLabel type="x509" withPrivatKey={true} />,
+      <CertificateTypeLabel
+        type="x509"
+        withPrivatKey={true}
+      />,
     );
 
     expect(screen.getByTestId('certificate_with_key_icon')).toBeInTheDocument();
@@ -44,8 +54,6 @@ describe('<CertificateTypeLabel />', () => {
       />,
     );
 
-    expect(screen.getByText(/Certificate/).closest('div')).toHaveClass(
-      'test_class_name',
-    );
+    expect(screen.getByText(/Certificate/).closest('div')).toHaveClass('test_class_name');
   });
 });

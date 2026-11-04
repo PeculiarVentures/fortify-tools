@@ -1,15 +1,15 @@
 import React, { useEffect, useRef } from 'react';
 import { IProviderInfo, FortifyAPI } from '@peculiar/fortify-client-core';
-import { ExtendedKeyUsageType } from '@peculiar/x509';
 import { useToast } from '@peculiar/react-components';
+import { ExtendedKeyUsageType } from '@peculiar/x509';
 import { useTranslation } from 'react-i18next';
 import { useLockBodyScroll } from 'react-use';
-import { certificateSubjectToString } from '../../utils/certificate';
 import {
   TCertificateCreateDataProps,
   CertificateCreateDialog,
 } from '../../components/certificate-create-dialog';
 import { TCertificateType } from '../../types';
+import { certificateSubjectToString } from '../../utils/certificate';
 
 export function useCertificateCreateDialog(props: {
   providers: IProviderInfo[];
@@ -17,9 +17,7 @@ export function useCertificateCreateDialog(props: {
   fortifyClient?: FortifyAPI | null;
   onSuccess: (providerId: string) => void;
 }) {
-  const {
-    providers, currentProviderId, fortifyClient, onSuccess,
-  } = props;
+  const { providers, currentProviderId, fortifyClient, onSuccess } = props;
   const { addToast } = useToast();
   const { t } = useTranslation();
 
@@ -55,26 +53,20 @@ export function useCertificateCreateDialog(props: {
       let newCert;
 
       if (type === 'x509') {
-        newCert = await fortifyClient.createX509(
-          localCurrentProviderId.current as string,
-          {
-            subjectName: subject,
-            hashAlgorithm: algorithm.hash,
-            signatureAlgorithm: algorithm.signature,
-            extensions: data?.extendedKeyUsages?.length
-              ? { extendedKeyUsage: data.extendedKeyUsages }
-              : undefined,
-          },
-        );
+        newCert = await fortifyClient.createX509(localCurrentProviderId.current as string, {
+          subjectName: subject,
+          hashAlgorithm: algorithm.hash,
+          signatureAlgorithm: algorithm.signature,
+          extensions: data?.extendedKeyUsages?.length
+            ? { extendedKeyUsage: data.extendedKeyUsages }
+            : undefined,
+        });
       } else if (type === 'csr') {
-        newCert = await fortifyClient.createPKCS10(
-          localCurrentProviderId.current as string,
-          {
-            subjectName: subject,
-            hashAlgorithm: algorithm.hash,
-            signatureAlgorithm: algorithm.signature,
-          },
-        );
+        newCert = await fortifyClient.createPKCS10(localCurrentProviderId.current as string, {
+          subjectName: subject,
+          hashAlgorithm: algorithm.hash,
+          signatureAlgorithm: algorithm.signature,
+        });
       }
 
       if (newCert) {
@@ -114,20 +106,18 @@ export function useCertificateCreateDialog(props: {
       setIsOpen(true);
     },
     dialog: () =>
-      isOpen
-        ? (
-            <CertificateCreateDialog
-              type={dialogType.current}
-              providers={providers}
-              currentProviderId={currentProviderId}
-              loading={isLoading}
-              onCreateButtonClick={handleCertificateCreate}
-              onDialogClose={() => setIsOpen(false)}
-              onProviderSelect={(id) => {
-                localCurrentProviderId.current = id;
-              }}
-            />
-          )
-        : null,
+      isOpen ? (
+        <CertificateCreateDialog
+          type={dialogType.current}
+          providers={providers}
+          currentProviderId={currentProviderId}
+          loading={isLoading}
+          onCreateButtonClick={handleCertificateCreate}
+          onDialogClose={() => setIsOpen(false)}
+          onProviderSelect={(id) => {
+            localCurrentProviderId.current = id;
+          }}
+        />
+      ) : null,
   };
 }

@@ -3,16 +3,10 @@ import orderBy from 'lodash/orderBy';
 
 type TSortDir = 'asc' | 'desc';
 
-export function useSortList(
-  list: object,
-  name: string,
-  direction: TSortDir = 'desc',
-) {
+export function useSortList(list: object, name: string, direction: TSortDir = 'desc') {
   const searchParams = new URLSearchParams(window.location.search);
 
-  const [currentName, setCurrentName] = useState(
-    searchParams.get('sort') || name,
-  );
+  const [currentName, setCurrentName] = useState(searchParams.get('sort') || name);
   const [currentDerection, setCurrentDirection] = useState(
     (searchParams.get('order') as TSortDir) || direction,
   );

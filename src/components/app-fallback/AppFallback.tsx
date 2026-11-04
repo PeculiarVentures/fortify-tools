@@ -1,6 +1,6 @@
-import { useTranslation } from 'react-i18next';
-import { FallbackProps } from 'react-error-boundary';
 import { Button, Typography } from '@peculiar/react-components';
+import { FallbackProps } from 'react-error-boundary';
+import { useTranslation } from 'react-i18next';
 import ErrorIcon from '../../icons/error-big.svg?react';
 import styles from './styles/index.module.scss';
 
@@ -14,15 +14,22 @@ export const AppFallback = (props: FallbackProps) => {
         <div className={styles.icon_wrapper}>
           <ErrorIcon />
         </div>
-        <Typography variant="h5" color="black">
+        <Typography
+          variant="h5"
+          color="black"
+        >
           {t('app-error.message')}
         </Typography>
-        <Typography variant="b2" color="gray-9">
+        <Typography
+          variant="b2"
+          color="gray-9"
+        >
           {t('app-error.description')}
         </Typography>
         <div className={styles.buttons_group}>
           <Button
-            component="a" href="/"
+            component="a"
+            href="/"
             variant="outlined"
           >
             {t('app-error.button.home-page')}

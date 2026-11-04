@@ -6,7 +6,7 @@
   display: inline-block;
   vertical-align: middle;
   &::after {
-    content: "";
+    content: '';
     display: block;
   }
 }

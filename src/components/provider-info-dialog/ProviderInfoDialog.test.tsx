@@ -1,8 +1,6 @@
 import { ComponentProps } from 'react';
-import {
-  render, userEvent, screen,
-} from '@testing';
 import type { IProviderInfo } from '@peculiar/fortify-client-core';
+import { render, userEvent, screen } from '@testing';
 import { ProviderInfoDialog } from './ProviderInfoDialog';
 
 describe('<ProviderInfoDialog />', () => {
@@ -33,49 +31,35 @@ describe('<ProviderInfoDialog />', () => {
   };
 
   it('Should render and handle click close', async () => {
-    render(
-      <ProviderInfoDialog {...defaultProps} />,
-    );
+    render(<ProviderInfoDialog {...defaultProps} />);
 
-    expect(
-      screen.getByText(`${defaultProps.data.name} information`),
-    ).toBeInTheDocument();
+    expect(screen.getByText(`${defaultProps.data.name} information`)).toBeInTheDocument();
 
     expect(screen.getByText(/Token name/).nextElementSibling).toHaveTextContent(
       defaultProps.data.token?.label || '',
     );
 
-    expect(
-      screen.getByText(/Token category/).nextElementSibling,
-    ).toHaveTextContent(/Software/);
+    expect(screen.getByText(/Token category/).nextElementSibling).toHaveTextContent(/Software/);
 
-    expect(
-      screen.getByText(/Extractable/).nextElementSibling,
-    ).toHaveTextContent(/No/);
+    expect(screen.getByText(/Extractable/).nextElementSibling).toHaveTextContent(/No/);
 
-    expect(
-      screen.getByText(/Serial number/).nextElementSibling,
-    ).toHaveTextContent(defaultProps.data.token?.serialNumber || '');
+    expect(screen.getByText(/Serial number/).nextElementSibling).toHaveTextContent(
+      defaultProps.data.token?.serialNumber || '',
+    );
 
     expect(screen.getByText(/Free space/).nextElementSibling).toHaveTextContent(
       defaultProps.data.token?.freePrivateMemory?.toString() || '',
     );
 
-    expect(
-      screen.getByText(/Hardware version/).nextElementSibling,
-    ).toHaveTextContent('1.1');
+    expect(screen.getByText(/Hardware version/).nextElementSibling).toHaveTextContent('1.1');
 
-    expect(
-      screen.getByText(/Firmware version/).nextElementSibling,
-    ).toHaveTextContent('1.2');
+    expect(screen.getByText(/Firmware version/).nextElementSibling).toHaveTextContent('1.2');
 
     expect(screen.getByText(/Model/).nextElementSibling).toHaveTextContent(
       defaultProps.data.token?.model || '',
     );
 
-    expect(screen.getByText(/Algorithms/).nextElementSibling).toHaveTextContent(
-      'SHA-1, SHA-256',
-    );
+    expect(screen.getByText(/Algorithms/).nextElementSibling).toHaveTextContent('SHA-1, SHA-256');
 
     await userEvent.click(screen.getByRole('button', { name: /Cancel/ }));
 
@@ -86,34 +70,28 @@ describe('<ProviderInfoDialog />', () => {
     const props: ComponentProps<typeof ProviderInfoDialog> = {
       ...defaultProps,
       data: {
-        ...defaultProps.data, isHardware: true,
+        ...defaultProps.data,
+        isHardware: true,
       } as IProviderInfo,
     };
 
-    render(
-      <ProviderInfoDialog {...props} />,
-    );
+    render(<ProviderInfoDialog {...props} />);
 
-    expect(
-      screen.getByText(/Token category/).nextElementSibling,
-    ).toHaveTextContent(/Hardware/);
+    expect(screen.getByText(/Token category/).nextElementSibling).toHaveTextContent(/Hardware/);
   });
 
   it('Should render as extractable', () => {
     const props: ComponentProps<typeof ProviderInfoDialog> = {
       ...defaultProps,
       data: {
-        ...defaultProps.data, isRemovable: true,
+        ...defaultProps.data,
+        isRemovable: true,
       } as IProviderInfo,
     };
 
-    render(
-      <ProviderInfoDialog {...props} />,
-    );
+    render(<ProviderInfoDialog {...props} />);
 
-    expect(
-      screen.getByText(/Extractable/).nextElementSibling,
-    ).toHaveTextContent(/Yes/);
+    expect(screen.getByText(/Extractable/).nextElementSibling).toHaveTextContent(/Yes/);
   });
 
   it('Should render with unavailable values', () => {
@@ -130,18 +108,16 @@ describe('<ProviderInfoDialog />', () => {
       } as unknown as IProviderInfo,
     };
 
-    render(
-      <ProviderInfoDialog {...props} />,
-    );
+    render(<ProviderInfoDialog {...props} />);
 
     expect(screen.getByText(/Free space/).nextElementSibling).toHaveTextContent(
       /Information is unavailable/,
     );
-    expect(
-      screen.getByText(/Hardware version/).nextElementSibling,
-    ).toHaveTextContent(/Information is unavailable/);
-    expect(
-      screen.getByText(/Firmware version/).nextElementSibling,
-    ).toHaveTextContent(/Information is unavailable/);
+    expect(screen.getByText(/Hardware version/).nextElementSibling).toHaveTextContent(
+      /Information is unavailable/,
+    );
+    expect(screen.getByText(/Firmware version/).nextElementSibling).toHaveTextContent(
+      /Information is unavailable/,
+    );
   });
 });

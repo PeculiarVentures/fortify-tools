@@ -8,9 +8,9 @@ interface IConnectionNotApprovedProps {
   onReload: () => void;
 }
 
-export const ConnectionNotApproved: React.FunctionComponent<
-  IConnectionNotApprovedProps
-> = (props) => {
+export const ConnectionNotApproved: React.FunctionComponent<IConnectionNotApprovedProps> = (
+  props,
+) => {
   const { onReload } = props;
   const { t } = useTranslation();
 
@@ -19,7 +19,10 @@ export const ConnectionNotApproved: React.FunctionComponent<
       <div className={styles.icon_wrapper}>
         <FortifyIcon />
       </div>
-      <Typography variant="h5" color="black">
+      <Typography
+        variant="h5"
+        color="black"
+      >
         <Trans
           i18nKey="connection.error.connection-not-approved.message"
           values={{ name: window.location.origin }}
@@ -34,12 +37,16 @@ export const ConnectionNotApproved: React.FunctionComponent<
           ]}
         />
       </Typography>
-      <Typography variant="b2" color="gray-9">
+      <Typography
+        variant="b2"
+        color="gray-9"
+      >
         {t('connection.error.connection-not-approved.description')}
       </Typography>
       <div className={styles.buttons_wrapper}>
         <Button
-          variant="contained" color="primary"
+          variant="contained"
+          color="primary"
           onClick={onReload}
         >
           {t('button.try-again')}

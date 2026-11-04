@@ -1,22 +1,12 @@
-import {
-  render, userEvent, screen,
-} from '@testing';
+import { render, userEvent, screen } from '@testing';
 import { CertificateKeyPropertiesSelect } from './CertificateKeyPropertiesSelect';
 
 describe('<CertificateKeyPropertiesSelect />', () => {
   it('Should render', async () => {
-    const signatureAlgorithm = [
-      'RSA-2048',
-      'RSA-4096',
-      'EC-P256',
-      'EC-P384',
-      'EC-P521',
-    ];
+    const signatureAlgorithm = ['RSA-2048', 'RSA-4096', 'EC-P256', 'EC-P384', 'EC-P521'];
     const hashAlgorithm = ['SHA-256', 'SHA-384', 'SHA-512'];
 
-    const { container } = render(
-      <CertificateKeyPropertiesSelect className="test_class" />,
-    );
+    const { container } = render(<CertificateKeyPropertiesSelect className="test_class" />);
 
     expect(container.children[0]).toHaveClass('test_class');
 

@@ -16,23 +16,30 @@ export const ApproveConnection: React.FunctionComponent<{
         <FortifyIcon />
       </div>
 
-      <Typography variant="h5" color="black">
+      <Typography
+        variant="h5"
+        color="black"
+      >
         {t('connection.approve.message')}
       </Typography>
-      {challenge?.length
-        ? (
-            <div className={styles.challenge}>
-              {challenge.split('').map((el, index) => (
-                <div key={`challenge-itm-${el}-${index}`}>
-                  <Typography variant="h5" color="black">
-                    {el}
-                  </Typography>
-                </div>
-              ))}
+      {challenge?.length ? (
+        <div className={styles.challenge}>
+          {challenge.split('').map((el, index) => (
+            <div key={`challenge-itm-${el}-${index}`}>
+              <Typography
+                variant="h5"
+                color="black"
+              >
+                {el}
+              </Typography>
             </div>
-          )
-        : null}
-      <Typography variant="b2" color="gray-9">
+          ))}
+        </div>
+      ) : null}
+      <Typography
+        variant="b2"
+        color="gray-9"
+      >
         {t('connection.approve.description')}
       </Typography>
     </div>

@@ -1,7 +1,7 @@
 import React, { ComponentProps } from 'react';
-import { useTranslation } from 'react-i18next';
 import { IProviderInfo } from '@peculiar/fortify-client-core';
 import { Select } from '@peculiar/react-components';
+import { useTranslation } from 'react-i18next';
 
 interface ICertificatesProvidersSelectListProps {
   className?: ComponentProps<'div'>['className'];
@@ -14,17 +14,9 @@ interface ICertificatesProvidersSelectListProps {
 export const CertificatesProvidersSelectList: React.FunctionComponent<
   ICertificatesProvidersSelectListProps
 > = (props) => {
-  const {
-    className,
-    providers,
-    currentProviderId,
-    popoverClassName,
-    onSelect,
-  } = props;
+  const { className, providers, currentProviderId, popoverClassName, onSelect } = props;
   const { t } = useTranslation();
-  const currProvider = providers.filter(
-    ({ id }) => id === currentProviderId,
-  )[0];
+  const currProvider = providers.filter(({ id }) => id === currentProviderId)[0];
 
   return (
     <Select
@@ -33,9 +25,7 @@ export const CertificatesProvidersSelectList: React.FunctionComponent<
       defaultValue={currProvider}
       getOptionLabel={({ name }) => name}
       options={providers}
-      placeholder={
-        !providers.length ? t('providers.list.empty-text') : undefined
-      }
+      placeholder={!providers.length ? t('providers.list.empty-text') : undefined}
       popoverProps={{ className: popoverClassName }}
       onChange={(_, value) => onSelect(value?.id as string)}
     />

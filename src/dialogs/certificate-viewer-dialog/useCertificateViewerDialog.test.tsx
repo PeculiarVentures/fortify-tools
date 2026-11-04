@@ -1,29 +1,26 @@
+import type { IProviderInfo, FortifyAPI } from '@peculiar/fortify-client-core';
 import { renderHook, act } from '@testing';
 import { vi } from 'vitest';
-import type { IProviderInfo, FortifyAPI } from '@peculiar/fortify-client-core';
 import { ICertificateProps } from '../../types';
 import { useCertificateViewerDialog } from './useCertificateViewerDialog';
 
 vi.mock('@peculiar/x509', async (importOriginal) => {
-  const originalModule
-    = await importOriginal<typeof import('@peculiar/x509')>();
+  const originalModule = await importOriginal<typeof import('@peculiar/x509')>();
 
   return {
     ...originalModule,
-    X509Certificate: vi.fn().mockImplementation(
-      function MockX509Certificate() {
-        return {
-          rawData: new ArrayBuffer(0),
-          subject: 'CN=Test Subject',
-          subjectName: 'Test Subject Name',
-          serialNumber: '1',
-          issuer: 'CN=Test Issuer',
-          notBefore: new Date('2024-01-01'),
-          notAfter: new Date('2025-01-01'),
-          publicKey: {} as CryptoKey,
-        };
-      },
-    ),
+    X509Certificate: vi.fn().mockImplementation(function MockX509Certificate() {
+      return {
+        rawData: new ArrayBuffer(0),
+        subject: 'CN=Test Subject',
+        subjectName: 'Test Subject Name',
+        serialNumber: '1',
+        issuer: 'CN=Test Issuer',
+        notBefore: new Date('2024-01-01'),
+        notAfter: new Date('2025-01-01'),
+        publicKey: {} as CryptoKey,
+      };
+    }),
   };
 });
 
@@ -53,9 +50,7 @@ describe('useCertificateViewerDialog', () => {
   };
 
   it('Should initialize, open & close dialog', async () => {
-    const { result } = renderHook(() =>
-      useCertificateViewerDialog(defaultProps),
-    );
+    const { result } = renderHook(() => useCertificateViewerDialog(defaultProps));
 
     expect(result.current.dialog).toBeInstanceOf(Function);
     expect(result.current.open).toBeInstanceOf(Function);
@@ -74,9 +69,7 @@ describe('useCertificateViewerDialog', () => {
   });
 
   it('Should close the dialog when the current provider is not found', async () => {
-    const { result } = renderHook(() =>
-      useCertificateViewerDialog(defaultProps),
-    );
+    const { result } = renderHook(() => useCertificateViewerDialog(defaultProps));
 
     await act(async () => {
       await result.current.open({
@@ -96,10 +89,7 @@ describe('useCertificateViewerDialog', () => {
         certStorage: {
           getChain: vi
             .fn()
-            .mockResolvedValue([
-              { value: new ArrayBuffer(0) },
-              { value: new ArrayBuffer(0) },
-            ]),
+            .mockResolvedValue([{ value: new ArrayBuffer(0) }, { value: new ArrayBuffer(0) }]),
         },
       }),
     };

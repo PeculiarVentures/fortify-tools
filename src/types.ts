@@ -1,8 +1,4 @@
-import {
-  ICertificate,
-  EHashAlgorithm,
-  ESignatureAlgorithm,
-} from '@peculiar/fortify-client-core';
+import { ICertificate, EHashAlgorithm, ESignatureAlgorithm } from '@peculiar/fortify-client-core';
 
 export interface ICertificateProps extends ICertificate {
   id?: string;

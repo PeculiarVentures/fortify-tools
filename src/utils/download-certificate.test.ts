@@ -1,7 +1,5 @@
-import {
-  describe, it, expect, vi,
-} from 'vitest';
 import { Download } from '@peculiar/certificates-viewer';
+import { describe, it, expect, vi } from 'vitest';
 import { TCertificateType } from '../types';
 import { downloadCertificate } from './download-certificate';
 
@@ -13,16 +11,12 @@ vi.mock('@peculiar/certificates-viewer', () => ({
 }));
 
 vi.mock('@peculiar/x509', () => ({
-  X509Certificate: vi.fn().mockImplementation(
-    function MockX509Certificate() {
-      return { toString: vi.fn().mockReturnValue('mocked-pem-x509') };
-    },
-  ),
-  Pkcs10CertificateRequest: vi.fn().mockImplementation(
-    function MockPkcs10CertificateRequest() {
-      return { toString: vi.fn().mockReturnValue('mocked-pem-csr') };
-    },
-  ),
+  X509Certificate: vi.fn().mockImplementation(function MockX509Certificate() {
+    return { toString: vi.fn().mockReturnValue('mocked-pem-x509') };
+  }),
+  Pkcs10CertificateRequest: vi.fn().mockImplementation(function MockPkcs10CertificateRequest() {
+    return { toString: vi.fn().mockReturnValue('mocked-pem-csr') };
+  }),
 }));
 
 describe('downloadCertificate', () => {
@@ -43,11 +37,7 @@ describe('downloadCertificate', () => {
 
   it('Should throw an error for unsupported certificate type', () => {
     expect(() =>
-      downloadCertificate(
-        label,
-        mockCertRaw,
-        'unsupported-type' as TCertificateType,
-      ),
+      downloadCertificate(label, mockCertRaw, 'unsupported-type' as TCertificateType),
     ).toThrowError('Unsupported certificate type: unsupported-type');
   });
 });

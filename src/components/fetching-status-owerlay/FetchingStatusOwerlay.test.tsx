@@ -10,14 +10,10 @@ describe('<FetchingStatusOwerlay />', () => {
   };
 
   it('Should render as error', () => {
-    render(
-      <FetchingStatusOwerlay {...defaultProps} />,
-    );
+    render(<FetchingStatusOwerlay {...defaultProps} />);
 
     expect(screen.getByText(/Oops! Something went wrong/)).toBeInTheDocument();
-    expect(
-      screen.getByText(/Sorry, please try again later/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Sorry, please try again later/)).toBeInTheDocument();
   });
 
   it('Should render as connectionClientUpdate rejected', () => {
@@ -28,9 +24,7 @@ describe('<FetchingStatusOwerlay />', () => {
       />,
     );
 
-    expect(
-      screen.getByText(/Update your local Fortify application/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Update your local Fortify application/)).toBeInTheDocument();
   });
 
   it('Should render as connectionSupport rejected', () => {
@@ -52,9 +46,7 @@ describe('<FetchingStatusOwerlay />', () => {
       />,
     );
 
-    expect(
-      screen.getByText(/Launch your local Fortify application/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Launch your local Fortify application/)).toBeInTheDocument();
   });
 
   it('Should render as connectionApprove rejected', () => {
@@ -80,7 +72,7 @@ describe('<FetchingStatusOwerlay />', () => {
     expect(screen.getByText(/Fortify authorization/)).toBeInTheDocument();
   });
 
-  it('Shouldn\'t render if certificates fetching state is present', () => {
+  it("Shouldn't render if certificates fetching state is present", () => {
     render(
       <FetchingStatusOwerlay
         {...defaultProps}
@@ -91,7 +83,7 @@ describe('<FetchingStatusOwerlay />', () => {
     expect(screen.queryByRole('presentation')).not.toBeInTheDocument();
   });
 
-  it('Shouldn\'t render if connectionDetect is pending', () => {
+  it("Shouldn't render if connectionDetect is pending", () => {
     render(
       <FetchingStatusOwerlay
         {...defaultProps}
@@ -102,7 +94,7 @@ describe('<FetchingStatusOwerlay />', () => {
     expect(screen.queryByRole('presentation')).not.toBeInTheDocument();
   });
 
-  it('Shouldn\'t render if connectionSupport is pending', () => {
+  it("Shouldn't render if connectionSupport is pending", () => {
     render(
       <FetchingStatusOwerlay
         {...defaultProps}
@@ -112,7 +104,7 @@ describe('<FetchingStatusOwerlay />', () => {
     expect(screen.queryByRole('presentation')).not.toBeInTheDocument();
   });
 
-  it('Shouldn\'t render if connectionApprove is pending', () => {
+  it("Shouldn't render if connectionApprove is pending", () => {
     render(
       <FetchingStatusOwerlay
         {...defaultProps}
@@ -123,7 +115,7 @@ describe('<FetchingStatusOwerlay />', () => {
     expect(screen.queryByRole('presentation')).not.toBeInTheDocument();
   });
 
-  it('Shouldn\'t render if providers fetching state is pending', () => {
+  it("Shouldn't render if providers fetching state is pending", () => {
     render(
       <FetchingStatusOwerlay
         {...defaultProps}

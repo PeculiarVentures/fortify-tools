@@ -8,9 +8,7 @@ interface IErrorConnectionProps {
   description?: string;
 }
 
-export const ErrorConnection: React.FunctionComponent<IErrorConnectionProps> = (
-  props,
-) => {
+export const ErrorConnection: React.FunctionComponent<IErrorConnectionProps> = (props) => {
   const { message, description } = props;
 
   return (
@@ -18,16 +16,20 @@ export const ErrorConnection: React.FunctionComponent<IErrorConnectionProps> = (
       <div className={styles.icon_wrapper}>
         <ErrorIcon />
       </div>
-      <Typography variant="h5" color="black">
+      <Typography
+        variant="h5"
+        color="black"
+      >
         {message}
       </Typography>
-      {description
-        ? (
-            <Typography variant="b2" color="gray-9">
-              {description}
-            </Typography>
-          )
-        : null}
+      {description ? (
+        <Typography
+          variant="b2"
+          color="gray-9"
+        >
+          {description}
+        </Typography>
+      ) : null}
     </div>
   );
 };

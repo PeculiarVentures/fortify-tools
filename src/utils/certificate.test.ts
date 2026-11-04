@@ -26,9 +26,7 @@ describe('Certificate Utilities', () => {
     });
 
     it('Should return an empty string if no attributes are provided', () => {
-      expect(
-        certificateSubjectToString({} as unknown as ICertificateSubjectProps),
-      ).toEqual('');
+      expect(certificateSubjectToString({} as unknown as ICertificateSubjectProps)).toEqual('');
     });
   });
 

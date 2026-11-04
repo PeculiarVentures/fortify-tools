@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { ExtendedKeyUsageType } from '@peculiar/x509';
+import { EHashAlgorithm, ESignatureAlgorithm } from '@peculiar/fortify-client-core';
 import { Button, TextField } from '@peculiar/react-components';
-import {
-  EHashAlgorithm,
-  ESignatureAlgorithm,
-} from '@peculiar/fortify-client-core';
-import { CertificateAlgorithmInfo } from '../certificate-algorithm-info';
-import { Card } from '../card';
+import { ExtendedKeyUsageType } from '@peculiar/x509';
+import { useTranslation } from 'react-i18next';
 import { ICertificateAlgorithmProps, TCertificateType } from '../../types';
+import { Card } from '../card';
+import { CertificateAlgorithmInfo } from '../certificate-algorithm-info';
 import styles from './styles/index.module.scss';
 
 export interface ICertificateCreateByCnameData {
@@ -26,12 +23,10 @@ interface ICertificateCreateByCnameProps {
   onCreateButtonClick: (data: ICertificateCreateByCnameData) => void;
 }
 
-export const CertificateCreateByCname: React.FunctionComponent<
-  ICertificateCreateByCnameProps
-> = (props) => {
-  const {
-    type = 'x509', extendedKeyUsages, onCreateButtonClick,
-  } = props;
+export const CertificateCreateByCname: React.FunctionComponent<ICertificateCreateByCnameProps> = (
+  props,
+) => {
+  const { type = 'x509', extendedKeyUsages, onCreateButtonClick } = props;
 
   const { t } = useTranslation();
   const [isFormValid, setIsFormValid] = useState(false);

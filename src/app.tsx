@@ -1,19 +1,19 @@
 import './global.scss';
 import './i18n';
-import { useApp } from './hooks/app';
-import { FetchingStatusOwerlay } from './components/fetching-status-owerlay';
 import { CertificatesList } from './components/certificates-list';
-import { CertificatesSidebar } from './components/certificates-sidebar';
 import { CertificatesProvidersList } from './components/certificates-providers-list';
+import { CertificatesSidebar } from './components/certificates-sidebar';
 import { CertificatesTopbar } from './components/certificates-topbar';
 import { ConnectionNotSupported } from './components/connection-not-supported';
-import { useCertificateViewerDialog } from './dialogs/certificate-viewer-dialog';
-import { useCertificateDeleteDialog } from './dialogs/certificate-delete-dialog';
-import { useSortList } from './hooks/sort-list';
-import { useSearchList } from './hooks/search-list';
-import { useCertificateImportDialog } from './dialogs/certificate-import-dialog';
+import { FetchingStatusOwerlay } from './components/fetching-status-owerlay';
 import { useCertificateCreateDialog } from './dialogs/certificate-create-dialog';
+import { useCertificateDeleteDialog } from './dialogs/certificate-delete-dialog';
+import { useCertificateImportDialog } from './dialogs/certificate-import-dialog';
+import { useCertificateViewerDialog } from './dialogs/certificate-viewer-dialog';
 import { useProviderInfoDialog } from './dialogs/provider-info-dialog';
+import { useApp } from './hooks/app';
+import { useSearchList } from './hooks/search-list';
+import { useSortList } from './hooks/sort-list';
 import styles from './app.module.scss';
 
 export function App() {
@@ -35,22 +35,16 @@ export function App() {
   const currentProviderId = currentProvider?.id;
   const isCurrentProviderReadOnly = Boolean(currentProvider?.readOnly);
 
-  const {
-    searchedText,
-    list: searchedCertificate,
-    handleSearch,
-  } = useSearchList(certificates);
+  const { searchedText, list: searchedCertificate, handleSearch } = useSearchList(certificates);
 
-  const {
-    open: handleCertificateDeleteDialogOpen,
-    dialog: certificateDeleteDialog,
-  } = useCertificateDeleteDialog({
-    providers,
-    fortifyClient,
-    onSuccess: (providerId) => {
-      void handleCertificatesDataReload(providerId);
-    },
-  });
+  const { open: handleCertificateDeleteDialogOpen, dialog: certificateDeleteDialog } =
+    useCertificateDeleteDialog({
+      providers,
+      fortifyClient,
+      onSuccess: (providerId) => {
+        void handleCertificatesDataReload(providerId);
+      },
+    });
 
   const {
     list: sortedCertificates,
@@ -59,43 +53,38 @@ export function App() {
     handleSort,
   } = useSortList(searchedCertificate, 'notAfter');
 
-  const {
-    open: handleCertificateImportDialogOpen,
-    dialog: certificateImportDialog,
-  } = useCertificateImportDialog({
-    providers,
-    currentProviderId,
-    fortifyClient,
-    onSuccess: (providerId) => {
-      if (currentProviderId !== providerId) return;
-      void handleCertificatesDataReload(providerId);
-    },
-  });
+  const { open: handleCertificateImportDialogOpen, dialog: certificateImportDialog } =
+    useCertificateImportDialog({
+      providers,
+      currentProviderId,
+      fortifyClient,
+      onSuccess: (providerId) => {
+        if (currentProviderId !== providerId) return;
+        void handleCertificatesDataReload(providerId);
+      },
+    });
 
-  const {
-    open: handleCertificateCreateDialogOpen,
-    dialog: certificateCreateDialog,
-  } = useCertificateCreateDialog({
-    providers,
-    currentProviderId,
-    fortifyClient,
-    onSuccess: (providerId) => {
-      if (currentProviderId !== providerId) return;
-      void handleCertificatesDataReload(providerId);
-    },
-  });
+  const { open: handleCertificateCreateDialogOpen, dialog: certificateCreateDialog } =
+    useCertificateCreateDialog({
+      providers,
+      currentProviderId,
+      fortifyClient,
+      onSuccess: (providerId) => {
+        if (currentProviderId !== providerId) return;
+        void handleCertificatesDataReload(providerId);
+      },
+    });
 
-  const {
-    open: handleCertificateViewerDialogOpen,
-    dialog: certificateViewerDialog,
-  } = useCertificateViewerDialog({
-    providers,
-    currentProviderId,
-    fortifyClient,
-  });
+  const { open: handleCertificateViewerDialogOpen, dialog: certificateViewerDialog } =
+    useCertificateViewerDialog({
+      providers,
+      currentProviderId,
+      fortifyClient,
+    });
 
-  const { open: handleProviderInfoDialogOpen, dialog: providerInfoDialog }
-    = useProviderInfoDialog({ providers });
+  const { open: handleProviderInfoDialogOpen, dialog: providerInfoDialog } = useProviderInfoDialog({
+    providers,
+  });
 
   if (fetching.connectionSupport === 'rejected') {
     return <ConnectionNotSupported />;
@@ -114,20 +103,16 @@ export function App() {
       <CertificatesTopbar
         searchValue={searchedText}
         isDisabled={!currentProviderId}
-        isReadOnly={
-          isCurrentProviderReadOnly || fetching.certificates === 'rejected'
-        }
+        isReadOnly={isCurrentProviderReadOnly || fetching.certificates === 'rejected'}
         className={styles.top_bar}
         isLoggedIn={isCurrentProviderLogedin}
         onSearch={handleSearch}
         onImport={handleCertificateImportDialogOpen}
         onCreate={handleCertificateCreateDialogOpen}
         onReload={handleProviderResetAndRefreshList}
-        onInfo={() =>
-          currentProvider && handleProviderInfoDialogOpen(currentProvider)}
+        onInfo={() => currentProvider && handleProviderInfoDialogOpen(currentProvider)}
         onLoginLogout={handleProviderLoginLogout}
-      >
-      </CertificatesTopbar>
+      ></CertificatesTopbar>
       <CertificatesList
         currentSortName={currentSortName}
         currentSortDir={currentSortDir}
@@ -146,17 +131,15 @@ export function App() {
         challenge={challenge}
         onReload={handleRetryConection}
       />
-      {providers.length
-        ? (
-            <>
-              {certificateViewerDialog()}
-              {certificateDeleteDialog()}
-              {certificateImportDialog()}
-              {certificateCreateDialog()}
-              {providerInfoDialog()}
-            </>
-          )
-        : null}
+      {providers.length ? (
+        <>
+          {certificateViewerDialog()}
+          {certificateDeleteDialog()}
+          {certificateImportDialog()}
+          {certificateCreateDialog()}
+          {providerInfoDialog()}
+        </>
+      ) : null}
 
       <div className={styles.certificate_list_corners_backdrop}></div>
     </>
