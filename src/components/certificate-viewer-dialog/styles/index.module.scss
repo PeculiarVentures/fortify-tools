@@ -7,11 +7,15 @@
 
 .dialog_title_text {
   padding: calc(var(--pv-size-base) * 3) calc(var(--pv-size-base) * 4);
+  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .dialog_title_tabs_wraper {
   border-top: 1px solid var(--pv-color-gray-4);
   max-width: 870px;
+  width: 100%;
   overflow: auto;
   .dialog_title_tabs {
     padding: 0 calc(var(--pv-size-base) * 4);
@@ -22,6 +26,12 @@
   padding: 0 !important;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+
+  & > * {
+    width: 100%;
+    text-align: left;
+  }
 }
 
 .dialog_tab_content {

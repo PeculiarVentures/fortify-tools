@@ -43,6 +43,7 @@
         "type": "Type",
         "name": "Name",
         "serial-number": "Serial number",
+        "created-at": "Created at",
         "expires": "Expires"
       },
       "cell": {
@@ -51,6 +52,7 @@
         "certificate-request": "CSR"
       },
       "action": {
+        "menu": "Certificate actions",
         "view-details": "View details",
         "delete": "Delete certificate",
         "download": "Download certificate",

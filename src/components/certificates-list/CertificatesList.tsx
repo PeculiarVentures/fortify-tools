@@ -1,19 +1,21 @@
 import type { ComponentProps } from 'react';
 import React, { useState } from 'react';
-import { Button, IconButton, Skeleton, Typography } from '@peculiar/react-components';
+import { IconButton, Menu, Skeleton, Typography, useClipboard } from '@peculiar/react-components';
 import { clsx } from 'clsx';
 import { Trans, useTranslation } from 'react-i18next';
 import type { ICertificateProps } from '../../types';
 import CertificatesIcon from '../../icons/certificates.svg?react';
+import CopyIcon from '../../icons/copy-20.svg?react';
 import DeleteIcon from '../../icons/delete.svg?react';
 import DownloadIcon from '../../icons/download-20.svg?react';
+import InfoIcon from '../../icons/info-20.svg?react';
+import MoreIcon from '../../icons/more-20.svg?react';
 import SearchIcon from '../../icons/search-120.svg?react';
 import { certificateRawToPem, getCertificateName } from '../../utils/certificate';
 import { downloadCertificate } from '../../utils/download-certificate';
 import { CertificateName } from '../certificate-name';
 import { CertificateSerialNumber } from '../certificate-serial-number';
 import { CertificateTypeLabel } from '../certificate-type-label';
-import { CopyIconButton } from '../copy-icon-button';
 import { Date } from '../date';
 import { SortButton } from '../sort-button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../table';
@@ -21,7 +23,7 @@ import styles from './styles/index.module.scss';
 
 type TSortColumnName = keyof Pick<
   ICertificateProps,
-  'label' | 'serialNumber' | 'notAfter' | 'type'
+  'label' | 'serialNumber' | 'notBefore' | 'notAfter' | 'type'
 >;
 type TSortColumnDir = 'asc' | 'desc';
 
@@ -39,6 +41,84 @@ interface ICertificatesListProps {
   isLoggedIn: boolean;
   isReadOnly: boolean;
 }
+
+interface ICertificateRowActionsProps {
+  certificate: ICertificateProps;
+  certificateName: string;
+  isLoggedIn: boolean;
+  isReadOnly: boolean;
+  onDelete: ICertificatesListProps['onDelete'];
+  onViewDetails: ICertificatesListProps['onViewDetails'];
+}
+
+const CertificateRowActions: React.FunctionComponent<ICertificateRowActionsProps> = (props) => {
+  const { certificate, certificateName, isLoggedIn, isReadOnly, onDelete, onViewDetails } = props;
+  const { providerID, raw, type, index } = certificate;
+  const pemType = type === 'x509' ? 'x509' : 'csr';
+  const { copy } = useClipboard();
+  const { t } = useTranslation();
+
+  const options = [
+    {
+      label: t('certificates.list.action.view-details'),
+      startIcon: <InfoIcon className={styles.row_actions_menu_icon} />,
+      onClick: () =>
+        onViewDetails({
+          certificate,
+          providerId: providerID,
+        }),
+    },
+    {
+      label: t('certificates.list.action.copy'),
+      startIcon: <CopyIcon className={styles.row_actions_menu_icon} />,
+      disabled: !raw.byteLength,
+      onClick: () => {
+        if (raw.byteLength) {
+          void copy(certificateRawToPem(raw, pemType));
+        }
+      },
+    },
+    {
+      label: t('certificates.list.action.download'),
+      startIcon: <DownloadIcon className={styles.row_actions_menu_icon} />,
+      disabled: !raw.byteLength,
+      onClick: () => {
+        if (raw.byteLength) {
+          downloadCertificate(certificateName, raw, pemType);
+        }
+      },
+    },
+    ...(isReadOnly
+      ? []
+      : [
+          {
+            label: t('certificates.list.action.delete'),
+            startIcon: <DeleteIcon className={styles.row_actions_menu_icon} />,
+            disabled: !isLoggedIn,
+            onClick: () =>
+              onDelete({
+                certificateIndex: index,
+                providerId: providerID,
+                label: certificateName,
+              }),
+          },
+        ]),
+  ];
+
+  return (
+    <Menu
+      popoverProps={{ placement: 'bottom-end' }}
+      options={options}
+    >
+      <IconButton
+        size="small"
+        aria-label={t('certificates.list.action.menu')}
+      >
+        <MoreIcon className={styles.more_icon} />
+      </IconButton>
+    </Menu>
+  );
+};
 
 export const CertificatesList: React.FunctionComponent<ICertificatesListProps> = (props) => {
   const {
@@ -123,12 +203,16 @@ export const CertificatesList: React.FunctionComponent<ICertificatesListProps> =
       <Table className={clsx(styles.list_table, className)}>
         <TableHeader>
           <TableRow>
-            <TableHead>{renderSortTitle('type', 'certificates.list.header.type')}</TableHead>
             <TableHead>{renderSortTitle('label', 'certificates.list.header.name')}</TableHead>
+            <TableHead>{renderSortTitle('type', 'certificates.list.header.type')}</TableHead>
             <TableHead>
               {renderSortTitle('serialNumber', 'certificates.list.header.serial-number')}
             </TableHead>
+            <TableHead>
+              {renderSortTitle('notBefore', 'certificates.list.header.created-at')}
+            </TableHead>
             <TableHead>{renderSortTitle('notAfter', 'certificates.list.header.expires')}</TableHead>
+            <TableHead className={styles.list_table_actions_head} />
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -136,8 +220,16 @@ export const CertificatesList: React.FunctionComponent<ICertificatesListProps> =
             <CertificatesListLoading />
           ) : (
             certificates.map((certificate) => {
-              const { id, providerID, serialNumber, type, notAfter, raw, index, privateKeyId } =
-                certificate;
+              const {
+                id,
+                providerID,
+                serialNumber,
+                type,
+                notBefore,
+                notAfter,
+                index,
+                privateKeyId,
+              } = certificate;
 
               const certificateName = getCertificateName(certificate);
 
@@ -164,86 +256,41 @@ export const CertificatesList: React.FunctionComponent<ICertificatesListProps> =
                   onMouseOver={() => currentRow && setCurrentRow(undefined)}
                 >
                   <TableCell>
-                    <CertificateTypeLabel
-                      type={type}
-                      withPrivatKey={Boolean(privateKeyId)}
+                    <CertificateName
+                      className={styles.list_table_name}
+                      highlight={highlightedText}
+                      name={certificateName}
                     />
                   </TableCell>
                   <TableCell>
-                    <CertificateName
-                      highlight={highlightedText}
-                      name={certificateName}
+                    <CertificateTypeLabel
+                      type={type}
+                      withPrivatKey={Boolean(privateKeyId)}
+                      withoutIcon
                     />
                   </TableCell>
                   <TableCell>
                     <CertificateSerialNumber value={serialNumber} />
                   </TableCell>
                   <TableCell>
+                    <Date date={notBefore} />
+                  </TableCell>
+                  <TableCell>
                     <Date date={notAfter} />
-                    {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-                    <div
-                      className={styles.list_table_actions}
-                      onClick={(event) => event.stopPropagation()}
-                      onKeyDown={(event) => event.stopPropagation()}
-                    >
-                      <Button
-                        tabIndex={0}
-                        className={styles.view_details_button}
-                        variant="outlined"
-                        size="small"
-                        onClick={() =>
-                          onViewDetails({
-                            certificate,
-                            providerId: providerID,
-                          })
-                        }
-                      >
-                        {t('certificates.list.action.view-details')}
-                      </Button>
-                      <CopyIconButton
-                        title={t('certificates.list.action.copy')}
-                        value={
-                          raw.byteLength
-                            ? () => certificateRawToPem(raw, type === 'x509' ? 'x509' : 'csr')
-                            : ''
-                        }
-                        className={styles.action_icon_button}
-                      />
-                      <IconButton
-                        tabIndex={0}
-                        title={t('certificates.list.action.download')}
-                        size="small"
-                        className={styles.action_icon_button}
-                        onClick={() =>
-                          raw.byteLength &&
-                          downloadCertificate(
-                            certificateName,
-                            raw,
-                            type === 'x509' ? 'x509' : 'csr',
-                          )
-                        }
-                      >
-                        <DownloadIcon />
-                      </IconButton>
-                      {!isReadOnly ? (
-                        <IconButton
-                          tabIndex={0}
-                          title={t('certificates.list.action.delete')}
-                          size="small"
-                          className={styles.action_icon_button}
-                          disabled={!isLoggedIn}
-                          onClick={() =>
-                            onDelete({
-                              certificateIndex: index,
-                              providerId: providerID,
-                              label: certificateName,
-                            })
-                          }
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      ) : null}
-                    </div>
+                  </TableCell>
+                  <TableCell
+                    className={styles.list_table_actions_cell}
+                    onClick={(event) => event.stopPropagation()}
+                    onKeyDown={(event) => event.stopPropagation()}
+                  >
+                    <CertificateRowActions
+                      certificate={certificate}
+                      certificateName={certificateName}
+                      isLoggedIn={isLoggedIn}
+                      isReadOnly={isReadOnly}
+                      onDelete={onDelete}
+                      onViewDetails={onViewDetails}
+                    />
                   </TableCell>
                 </TableRow>
               );
@@ -261,7 +308,7 @@ function CertificatesListLoading() {
       className={styles.skeleton_tr}
       key={`skel-row-${rowIndex}`}
     >
-      {[...Array(4).keys()].map((cellIndex) => (
+      {[...Array(6).keys()].map((cellIndex) => (
         <TableCell
           className={styles.skeleton_td}
           key={`skel-td-${cellIndex}`}
