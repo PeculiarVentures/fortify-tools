@@ -271,12 +271,10 @@ describe('useApp', () => {
   });
 
   it('Should reload app on handleRetryConection', () => {
-    const originalLocation = global.location;
+    // jsdom's Location can't be assigned or spied on; replace the global for this test.
+    const reloadSpy = vi.fn();
 
-    global.location = {
-      ...originalLocation,
-      reload: vi.fn(),
-    };
+    vi.stubGlobal('location', { ...window.location, reload: reloadSpy });
 
     const { result } = renderHook(() => useApp());
 
@@ -284,9 +282,9 @@ describe('useApp', () => {
       result.current.handleRetryConection();
     });
 
-    expect(global.location.reload).toHaveBeenCalled();
+    expect(reloadSpy).toHaveBeenCalled();
 
-    global.location = originalLocation;
+    vi.unstubAllGlobals();
   });
 
   it('Should clear certificates when error occured during first load & reload', async () => {
