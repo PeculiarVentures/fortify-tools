@@ -6,7 +6,7 @@
 }
 
 .dialog_title_text {
-  padding: var(--pv-size-base-3) var(--pv-size-base-4);
+  padding: calc(var(--pv-size-base) * 3) calc(var(--pv-size-base) * 4);
 }
 
 .dialog_title_tabs_wraper {
@@ -14,7 +14,7 @@
   max-width: 870px;
   overflow: auto;
   .dialog_title_tabs {
-    padding: 0 var(--pv-size-base-4);
+    padding: 0 calc(var(--pv-size-base) * 4);
   }
 }
 

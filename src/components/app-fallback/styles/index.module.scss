@@ -13,19 +13,19 @@
   .content {
     display: flex;
     flex-direction: column;
-    gap: var(--pv-size-base-2);
+    gap: calc(var(--pv-size-base) * 2);
     text-align: center;
     align-items: center;
 
     .icon_wrapper {
       font-size: 0;
-      padding-bottom: var(--pv-size-base-2);
+      padding-bottom: calc(var(--pv-size-base) * 2);
     }
 
     .buttons_group {
-      padding-top: var(--pv-size-base-4);
+      padding-top: calc(var(--pv-size-base) * 4);
       display: flex;
-      gap: var(--pv-size-base-2);
+      gap: calc(var(--pv-size-base) * 2);
     }
   }
 }
