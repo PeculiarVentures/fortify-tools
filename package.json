@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@abraham/reflection": "^0.13.0",
-    "@peculiar/certificates-viewer-react": "^4.3.2",
+    "@peculiar/certificates-viewer-react": "^5.2.1",
     "@peculiar/fortify-client-core": "^6.0.0",
     "@peculiar/react-components": "^1.1.2",
     "@peculiar/x509": "^3.1.0",
