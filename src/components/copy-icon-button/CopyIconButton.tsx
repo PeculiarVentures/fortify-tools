@@ -22,9 +22,9 @@ export const CopyIconButton: React.FunctionComponent<ICopyIconButtonProps> = (
 
   const handleClick = () => {
     if (typeof value === 'function') {
-      copy(value());
+      void copy(value());
     } else {
-      copy(value);
+      void copy(value);
     }
   };
 

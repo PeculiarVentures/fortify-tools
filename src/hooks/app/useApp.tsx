@@ -102,7 +102,7 @@ export function useApp() {
 
       if (!currentProvider) {
         setCurrentProvider(defaultProvider);
-        handleProviderChange(defaultProvider.id);
+        void handleProviderChange(defaultProvider.id);
 
         return;
       }
@@ -113,7 +113,7 @@ export function useApp() {
 
       if (!curProvider) {
         setCurrentProvider(defaultProvider);
-        handleProviderChange(defaultProvider.id);
+        void handleProviderChange(defaultProvider.id);
       }
     } catch {
       setProviders([]);
@@ -193,10 +193,10 @@ export function useApp() {
     try {
       const requests
         = await fortifyClient.current.getCertificateRequestsByProviderId(id);
-      const certificates
+      const providerCertificates
         = await fortifyClient.current.getCertificatesByProviderId(id);
 
-      setCertificates([...certificates, ...requests]);
+      setCertificates([...providerCertificates, ...requests]);
       if (providers?.length) {
         setCurrentProvider(providers.find((provider) => provider.id === id));
       }
@@ -219,7 +219,7 @@ export function useApp() {
       // },
     });
 
-    start();
+    void start();
   }, []);
 
   const handleCertificatesDataReload = async (providerId: string) => {
@@ -234,10 +234,10 @@ export function useApp() {
         = await fortifyClient.current.getCertificateRequestsByProviderId(
           providerId,
         );
-      const certificates
+      const providerCertificates
         = await fortifyClient.current.getCertificatesByProviderId(providerId);
 
-      setCertificates([...certificates, ...requests]);
+      setCertificates([...providerCertificates, ...requests]);
       setFetchingValue('certificates', 'resolved');
     } catch {
       setFetchingValue('certificates', 'rejected');
@@ -264,7 +264,7 @@ export function useApp() {
       //
     }
 
-    handleCertificatesDataReload(currentProvider.id);
+    void handleCertificatesDataReload(currentProvider.id);
   };
 
   const handleProviderLoginLogout = async (isLogedin: boolean) => {
@@ -283,7 +283,7 @@ export function useApp() {
 
         if (!isLoggedIn) {
           setIsCurrentProviderLogedin(false);
-          handleCertificatesDataReload(currentProvider.id);
+          void handleCertificatesDataReload(currentProvider.id);
         } else {
           addToast({
             message: t('topbar.provider-doesnt-support-signing-in'),
@@ -299,7 +299,7 @@ export function useApp() {
 
         if (isLoggedIn) {
           setIsCurrentProviderLogedin(true);
-          handleCertificatesDataReload(currentProvider.id);
+          void handleCertificatesDataReload(currentProvider.id);
         }
       }
     } catch {

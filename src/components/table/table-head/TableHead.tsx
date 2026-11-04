@@ -6,7 +6,6 @@ export const TableHead = React.forwardRef<
   HTMLTableCellElement,
   React.ThHTMLAttributes<HTMLTableCellElement>
 >((props, ref) => {
-  // eslint-disable-next-line react/prop-types
   const { className, ...restProps } = props;
 
   return (

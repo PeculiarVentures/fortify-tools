@@ -119,7 +119,7 @@ describe('<App />', () => {
       expect(screen.getByText(/Certificate test 1/)).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByRole('button', { name: /info/i }));
+    await userEvent.click(screen.getByRole('button', { name: /info/i }));
 
     await waitFor(() => {
       expect(screen.getByText(/Provider 1 information/)).toBeInTheDocument();
@@ -282,7 +282,7 @@ describe('<App />', () => {
       expect(screen.getByText(/Certificate test 1/)).toBeInTheDocument();
     });
 
-    userEvent.type(screen.getByPlaceholderText('Search'), 'test 1');
+    await userEvent.type(screen.getByPlaceholderText('Search'), 'test 1');
 
     await waitFor(() => {
       expect(screen.getAllByText('test 1')).toHaveLength(1);

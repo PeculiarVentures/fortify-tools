@@ -28,6 +28,6 @@ export function downloadCertificate(
     }
 
     default:
-      throw new Error(`Unsupported certificate type: ${type}`);
+      throw new Error(`Unsupported certificate type: ${String(type)}`);
   }
 }

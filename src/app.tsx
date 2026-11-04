@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/order
 import './global.scss';
 import './i18n';
 import { useApp } from './hooks/app';
@@ -49,7 +48,7 @@ export function App() {
     providers,
     fortifyClient,
     onSuccess: (providerId) => {
-      handleCertificatesDataReload(providerId);
+      void handleCertificatesDataReload(providerId);
     },
   });
 
@@ -69,7 +68,7 @@ export function App() {
     fortifyClient,
     onSuccess: (providerId) => {
       if (currentProviderId !== providerId) return;
-      handleCertificatesDataReload(providerId);
+      void handleCertificatesDataReload(providerId);
     },
   });
 
@@ -82,7 +81,7 @@ export function App() {
     fortifyClient,
     onSuccess: (providerId) => {
       if (currentProviderId !== providerId) return;
-      handleCertificatesDataReload(providerId);
+      void handleCertificatesDataReload(providerId);
     },
   });
 

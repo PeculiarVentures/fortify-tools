@@ -8,8 +8,6 @@
   "type": "module",
   "devDependencies": {
     "@faker-js/faker": "^10.5.0",
-    "@peculiar/eslint-config-base": "^0.2.8",
-    "@peculiar/eslint-config-react": "^0.2.8",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/lodash": "^4.17.14",
@@ -18,6 +16,9 @@
     "@vitejs/plugin-react": "^6.0.3",
     "autoprefixer": "^10.4.20",
     "jsdom": "^25.0.1",
+    "oxfmt": "^0.76.0",
+    "oxlint": "^1.91.0",
+    "oxlint-tsgolint": "^7.0.2005",
     "postcss": "^8.5.26",
     "sass": "^1.83.1",
     "typescript": "^5.7.2",
@@ -48,7 +49,10 @@
     "preview": "vite preview --port 3005",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint"
+    "lint": "OXLINT_TSGOLINT_DANGEROUSLY_SUPPRESS_PROGRAM_DIAGNOSTICS=true oxlint",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check"
   },
   "devEngines": {
     "packageManager": {

@@ -68,11 +68,9 @@ export const CertificateCreateByCustom: React.FunctionComponent<
       ? (formData.getAll('keyUsage') as ExtendedKeyUsageType[])
       : [];
 
-    const hash = hashAlgorithm
-      .toString()
+    const hash = (hashAlgorithm as string)
       .replace(/"/g, '') as ICertificateAlgorithmProps['hash'];
-    const signature = signatureAlgorithm
-      .toString()
+    const signature = (signatureAlgorithm as string)
       .replace(/"/g, '') as ICertificateAlgorithmProps['signature'];
 
     const country = C ? JSON.parse(C as string)?.code : '';
