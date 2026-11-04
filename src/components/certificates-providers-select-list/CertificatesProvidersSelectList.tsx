@@ -8,7 +8,7 @@ interface ICertificatesProvidersSelectListProps {
   className?: ComponentProps<'div'>['className'];
   popoverClassName?: ComponentProps<'div'>['className'];
   currentProviderId?: string;
-  providers: Pick<IProviderInfo, 'id' | 'name'>[];
+  providers: Pick<IProviderInfo, 'id' | 'name' | 'readOnly'>[];
   onSelect: (id: string) => void;
 }
 
@@ -24,7 +24,9 @@ export const CertificatesProvidersSelectList: React.FunctionComponent<
       className={className}
       disableSearch={true}
       defaultValue={currProvider}
-      getOptionLabel={({ name }) => name}
+      getOptionLabel={({ name, readOnly }) =>
+        readOnly ? `${name} (${t('providers.list.item.read-only')})` : name
+      }
       options={providers}
       placeholder={!providers.length ? t('providers.list.empty-text') : undefined}
       popoverProps={{ className: popoverClassName }}
